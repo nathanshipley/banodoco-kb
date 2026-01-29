@@ -6,12 +6,53 @@
     <title>Banodoco Discord Database Exploration</title>
     <style>
         :root {
-            --bg-dark: #1a1a2e;
-            --bg-card: #16213e;
-            --accent: #e94560;
-            --accent-secondary: #0f3460;
-            --text: #eaeaea;
-            --text-muted: #a0a0a0;
+            /* Light theme (default) */
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066ff;
+            --accent-subtle: rgba(0, 102, 255, 0.08);
+            --success: #10b981;
+            --success-subtle: rgba(16, 185, 129, 0.08);
+            --warning: #f59e0b;
+            --warning-subtle: rgba(245, 158, 11, 0.08);
+        }
+
+        /* System preference: dark */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0d0d0d;
+                --bg-secondary: #161616;
+                --bg-tertiary: #1f1f1f;
+                --text: #f0f0f0;
+                --text-muted: #888888;
+                --border: #2a2a2a;
+                --accent: #3b82f6;
+                --accent-subtle: rgba(59, 130, 246, 0.12);
+                --success: #22c55e;
+                --success-subtle: rgba(34, 197, 94, 0.12);
+                --warning: #eab308;
+                --warning-subtle: rgba(234, 179, 8, 0.12);
+            }
+        }
+
+        /* Manual override: dark */
+        :root[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --bg-secondary: #161616;
+            --bg-tertiary: #1f1f1f;
+            --text: #f0f0f0;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+            --accent: #3b82f6;
+            --accent-subtle: rgba(59, 130, 246, 0.12);
+            --success: #22c55e;
+            --success-subtle: rgba(34, 197, 94, 0.12);
+            --warning: #eab308;
+            --warning-subtle: rgba(234, 179, 8, 0.12);
         }
 
         * {
@@ -21,237 +62,332 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-            padding: 2rem;
+            line-height: 1.7;
+            padding: 3rem 2rem;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid var(--accent);
+            margin-bottom: 4rem;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--accent), #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: -0.02em;
         }
 
         .subtitle {
             color: var(--text-muted);
             font-size: 1.1rem;
+            font-weight: 400;
         }
 
         .date {
             color: var(--accent);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            font-weight: 500;
         }
 
         h2 {
-            color: var(--accent);
-            margin: 2rem 0 1rem;
-            font-size: 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 4rem 0 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
         }
 
         h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
             color: var(--text);
-            margin: 1.5rem 0 0.75rem;
-            font-size: 1.2rem;
         }
 
         .card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--accent);
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
             margin-bottom: 2rem;
         }
 
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .stat-card {
-            background: var(--bg-card);
-            border-radius: 12px;
+            background: var(--bg-secondary);
             padding: 1.5rem;
             text-align: center;
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--accent);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
         }
 
         .stat-label {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
+            font-size: 0.95rem;
         }
 
         th, td {
-            padding: 0.75rem;
+            padding: 0.875rem 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--accent-secondary);
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            color: var(--accent);
-            font-weight: 600;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
         }
 
         .channel-tag {
             display: inline-block;
-            background: var(--accent-secondary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            background: var(--bg-tertiary);
+            padding: 0.375rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
             margin: 0.25rem;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+            border: 1px solid var(--border);
         }
 
         .channels-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--accent);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 1.5rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2rem;
-            top: 0.5rem;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--accent);
-            transform: translateX(-5px);
+            gap: 0.25rem;
         }
 
         .coverage-bar {
-            height: 30px;
-            background: var(--accent-secondary);
-            border-radius: 4px;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
             overflow: hidden;
-            margin: 0.5rem 0;
         }
 
         .coverage-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent), #ff6b6b);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
+            background: var(--accent);
+            border-radius: 3px;
         }
 
         .highlight {
             color: var(--accent);
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .sample-summary {
-            background: rgba(233, 69, 96, 0.1);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 0.5rem 0;
+            background: var(--accent-subtle);
+            border-radius: 6px;
+            padding: 1.25rem;
+            margin: 0.75rem 0;
             font-size: 0.9rem;
+            border: 1px solid transparent;
         }
 
         .sample-summary strong {
             color: var(--accent);
+            font-weight: 600;
+        }
+
+        .sample-summary p {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         .gap-analysis {
-            background: rgba(255, 193, 7, 0.1);
-            border-left: 4px solid #ffc107;
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
+            background: var(--warning-subtle);
+            border-left: 3px solid var(--warning);
+            padding: 1.25rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .gap-analysis h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.95rem;
         }
 
         .opportunity {
-            background: rgba(76, 175, 80, 0.1);
-            border-left: 4px solid #4caf50;
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
+            background: var(--success-subtle);
+            border-left: 3px solid var(--success);
+            padding: 1.25rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .opportunity h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.95rem;
         }
 
         code {
-            background: var(--accent-secondary);
+            background: var(--bg-tertiary);
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-family: 'Monaco', 'Menlo', monospace;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
             font-size: 0.85rem;
+            border: 1px solid var(--border);
         }
 
         ul {
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
+            margin-left: 1.25rem;
+            margin-top: 0.75rem;
         }
 
         li {
             margin-bottom: 0.5rem;
         }
+
+        ol {
+            margin-left: 1.25rem;
+        }
+
+        ol li {
+            padding-left: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer p {
+            margin: 0.25rem 0;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
     <div class="container">
         <header>
             <h1>Banodoco Discord Database Exploration</h1>
             <p class="subtitle">Exploring the potential for an Open Source AI Knowledge Base</p>
-            <p class="date">Generated: January 24, 2026</p>
+            <p class="date">Generated: January 29, 2026</p>
         </header>
 
         <section>
             <h2>Database Overview</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">727,352</div>
+                    <div class="stat-number">1,046,623</div>
                     <div class="stat-label">Discord Messages</div>
                 </div>
                 <div class="stat-card">
@@ -263,7 +399,7 @@
                     <div class="stat-label">Channels</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">429</div>
+                    <div class="stat-number">463</div>
                     <div class="stat-label">Daily Summaries</div>
                 </div>
             </div>
@@ -274,84 +410,75 @@
 
             <div class="card">
                 <h3>Discord Messages</h3>
-                <p><span class="highlight">August 8, 2023</span> to <span class="highlight">January 24, 2026</span></p>
-                <p style="color: var(--text-muted);">~17 months of data (with 12-month gap from Feb 2024 - Jan 2025)</p>
+                <p><span class="highlight">August 8, 2023</span> to <span class="highlight">January 29, 2026</span></p>
+                <p class="text-muted">~29 months of continuous data coverage</p>
 
-                <h3 style="margin-top: 1.5rem;">Message Volume by Period</h3>
+                <h3>Message Volume by Period</h3>
                 <table>
                     <tr>
                         <th>Period</th>
                         <th>Messages</th>
-                        <th>Distribution</th>
+                        <th style="width: 40%;">Distribution</th>
                     </tr>
                     <tr>
                         <td>Aug - Dec 2023</td>
                         <td>124,595</td>
                         <td>
-                            <div class="coverage-bar" style="width: 200px;">
-                                <div class="coverage-fill" style="width: 17%;">17%</div>
+                            <div class="coverage-bar">
+                                <div class="coverage-fill" style="width: 12%;"></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>Jan 2024</td>
-                        <td>22,135</td>
+                        <td>Jan - Dec 2024</td>
+                        <td>262,808</td>
                         <td>
-                            <div class="coverage-bar" style="width: 200px;">
-                                <div class="coverage-fill" style="width: 3%;">3%</div>
+                            <div class="coverage-bar">
+                                <div class="coverage-fill" style="width: 25%;"></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="color: #ffc107;">Feb 2024 - Jan 2025</td>
-                        <td style="color: #ffc107;">DATABASE GAP</td>
+                        <td>Jan - Jun 2025</td>
+                        <td>273,282</td>
                         <td>
-                            <div class="coverage-bar" style="width: 200px; background: repeating-linear-gradient(45deg, var(--accent-secondary), var(--accent-secondary) 10px, #2a2a4e 10px, #2a2a4e 20px);">
-                                <div class="coverage-fill" style="width: 0%; background: transparent; color: #ffc107;">12 months missing</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Feb - Jun 2025</td>
-                        <td>236,407</td>
-                        <td>
-                            <div class="coverage-bar" style="width: 200px;">
-                                <div class="coverage-fill" style="width: 32%;">32%</div>
+                            <div class="coverage-bar">
+                                <div class="coverage-fill" style="width: 26%;"></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>Jul - Dec 2025</td>
-                        <td>300,288</td>
+                        <td>319,886</td>
                         <td>
-                            <div class="coverage-bar" style="width: 200px;">
-                                <div class="coverage-fill" style="width: 41%;">41%</div>
+                            <div class="coverage-bar">
+                                <div class="coverage-fill" style="width: 31%;"></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>Jan 2026</td>
-                        <td>43,927</td>
+                        <td>66,053</td>
                         <td>
-                            <div class="coverage-bar" style="width: 200px;">
-                                <div class="coverage-fill" style="width: 6%;">6%</div>
+                            <div class="coverage-bar">
+                                <div class="coverage-fill" style="width: 6%;"></div>
                             </div>
                         </td>
                     </tr>
                 </table>
 
-                <div class="gap-analysis" style="margin-top: 1rem;">
-                    <strong>Database Gap Identified:</strong> There is a <strong>12-month gap</strong> in the database from <strong>February 1, 2024</strong> to <strong>January 31, 2025</strong>. This period includes major releases like FLUX, Stable Diffusion 3, and early HunyuanVideo discussions that are not captured in this database.
+                <div class="opportunity">
+                    <strong>Complete Coverage:</strong> The database now has <strong>continuous message history</strong> from August 2023 to present, including the full 2024 period covering FLUX, Stable Diffusion 3, CogVideoX, and early HunyuanVideo discussions. Gap was resolved by @pom in January 2026.
                 </div>
             </div>
 
             <div class="card">
                 <h3>AI-Generated Daily Summaries</h3>
-                <p><span class="highlight">November 4, 2025</span> to <span class="highlight">January 24, 2026</span></p>
-                <p style="color: var(--text-muted);">~82 days of summaries (429 total)</p>
+                <p><span class="highlight">November 4, 2025</span> to <span class="highlight">January 29, 2026</span></p>
+                <p class="text-muted">~87 days of summaries (463 total)</p>
 
                 <div class="gap-analysis">
-                    <strong>Summary Coverage:</strong> Daily summaries only cover Nov 2025 - Jan 2026 (~82 days). The database has ~147K messages from Aug 2023 - Jan 2024 without summaries, plus a 12-month database gap (Feb 2024 - Jan 2025) where no messages were captured at all.
+                    <strong>Summary Coverage:</strong> Daily summaries only cover Nov 2025 - Jan 2026 (~87 days). The database has ~660K messages from Aug 2023 - Oct 2025 that exist but don't have AI-generated summaries yet.
                 </div>
             </div>
         </section>
@@ -360,7 +487,7 @@
             <h2>Channels with Daily Summaries</h2>
             <div class="card">
                 <p>21 channels currently have AI-generated daily summaries:</p>
-                <div class="channels-container" style="margin-top: 1rem;">
+                <div class="channels-container">
                     <span class="channel-tag">wan_chatter</span>
                     <span class="channel-tag">wan_comfyui</span>
                     <span class="channel-tag">wan_training</span>
@@ -388,7 +515,7 @@
 
         <section>
             <h2>Sample Daily Summaries</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">These AI-generated summaries show the quality and depth of technical knowledge being captured:</p>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">These AI-generated summaries show the quality and depth of technical knowledge being captured:</p>
 
             <div class="card">
                 <h3>LTX Chatter - January 24, 2026</h3>
@@ -459,7 +586,7 @@
                     </tr>
                 </table>
 
-                <h3 style="margin-top: 1.5rem;">Summary Structure</h3>
+                <h3>Summary Structure</h3>
                 <p>Each <code>daily_summaries.full_summary</code> contains structured JSON with:</p>
                 <ul>
                     <li><strong>title</strong> - Topic headline</li>
@@ -569,17 +696,17 @@
             </div>
 
             <div class="gap-analysis">
-                <h3>Gap: Historical Content & Database Coverage</h3>
-                <p><strong>Two separate gaps exist:</strong></p>
+                <h3>Opportunity: Historical Summaries</h3>
+                <p><strong>Summary generation opportunity:</strong></p>
                 <ul>
-                    <li><strong>Database gap:</strong> 12 months of Discord messages (Feb 2024 - Jan 2025) are missing entirely from the database. This includes FLUX, SD3, and early HunyuanVideo releases.</li>
-                    <li><strong>Summary gap:</strong> The ~147K messages from Aug 2023 - Jan 2024 exist in the database but have no AI-generated summaries.</li>
+                    <li><strong>~660K messages</strong> from Aug 2023 - Oct 2025 exist in the database but don't have AI-generated summaries yet</li>
+                    <li>This includes major eras: AnimateDiff, FLUX launch, SD3, CogVideoX, early HunyuanVideo</li>
                 </ul>
-                <p style="margin-top: 0.5rem;">Options for the knowledge base:</p>
+                <p style="margin-top: 1rem;"><strong>Options for the knowledge base:</strong></p>
                 <ul>
-                    <li>Generate retrospective summaries for Aug 2023 - Jan 2024 content</li>
-                    <li>Investigate recovering the missing Feb 2024 - Jan 2025 data</li>
-                    <li>Focus knowledge base on Feb 2025 onwards (summarized period)</li>
+                    <li>Generate retrospective summaries for historical content</li>
+                    <li>Focus initial knowledge base on Nov 2025+ (already summarized)</li>
+                    <li>Prioritize high-activity channels for retrospective processing</li>
                 </ul>
             </div>
         </section>
@@ -587,20 +714,55 @@
         <section>
             <h2>Next Steps</h2>
             <div class="card">
-                <ol style="margin-left: 1.5rem;">
+                <ol>
                     <li><strong>Deep dive into summary structure</strong> - Explore the full JSON schema of daily_summaries to understand all available fields</li>
                     <li><strong>Analyze channel coverage</strong> - Determine which channels have the most valuable technical content</li>
                     <li><strong>Build export pipeline</strong> - Create scripts to extract and transform data for the knowledge base</li>
                     <li><strong>Design navigation</strong> - Plan how users will browse by model, topic, contributor, or date</li>
-                    <li><strong>Address historical gap</strong> - Decide strategy for pre-November 2025 content</li>
+                    <li><strong>Generate retrospective summaries</strong> - Process Aug 2023 - Oct 2025 messages for historical coverage</li>
                 </ol>
             </div>
         </section>
 
-        <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--accent-secondary); text-align: center; color: var(--text-muted);">
+        <footer>
             <p>Exploration conducted with Claude Code</p>
             <p>Database: Banodoco Discord Archive on Supabase</p>
         </footer>
     </div>
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getCurrentTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return getSystemTheme();
+        }
+
+        function applyTheme(theme) {
+            if (theme === getSystemTheme()) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = getCurrentTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        // Apply stored theme on load
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
 </body>
 </html>

@@ -41,10 +41,10 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 
 | Table | Count | Description |
 |-------|-------|-------------|
-| `discord_messages` | 727,352 | All chat messages |
+| `discord_messages` | 1,046,623 | All chat messages |
 | `discord_members` | 4,477 | User profiles |
 | `discord_channels` | 227 | Channel metadata |
-| `daily_summaries` | 429 | AI-generated daily summaries |
+| `daily_summaries` | 463 | AI-generated daily summaries |
 
 ### Key Fields
 
@@ -93,14 +93,13 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 | Period | Messages | Notes |
 |--------|----------|-------|
 | Aug - Dec 2023 | 124,595 | Early AnimateDiff era |
-| Jan 2024 | 22,135 | Last month before gap |
-| **Feb 2024 - Jan 2025** | **0** | **12-MONTH DATABASE GAP** |
-| Feb - Jun 2025 | 236,407 | Post-gap recovery |
-| Jul - Dec 2025 | 300,288 | High activity period |
-| Jan 2026 | 43,927 | Current month |
+| Jan - Dec 2024 | 262,808 | FLUX, SD3, CogVideoX era |
+| Jan - Jun 2025 | 273,282 | Wan, LTX, HunyuanVideo emerge |
+| Jul - Dec 2025 | 319,886 | High activity period |
+| Jan 2026 | 66,053 | Current month |
 
 ### Summary Coverage
-- **Date range:** Nov 4, 2025 - Jan 24, 2026 (~82 days)
+- **Date range:** Nov 4, 2025 - Jan 29, 2026 (~87 days)
 - **Channels with summaries:** 21 of 227
 
 ### Channels With Daily Summaries
@@ -111,14 +110,11 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 
 ## Key Findings
 
-### The 12-Month Gap
-The database is missing all messages from **February 1, 2024** to **January 31, 2025**. This period includes:
-- FLUX release and adoption
-- Stable Diffusion 3
-- CogVideoX
-- Early HunyuanVideo discussions
-
-**Action needed:** Check if this data can be recovered or re-scraped.
+### Complete Message Coverage (Gap Resolved)
+The database now has **continuous coverage** from August 2023 to present:
+- **1M+ messages** spanning 2.5 years of open source AI development
+- 2024 data (262K messages) includes FLUX, SD3, CogVideoX, and early HunyuanVideo discussions
+- Gap was filled by @pom in January 2026
 
 ### Daily Summaries Are High Quality
 The AI-generated summaries include:
@@ -138,14 +134,16 @@ The AI-generated summaries include:
 ## Files Created
 
 - `banodoco_db_exploration.html` - Visual summary of database exploration (for GitHub sharing)
+  - Monochrome design with accent color highlights
+  - Responds to system light/dark theme preference
+  - Manual theme toggle button in top-right corner
 
 ## Next Steps
 
-1. **Investigate the data gap** - Can Feb 2024 - Jan 2025 be recovered?
-2. **Deep dive into daily_summaries** - Extract and display the structured content
-3. **Build export pipeline** - Scripts to transform data for knowledge base
-4. **Design navigation** - Browse by model, topic, contributor, or date
-5. **Generate retrospective summaries** - For Aug 2023 - Jan 2024 content
+1. **Deep dive into daily_summaries** - Extract and display the structured content
+2. **Build export pipeline** - Scripts to transform data for knowledge base
+3. **Design navigation** - Browse by model, topic, contributor, or date
+4. **Generate retrospective summaries** - For Aug 2023 - Oct 2025 content (pre-summary era)
 
 ## Useful Example Queries
 
