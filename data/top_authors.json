@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-01-29T19:15:00Z",
+  "total_messages": 1046713,
+  "unique_authors": 8145,
+  "top_authors": [
+    {"rank": 1, "username": "Kijai", "message_count": 103556, "top_channel_name": "wan_chatter"},
+    {"rank": 2, "username": "Draken", "message_count": 62016, "top_channel_name": "comfyui"},
+    {"rank": 3, "username": "Cubey", "message_count": 21935, "top_channel_name": "comfyui"},
+    {"rank": 4, "username": "˗ˏˋ⚡ˎˊ-", "message_count": 18268, "top_channel_name": "wan_chatter"},
+    {"rank": 5, "username": "Juampab12", "message_count": 17780, "top_channel_name": "wan_chatter"},
+    {"rank": 6, "username": "fredbliss", "message_count": 16430, "top_channel_name": "hunyuanvideo"},
+    {"rank": 7, "username": "Kosinkadink", "message_count": 16351, "top_channel_name": "comfyui"},
+    {"rank": 8, "username": "A.I.Warper", "message_count": 14729, "top_channel_name": "comfyui"},
+    {"rank": 9, "username": "Lumifel", "message_count": 14459, "top_channel_name": "nsfw"},
+    {"rank": 10, "username": "VRGameDevGirl84", "message_count": 13243, "top_channel_name": "wan_chatter"},
+    {"rank": 11, "username": "pom", "message_count": 12165, "top_channel_name": "updates"},
+    {"rank": 12, "username": "hicho", "message_count": 11874, "top_channel_name": "wan_chatter"},
+    {"rank": 13, "username": "David Snow", "message_count": 11871, "top_channel_name": "wan_chatter"},
+    {"rank": 14, "username": "CJ", "message_count": 9762, "top_channel_name": "nsfw"},
+    {"rank": 15, "username": "JohnDopamine", "message_count": 9467, "top_channel_name": "wan_chatter"},
+    {"rank": 16, "username": "NebSH", "message_count": 9164, "top_channel_name": "wan_chatter"},
+    {"rank": 17, "username": "Ablejones", "message_count": 9104, "top_channel_name": "wan_chatter"},
+    {"rank": 18, "username": "TK_999", "message_count": 9065, "top_channel_name": "wan_chatter"},
+    {"rank": 19, "username": "Dream Making", "message_count": 8455, "top_channel_name": "wan_chatter"},
+    {"rank": 20, "username": "itsB34STW4RS", "message_count": 8103, "top_channel_name": "comfyui"}
+  ]
+}

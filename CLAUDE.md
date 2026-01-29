@@ -131,13 +131,27 @@ The AI-generated summaries include:
 - **3D/Motion:** trellis, hunyuan3d, liveportrait
 - **Audio:** mmaudio, ace-step, music, yue, zonos
 
-## Files Created
+## Project Structure
 
-- `index.html` - Visual summary of database exploration
-  - Live at: https://nathanshipley.github.io/banodoco-kb/
-  - Monochrome design with accent color highlights
-  - Responds to system light/dark theme preference
-  - Manual theme toggle button in top-right corner
+```
+banodoco-kb/
+├── index.html          # Hub page linking to all sections
+├── database.html       # Database overview and exploration
+├── stats.html          # Community stats (top contributors)
+├── scripts/
+│   └── get_top_authors.py  # Fetches top contributors from API
+├── data/
+│   └── top_authors.json    # Cached stats data
+├── CLAUDE.md           # This file
+└── README.md           # GitHub readme
+```
+
+**Live site:** https://nathanshipley.github.io/banodoco-kb/
+
+**Design:**
+- Monochrome with accent color highlights
+- Responds to system light/dark theme preference
+- Manual theme toggle button in top-right corner
 
 ## Next Steps
 

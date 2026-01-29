@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Stats - Banodoco Knowledge Base</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066ff;
+            --accent-subtle: rgba(0, 102, 255, 0.08);
+            --success: #10b981;
+            --success-subtle: rgba(16, 185, 129, 0.08);
+            --warning: #f59e0b;
+            --warning-subtle: rgba(245, 158, 11, 0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0d0d0d;
+                --bg-secondary: #161616;
+                --bg-tertiary: #1f1f1f;
+                --text: #f0f0f0;
+                --text-muted: #888888;
+                --border: #2a2a2a;
+                --accent: #3b82f6;
+                --accent-subtle: rgba(59, 130, 246, 0.12);
+                --success: #22c55e;
+                --success-subtle: rgba(34, 197, 94, 0.12);
+                --warning: #eab308;
+                --warning-subtle: rgba(234, 179, 8, 0.12);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --bg-secondary: #161616;
+            --bg-tertiary: #1f1f1f;
+            --text: #f0f0f0;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+            --accent: #3b82f6;
+            --accent-subtle: rgba(59, 130, 246, 0.12);
+            --success: #22c55e;
+            --success-subtle: rgba(34, 197, 94, 0.12);
+            --warning: #eab308;
+            --warning-subtle: rgba(234, 179, 8, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 3rem 2rem;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        .breadcrumb span { color: var(--text-muted); }
+
+        header { margin-bottom: 3rem; }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .date {
+            color: var(--accent);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.875rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        td.rank {
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 60px;
+        }
+
+        td.rank-1 { color: #ffd700; }
+        td.rank-2 { color: #c0c0c0; }
+        td.rank-3 { color: #cd7f32; }
+
+        .username {
+            font-weight: 500;
+        }
+
+        .message-count {
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+        }
+
+        .channel-name {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .highlight-row {
+            background: var(--accent-subtle);
+        }
+
+        .text-muted { color: var(--text-muted); }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="index.html">Banodoco KB</a> <span>/</span> Community Stats
+        </nav>
+
+        <header>
+            <h1>Community Stats</h1>
+            <p class="subtitle">Who's contributing the most to the Banodoco Discord</p>
+            <p class="date">Data as of January 29, 2026</p>
+        </header>
+
+        <section>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">1,046,713</div>
+                    <div class="stat-label">Total Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8,145</div>
+                    <div class="stat-label">Unique Authors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">103,556</div>
+                    <div class="stat-label">Top Contributor Messages</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Top 20 Contributors</h2>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th style="text-align: right;">Messages</th>
+                            <th>Most Active In</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td class="rank rank-1">#1</td>
+                            <td class="username">Kijai</td>
+                            <td class="message-count">103,556</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank rank-2">#2</td>
+                            <td class="username">Draken</td>
+                            <td class="message-count">62,016</td>
+                            <td class="channel-name">comfyui</td>
+                        </tr>
+                        <tr>
+                            <td class="rank rank-3">#3</td>
+                            <td class="username">Cubey</td>
+                            <td class="message-count">21,935</td>
+                            <td class="channel-name">comfyui</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#4</td>
+                            <td class="username">˗ˏˋ⚡ˎˊ-</td>
+                            <td class="message-count">18,268</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#5</td>
+                            <td class="username">Juampab12</td>
+                            <td class="message-count">17,780</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#6</td>
+                            <td class="username">fredbliss</td>
+                            <td class="message-count">16,430</td>
+                            <td class="channel-name">hunyuanvideo</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#7</td>
+                            <td class="username">Kosinkadink</td>
+                            <td class="message-count">16,351</td>
+                            <td class="channel-name">comfyui</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#8</td>
+                            <td class="username">A.I.Warper</td>
+                            <td class="message-count">14,729</td>
+                            <td class="channel-name">comfyui</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#9</td>
+                            <td class="username">Lumifel</td>
+                            <td class="message-count">14,459</td>
+                            <td class="channel-name">nsfw</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#10</td>
+                            <td class="username">VRGameDevGirl84</td>
+                            <td class="message-count">13,243</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#11</td>
+                            <td class="username">pom</td>
+                            <td class="message-count">12,165</td>
+                            <td class="channel-name">updates</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#12</td>
+                            <td class="username">hicho</td>
+                            <td class="message-count">11,874</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#13</td>
+                            <td class="username">David Snow</td>
+                            <td class="message-count">11,871</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#14</td>
+                            <td class="username">CJ</td>
+                            <td class="message-count">9,762</td>
+                            <td class="channel-name">nsfw</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#15</td>
+                            <td class="username">JohnDopamine</td>
+                            <td class="message-count">9,467</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#16</td>
+                            <td class="username">NebSH</td>
+                            <td class="message-count">9,164</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#17</td>
+                            <td class="username">Ablejones</td>
+                            <td class="message-count">9,104</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#18</td>
+                            <td class="username">TK_999</td>
+                            <td class="message-count">9,065</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#19</td>
+                            <td class="username">Dream Making</td>
+                            <td class="message-count">8,455</td>
+                            <td class="channel-name">wan_chatter</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">#20</td>
+                            <td class="username">itsB34STW4RS</td>
+                            <td class="message-count">8,103</td>
+                            <td class="channel-name">comfyui</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-muted" style="margin-top: 1rem; font-size: 0.875rem;">
+                <strong>Kijai</strong> alone accounts for ~10% of all messages in the database.
+                <strong>wan_chatter</strong> is the most common top channel, followed by <strong>comfyui</strong>.
+            </p>
+        </section>
+
+        <footer>
+            <p>Data from Banodoco Discord Archive</p>
+            <p>Generated with Claude Code</p>
+        </footer>
+    </div>
+
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getCurrentTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return getSystemTheme();
+        }
+
+        function applyTheme(theme) {
+            if (theme === getSystemTheme()) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = getCurrentTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
+</body>
+</html>
