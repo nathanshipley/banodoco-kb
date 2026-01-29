@@ -133,7 +133,8 @@ The AI-generated summaries include:
 
 ## Files Created
 
-- `banodoco_db_exploration.html` - Visual summary of database exploration (for GitHub sharing)
+- `index.html` - Visual summary of database exploration
+  - Live at: https://nathanshipley.github.io/banodoco-kb/
   - Monochrome design with accent color highlights
   - Responds to system light/dark theme preference
   - Manual theme toggle button in top-right corner
