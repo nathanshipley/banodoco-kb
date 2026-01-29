@@ -1,0 +1,178 @@
+{
+  "generated_at": "2026-01-29T21:15:00Z",
+  "channel": "wan_chatter",
+  "source_messages": 50000,
+  "troubleshooting_entries": [
+    {
+      "title": "mat1 and mat2 error for CLIP loader",
+      "problem": "CLIP loader only passing clip-l data, getting mat1 and mat2 shape mismatch errors",
+      "solution": "Reinstall specific versions of transformers and tokenizers",
+      "details": "Run these commands in your ComfyUI python environment:\n.\\python_embeded\\python.exe -m pip uninstall -y transformers tokenizers\n.\\python_embeded\\python.exe -m pip install transformers==4.48.0 tokenizers==0.21.0\n\nAlternatively, using dual clip loader may also fix the issue.",
+      "contributors": ["Faust-SiN"],
+      "category": "error_fix"
+    },
+    {
+      "title": "WanSelfAttention normalized_attention_guidance error",
+      "problem": "Error: 'WanSelfAttention.normalized_attention_guidance() takes from 3 to 4 positional arguments but 8 were given'",
+      "solution": "Disable the WanVideo Apply NAG node in your workflow",
+      "details": "This error occurs when using NAG (Normalized Attention Guidance) with incompatible node versions. If the error is coming from the sampler itself, try replacing the node (in case a bad value is cached). Also ensure KJNodes and WanVideoWrapper are up to date.",
+      "contributors": ["Nao48", "JohnDopamine"],
+      "category": "error_fix"
+    },
+    {
+      "title": "Sampler V2 preview not showing",
+      "problem": "Live preview not working on WanVideo Sampler V2 node, though it works on the old sampler",
+      "solution": "Change the Live Preview Method setting in ComfyUI's settings",
+      "details": "The preview setting was moved from ComfyUI Manager to ComfyUI's native settings. Click the gear icon on the bottom left, search for 'Preview' and change 'Live Preview Method' to latent2rgb (or your preferred method).",
+      "contributors": ["lostintranslation"],
+      "category": "configuration"
+    },
+    {
+      "title": "Video colorspace/color shift issues",
+      "problem": "Color issues when loading videos, colors look different after save/load cycle",
+      "solution": "Use Load Video (FFmpeg) instead of VHS Load Video for correct colorspace handling",
+      "details": "Austin Mroz's analysis:\n- Video Combine works correctly but may produce videos in colorspaces that loaders don't convert back from\n- Load Video (FFmpeg) will convert colorspaces correctly but loads with high bit depth (may have rounding errors)\n- VHS Load Video does not support colorspaces and probably can't be fixed\n- Native Load Video loads as uint8 with default configuration",
+      "contributors": ["Austin Mroz", "CaptHook"],
+      "category": "compatibility"
+    },
+    {
+      "title": "SkyReels V3 reference-to-video compatibility",
+      "problem": "How to run SkyReels V3 in native ComfyUI",
+      "solution": "Use the Phantom workflow nodes",
+      "details": "The reference-to-video model works with Phantom workflows. It should run with the phantom node in both wrapper and native modes.",
+      "contributors": ["Kijai"],
+      "category": "workflow"
+    },
+    {
+      "title": "Block swap prefetch causing black output",
+      "problem": "Using WAN wrapper with block swap, setting prefetch higher than 1 causes black output with 'invalid value encountered in cast' warning",
+      "solution": "Keep prefetch count at 1 when using block swap",
+      "details": "With non_blocking enabled, prefetch count of 1 works reliably. Higher values (2-3) may give slight speed boost but risk black output. The error appears in videohelpersuite nodes.py:130.",
+      "contributors": ["patientx", "Kijai"],
+      "category": "performance"
+    },
+    {
+      "title": "Shift values for distilled LoRAs",
+      "problem": "Unclear what shift value to use with Wan distilled LoRAs at different resolutions",
+      "solution": "Use shift=5 for Wan distilled LoRAs; increase shift for higher resolutions",
+      "details": "Distilled LoRAs are trained with shift=5, so that works best. In general, shift depends on resolution - higher resolution needs higher shift because more resolution increases signal at a given noise level. You increase shift to increase noise level which maintains equivalent SNR. FLUX uses resolution-dependent shift automatically, but for other models you need to adjust manually.",
+      "contributors": ["spacepxl"],
+      "category": "configuration"
+    },
+    {
+      "title": "SAM3 masking VRAM leak",
+      "problem": "SAM3 masking has an awful VRAM leak when used in workflows",
+      "solution": "Run SAM3, then disable it, then load the video for the mask",
+      "details": "The workaround is to split the operation: run the SAM3 masking first, disable the node, then load the video with the mask applied. When it works, SAM3 can mask specific body parts like arms effectively.",
+      "contributors": ["mdkb"],
+      "category": "performance"
+    },
+    {
+      "title": "Long video generation approaches",
+      "problem": "Need to generate long videos with consistent identity/details",
+      "solution": "Use SVI Pro LoRA instead of context windows",
+      "details": "SVI Pro (released end of December) lets you chain generations using frames from the previous gen plus the original reference image. Benefits:\n- Faster than context windows (no overhead)\n- Each segment can be prompted individually\n- Works well when camera angle doesn't change much\n\nCaveats:\n- Color drift is common (various correction attempts)\n- Not as flexible as VACE for planned shots with controlnet\n\nAlternatives: LongCat-avatar (best for single person talking), PainterI2V Long Gen",
+      "contributors": ["blake37", "Juan Gea", "Stef"],
+      "category": "workflow"
+    },
+    {
+      "title": "SVI fragility and misalignment",
+      "problem": "SVI (Semantic Video Interpolation) produces misaligned results",
+      "solution": "Accept inherent limitations; use default overlap of 5 frames",
+      "details": "SVI is fragile due to the nature of its training - it was trained using noise generated from errors of a specific generation setup. Default 5-frame overlap works fine. For motion that doesn't translate well over few frames, try more frames but results may vary.",
+      "contributors": ["mallardgazellegoosewildcat2", "lostintranslation"],
+      "category": "workflow"
+    },
+    {
+      "title": "Frontend bug causing node display issues",
+      "problem": "Nodes not displaying correctly or workflow issues after frontend update",
+      "solution": "Update to the latest frontend version",
+      "details": "This was a bug in a recent frontend version that has been resolved. The frontend typically auto-updates on start, but if issues persist check for updates manually.",
+      "contributors": ["Kijai"],
+      "category": "error_fix"
+    },
+    {
+      "title": "SCAIL resolution for distant subjects",
+      "problem": "SCAIL output is hard to work with for far distance subjects",
+      "solution": "Use higher resolution or stick to closeups",
+      "details": "SCAIL works best for closeups and long gens with audio. For distant subjects, it needs more resolution. Also note: SCAIL uses pose image at half resolution, so expect about 50% more VRAM usage compared to similar workflows.",
+      "contributors": ["hicho", "Kijai"],
+      "category": "workflow"
+    },
+    {
+      "title": "Merged LoRA models causing errors",
+      "problem": "Models merged with LoRAs and their GGUFs giving errors that base models don't",
+      "solution": "Use base non-modified Wan models, or re-merge LoRAs using ComfyUI's model merge nodes",
+      "details": "If you're getting errors with merged models that worked before, try merging the LoRAs fresh using ComfyUI's nodes and saving the result. Base Wan models and their GGUFs typically work without these errors.",
+      "contributors": ["patientx"],
+      "category": "error_fix"
+    },
+    {
+      "title": "InfiniteTalk workflow step limit",
+      "problem": "InfiniteTalk workflow errors when using more than 4 steps without the lightx2v LoRA",
+      "solution": "Keep steps at 4 or below when using InfiniteTalk, or use with the lightx2v LoRA",
+      "details": "InfiniteTalk uses extensions looped (not long gen in one go). The workflow is designed for low step counts with the distilled LoRA.",
+      "contributors": ["Kijai", "avillabon"],
+      "category": "configuration"
+    }
+  ],
+  "tips_and_tricks": [
+    {
+      "tip": "Diffusers version doesn't matter much for WanVideoWrapper",
+      "context": "The wrapper doesn't really use diffusers beyond some schedulers, so version 0.36 or similar should work fine",
+      "contributor": "Kijai"
+    },
+    {
+      "tip": "Use VitPose with thickness=20 for animal motion in SCAIL",
+      "context": "For getting animals like dogs to run correctly, use SCAIL with just VitPose (not other pose options) and set thickness to 20",
+      "contributor": "Kijai, amli"
+    },
+    {
+      "tip": "Refresh ComfyUI when nodes don't work on first add",
+      "context": "Sometimes new nodes don't work until you refresh the page - this is a known quirk",
+      "contributor": "Kijai"
+    },
+    {
+      "tip": "2x VAE upscaler available for Wan",
+      "context": "spacepxl trained a decoder that acts as a free 2x upscaler, killing noise grid patterns: huggingface.co/spacepxl/Wan2.1-VAE-upscale2x",
+      "contributor": "spacepxl"
+    },
+    {
+      "tip": "Self-refine feature is on a testing branch",
+      "context": "The self-refine capability shown in examples is still in testing/development, not in main wrapper yet",
+      "contributor": "JohnDopamine"
+    },
+    {
+      "tip": "Video-to-video infinite for extending VACE generations",
+      "context": "To extend VACE videos, use two workflows: one for initial video gen, another for video-to-video infinite extension",
+      "contributor": "asd"
+    }
+  ],
+  "common_questions": [
+    {
+      "question": "Can SkyReels V3 work with native ComfyUI?",
+      "answer": "Yes, the reference-to-video model works with Phantom workflows in both wrapper and native modes",
+      "contributor": "Kijai"
+    },
+    {
+      "question": "Is there a reference face solution for Wan I2V like IP-Adapter?",
+      "answer": "WanAnimate-like facial injection methods may be added to SCAIL's official version, but nothing currently works like IP-Adapter on base Wan model",
+      "contributor": "teal024 (SCAIL developer)"
+    },
+    {
+      "question": "How long can SVI Pro generate?",
+      "answer": "About 5 seconds per segment, which you can chain together. The model lets you extend by using frames from previous gen plus original reference image",
+      "contributor": "Elvaxorn, blake37"
+    },
+    {
+      "question": "What's the difference between wrapper and native nodes?",
+      "answer": "Make sure you're using the correct sampler/loader - there are separate nodes for Wrapper vs Native workflows. Using the wrong one causes errors.",
+      "contributor": "JohnDopamine"
+    },
+    {
+      "question": "Why are preview results grainy after ComfyUI update?",
+      "answer": "This can be a ComfyUI frontend issue. Check that Live Preview Method is set correctly in ComfyUI settings (not Manager), and try latent2rgb",
+      "contributor": "lostintranslation"
+    }
+  ]
+}

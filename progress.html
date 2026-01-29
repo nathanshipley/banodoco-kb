@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Log - Banodoco Knowledge Base</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066ff;
+            --accent-subtle: rgba(0, 102, 255, 0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0d0d0d;
+                --bg-secondary: #161616;
+                --bg-tertiary: #1f1f1f;
+                --text: #f0f0f0;
+                --text-muted: #888888;
+                --border: #2a2a2a;
+                --accent: #3b82f6;
+                --accent-subtle: rgba(59, 130, 246, 0.12);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --bg-secondary: #161616;
+            --bg-tertiary: #1f1f1f;
+            --text: #f0f0f0;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+            --accent: #3b82f6;
+            --accent-subtle: rgba(59, 130, 246, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-muted);
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Status Summary */
+        .status-summary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-summary h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .status-summary p {
+            margin-bottom: 0.75rem;
+        }
+
+        .status-summary p:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-summary strong {
+            color: var(--accent);
+        }
+
+        .status-summary ul {
+            margin: 0.5rem 0 0.75rem 1.5rem;
+        }
+
+        .status-summary li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-entry {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .timeline-entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-entry::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateX(-4px);
+        }
+
+        .timestamp {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-entry h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-entry p {
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .timeline-entry ul {
+            margin: 0.5rem 0 0.75rem 1.5rem;
+            color: var(--text);
+        }
+
+        .timeline-entry li {
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-entry code {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        .insight {
+            background: var(--accent-subtle);
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem 1rem;
+            margin: 0.75rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .insight strong {
+            color: var(--accent);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="index.html">Home</a> <span>/ Progress Log</span>
+        </nav>
+
+        <header>
+            <h1>Progress Log</h1>
+            <p class="subtitle">Documenting our thinking as we build the knowledge base</p>
+        </header>
+
+        <section class="status-summary">
+            <h2>Current Status</h2>
+            <p><strong>Phase:</strong> Data exploration & knowledge extraction experiments</p>
+            <p><strong>Key insight:</strong> The database contains two complementary knowledge sources:</p>
+            <ul>
+                <li><strong>Daily summaries</strong> - AI-generated, structured, attributed, include media. Cover ~82 days across 21 channels. Contain both "news" AND reference knowledge (settings, workflows, troubleshooting).</li>
+                <li><strong>Raw chat messages</strong> - 1M+ messages. Rich Q&A pairs buried in replies (5,600+ in wan_chatter alone). Requires extraction and synthesis.</li>
+            </ul>
+            <p><strong>Working hypothesis:</strong> Combine both sources - daily summaries as the primary structured content, supplemented by extracted troubleshooting guides from raw Q&A.</p>
+            <p><strong>Open questions:</strong> What's the best format for the KB? Static pages vs RAG vs chat interface?</p>
+        </section>
+
+        <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">January 29, 2026 - Evening</div>
+                <h3>Daily summaries contain more than "news"</h3>
+                <p>Re-examined daily summaries after initially thinking they were mostly "news" (model releases, community activity). Found they actually contain significant <strong>reference knowledge</strong>:</p>
+                <ul>
+                    <li><strong>Technical settings:</strong> FP32 vs BF16 compute flags, sampler recommendations, resolution tables</li>
+                    <li><strong>Workflow techniques:</strong> Dual-model approaches (Base + Turbo), step counts for different effects</li>
+                    <li><strong>Training knowledge:</strong> LoRA strength conversions, captioning best practices, specific commit versions</li>
+                    <li><strong>Troubleshooting:</strong> SageAttention breaking Z-Image Base, facial changes during relighting</li>
+                </ul>
+                <div class="insight">
+                    <strong>Insight:</strong> Daily summaries may be better than raw chat for many KB use cases - they're already synthesized, structured, and attributed. The "news" framing was too narrow.
+                </div>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 29, 2026 - Afternoon</div>
+                <h3>Synthesized first troubleshooting guide from raw chat</h3>
+                <p>Took the extracted Q&A data from wan_chatter and synthesized it into a structured troubleshooting guide. Created both JSON and Markdown outputs.</p>
+                <p>Results: 14 troubleshooting entries, 6 tips, 5 FAQs. Examples:</p>
+                <ul>
+                    <li>mat1/mat2 CLIP loader fix: <code>pip install transformers==4.48.0</code></li>
+                    <li>NAG attention error: disable WanVideo Apply NAG node</li>
+                    <li>Sampler preview missing: check ComfyUI settings, not Manager</li>
+                    <li>Shift values: use 5 for distilled LoRAs, increase for higher res</li>
+                </ul>
+                <p>Files: <code>data/troubleshooting_wan_chatter.json</code>, <code>data/troubleshooting_wan_chatter.md</code></p>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 29, 2026 - Afternoon</div>
+                <h3>Extracted reference knowledge from raw chat</h3>
+                <p>Built <code>scripts/extract_reference_knowledge.py</code> to find Q&A patterns, errors, and solutions buried in Discord messages. Ran against wan_chatter channel (50K messages).</p>
+                <p>Results surprised us:</p>
+                <ul>
+                    <li>11,544 potential questions (~23% of messages match question patterns)</li>
+                    <li>5,605 Q&A reply pairs (using <code>reference_id</code> to track who replied to what)</li>
+                    <li>662 messages mentioning fixes/solutions</li>
+                    <li>793 error-related discussions</li>
+                </ul>
+                <div class="insight">
+                    <strong>Insight:</strong> There's substantial reference knowledge in raw chat that doesn't appear in daily summaries. The <code>reference_id</code> field is key - it lets us connect questions to their answers.
+                </div>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 29, 2026 - Morning</div>
+                <h3>Discussion: What makes a good knowledge base?</h3>
+                <p>Nathan shared that NotebookLM (chat-with-docs) has been the most useful KB approach he's tried. This led to thinking about what makes knowledge useful:</p>
+                <ul>
+                    <li><strong>"News" vs "Reference"</strong> - Daily summaries capture what happened (news), but users often need how-to information (reference)</li>
+                    <li><strong>Update frequency</strong> - AI video/image space moves fast. Content becomes outdated quickly.</li>
+                    <li><strong>Audience</strong> - Primarily technical users who want to get unstuck or learn techniques</li>
+                </ul>
+                <p>Initial hypothesis: Daily summaries = news, raw chat = buried reference knowledge. (This hypothesis was later revised - see evening entry.)</p>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 28, 2026</div>
+                <h3>Analyzed top contributors</h3>
+                <p>Built script to find who contributes most to the community. Key finding: <strong>Kijai</strong> has sent 103,556 messages - about 10% of all messages in the database. Clear power-law distribution.</p>
+                <p>Top 5: Kijai (103K), pom (34K), Juampab12 (26K), spacepxl (21K), Juan Gea (20K)</p>
+                <p>Created <code>stats.html</code> to display top 20 contributors with their most active channels.</p>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 28, 2026</div>
+                <h3>Database gap filled!</h3>
+                <p>Peter (@pom) filled in the 12-month data gap (Feb 2024 - Jan 2025). Database now has:</p>
+                <ul>
+                    <li>1,046,692 messages (up from 727K)</li>
+                    <li>6,624 members (up from 4,477)</li>
+                    <li>272,750 messages recovered from the gap period</li>
+                </ul>
+                <p>This data includes FLUX release, Stable Diffusion 3, CogVideoX, and early HunyuanVideo discussions.</p>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">January 28, 2026</div>
+                <h3>Project started</h3>
+                <p>Goal: Transform the Banodoco Discord database into a useful knowledge base about open source AI tools (video generation, image generation, training, ComfyUI, etc.)</p>
+                <p>Initial exploration revealed:</p>
+                <ul>
+                    <li>4 core tables: discord_messages, discord_members, discord_channels, daily_summaries</li>
+                    <li>29 months of data (Aug 2023 - Jan 2026)</li>
+                    <li>AI-generated daily summaries with structured JSON, attribution, and media links</li>
+                    <li>A 12-month gap in the data (Feb 2024 - Jan 2025) - later filled</li>
+                </ul>
+                <p>Created <code>database.html</code> to visualize the database structure and coverage.</p>
+            </article>
+        </div>
+
+        <footer>
+            <p>Built by <a href="https://nathanshipley.github.io">Nathan Shipley</a> with Claude Code</p>
+        </footer>
+    </div>
+
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getCurrentTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return getSystemTheme();
+        }
+
+        function applyTheme(theme) {
+            if (theme === getSystemTheme()) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = getCurrentTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
+</body>
+</html>

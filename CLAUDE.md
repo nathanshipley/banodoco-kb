@@ -9,17 +9,23 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ```
 banodoco-kb/
-├── index.html              # Hub page linking to all sections
-├── database.html           # Database overview and exploration
-├── stats.html              # Community stats (top contributors)
+├── index.html                              # Hub page linking to all sections
+├── progress.html                           # Progress log documenting our thinking
+├── database.html                           # Database overview and exploration
+├── stats.html                              # Community stats (top contributors)
 ├── scripts/
-│   └── get_top_authors.py  # Fetches top contributors from API
+│   ├── get_top_authors.py                  # Fetches top contributors from API
+│   ├── extract_reference_knowledge.py      # Extracts Q&A pairs from raw chat
+│   └── synthesize_troubleshooting.py       # Synthesizes Q&A into guides (API-based)
 ├── data/
-│   └── top_authors.json    # Cached stats data
+│   ├── top_authors.json                    # Cached stats data
+│   ├── reference_knowledge_wan_chatter.json # Extracted Q&A from wan_chatter
+│   ├── troubleshooting_wan_chatter.json    # Synthesized troubleshooting guide
+│   └── troubleshooting_wan_chatter.md      # Human-readable version
 ├── docs/
-│   └── stats-ideas.md      # Future stats/visualization ideas
-├── CLAUDE.md               # This file
-└── README.md               # GitHub readme
+│   └── stats-ideas.md                      # Future stats/visualization ideas
+├── CLAUDE.md                               # This file
+└── README.md                               # GitHub readme
 ```
 
 ## Design
@@ -165,12 +171,20 @@ The database has **continuous coverage** from August 2023 to present:
 - 8,145 unique authors across 1M+ messages
 - **wan_chatter** is the most common top channel
 
-### Daily Summaries Are High Quality
-The AI-generated summaries include:
-- Specific technical details (VRAM, LoRA strengths, samplers)
-- Attribution to community experts by name
-- Links back to source messages
-- Structured topics with subtopics
+### Daily Summaries Contain Reference Knowledge
+Initially thought summaries were just "news" but they contain significant reference knowledge:
+- **Technical settings:** FP32 vs BF16 flags, sampler recommendations, resolution tables
+- **Workflow techniques:** Dual-model approaches, step counts for effects
+- **Training knowledge:** LoRA strength conversions, captioning best practices
+- **Troubleshooting:** SageAttention issues, facial changes during relighting
+- Plus: attribution, media links, structured format
+
+### Raw Chat Contains Buried Q&A
+Extraction from wan_chatter (50K messages) found:
+- 11,544 potential questions (23% of messages)
+- 5,605 Q&A reply pairs (via `reference_id`)
+- 662 solution mentions, 793 error discussions
+- Synthesized into 14 troubleshooting entries, 6 tips, 5 FAQs
 
 ### Channel Categories
 - **Video:** wan_*, ltx_*, hunyuanvideo, cogvideox, mochi, animatediff, sora, veo3
@@ -184,18 +198,23 @@ The AI-generated summaries include:
 
 ## Next Steps
 
+### Knowledge Base (Current Focus)
+Working hypothesis: combine both knowledge sources:
+1. **Daily summaries as primary content** - already structured, attributed, includes media
+2. **Extracted troubleshooting guides** - synthesized from raw Q&A pairs
+3. **Open question:** Best format? Static pages vs RAG vs chat interface?
+
+To do:
+- Extract troubleshooting from more channels
+- Design browsable interface for daily summaries
+- Consider NotebookLM-style chat for querying
+
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:
-1. Top channels by message count
-2. Activity timeline (messages per month)
-3. Most reacted messages
-4. Activity heatmap (hour/day)
-
-### Knowledge Base
-1. Deep dive into daily_summaries structure
-2. Design navigation (by model, topic, contributor, date)
-3. Build search/browse interface
-4. Generate retrospective summaries for Aug 2023 - Oct 2025
+1. Activity timeline (messages per month)
+2. Most reacted messages
+3. Activity heatmap (hour/day)
+4. Model mentions over time
 
 ---
 
