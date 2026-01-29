@@ -41,8 +41,8 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 
 | Table | Count | Description |
 |-------|-------|-------------|
-| `discord_messages` | 1,046,623 | All chat messages |
-| `discord_members` | 4,477 | User profiles |
+| `discord_messages` | 1,046,692 | All chat messages |
+| `discord_members` | 6,624 | User profiles |
 | `discord_channels` | 227 | Channel metadata |
 | `daily_summaries` | 463 | AI-generated daily summaries |
 

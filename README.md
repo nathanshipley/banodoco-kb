@@ -9,7 +9,7 @@ This project aims to transform the [Banodoco Discord](https://discord.gg/banodoc
 Currently just a [data exploration page](https://nathanshipley.github.io/banodoco-kb/) summarizing what's in the database:
 
 - **1M+ Discord messages** spanning Aug 2023 - present
-- **4,400+ community members**
+- **6,600+ community members**
 - **227 channels** covering video generation, image generation, training, ComfyUI, and more
 - **460+ AI-generated daily summaries** with technical details and contributor attribution
 
