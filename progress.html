@@ -310,17 +310,64 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Data exploration & knowledge extraction experiments</p>
-            <p><strong>Key insight:</strong> The database contains two complementary knowledge sources:</p>
+            <p><strong>Phase:</strong> Understanding the data sources & planning extraction</p>
+            <p><strong>Key insight:</strong> Found the source code for how daily summaries are generated. They use Claude Sonnet 4.5 with GPT-5.2 verification. The prompt prioritizes community contributions and new discoveries - so reference knowledge IS captured, but framed as "news".</p>
+            <p><strong>Two knowledge sources:</strong></p>
             <ul>
-                <li><strong>Daily summaries</strong> - AI-generated, structured, attributed, include media. Cover ~82 days across 21 channels. Contain both "news" AND reference knowledge (settings, workflows, troubleshooting).</li>
-                <li><strong>Raw chat messages</strong> - 1M+ messages. Rich Q&A pairs buried in replies (5,600+ in wan_chatter alone). Requires extraction and synthesis.</li>
+                <li><strong>Daily summaries</strong> - Structured, attributed, include media. News-framed but contain durable reference knowledge. Date-anchored.</li>
+                <li><strong>Raw chat Q&A</strong> - 1M+ messages with 5,600+ reply pairs in wan_chatter alone. Troubleshooting buried in conversations.</li>
             </ul>
-            <p><strong>Working hypothesis:</strong> Combine both sources - daily summaries as the primary structured content, supplemented by extracted troubleshooting guides from raw Q&A.</p>
-            <p><strong>Open questions:</strong> What's the best format for the KB? Static pages vs RAG vs chat interface?</p>
+            <p><strong>Proposed approach:</strong></p>
+            <ol>
+                <li>Re-process summaries to extract timeless reference content</li>
+                <li>Cross-reference with raw Q&A for troubleshooting specifics</li>
+                <li>Organize by topic (all Z-Image tips together) rather than by date</li>
+            </ol>
+            <p><strong>Open questions:</strong> Best format? Static pages vs RAG vs chat? How to keep content fresh as field evolves?</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">January 29, 2026 - Late Evening</div>
+                <h3>Found the summary generation source code</h3>
+                <p>Nathan found the code that generates daily summaries: <a href="https://github.com/banodoco/brain-of-bdnc/blob/main/src/features/summarising/subfeatures/news_summary.py">brain-of-bdnc/news_summary.py</a></p>
+
+                <p><strong>How summaries are generated:</strong></p>
+                <ul>
+                    <li><strong>Model:</strong> Claude Sonnet 4.5 for generation, GPT-5.2 with "high reasoning effort" for verification</li>
+                    <li><strong>Chunking:</strong> 1000 messages at a time, then combined to top 3-5 items</li>
+                    <li><strong>Verification checks:</strong> Attribution errors, unsupported claims, logical leaps, invented details</li>
+                </ul>
+
+                <p><strong>The prompt explicitly prioritizes</strong> (in order):</p>
+                <ol>
+                    <li>Original creations by community members (nodes, workflows, tools, LoRAs, scripts)</li>
+                    <li>Notable achievements and demonstrations</li>
+                    <li>High-engagement content (reactions/comments signal community interest)</li>
+                    <li>New features people are excited about</li>
+                    <li>Shared workflows with examples</li>
+                </ol>
+
+                <p><strong>Key prompt instructions:</strong></p>
+                <ul>
+                    <li>"Do NOT jump to conclusions unsupported by evidence"</li>
+                    <li>"Only report what is explicitly stated or clearly demonstrated"</li>
+                    <li>"Distinguish between facts, opinions, and speculation"</li>
+                    <li>"Always credit creators with bold usernames"</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Insight:</strong> The summaries ARE capturing reference knowledge - but framed as "news". When someone discovers "FP32 compute improves quality", it's captured as a news item even though it's durable reference knowledge. For a KB, we need to re-process to extract the timeless content and organize by topic rather than date.
+                </div>
+
+                <p><strong>Proposed KB approach:</strong></p>
+                <ol>
+                    <li><strong>Re-process summaries</strong> - Extract reference content, strip the news framing</li>
+                    <li><strong>Cross-reference with raw Q&A</strong> - Summaries miss troubleshooting that happens in back-and-forth chat</li>
+                    <li><strong>Organize by topic</strong> - All Z-Image tips together, all Wan troubleshooting together, not scattered across dates</li>
+                </ol>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">January 29, 2026 - Evening</div>
                 <h3>Daily summaries contain more than "news"</h3>
