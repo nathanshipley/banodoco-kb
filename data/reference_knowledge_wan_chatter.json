@@ -1,0 +1,1061 @@
+{
+  "generated_at": "2026-01-29T20:50:51.506341Z",
+  "channel": "wan_chatter",
+  "channel_id": 1342763350815277067,
+  "messages_analyzed": 50000,
+  "summary": {
+    "potential_questions": 100,
+    "qa_pairs_found": 100,
+    "solution_mentions": 100,
+    "error_discussions": 100,
+    "highly_reacted": 50
+  },
+  "sample_qa_pairs": [
+    {
+      "question": {
+        "message_id": 1466489311871631645,
+        "author": "Juan Gea",
+        "content": "<@228118453062467585> what diffusers version is recommended now? I'm talking about windows, I have 0.36, but not sure if it's the adequate",
+        "created_at": "2026-01-29T17:44:58.004+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466497150446993482,
+        "author": "Kijai",
+        "content": "Shouldn't matter, it's not really used in the wrapper  beyond some schedulers",
+        "created_at": "2026-01-29T18:16:06.866+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466457494753644778,
+        "author": "VRGameDevGirl84(RTX 5090)",
+        "content": "i can take a look after work. You have the most recent version right?",
+        "created_at": "2026-01-29T15:38:32.212+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466478551258632212,
+        "author": "lostintranslation",
+        "content": "it definitely happens after a forced update. the 15min nonresponsive swapping after about 5min processing is *quite* noticeable, lol",
+        "created_at": "2026-01-29T17:02:12.474+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466282536316571800,
+        "author": "Faust-SiN",
+        "content": "anyone else's clip loader break out of nowhere? for whatever reason it's only passing clip-l data",
+        "created_at": "2026-01-29T04:03:18.87+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466476170521350307,
+        "author": "Faust-SiN",
+        "content": "just leaving this here in case anyone else runs into a mat1 and mat2 error for clip loader, the fix for me was:\n\n.\\python_embeded\\python.exe -m pip uninstall -y transformers tokenizers\n.\\python_embeded\\python.exe -m pip install transformers==4.48.0 tokenizers==0.21.0",
+        "created_at": "2026-01-29T16:52:44.862+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466457294370898258,
+        "author": "lostintranslation",
+        "content": "I'm dealing with monstrosities like this, but also twice the frames because interpolation. color correction has to come last because the other nodes have a known color issue",
+        "created_at": "2026-01-29T15:37:44.437+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466474784845205650,
+        "author": "hicho",
+        "content": "\ud83d\ude31",
+        "created_at": "2026-01-29T16:47:14.491+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466456793671663696,
+        "author": "lostintranslation",
+        "content": "<@330829305477333022> I'm getting a bit wild with postprocessing long sequences; the chunking works well at first, taking a while which is expected due to input size, but a bit later I get a pretty brutal RAM OOM (sort of, it was just completely unresponsive while it swapped for like 15min). is this normal, and is there a way around this?\nI could hardcode pre-chunking into the workflow itself but I feel like that defeats the purpose of the batch size setting.",
+        "created_at": "2026-01-29T15:35:45.061+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466457494753644778,
+        "author": "VRGameDevGirl84(RTX 5090)",
+        "content": "i can take a look after work. You have the most recent version right?",
+        "created_at": "2026-01-29T15:38:32.212+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466440400989585439,
+        "author": "Shubhooooo",
+        "content": "claude think thats the case plus i got an error when i removed the ref image path",
+        "created_at": "2026-01-29T14:30:36.741+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466443036824178729,
+        "author": "mallardgazellegoosewildcat2",
+        "content": "Ah ye claude gets confused with ML stuff",
+        "created_at": "2026-01-29T14:41:05.173+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466441199924810043,
+        "author": "Shubhooooo",
+        "content": "could be there inference script maybe? \ud83e\udd37\u200d\u2642\ufe0f",
+        "created_at": "2026-01-29T14:33:47.222+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466442185883914475,
+        "author": "yi",
+        "content": "Could be. Even if if doesn't somehow support native t2v, there are ways to make it do t2v",
+        "created_at": "2026-01-29T14:37:42.293+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466416072122175588,
+        "author": "lostintranslation",
+        "content": "<@228118453062467585> I've been trying to fix the preview on the sampler, and just recently I saw the sampler preview start working after adding some lora to the multi loader, then it was working fine for a while, and then some time later I swapped the loras around and it stopped working again.\nI tried reproducing this with loading the workflow after which it got fixed, and swapping loras around but it's still broken ever since.\nI'm not sure if this is in any way useful, but I figure maybe you know something that could be wrong somewhere based on this; \nunfortunately I've been all out of ideas why this is so weird with breaking seemingly at random",
+        "created_at": "2026-01-29T12:53:56.287+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466427064788844615,
+        "author": "Kijai",
+        "content": "just sounds random, I don't have any issues",
+        "created_at": "2026-01-29T13:37:37.143+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466425728881918114,
+        "author": "huangkun1985",
+        "content": "cool, but only 3 seconds long?",
+        "created_at": "2026-01-29T13:32:18.638+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466426291082493993,
+        "author": "Elvaxorn",
+        "content": "you can do 5 but that's the point, I'm looking how to extend it",
+        "created_at": "2026-01-29T13:34:32.677+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466425389277778147,
+        "author": "Shubhooooo",
+        "content": "so this is kinda just ovi but with hunyuan foley instead of mmaudio plus scaled to 2.2 ?",
+        "created_at": "2026-01-29T13:30:57.67+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466425461960868036,
+        "author": "yi",
+        "content": "Yes",
+        "created_at": "2026-01-29T13:31:14.999+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466410500379115759,
+        "author": "Elvaxorn",
+        "content": "you mean I do a vace video then plug it into infinite talk like with denoise?",
+        "created_at": "2026-01-29T12:31:47.88+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466410692289757194,
+        "author": "asd",
+        "content": "No u have to use 2 workflow 1 for ur video gen and another is video to video infinite",
+        "created_at": "2026-01-29T12:32:33.635+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466410068621918289,
+        "author": "Elvaxorn",
+        "content": "what  do you mean?",
+        "created_at": "2026-01-29T12:30:04.941+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466410100423135375,
+        "author": "asd",
+        "content": "Video to video",
+        "created_at": "2026-01-29T12:30:12.523+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466409871346896918,
+        "author": "asd",
+        "content": "Why not v2v infinite?",
+        "created_at": "2026-01-29T12:29:17.907+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466410068621918289,
+        "author": "Elvaxorn",
+        "content": "what  do you mean?",
+        "created_at": "2026-01-29T12:30:04.941+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466389341080260679,
+        "author": "Kijai",
+        "content": "Sure but why are their examples so bad? How is that even close to LTX2",
+        "created_at": "2026-01-29T11:07:43.11+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466400708264988764,
+        "author": "yi",
+        "content": "Tbh the sound feels much better",
+        "created_at": "2026-01-29T11:52:53.258+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466392090157252780,
+        "author": "Elvaxorn",
+        "content": "Can skyreels v3 work with Native?",
+        "created_at": "2026-01-29T11:18:38.541+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466392385519882290,
+        "author": "Kijai",
+        "content": "The reference to video works with Phantom workflows",
+        "created_at": "2026-01-29T11:19:48.961+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466327757456670801,
+        "author": "Juampab12",
+        "content": "excuse me, what the flip?",
+        "created_at": "2026-01-29T07:03:00.43+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466328560083144755,
+        "author": "\ud83e\udd99rishappi",
+        "content": "KJ to decode  \ud83d\ude06",
+        "created_at": "2026-01-29T07:06:11.791+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466255804423340174,
+        "author": "JohnDopamine",
+        "content": "Do you have either of the nodes on the right in your WF? One is for the Wrapper and one is for native. You may be using the wrong one.",
+        "created_at": "2026-01-29T02:17:05.49+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466257444396204269,
+        "author": "Nao48",
+        "content": "thanks, it works after disabling WanVideo Apply NAG",
+        "created_at": "2026-01-29T02:23:36.49+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466254013400879154,
+        "author": "JohnDopamine",
+        "content": "Edit: obviously - but have you tried disabling the nodes? Def related to that",
+        "created_at": "2026-01-29T02:09:58.477+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466255278990164060,
+        "author": "Nao48",
+        "content": "it's in the WanVideo Sampler node",
+        "created_at": "2026-01-29T02:15:00.217+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466252952019931373,
+        "author": "Nao48",
+        "content": "hi <@228118453062467585> idk if anyone else has asked this, but I'm getting this error \"WanSelfAttention.normalized_attention_guidance() takes from 3 to 4 positional arguments but 8 were given\" do you know how to fix it?",
+        "created_at": "2026-01-29T02:05:45.424+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466254013400879154,
+        "author": "JohnDopamine",
+        "content": "Edit: obviously - but have you tried disabling the nodes? Def related to that",
+        "created_at": "2026-01-29T02:09:58.477+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466238169174245386,
+        "author": "Elvaxorn",
+        "content": "amazing, can you share the wf for this?",
+        "created_at": "2026-01-29T01:07:00.919+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466240863033102443,
+        "author": "JohnDopamine",
+        "content": "Sure, Kijai shared a WIP here: https://discord.com/channels/1076117621407223829/1342763350815277067/1466133032577794109",
+        "created_at": "2026-01-29T01:17:43.185+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466235485268480184,
+        "author": "Cubey",
+        "content": "is self refine on wrapper only?",
+        "created_at": "2026-01-29T00:56:21.026+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466236991598497908,
+        "author": "JohnDopamine",
+        "content": "Not even there yet....branch for the moment (testing)",
+        "created_at": "2026-01-29T01:02:20.163+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466205776753197190,
+        "author": "asd",
+        "content": "Its long gen also in one go right?",
+        "created_at": "2026-01-28T22:58:17.964+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466205845036597483,
+        "author": "Kijai",
+        "content": "it's infinitetalk so no, it's extensions looped",
+        "created_at": "2026-01-28T22:58:34.244+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466194245302878294,
+        "author": "Kijai",
+        "content": "the default 5 works fine?",
+        "created_at": "2026-01-28T22:12:28.652+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466195979513626897,
+        "author": "lostintranslation",
+        "content": "it does, so I guess that'll have to do. some motion doesn't go over super well over just just a few frames, so I wanted to try more",
+        "created_at": "2026-01-28T22:19:22.12+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466194086737477723,
+        "author": "lostintranslation",
+        "content": "hmm, so that should be right then, but there's still some misalignment. I wonder if that's inherent to SVI?",
+        "created_at": "2026-01-28T22:11:50.847+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466195360115589345,
+        "author": "mallardgazellegoosewildcat2",
+        "content": "SVI is a bit fragile due to the nature of the training\nIt is a fantastic method but not too flexible",
+        "created_at": "2026-01-28T22:16:54.444+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466147871580749945,
+        "author": "Ablejones",
+        "content": "Ah a new model? Coolio",
+        "created_at": "2026-01-28T19:08:12.295+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466155576252694732,
+        "author": "Kijai",
+        "content": "Might be right up your alley, it's almost identical to Phantom",
+        "created_at": "2026-01-28T19:38:49.232+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466132691257790565,
+        "author": "yi",
+        "content": "Anyway to run it in native comfyui?",
+        "created_at": "2026-01-28T18:07:53.024+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466132747797008496,
+        "author": "Kijai",
+        "content": "should run with phantom node, it does in wrapper so why not native too",
+        "created_at": "2026-01-28T18:08:06.504+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466104993143853117,
+        "author": "JohnDopamine",
+        "content": "What WF/nodes/model are you using?",
+        "created_at": "2026-01-28T16:17:49.279+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466105072428646694,
+        "author": "yi",
+        "content": "https://huggingface.co/spaces/Skywork/SkyReels-V3",
+        "created_at": "2026-01-28T16:18:08.182+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466099897466884279,
+        "author": "JohnDopamine",
+        "content": "did you answer if you tried it? Or have you?",
+        "created_at": "2026-01-28T15:57:34.375+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466099973765595230,
+        "author": "yi",
+        "content": "Not tried yet",
+        "created_at": "2026-01-28T15:57:52.566+00:00",
+        "reactions": 1
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466099448328355930,
+        "author": "Kijai",
+        "content": "don't think there's any ref model for A14B 2.2 (or based on it)?",
+        "created_at": "2026-01-28T15:55:47.292+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466099585113133159,
+        "author": "yi",
+        "content": "Nah, don't think so",
+        "created_at": "2026-01-28T15:56:19.904+00:00",
+        "reactions": 0
+      }
+    },
+    {
+      "question": {
+        "message_id": 1466022213114134528,
+        "author": "Juan Gea",
+        "content": "Do we have the self-refine already in the wrapper? It looks amazing",
+        "created_at": "2026-01-28T10:48:52.982+00:00",
+        "reactions": 0
+      },
+      "answer": {
+        "message_id": 1466083157647294534,
+        "author": "JohnDopamine",
+        "content": "https://discord.com/channels/1076117621407223829/1342763350815277067/1465777112005738690",
+        "created_at": "2026-01-28T14:51:03.291+00:00",
+        "reactions": 0
+      }
+    }
+  ],
+  "sample_solutions": [
+    {
+      "message_id": 1466474480145662062,
+      "author": "hicho",
+      "content": "its so hard to work with in far distance output as it needs more resolution, for closeups and long gens with audio its a banger.",
+      "created_at": "2026-01-29T16:46:01.845+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466416072122175588,
+      "author": "lostintranslation",
+      "content": "<@228118453062467585> I've been trying to fix the preview on the sampler, and just recently I saw the sampler preview start working after adding some lora to the multi loader, then it was working fine for a while, and then some time later I swapped the loras around and it stopped working again.\nI tried reproducing this with loading the workflow after which it got fixed, and swapping loras around but it's still broken ever since.\nI'm not sure if this is in any way useful, but I figure maybe you know something that could be wrong somewhere based on this; \nunfortunately I've been all out of ideas why this is so weird with breaking seemingly at random",
+      "created_at": "2026-01-29T12:53:56.287+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466282591433785414,
+      "author": "Faust-SiN",
+      "content": "using dual clip loader fixed it, but just weird",
+      "created_at": "2026-01-29T04:03:32.011+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1465763370962518333,
+      "author": "Austin Mroz",
+      "content": "Thanks for the nudge.\nThere's been quite a few reports over in [#529](<https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/issues/529>) and [#591](<https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/issues/591>)\nThe post in this thread match up with my current understanding:\n- Video Combine works correctly, but can produce output videos in colorspaces which loader nodes may not convert back from\n- Load Video (FFmpeg) will convert colorspaces correctly, but loads with high bit depth which may introduce some rounding errors.\n- VHS Load Video does not support color spaces and probably can't be fixed.\n- Native Load Video (in my minimal experience) loads as uint8 with default configuration.",
+      "created_at": "2026-01-27T17:40:20.204+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1465399012109713479,
+      "author": "CaptHook",
+      "content": "The repository, folks reported it to the node developer with no response.  So seems no fix at this time and it's ffmpeg for the solution",
+      "created_at": "2026-01-26T17:32:30.284+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1465344243462574184,
+      "author": "Kijai",
+      "content": "and fixed some small inefficiencies... but they didn't affect speed for me",
+      "created_at": "2026-01-26T13:54:52.421+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464998242411610285,
+      "author": "Stef",
+      "content": "I think Longcat-avatar is one of the best solution for a single person talking a long time,  iirc there should be an example workflow in the comfy templates",
+      "created_at": "2026-01-25T14:59:59.342+00:00",
+      "reactions": 1
+    },
+    {
+      "message_id": 1464716089547165758,
+      "author": "PineAmbassador",
+      "content": "You should be able to do both, one WF, and have different inputs/loras for each segment.  If the seed is fixed you can stop and start it again without repeating the whole thing",
+      "created_at": "2026-01-24T20:18:48.857+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464666012753465435,
+      "author": "Kijai",
+      "content": "sometimes it just doesn't work on new nodes or something, every time refresh has fixed that for me",
+      "created_at": "2026-01-24T16:59:49.619+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464665095698383076,
+      "author": "lostintranslation",
+      "content": "also in the meantime my issues are somehow all fixed. I have no idea what fixed it, but sampler v2 previews are now working.\nthings I did:\n- changed the UI maximum framerate back to unlimited. I limited it again after the previews started working, and the previews were still working.\n- changed preview to auto and then all the other options, again.\n- I was missing taew2.2, which I downloaded. I never had it before though, and the preview was working without it before with taew2.1\n- reloaded/restarted a bunch of times",
+      "created_at": "2026-01-24T16:56:10.976+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464558307116318826,
+      "author": "trykiss",
+      "content": "big Thank you, u are bringing me closer to the solution \n\nbut how can you do it? (just mask and overlay on orginal video, lol?) in this example, the SCAIL is turned into vid2vid, which is impossible (I thought so)\n\"In diffusion/flow, everything works with masks\" - does this mean that any dif model can be inpaint/vid2vid?  This sounds like an advanced level of understanding models \nwhich node/nodes do I need to Google?",
+      "created_at": "2026-01-24T09:51:50.594+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464469752725635277,
+      "author": "spacepxl",
+      "content": "Wan distilled loras are mostly best with shift=5 all the time, because that's how they were trained. But in general shift depends on resolution, and you need to use higher shift with higher resolution due to the relationship between resolution, noise level, and signal to noise ratio. More resolution increases the signal at a given noise level, so you increase shift to increase noise level which gives equivalent SNR. This is why flux uses a resolution-dependent shift factor, but with most other models you just have to wing it.",
+      "created_at": "2026-01-24T03:59:57.582+00:00",
+      "reactions": 1
+    },
+    {
+      "message_id": 1463893602768912556,
+      "author": "mallardgazellegoosewildcat2",
+      "content": "At some point duration will be fixed though",
+      "created_at": "2026-01-22T13:50:32.728+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463892299749658635,
+      "author": "mallardgazellegoosewildcat2",
+      "content": "This is kinda rough, much worse than a fixed fee",
+      "created_at": "2026-01-22T13:45:22.064+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463633555715526820,
+      "author": "blake37",
+      "content": "SVI Pro, which dropped at the end of December, is a lora you can add to Wan 2.2 to do longer I2V generations. Basically it lets you chain generations together that both uses a few frames from the previous generation and the original reference image to keep identity and details more preserved through the long generation.\n\nIf the camera angle doesn't change much it does a pretty good job at preserving things, although not perfect. A common issue is color drift that people have tried in various ways to correct. I still haven't found a perfect solution for it.\n\nBut it basically replaced the use case for context windows for me. It can almost do the same effect for a long gen but faster, since there isn't a context window overhead, and since each segment is effectively it's own gen each segment can be prompted on it's own for more control.\n\nOne thing I'm trying to figure out, though, is how to get HPS and MPS working with it. I get weird results when I try and was hoping to use them to keep better prompt adherence.",
+      "created_at": "2026-01-21T20:37:12.679+00:00",
+      "reactions": 1
+    },
+    {
+      "message_id": 1463595990920466675,
+      "author": "amli",
+      "content": "Seems maybe it wasnt resolved tho, my front end upgrades tot he latest automatically when I start it. But Ill look around, appreciated again",
+      "created_at": "2026-01-21T18:07:56.534+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463594490559463586,
+      "author": "Kijai",
+      "content": "this was bug in some recent frontend version, should be resolved in the latest",
+      "created_at": "2026-01-21T18:01:58.82+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462803903665016949,
+      "author": "lostintranslation",
+      "content": "~~I'm updating my everything after a few months and search gave me this on my current issue of previews not showing up on sampler v2.\nit works on the old sampler node, and on v2 it's not working ever after a refresh; VHS is updated, any other setting I may have missed?\n(although after the comfy update the preview seems weirdly grainy wherever it does work, not sure why, assuming it's a comfy thing)~~\nnevermind, this got it fixed, I was indeed missing a setting\n> It was moved from Comfy UI Manager to ComfyUI's settings. Click the gear icon on the bottom left, search Preview and change Live Preview Method to latent2rgb (or whatever you want).",
+      "created_at": "2026-01-19T13:40:28.216+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462577496926064703,
+      "author": "psylent_gamer",
+      "content": "Need help figuring out stupid tensor mismatch error using Wan 2.2 fun vace with wan wrapper.\nI know its usually a model/vae/encoder is wrong for what is going on, but I've made sure im using the fun vace model.\nI also know it could be frame/resolution count, but all of that matches. In the picture I have the wan image resizer, and when using it I get :\nSizes of tensors must match except in dimension 0. Expected size 76 but got size 78 for tensor number 1 in the list.\nIf I turn this one off, to make sure that trajectory frames resolution matches the first image the message changes to :\nSizes of tensors must match except in dimension 0. Expected size 170 but got size 102 for tensor number 1 in the list.",
+      "created_at": "2026-01-18T22:40:48.643+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1461412923539722374,
+      "author": "Juampab12",
+      "content": "what's currently the best solution to apply a reference face to an I2V video on wan? not another model like humo or whatever, an addon for wan similar to IP-Adapter which works on the base model, is there any yet?",
+      "created_at": "2026-01-15T17:33:12.711+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1461305226056437762,
+      "author": "Ashtar",
+      "content": "for having live preview on ksampler for wan, what to do ? i got it working for a while and after playing with LTX and going back to WAn, i see i don't it anymore",
+      "created_at": "2026-01-15T10:25:15.63+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1460996714281304178,
+      "author": "Kijai",
+      "content": "scail is like 50% more because it halves the pose image resolution",
+      "created_at": "2026-01-14T13:59:20.691+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1460981224813101077,
+      "author": "Dream Making",
+      "content": "<@1004684178555682906> yes fixed. I'm sampling",
+      "created_at": "2026-01-14T12:57:47.714+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1460977592919134253,
+      "author": "Dream Making",
+      "content": "<@1004684178555682906> maybe fixed",
+      "created_at": "2026-01-14T12:43:21.803+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1460611225481121993,
+      "author": "Kijai",
+      "content": "it's kinda it's own thing, the training is based on I2V but the structure is unique, everything is in the 20 channels and the pose conditioning is temporally concatenated to the end of the main sequence (at half resolution with this version at least)",
+      "created_at": "2026-01-13T12:27:32.999+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1460016619643343166,
+      "author": "Godhand",
+      "content": "Is there any motion deblurring solution in comfyui?\nhttps://github.com/subeeshvasu/Awesome-Deblurring",
+      "created_at": "2026-01-11T21:04:47.92+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1459657289207386266,
+      "author": "mdkb",
+      "content": "SAM3 masking. was testing it yday but its got awful VRAM leak you have to run it then disable it then load the video fo the mask to dodge the problem. figured it out in  the end. but SAM3 when it works can mask an arm. Wanimate is a powerful tool. I am going to be experimenting with it in the coming days for a bit,.",
+      "created_at": "2026-01-10T21:16:56.868+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1459264267973824776,
+      "author": "Piblarg",
+      "content": "Did you ever sort out a solution to using context windows on the clownshark samplers if not using VACE? It errors the last step for me",
+      "created_at": "2026-01-09T19:15:13.304+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1459229953726877966,
+      "author": "mdkb",
+      "content": "similar for me. SVI has no controlnet or prompt control which makes it too random. I have planned video shots, VACE is best for that by far, but for the contrast blows out and managing multiple characters is tough as loras wont work for multi characters, and a zoom in shot swap out adds challenges. best approach is fix on the seams and I try new split points in latent space + USDU for that been best so far instead of just upscaling, using low denoise to re-detail. but nothing really worked perfectly yet if its full color video or needs realistic continuance. I hoped something would be solved by now, but its just more options to test that dont quite cut it.",
+      "created_at": "2026-01-09T16:58:52.15+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1459172763234209853,
+      "author": "Juan Gea",
+      "content": "but it suffers a lot from color and brightness shift, and also degrades a lot, SVI is way better, I think no proper solution so far, we have also LongCat and PainterI2V Long Gen",
+      "created_at": "2026-01-09T13:11:36.874+00:00",
+      "reactions": 0
+    }
+  ],
+  "sample_errors": [
+    {
+      "message_id": 1466476170521350307,
+      "author": "Faust-SiN",
+      "content": "just leaving this here in case anyone else runs into a mat1 and mat2 error for clip loader, the fix for me was:\n\n.\\python_embeded\\python.exe -m pip uninstall -y transformers tokenizers\n.\\python_embeded\\python.exe -m pip install transformers==4.48.0 tokenizers==0.21.0",
+      "created_at": "2026-01-29T16:52:44.862+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466441092156358829,
+      "author": "Shubhooooo",
+      "content": "**inference_single.py: error: the following arguments are required: --ref_path**",
+      "created_at": "2026-01-29T14:33:21.528+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466440400989585439,
+      "author": "Shubhooooo",
+      "content": "claude think thats the case plus i got an error when i removed the ref image path",
+      "created_at": "2026-01-29T14:30:36.741+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466255989404729692,
+      "author": "JohnDopamine",
+      "content": "If the error is coming from the sampler itself could try replacing it (in case a bad value is cached for one of the fields). Also make sure you're up to date w/ KJNodes and WanVideoWrapper",
+      "created_at": "2026-01-29T02:17:49.593+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466252952019931373,
+      "author": "Nao48",
+      "content": "hi <@228118453062467585> idk if anyone else has asked this, but I'm getting this error \"WanSelfAttention.normalized_attention_guidance() takes from 3 to 4 positional arguments but 8 were given\" do you know how to fix it?",
+      "created_at": "2026-01-29T02:05:45.424+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466195469506973697,
+      "author": "mallardgazellegoosewildcat2",
+      "content": "Cos they specifically trained using noise generated from the errors of a specific generation setup",
+      "created_at": "2026-01-28T22:17:20.525+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466190219266101512,
+      "author": "The Shadow (NYC)",
+      "content": "<@228118453062467585> have a wrapper workflow throwing this error but nothing showing up in log or red nodes... never seen this kind of error before",
+      "created_at": "2026-01-28T21:56:28.77+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466127027403886867,
+      "author": "JohnDopamine",
+      "content": "Searching prior convos I got the same error w/ VAP at one point while trying that when it first popped up.....have a conversion script for that model, but still errors after w/ time_projection",
+      "created_at": "2026-01-28T17:45:22.656+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466122216591851612,
+      "author": "JohnDopamine",
+      "content": "The R2V model for SkyReels V3 won't work as is (pretty sure) - get:\n--\n  File \"D:\\ComfyUI\\custom_nodes\\ComfyUI-WanVideoWrapper\\nodes_model_loading.py\", line 1265, in loadmodel\n    in_features = sd[\"blocks.0.self_attn.k.weight\"].shape[1]\n                  ~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'blocks.0.self_attn.k.weight'",
+      "created_at": "2026-01-28T17:26:15.669+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466054643317473444,
+      "author": "patientx",
+      "content": "I merged some loras into the model and saved with comfy's nodes now the resulting model isn't giving these errors anymore ...",
+      "created_at": "2026-01-28T12:57:44.945+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466048745048375540,
+      "author": "patientx",
+      "content": "ok it seems like \"base\" non-modified wan models and its gguf's doesn't give these errors but models merged with loras and gguf's of them does. BUT they didn't yesterday",
+      "created_at": "2026-01-28T12:34:18.688+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1466045832523415728,
+      "author": "patientx",
+      "content": "it generates everything but with all the models I am getting this errors",
+      "created_at": "2026-01-28T12:22:44.288+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1465763370962518333,
+      "author": "Austin Mroz",
+      "content": "Thanks for the nudge.\nThere's been quite a few reports over in [#529](<https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/issues/529>) and [#591](<https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/issues/591>)\nThe post in this thread match up with my current understanding:\n- Video Combine works correctly, but can produce output videos in colorspaces which loader nodes may not convert back from\n- Load Video (FFmpeg) will convert colorspaces correctly, but loads with high bit depth which may introduce some rounding errors.\n- VHS Load Video does not support color spaces and probably can't be fixed.\n- Native Load Video (in my minimal experience) loads as uint8 with default configuration.",
+      "created_at": "2026-01-27T17:40:20.204+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464949988516696226,
+      "author": "lostintranslation",
+      "content": "is it normal that kjnodes getnode can't go into a subgraph? I'm getting a `can't access property \"links\", node.graph is null` error when I try.",
+      "created_at": "2026-01-25T11:48:14.717+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464766868043862216,
+      "author": "hicho",
+      "content": "error on first infinit talk test native",
+      "created_at": "2026-01-24T23:40:35.394+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464754620575383592,
+      "author": "Kevin \"Literally Who?\" Abanto",
+      "content": "**this works for wan or the heck is:**\n\n RuntimeError: Error(s) in loading state_dict for WanVideoVAE:\n        size mismatch for model.decoder.head.2.weight: copying a param with shape torch.Size([12, 96, 3, 3, 3]) from checkpoint, the shape in current model is torch.Size([3, 96, 3, 3, 3]).\n        size mismatch for model.decoder.head.2.bias: copying a param with shape torch.Size([12]) from checkpoint, the shape in current model is torch.Size([3]).",
+      "created_at": "2026-01-24T22:51:55.37+00:00",
+      "reactions": 2
+    },
+    {
+      "message_id": 1464712472559882434,
+      "author": "Kevin \"Literally Who?\" Abanto",
+      "content": "hmm i have this error with SCAIL standard workflow idk why:\n\nRuntimeError: shape '[1, 21, 1, 64, 2, 2, 40, 23]' is invalid for input of size 4730880",
+      "created_at": "2026-01-24T20:04:26.5+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464377837615054859,
+      "author": "Juan Gea",
+      "content": "quick question for who may know, I'm doing a test with Wan 2.1, and I'm getting this error, any idea of what could be causing it? \nWan 2.2 works fine.",
+      "created_at": "2026-01-23T21:54:43.312+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464364049520132340,
+      "author": "lostintranslation",
+      "content": "is this node released? I just updated and it's still giving me a missing node error",
+      "created_at": "2026-01-23T20:59:55.974+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464305002192437423,
+      "author": "topmass",
+      "content": "for me it just into some oom errors in console that i hadn't experienced before \ud83e\udd37\u200d\u2642\ufe0f",
+      "created_at": "2026-01-23T17:05:17.994+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1464114115176825026,
+      "author": "94772409600573440",
+      "content": "I keep getting this crash when running WanVideoWrapper nodes, on 5090.\n\n```\n---------- Sampling start ----------\n65 frames at 472x704 (Input sequence length: 22066) with 3 steps\nGenerated new RoPE frequencies                                                  \n  0%|                                                     | 0/3 [00:00<?, ?it/s]Segmentation fault (core dumped)\n```\n\nAnyone know?",
+      "created_at": "2026-01-23T04:26:46.983+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463995322887045250,
+      "author": "JohnDopamine",
+      "content": "Pre-NAG adjustment (yesterday) : \n (4 extensions off of a clip of the old man bike riding) / Prompts: 1-old man keeps riding his bike but starts going faster and he becomes paniced / 2-old man sprouts wings and starts flapping them. his bike goes off a cliff but old man continues straight into the air flying high above the lake below where his bike -crash landed in the water. / 3-old man swoops down with his wings. The point of view follows him and goes in front of his face like in sky diving video footage shot by drones. / 4-old man pulls out a CB radio walkie-talkie and radios to the airport traffic control tower. he then descends and is seen approaching an airport runway.",
+      "created_at": "2026-01-22T20:34:44.694+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463940548841705687,
+      "author": "Kenk",
+      "content": "what this error was about?",
+      "created_at": "2026-01-22T16:57:05.544+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1463463179479945379,
+      "author": "Rusch Meyer",
+      "content": "Hey Guys! I'm trying to use the current WanAnimate template in Comfy (i think it's the KL examle workflow) but it gives me a triton error. Can I turn off triton in the nodes in the workflow like I can do with sage attention?",
+      "created_at": "2026-01-21T09:20:11.819+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462961260717936844,
+      "author": "patientx",
+      "content": "<@228118453062467585> using block swap with wan wrapper, non_blocking and 1 prefetch works. I raised prefetch count from 1 to 2 or above and it gives black output with this famous error \"D:\\ComfyUI\\custom_nodes\\comfyui-videohelpersuite\\videohelpersuite\\nodes.py:130: RuntimeWarning: invalid value encountered in cast\n  return tensor_to_int(tensor, 8).astype(np.uint8)\" is 1 block prefetch as much I can go or is there something else going on -setting it higher than 1 , 2 or 3 seems to give me a little extra boost too-",
+      "created_at": "2026-01-20T00:05:45.061+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462799829330821191,
+      "author": "Dream Making",
+      "content": "numpy.core._exceptions._ArrayMemoryError: Unable to allocate 6.65 PiB for an array with shape (935223910595272,) and data type float64 WHAAAT?",
+      "created_at": "2026-01-19T13:24:16.819+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462577496926064703,
+      "author": "psylent_gamer",
+      "content": "Need help figuring out stupid tensor mismatch error using Wan 2.2 fun vace with wan wrapper.\nI know its usually a model/vae/encoder is wrong for what is going on, but I've made sure im using the fun vace model.\nI also know it could be frame/resolution count, but all of that matches. In the picture I have the wan image resizer, and when using it I get :\nSizes of tensors must match except in dimension 0. Expected size 76 but got size 78 for tensor number 1 in the list.\nIf I turn this one off, to make sure that trajectory frames resolution matches the first image the message changes to :\nSizes of tensors must match except in dimension 0. Expected size 170 but got size 102 for tensor number 1 in the list.",
+      "created_at": "2026-01-18T22:40:48.643+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1462527322723844168,
+      "author": "Ashtar",
+      "content": "i got an issue with <@228118453062467585>  node, (i'm reinstalling all my custom node beucase after an update, i got blank page when starting comfyui), and now i got this error, but i did a fresh git clone, so i don't understand",
+      "created_at": "2026-01-18T19:21:26.181+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1461310422480191612,
+      "author": "avillabon",
+      "content": "Is <@228118453062467585> 's infintetalk workflow meant to only be used with a maximum of 4 steps? I tired removing the lightx2v lora and increase the steps and cfg but I always get this error.",
+      "created_at": "2026-01-15T10:45:54.554+00:00",
+      "reactions": 0
+    },
+    {
+      "message_id": 1461290636643663913,
+      "author": "screwfunk",
+      "content": "I had to dump my HDD and I lost my good KJ wan 22 T2V workflow. Anybody have a current one. I tried to download one and got errors",
+      "created_at": "2026-01-15T09:27:17.243+00:00",
+      "reactions": 0
+    }
+  ],
+  "top_reacted": [
+    {
+      "message_id": 1449965887330324614,
+      "author": "teal024",
+      "content": "https://github.com/zai-org/SCAIL\nHey guys, developer from SCAIL here, we will be cooking the official version in lateral months, it will have innate long video support and support higher-res. WanAnimate-like facial injection methods may also be considered in the next version but not assured as it would take more resources to train and we may encounter many issues implementing that.  If you enjoy playing around with the currently released SCAIL-Preview model you may STAR our original repo and promote it as you like, this will help us obtain more resources internally and facilitate our progress. Your feedbacks of the Preview model may help us improve the Offcial model too.",
+      "created_at": "2025-12-15T03:26:46.603+00:00",
+      "reactions": 32
+    },
+    {
+      "message_id": 1433461414215024731,
+      "author": "Kijai",
+      "content": "current backlog (what I can remember):\n- HoloCine: ongoing PR\n- LongCat: on a dev branch\n- Kaleido: todo\n- Video-as-prompt: todo\n- CamCloneMaster: todo\n- ChronoEdit: to see if it's anything",
+      "created_at": "2025-10-30T14:23:53.574+00:00",
+      "reactions": 30
+    },
+    {
+      "message_id": 1450803935861411996,
+      "author": "1129349270521266176",
+      "content": "FUN VACE splice the seams",
+      "created_at": "2025-12-17T10:56:52.943+00:00",
+      "reactions": 29
+    },
+    {
+      "message_id": 1456005799456280824,
+      "author": "Kijai",
+      "content": "Thanks, happy new year to you as well! Was just out seeing some fireworks",
+      "created_at": "2025-12-31T19:27:13.87+00:00",
+      "reactions": 28
+    },
+    {
+      "message_id": 1424439323721334857,
+      "author": "Neex",
+      "content": "",
+      "created_at": "2025-10-05T16:53:19.578+00:00",
+      "reactions": 27
+    },
+    {
+      "message_id": 1433517338153582675,
+      "author": "Kijai",
+      "content": "that end",
+      "created_at": "2025-10-30T18:06:06.88+00:00",
+      "reactions": 26
+    },
+    {
+      "message_id": 1423257508654616598,
+      "author": "Kijai",
+      "content": "finally updated the wrapper example to use the new preprocessing nodes btw",
+      "created_at": "2025-10-02T10:37:12.909+00:00",
+      "reactions": 26
+    },
+    {
+      "message_id": 1442263414838657105,
+      "author": "Guey.KhalaMari",
+      "content": "TTM : Old Man + Hippo : One Take Final.",
+      "created_at": "2025-11-23T21:19:54.056+00:00",
+      "reactions": 24
+    },
+    {
+      "message_id": 1433484794708361360,
+      "author": "Kijai",
+      "content": "",
+      "created_at": "2025-10-30T15:56:47.918+00:00",
+      "reactions": 24
+    },
+    {
+      "message_id": 1432856610296041472,
+      "author": "Kijai",
+      "content": "this model understands cats",
+      "created_at": "2025-10-28T22:20:37.083+00:00",
+      "reactions": 24
+    },
+    {
+      "message_id": 1451338474627272704,
+      "author": "amli",
+      "content": "oh.my.god. <@228118453062467585> YOU ARE A GENIUS THANK YOU! I could cry RN you have no idea. \n\nJust like you said, SCAIL but iwht just vitpose and the thickness up at 20. Its not perfect, front legs are hopping instead of running, but better than I have gotten before!!",
+      "created_at": "2025-12-18T22:20:56.916+00:00",
+      "reactions": 22
+    },
+    {
+      "message_id": 1432469859702407179,
+      "author": "spacepxl",
+      "content": "Speaking of the VAE, I have something to share on that front. Image only for now, but I found you can train the decoder into a free 2x upscaler and get a hell of a lot more detail and kill the noise grid patterns\nhttps://huggingface.co/spacepxl/Wan2.1-VAE-upscale2x",
+      "created_at": "2025-10-27T20:43:48.556+00:00",
+      "reactions": 22
+    },
+    {
+      "message_id": 1436535900254371933,
+      "author": "Adrien Toupet",
+      "content": "Hello lovely Banodoco magicians - After 4 months, I finally pushed the latest version of the SeedVR2 ComfyUI integration (with updated CLI tool for those who are keen on batch processing) - don't hesitate to check it out, break it and report back. It's available in the ComfyUI Manager as of now. Enjoy and thanks to everyone who contributed to the project to make it happen.\nhttps://www.youtube.com/watch?v=MBtWYXq_r60\nhttps://registry.comfy.org/nodes/seedvr2_videoupscaler",
+      "created_at": "2025-11-08T02:00:48.167+00:00",
+      "reactions": 20
+    },
+    {
+      "message_id": 1431995963865694324,
+      "author": "Kijai",
+      "content": "amazing",
+      "created_at": "2025-10-26T13:20:42.984+00:00",
+      "reactions": 20
+    },
+    {
+      "message_id": 1452407229247655967,
+      "author": "627140525916422145",
+      "content": "first test loncat avatar",
+      "created_at": "2025-12-21T21:07:47.874+00:00",
+      "reactions": 19
+    },
+    {
+      "message_id": 1451602308562550785,
+      "author": "PeacewalkerOTHV",
+      "content": "i'm having fun with Scail",
+      "created_at": "2025-12-19T15:49:19.828+00:00",
+      "reactions": 19
+    },
+    {
+      "message_id": 1429767895898128385,
+      "author": "Kijai",
+      "content": "",
+      "created_at": "2025-10-20T09:47:10.185+00:00",
+      "reactions": 19
+    },
+    {
+      "message_id": 1455991392391401502,
+      "author": "slmonker(5090D 32GB)",
+      "content": "<@228118453062467585>Anyway\uff0c happy new year kj\uff0cthanks what u did last year!\ud83c\udf89 \ud83c\udf89 \ud83c\udf89",
+      "created_at": "2025-12-31T18:29:58.958+00:00",
+      "reactions": 18
+    },
+    {
+      "message_id": 1454245385139781677,
+      "author": "Ablejones",
+      "content": "haha, itz verking!",
+      "created_at": "2025-12-26T22:51:58.39+00:00",
+      "reactions": 18
+    },
+    {
+      "message_id": 1450423148053921863,
+      "author": "slmonker(5090D 32GB)",
+      "content": "",
+      "created_at": "2025-12-16T09:43:46.055+00:00",
+      "reactions": 18
+    }
+  ]
+}
