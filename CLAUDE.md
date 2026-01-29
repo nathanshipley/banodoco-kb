@@ -188,6 +188,8 @@ Found the source code: [brain-of-bdnc/news_summary.py](https://github.com/banodo
 
 **Key insight:** Reference knowledge IS captured but framed as "news". When someone discovers "FP32 compute improves quality", it's captured as a news item even though it's durable reference knowledge.
 
+**Important caveat:** Peter (@pom) noted the GPT-5.2 verification step was only added this week (late Jan 2026). Earlier summaries may contain inaccuracies - attribution errors, unsupported claims, etc. This adds more reason to re-process everything rather than using summaries as-is.
+
 ### Daily Summaries Contain Reference Knowledge
 Looking at actual summaries, they include:
 - **Technical settings:** FP32 vs BF16 flags, sampler recommendations, resolution tables
