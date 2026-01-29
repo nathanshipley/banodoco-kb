@@ -3,6 +3,33 @@
 ## Project Goal
 Transform the Banodoco Discord database into a useful web-based knowledge base about Open Source AI tools (video generation, image generation, training, ComfyUI, etc.).
 
+**Live site:** https://nathanshipley.github.io/banodoco-kb/
+
+## Project Structure
+
+```
+banodoco-kb/
+├── index.html              # Hub page linking to all sections
+├── database.html           # Database overview and exploration
+├── stats.html              # Community stats (top contributors)
+├── scripts/
+│   └── get_top_authors.py  # Fetches top contributors from API
+├── data/
+│   └── top_authors.json    # Cached stats data
+├── docs/
+│   └── stats-ideas.md      # Future stats/visualization ideas
+├── CLAUDE.md               # This file
+└── README.md               # GitHub readme
+```
+
+## Design
+- Monochrome with accent color highlights
+- Responds to system light/dark theme preference
+- Manual theme toggle button in top-right corner
+- Consistent styling across all pages with breadcrumb navigation
+
+---
+
 ## Database Access
 
 ### Supabase REST API
@@ -14,7 +41,7 @@ curl "https://ujlwuvkrxlvoswwkerdf.supabase.co/rest/v1/{TABLE_NAME}" \
 ### Useful Query Patterns
 ```bash
 # Get row count
-curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep content-range
+curl -sI "URL?select=id" -H "apikey: KEY" -H "Prefer: count=exact" | grep content-range
 
 # Filter by date
 ?created_at=gte.2025-01-01&created_at=lt.2025-02-01
@@ -22,11 +49,8 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 # Select specific fields
 ?select=channel_name,channel_id
 
-# Order results
-?order=created_at.desc
-
-# Limit results
-?limit=10
+# Order and limit
+?order=created_at.desc&limit=10
 
 # Filter by value
 ?channel_id=eq.1342763350815277067
@@ -34,6 +58,8 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 # Filter by multiple values
 ?channel_id=in.(123,456,789)
 ```
+
+---
 
 ## Database Schema
 
@@ -45,6 +71,7 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 | `discord_members` | 6,624 | User profiles |
 | `discord_channels` | 227 | Channel metadata |
 | `daily_summaries` | 463 | AI-generated daily summaries |
+| `message_stats` | - | Aggregated stats per channel |
 
 ### Key Fields
 
@@ -70,6 +97,11 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 - `full_summary` - structured JSON with topics
 - `short_summary` - bullet point highlights
 
+**message_stats:**
+- `channel_id`, `channel_name`
+- `message_count`, `unique_authors`
+- `first_message_at`, `last_message_at`
+
 ### Daily Summary JSON Structure
 ```json
 {
@@ -86,6 +118,8 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
   ]
 }
 ```
+
+---
 
 ## Data Coverage
 
@@ -108,13 +142,28 @@ curl -s "URL?select=count" -H "apikey: KEY" -H "Prefer: count=exact" -I | grep c
 - hunyuanvideo, flux, comfyui, chroma, trellis
 - kandinsky-5, qwen-image, sora, z-image, newbie
 
+---
+
 ## Key Findings
 
-### Complete Message Coverage (Gap Resolved)
-The database now has **continuous coverage** from August 2023 to present:
+### Complete Message Coverage
+The database has **continuous coverage** from August 2023 to present:
 - **1M+ messages** spanning 2.5 years of open source AI development
 - 2024 data (262K messages) includes FLUX, SD3, CogVideoX, and early HunyuanVideo discussions
 - Gap was filled by @pom in January 2026
+
+### Top Contributors
+| Rank | Username | Messages | Top Channel |
+|------|----------|----------|-------------|
+| 1 | **Kijai** | 103,556 | wan_chatter |
+| 2 | Draken | 62,016 | comfyui |
+| 3 | Cubey | 21,935 | comfyui |
+| 4 | ˗ˏˋ⚡ˎˊ- | 18,268 | wan_chatter |
+| 5 | Juampab12 | 17,780 | wan_chatter |
+
+- **Kijai alone accounts for ~10% of all messages**
+- 8,145 unique authors across 1M+ messages
+- **wan_chatter** is the most common top channel
 
 ### Daily Summaries Are High Quality
 The AI-generated summaries include:
@@ -123,7 +172,7 @@ The AI-generated summaries include:
 - Links back to source messages
 - Structured topics with subtopics
 
-### Channel Categories (from exploration)
+### Channel Categories
 - **Video:** wan_*, ltx_*, hunyuanvideo, cogvideox, mochi, animatediff, sora, veo3
 - **Image:** flux, sdxl, chroma, omnigen, qwen-image
 - **Training:** *_training channels, training_control_loras
@@ -131,34 +180,24 @@ The AI-generated summaries include:
 - **3D/Motion:** trellis, hunyuan3d, liveportrait
 - **Audio:** mmaudio, ace-step, music, yue, zonos
 
-## Project Structure
-
-```
-banodoco-kb/
-├── index.html          # Hub page linking to all sections
-├── database.html       # Database overview and exploration
-├── stats.html          # Community stats (top contributors)
-├── scripts/
-│   └── get_top_authors.py  # Fetches top contributors from API
-├── data/
-│   └── top_authors.json    # Cached stats data
-├── CLAUDE.md           # This file
-└── README.md           # GitHub readme
-```
-
-**Live site:** https://nathanshipley.github.io/banodoco-kb/
-
-**Design:**
-- Monochrome with accent color highlights
-- Responds to system light/dark theme preference
-- Manual theme toggle button in top-right corner
+---
 
 ## Next Steps
 
-1. **Deep dive into daily_summaries** - Extract and display the structured content
-2. **Build export pipeline** - Scripts to transform data for knowledge base
-3. **Design navigation** - Browse by model, topic, contributor, or date
-4. **Generate retrospective summaries** - For Aug 2023 - Oct 2025 content (pre-summary era)
+### Stats & Visualization
+See `docs/stats-ideas.md` for full list. Priority items:
+1. Top channels by message count
+2. Activity timeline (messages per month)
+3. Most reacted messages
+4. Activity heatmap (hour/day)
+
+### Knowledge Base
+1. Deep dive into daily_summaries structure
+2. Design navigation (by model, topic, contributor, date)
+3. Build search/browse interface
+4. Generate retrospective summaries for Aug 2023 - Oct 2025
+
+---
 
 ## Useful Example Queries
 
@@ -174,4 +213,7 @@ curl -s "...daily_summaries?channel_id=eq.1342763350815277067&order=date.desc" -
 
 # Get messages with attachments
 curl -s "...discord_messages?attachments=not.eq.[]&limit=10" -H "apikey: ..."
+
+# Get channel stats ordered by message count
+curl -s "...message_stats?order=message_count.desc&limit=20" -H "apikey: ..."
 ```
