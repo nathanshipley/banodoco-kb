@@ -171,8 +171,25 @@ The database has **continuous coverage** from August 2023 to present:
 - 8,145 unique authors across 1M+ messages
 - **wan_chatter** is the most common top channel
 
+### Daily Summaries: How They're Generated
+Found the source code: [brain-of-bdnc/news_summary.py](https://github.com/banodoco/brain-of-bdnc/blob/main/src/features/summarising/subfeatures/news_summary.py)
+
+**Generation process:**
+- **Model:** Claude Sonnet 4.5 for generation, GPT-5.2 with "high reasoning effort" for verification
+- **Chunking:** 1000 messages at a time, combined to top 3-5 items
+- **Verification:** Checks for attribution errors, unsupported claims, logical leaps, invented details
+
+**Prompt priorities (in order):**
+1. Original creations by community members (nodes, workflows, tools, LoRAs)
+2. Notable achievements and demonstrations
+3. High-engagement content (reactions/comments)
+4. New features people are excited about
+5. Shared workflows with examples
+
+**Key insight:** Reference knowledge IS captured but framed as "news". When someone discovers "FP32 compute improves quality", it's captured as a news item even though it's durable reference knowledge.
+
 ### Daily Summaries Contain Reference Knowledge
-Initially thought summaries were just "news" but they contain significant reference knowledge:
+Looking at actual summaries, they include:
 - **Technical settings:** FP32 vs BF16 flags, sampler recommendations, resolution tables
 - **Workflow techniques:** Dual-model approaches, step counts for effects
 - **Training knowledge:** LoRA strength conversions, captioning best practices
@@ -199,15 +216,19 @@ Extraction from wan_chatter (50K messages) found:
 ## Next Steps
 
 ### Knowledge Base (Current Focus)
-Working hypothesis: combine both knowledge sources:
-1. **Daily summaries as primary content** - already structured, attributed, includes media
-2. **Extracted troubleshooting guides** - synthesized from raw Q&A pairs
-3. **Open question:** Best format? Static pages vs RAG vs chat interface?
+**Proposed 3-step approach:**
+1. **Re-process summaries** - Extract reference content, strip news framing, organize by topic
+2. **Cross-reference with raw Q&A** - Summaries miss troubleshooting in back-and-forth chat
+3. **Organize by topic** - All Z-Image tips together, all Wan troubleshooting together (not by date)
 
-To do:
-- Extract troubleshooting from more channels
-- Design browsable interface for daily summaries
-- Consider NotebookLM-style chat for querying
+**Open questions:**
+- Best format? Static pages vs RAG vs chat interface?
+- How to keep content fresh as field evolves rapidly?
+
+**To build:**
+- Script to re-process summaries by topic (extract timeless content)
+- Extract troubleshooting from more channels beyond wan_chatter
+- Design browsable topic-based interface
 
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:
