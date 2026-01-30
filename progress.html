@@ -310,23 +310,56 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Understanding the data sources & planning extraction</p>
-            <p><strong>Key insight:</strong> Found the source code for how daily summaries are generated. They use Claude Sonnet 4.5 with GPT-5.2 verification. The prompt prioritizes community contributions and new discoveries - so reference knowledge IS captured, but framed as "news".</p>
-            <p><strong>Two knowledge sources:</strong></p>
-            <ul>
-                <li><strong>Daily summaries</strong> - Structured, attributed, include media. News-framed but contain durable reference knowledge. Date-anchored.</li>
-                <li><strong>Raw chat Q&A</strong> - 1M+ messages with 5,600+ reply pairs in wan_chatter alone. Troubleshooting buried in conversations.</li>
-            </ul>
-            <p><strong>Proposed approach:</strong></p>
+            <p><strong>Phase:</strong> Planning cost-effective extraction from raw messages</p>
+            <p><strong>Key decision:</strong> Don't trust existing daily summaries. Will regenerate knowledge from raw messages to cover the full 2.5 year archive (not just 87 days of summaries).</p>
+            <p><strong>Major discovery:</strong> Resources channels (wan_resources, ltx_resources, etc.) are forum-style with only ~209 high-value posts containing curated workflows, LoRAs, and techniques. The <code>thread_id</code> field identifies these.</p>
+            <p><strong>Cost-effective approach:</strong></p>
             <ol>
-                <li>Re-process summaries to extract timeless reference content</li>
-                <li>Cross-reference with raw Q&A for troubleshooting specifics</li>
-                <li>Organize by topic (all Z-Image tips together) rather than by date</li>
+                <li><strong>Tier 1:</strong> Process 209 forum threads from resources channels (~$5-10 with Opus)</li>
+                <li><strong>Tier 2:</strong> Filter chatter to high-value messages (3+ reactions, >300 chars, attachments) (~$50-75)</li>
+                <li><strong>Tier 3:</strong> Mine expert knowledge from Kijai's 104K messages (~$30-45)</li>
             </ol>
-            <p><strong>Open questions:</strong> Best format? Static pages vs RAG vs chat? How to keep content fresh as field evolves?</p>
+            <p><strong>Total estimated cost:</strong> ~$60-110 with Opus (vs $1,500+ for naive approach)</p>
+            <p><strong>Next step:</strong> Build prototype to process one forum thread and validate the extraction approach.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">January 30, 2026 - Morning</div>
+                <h3>Discovered forum structure & planned cost-effective extraction</h3>
+
+                <p><strong>Key realization:</strong> Resources channels use Discord's forum feature, not regular chat. The <code>thread_id</code> field identifies which "post" each message belongs to.</p>
+
+                <p><strong>Actual forum post counts:</strong></p>
+                <ul>
+                    <li>wan_resources: <strong>50 posts</strong> (not 6,600 messages - those are replies within posts)</li>
+                    <li>ltx_resources: <strong>45 posts</strong></li>
+                    <li>resources: <strong>114 posts</strong></li>
+                    <li>Total: <strong>~209 curated workflow/resource posts</strong></li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Insight:</strong> Initial query showed 6,605 "messages without reference_id" which seemed like 6,605 posts. But these are actually all messages across ~50 forum threads. Each forum post averages ~200 comments/replies. The <code>thread_id</code> field (not <code>reference_id</code>) is what groups forum messages.
+                </div>
+
+                <p><strong>LLM cost analysis:</strong></p>
+                <ul>
+                    <li>Processing all 1M messages naively: <strong>~$1,500+ with Opus</strong> (too expensive)</li>
+                    <li>Smart filtering to ~100K high-value messages: <strong>~$60-110 with Opus</strong></li>
+                    <li>Same with Sonnet: <strong>~$15-25</strong></li>
+                </ul>
+
+                <p><strong>High-value subsets identified:</strong></p>
+                <ul>
+                    <li>Messages with 3+ reactions: 42K (community-validated)</li>
+                    <li>Messages with attachments: 155K (workflows, examples)</li>
+                    <li>Long messages (>300 chars): ~21K (substantive content)</li>
+                    <li>Kijai's messages: 104K (expert knowledge)</li>
+                </ul>
+
+                <p><strong>Decision:</strong> Don't trust existing daily summaries. They only cover 87 days and earlier ones may have errors (GPT verification added late Jan 2026). Will regenerate from raw messages to cover full 2.5 year archive.</p>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">January 29, 2026 - Late Evening</div>
                 <h3>Found the summary generation source code</h3>

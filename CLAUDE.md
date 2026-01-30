@@ -88,7 +88,8 @@ curl -sI "URL?select=id" -H "apikey: KEY" -H "Prefer: count=exact" | grep conten
 - `attachments` - array of media files
 - `embeds` - embedded content
 - `reaction_count`, `reactors`
-- `reference_id` - for reply threading
+- `reference_id` - for reply threading in regular channels
+- `thread_id` - for forum-style channels (resources), identifies which post/thread a message belongs to
 
 **discord_channels:**
 - `channel_id`, `channel_name`
@@ -213,24 +214,89 @@ Extraction from wan_chatter (50K messages) found:
 - **3D/Motion:** trellis, hunyuan3d, liveportrait
 - **Audio:** mmaudio, ace-step, music, yue, zonos
 
+### Resources Channels (Forum-Style, High Value)
+These are Discord forum channels where each "post" is a thread. Use `thread_id` to group messages.
+
+| Channel | Forum Posts | Total Messages | Avg Msgs/Post |
+|---------|-------------|----------------|---------------|
+| wan_resources | 50 | 10,224 | 204 |
+| ltx_resources | 45 | 2,808 | 62 |
+| resources | 114 | 4,374 | 38 |
+| **Total** | **~209** | **17,406** | - |
+
+**Content:** Curated workflows, LoRAs, techniques shared by community members with discussion threads.
+
+### High-Value Message Subsets
+For filtering the 1M+ messages to high-value content:
+
+| Filter | Count | Notes |
+|--------|-------|-------|
+| Messages with 3+ reactions | 42,058 | Community-validated value |
+| Messages with attachments | 154,642 | Workflows, examples, media |
+| Long messages (>300 chars) | ~21,000 | Substantive content |
+| Messages with thread_id | 32,430 | Forum-style discussions |
+| Kijai's messages | 103,609 | Expert knowledge |
+
+---
+
+## LLM Processing Cost Estimates
+
+### Decision: Don't Trust Existing Daily Summaries
+- Summaries only cover ~87 days (Nov 2025 - Jan 2026)
+- GPT verification step added only late Jan 2026; earlier summaries may have errors
+- Want to cover full 2.5 year archive
+- Will regenerate from raw messages
+
+### Processing All 1M Messages = Too Expensive
+- 1M+ messages × ~50 tokens avg = 50M+ input tokens
+- With Opus 4.5 ($15/M input, $75/M output): **~$1,500+**
+- Not practical
+
+### Smart Filtering Approach = ~$60-110
+By filtering to high-value content first:
+
+| Tier | Content | Volume | Opus Cost |
+|------|---------|--------|-----------|
+| 1 | Resources (209 forum threads) | ~17K msgs in 209 units | ~$5-10 |
+| 2 | High-signal chatter (3+ reactions, >300 chars, attachments) | ~50-60K msgs | ~$50-75 |
+| 3 | Q&A threads (questions + expert replies) | ~30-40K msgs | ~$30-45 |
+| **Total** | | ~100-150K msgs | **~$60-110** |
+
+With Sonnet instead of Opus: **~$15-25**
+
 ---
 
 ## Next Steps
 
 ### Knowledge Base (Current Focus)
-**Proposed 3-step approach:**
-1. **Re-process summaries** - Extract reference content, strip news framing, organize by topic
-2. **Cross-reference with raw Q&A** - Summaries miss troubleshooting in back-and-forth chat
-3. **Organize by topic** - All Z-Image tips together, all Wan troubleshooting together (not by date)
+
+**Revised approach - Process raw messages, not summaries:**
+
+**Tier 1: Resources Channels (Highest Priority)**
+- 209 forum posts across wan_resources, ltx_resources, resources
+- Each post = curated workflow/LoRA/technique + discussion thread
+- Process each thread as a unit (opening post + key replies)
+- Estimated cost: ~$5-10 with Opus
+
+**Tier 2: High-Signal Chatter Messages**
+- Filter by: 3+ reactions, >300 chars, has attachments, expert authors
+- Use `reference_id` to reconstruct Q&A threads
+- Estimated cost: ~$50-75 with Opus
+
+**Tier 3: Expert Knowledge Mining**
+- Kijai's 104K messages (filter for substantive ones)
+- Other top contributors
+- Focus on technical explanations, not casual chat
 
 **Open questions:**
 - Best format? Static pages vs RAG vs chat interface?
 - How to keep content fresh as field evolves rapidly?
+- Start with Sonnet to validate approach, then upgrade to Opus if needed?
 
 **To build:**
-- Script to re-process summaries by topic (extract timeless content)
-- Extract troubleshooting from more channels beyond wan_chatter
-- Design browsable topic-based interface
+- Script to fetch and process forum threads (using `thread_id`)
+- Script to filter high-value chatter messages
+- Prototype extraction on one forum thread to validate approach
 
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:
@@ -258,4 +324,13 @@ curl -s "...discord_messages?attachments=not.eq.[]&limit=10" -H "apikey: ..."
 
 # Get channel stats ordered by message count
 curl -s "...message_stats?order=message_count.desc&limit=20" -H "apikey: ..."
+
+# Get all messages in a forum thread (by thread_id)
+curl -s "...discord_messages?thread_id=eq.{THREAD_ID}&order=created_at.asc" -H "apikey: ..."
+
+# Get unique thread_ids in a channel (forum posts)
+curl -s "...discord_messages?channel_id=eq.{CHANNEL_ID}&select=thread_id" -H "apikey: ..."
+
+# Get high-value messages (3+ reactions)
+curl -s "...discord_messages?reaction_count=gte.3&order=reaction_count.desc" -H "apikey: ..."
 ```
