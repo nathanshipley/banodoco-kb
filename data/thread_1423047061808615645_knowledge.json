@@ -1,0 +1,93 @@
+{
+  "thread_id": 1423047061808615645,
+  "extracted_at": "2026-02-01T21:06:16.374076Z",
+  "messages_processed": 140,
+  "api_usage": {
+    "input_tokens": 7715,
+    "output_tokens": 1024
+  },
+  "resource": {
+    "title": "SYSTMS Transition Workflow",
+    "type": "workflow",
+    "description": "A ComfyUI workflow for creating smooth video transitions between two different clips using WAN 2.2 VACE",
+    "creator": "ingi // SYSTMS",
+    "links": []
+  },
+  "usage": {
+    "requirements": [
+      "WAN 2.2 VACE models (preferably 14B)",
+      "High VRAM (80GB+ recommended for full quality)",
+      "64GB+ system RAM (128GB recommended)",
+      "Videos with common elements (person, color, shape) work best"
+    ],
+    "recommended_settings": [
+      "Shift value of 8 (sweet spot for transitions)",
+      "49 frames total with 11 frame overlap for basic transitions",
+      "81 frames with 14 frame overlap for elaborate transitions",
+      "Lower shift values (5 and below) for forcing transitions but may cause hard cuts",
+      "Higher shift values (above 9) may lead to cross fades",
+      "Adding CFG without Lightning for first step can help force transitions"
+    ],
+    "tips": [
+      "Pick shots that work well together for best results",
+      "Describe what's in frame before, during, and after transition in prompts",
+      "Focus on scene descriptions rather than just transition effects",
+      "Longer overlaps help with more complex transitions",
+      "Can experiment with no prompts for unexpected results"
+    ],
+    "workflow_notes": "Process videos two at a time (1+2, 2+3, 3+4), then combine in After Effects with frame trimming or fading"
+  },
+  "technical_details": [
+    "Uses fp16 to bf16 automatic conversion in Kijai's code",
+    "Math node calculates frame skipping for proper overlap",
+    "VACE can handle 400+ frames with context options",
+    "BF16 VACE provides slightly more motion than FP16",
+    "Memory management differs between wrapper nodes and native nodes"
+  ],
+  "issues_and_solutions": [
+    {
+      "issue": "Cartoonish transitions",
+      "solution": "Make overlaps longer so model has more reference material"
+    },
+    {
+      "issue": "Hard cuts or fade transitions",
+      "solution": "Adjust shift values, improve prompting with detailed scene descriptions, add CFG for first frame"
+    },
+    {
+      "issue": "Start index out of range error",
+      "solution": "Check that overlap setting doesn't exceed clip length - math node may be trying to skip more frames than available"
+    },
+    {
+      "issue": "Motion overshoot in rotations",
+      "solution": "Avoid using identical start/end frames - give VACE different time points to interpolate between"
+    },
+    {
+      "issue": "12GB VRAM limitations",
+      "solution": "Use WAN 2.1 1_3B models, FP8 versions with matching precision, aggressive block swapping (30+ blocks), or lower resolution (360x480)"
+    },
+    {
+      "issue": "Time jumps near end of output",
+      "solution": "Check for duplicate overlapping frames in input"
+    }
+  ],
+  "related_resources": [
+    "WAN 2.2 Lightning LoRA",
+    "Transition-focused LoRAs (in development by community)",
+    "KJ's Concat with Overlap node",
+    "Steerable Motion nodes",
+    "TREAD for diffusion pipe training"
+  ],
+  "key_contributors": [
+    "ingi // SYSTMS",
+    "42hub",
+    "Charlie",
+    "lostless.visuals",
+    "happy.j",
+    "Bernie 'Hot Dog' Madoff",
+    "Ablejones",
+    "atom.p",
+    "Blink",
+    "Godhand"
+  ],
+  "summary": "A comprehensive workflow for creating smooth video transitions using WAN 2.2 VACE, with detailed community discussion covering optimization tips, memory management, and troubleshooting. The workflow can also be adapted for frame interpolation and slow-motion effects."
+}

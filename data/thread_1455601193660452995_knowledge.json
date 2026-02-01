@@ -1,0 +1,90 @@
+{
+  "thread_id": 1455601193660452995,
+  "extracted_at": "2026-02-01T21:05:47.267390Z",
+  "messages_processed": 935,
+  "api_usage": {
+    "input_tokens": 16370,
+    "output_tokens": 1117
+  },
+  "resource": {
+    "title": "Wan HuMo SVI Pro v5 Workflow",
+    "type": "workflow",
+    "description": "Advanced workflow combining Wan2.2 A14B I2V High Noise with Wan HuMo 14B for high-quality lip-synced video generation with SVI Loras for clean continuations",
+    "creator": "Ablejones",
+    "links": [
+      "https://github.com/drozbay/WanExperiments"
+    ]
+  },
+  "usage": {
+    "requirements": [
+      "WanExperiments from drozbay GitHub for HuMo I2V behavior",
+      "Wan2.2 A14B I2V High Noise model",
+      "Wan HuMo 14B model",
+      "SVI 2.1 and SVI 2 Pro Loras",
+      "ComfyUI Essentials nodes (nightly version for SimpleMathDual+)",
+      "Melbandroformer for audio cleaning"
+    ],
+    "recommended_settings": [
+      "Higher resolution (1024x1024) improves lip sync significantly vs 512x512",
+      "Steps: 6/2 for HuMo motion (changed from 7/3)",
+      "97 frames per extension = ~3.68 seconds at 25fps",
+      "Audio delay: 0.2s default (adjustable for sync)",
+      "Disable SageAttention if lip sync issues occur",
+      "Use --no-cache for very long videos to avoid RAM issues"
+    ],
+    "tips": [
+      "Prompt aggressively for motion in SVI stages",
+      "Remove 'speaking/talking' from prompts - let HuMo add when needed",
+      "Try different seeds if lip sync breaks on specific segments",
+      "Original image should look directly at camera for best eye tracking",
+      "Face size in pixels is crucial for HuMo quality"
+    ],
+    "workflow_notes": "READ THE NOTES IN THE WORKFLOW! Sections are designed to be subgraphable but avoid GetNodes in subgraphs"
+  },
+  "technical_details": [
+    "Uses SVI 2 Pro lora combined with SVI v2 lora for 2.1",
+    "HuMo processes audio by splitting vocals from instruments using melbandroformer",
+    "Audio encoder uses same overlap as video but should be padded with silence",
+    "VRAM usage increases with frames per generation and resolution, not number of extensions",
+    "Each segment runs independently - if first works, all should work",
+    "Color drift minimized in v5 through improved anchoring with SVI"
+  ],
+  "issues_and_solutions": [
+    {
+      "issue": "SimpleMathDual+ node missing in ComfyUI Essentials",
+      "solution": "Switch to nightly version of comfyui_essentials in ComfyUI Manager"
+    },
+    {
+      "issue": "Static images in extensions with certain SVI models",
+      "solution": "Use original SVI models, avoid using 2.2 loras on HuMo (2.1 based model)"
+    },
+    {
+      "issue": "RAM OOM crashes during long generations",
+      "solution": "Use --no-cache flag or save/reload videos to continue from checkpoint"
+    },
+    {
+      "issue": "Audio sync drift over time",
+      "solution": "Adjust audio delay node, ensure audio length matches frame boundaries exactly"
+    },
+    {
+      "issue": "Poor lip sync quality",
+      "solution": "Increase resolution, disable SageAttention, ensure face looks directly at camera"
+    }
+  ],
+  "related_resources": [
+    "VRGameDevGirl's automatic HuMo workflow",
+    "OmniAvatar-14B LoRA for potential lip sync improvement",
+    "VideoColorMatch node for color consistency",
+    "Various SVI models and loras"
+  ],
+  "key_contributors": [
+    "Ablejones",
+    "Gleb Tretyak",
+    "hudson223",
+    "JohnDopamine",
+    "NC17z",
+    "NebSH",
+    "Mr_J"
+  ],
+  "summary": "This is a sophisticated workflow combining Wan2.2 and HuMo models with SVI loras to create high-quality lip-synced video extensions. The v5 iteration offers improved motion dynamics and color consistency, with extensive community testing showing successful results up to 40+ seconds with proper settings and prompting."
+}

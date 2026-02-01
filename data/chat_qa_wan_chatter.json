@@ -1,0 +1,98 @@
+{
+  "channel": "wan_chatter",
+  "extracted_at": "2026-02-01T21:09:38.936962Z",
+  "qa_pairs_processed": 99,
+  "api_usage": {
+    "input_tokens": 8806,
+    "output_tokens": 1256
+  },
+  "troubleshooting": [
+    {
+      "problem": "VACE start/end frame node errors when reference frames don't equal total frames",
+      "solution": "Update to latest version - the logic for start/end index was fixed to pad differences automatically",
+      "details": "Start/end index allows placing frames at any index instead of just first/last",
+      "answered_by": "Kijai"
+    },
+    {
+      "problem": "White and black frames inverted in direction mask node",
+      "solution": "Git pull the node ASAP to get the fix for inverted mask frames",
+      "details": "The white and black frames were inverted from what they were supposed to be",
+      "answered_by": "Dream Making"
+    },
+    {
+      "problem": "TEAcache not working properly with low steps and CFG 1.0",
+      "solution": "Don't use TEAcache with low steps and CFG 1.0 as it doesn't work and can ruin results",
+      "details": "Part of speed/quality optimization compatibility issues",
+      "answered_by": "Kijai"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Use iPhone for camera movement control in AI video generation",
+      "context": "When asked about driving camera movement in videos",
+      "from": "T2 (RTX6000Pro)"
+    },
+    {
+      "tip": "Multi-character generation with Infinite can be achieved through proper prompting",
+      "context": "When working with character generation, everything can be done in the prompt rather than needing complex nodes",
+      "from": "\ud835\udd6f\ud835\udd97. \ud835\udd78\ud835\udd86\ud835\udd88\ud835\udd86\ud835\udd87\ud835\udd97\ud835\udd8a \u2620"
+    },
+    {
+      "tip": "Use Qwen LoRAs for better character likeness and zoom functionality",
+      "context": "When having issues with character likeness being off when zooming in on faces",
+      "from": "uff"
+    },
+    {
+      "tip": "14B VACE is preferred over other models for quality",
+      "context": "When comparing different video generation models like Phantom, Skyreels, or VACE",
+      "from": "Kijai"
+    },
+    {
+      "tip": "InfiniteTalk is recommended as the best talking method that can be combined with WAN LoRAs",
+      "context": "When looking for talking head animation methods",
+      "from": "JohnDopamine"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "Speed/Quality optimization compatibility for low steps and CFG 1.0",
+      "recommendation": "Use: compile (great), fp16fast (great), sageattention (absolute must), blockswap (depends on VRAM). Avoid: teacache (doesn't work/ruins results), SLG (doesn't do anything), cfg zerostar (doesn't do anything). Use carefully: Fresca (can work but need good settings), enhance-a-video (works but careful with values)",
+      "reason": "These optimizations are specifically tested for low-step, CFG 1.0 workflows",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Krea LoRA usage on WAN 2.2",
+      "recommendation": "Use strength 4 on HN and 1.1 on LN, plus HPS at 0.75 to reduce noise, with dpm++sde sampler and wrapper",
+      "reason": "Produces wonderful color space and best tones seen in AI video generation",
+      "from": "aipmaster"
+    },
+    {
+      "setting": "Causvid LoRA with Phantom",
+      "recommendation": "Use more than 8 steps for speed optimization",
+      "reason": "Works fine and provides speed improvement - 65 frames at 720p in 3 minutes",
+      "from": "zelgo_"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "Direction mask",
+      "explanation": "A manually created mask used to guide movement direction in video generation, typically used with 2-3 separate controlnets",
+      "from": "Mads Hagbarth Damsbo"
+    },
+    {
+      "term": "Self forcing",
+      "explanation": "A technique used with video generation models, particularly effective with 14B models for improved results",
+      "from": "David Snow"
+    },
+    {
+      "term": "VACE",
+      "explanation": "A video generation model that's intelligent at choosing 'union types' and respecting prompts, particularly good with white backgrounds and context understanding",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "term": "Block-based LoRA training",
+      "explanation": "LoRA blocks are interconnected - sometimes individual blocks don't do much but together they have significant effects. They blend concepts well when experimenting",
+      "from": "Mads Hagbarth Damsbo"
+    }
+  ]
+}

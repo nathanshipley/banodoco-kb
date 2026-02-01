@@ -1,0 +1,93 @@
+{
+  "thread_id": 1428831092181303437,
+  "extracted_at": "2026-02-01T21:03:19.640868Z",
+  "messages_processed": 394,
+  "api_usage": {
+    "input_tokens": 16576,
+    "output_tokens": 1284
+  },
+  "resource": {
+    "title": "FlippinRad Motion Morph LoRA",
+    "type": "lora",
+    "description": "A custom LoRA designed for Wan2.1 that injects dynamic, stylized movement into animations with AnimateDiff-inspired flow and Steerable Motion precision",
+    "creator": "Flipping Sigmas",
+    "links": [
+      "https://civitai.com/models/2052865/flippinrad-motion-morph?modelVersionId=2323211",
+      "https://drive.google.com/file/d/1TX4BRvJGDjdQ3CswXq9r60jkRoGYHHNw/view?usp=sharing"
+    ]
+  },
+  "usage": {
+    "requirements": [
+      "Wan2.1 14B model (or Wan2.2)",
+      "Two LoRA files: trigger_phrase_flippnrad-motion-morph.safetensors and infi-var-H-gfbz-050.safetensors",
+      "umtfp32.safetensors model from CivitAI",
+      "High VRAM setup (A6000/5090 recommended, 4090 with optimizations)"
+    ],
+    "recommended_settings": [
+      "Resolution: 1024x576 (avoid 720p or non-32 divisible dimensions)",
+      "High noise LoRA strength: adjustable (start with default, can bump up for fp8 models)",
+      "Low noise LoRA strength: 0.7 or lower to prevent random objects",
+      "Color match strength: 0.5 to prevent dark videos",
+      "Use smaller VAE with fp8 scaled models"
+    ],
+    "tips": [
+      "Wan2.1 performs 99.9% as well as 2.2 with dual sampler passes",
+      "Add 'green olive tone color' to negative prompt to avoid color shifts",
+      "Turn off 'add noise to sampling' on low noise pass to preserve colors but reduce motion",
+      "Use block swapping if you have enough system RAM for higher VRAM efficiency",
+      "Connect prompts to text encode cache to prevent second pass issues"
+    ],
+    "workflow_notes": "Workflow includes Google API node for automatic prompting (can be bypassed), color matching, and frame interpolation to reduce pauses between segments"
+  },
+  "technical_details": [
+    "Trained using a mix of AnimateDiff videos without captions initially",
+    "Uses dual-pass sampling (high noise + low noise) for better quality",
+    "Incorporates frame interpolation and color matching post-processing",
+    "V2 trained as proper i2v LoRA instead of T2V style",
+    "V8 version focuses on better style adherence and realistic motion"
+  ],
+  "issues_and_solutions": [
+    {
+      "issue": "Second pass adds random objects (planes, buildings, butterflies)",
+      "solution": "Lower LoRA strength to 0.7, ensure prompts are connected to text encode cache, check prompt content"
+    },
+    {
+      "issue": "Videos turn out dark or washed out",
+      "solution": "Adjust color match strength to 0.5 or lower, disable 'add additional noise' in low noise sampler"
+    },
+    {
+      "issue": "Olive green/grey color shift",
+      "solution": "Add 'green olive tone color' to negative prompt, adjust color match reference image"
+    },
+    {
+      "issue": "Square artifacts in output",
+      "solution": "Use 1024x576 resolution (dimensions divisible by 32), check LoRA selections"
+    },
+    {
+      "issue": "OOM errors on 4090",
+      "solution": "Use GGUF models, smaller VAE, increase block swap, try Wan2.1 instead of 2.2"
+    },
+    {
+      "issue": "Aggressive transition to last frame with Wan2.2",
+      "solution": "Enable t2v lighting LoRA, adjust lighting LoRA strengths in both passes"
+    }
+  ],
+  "related_resources": [
+    "Infinite Variation LoRA (infi-var-H-gfbz-050.safetensors)",
+    "AnimateDiff with SparseCtrl",
+    "Wan2.2 VACE workflows",
+    "GGUF models for lower VRAM",
+    "Ollama for local prompt generation"
+  ],
+  "key_contributors": [
+    "Flipping Sigmas",
+    "lostless.visuals",
+    "Mandulis - Max - 2/2",
+    "Charlie",
+    "JohnnyLongBalls",
+    "Dream Making",
+    "atom.p",
+    "pom"
+  ],
+  "summary": "FlippinRad Motion Morph is a powerful LoRA for Wan2.1/2.2 that creates dynamic, stylized animations inspired by AnimateDiff. The community has extensively tested and optimized workflows, sharing solutions for common issues like color shifts, memory problems, and unwanted artifacts while developing multiple versions with improved quality and style adherence."
+}

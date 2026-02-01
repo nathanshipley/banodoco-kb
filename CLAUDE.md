@@ -293,10 +293,20 @@ With Sonnet instead of Opus: **~$15-25**
 - How to keep content fresh as field evolves rapidly?
 - Start with Sonnet to validate approach, then upgrade to Opus if needed?
 
-**To build:**
-- Script to fetch and process forum threads (using `thread_id`)
-- Script to filter high-value chatter messages
-- Prototype extraction on one forum thread to validate approach
+**Built (prototype phase complete):**
+- `scripts/extract_forum_thread.py` - Process forum threads, extracts resource info, usage, issues/solutions
+- `scripts/extract_chat_qa.py` - Extract Q&A pairs from chatter, filters by reactions/experts
+- Tested on 4 forum threads + 99 chat Q&A pairs with good results
+
+**Prototype results:**
+- Forum thread (394 msgs): ~17K tokens, ~$0.05 with Sonnet
+- Chat Q&A (99 pairs): ~9K tokens, ~$0.03 with Sonnet
+- Quality is high - extracts structured knowledge with attribution
+
+**To build next:**
+- Batch processing script for all 209 forum threads
+- Output format decision (static pages vs search vs chat interface)
+- Cross-referencing between forum knowledge and chat Q&A
 
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:

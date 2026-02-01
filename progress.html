@@ -310,20 +310,62 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Planning cost-effective extraction from raw messages</p>
-            <p><strong>Key decision:</strong> Don't trust existing daily summaries. Will regenerate knowledge from raw messages to cover the full 2.5 year archive (not just 87 days of summaries).</p>
-            <p><strong>Major discovery:</strong> Resources channels (wan_resources, ltx_resources, etc.) are forum-style with only ~209 high-value posts containing curated workflows, LoRAs, and techniques. The <code>thread_id</code> field identifies these.</p>
-            <p><strong>Cost-effective approach:</strong></p>
-            <ol>
-                <li><strong>Tier 1:</strong> Process 209 forum threads from resources channels (~$5-10 with Opus)</li>
-                <li><strong>Tier 2:</strong> Filter chatter to high-value messages (3+ reactions, >300 chars, attachments) (~$50-75)</li>
-                <li><strong>Tier 3:</strong> Mine expert knowledge from Kijai's 104K messages (~$30-45)</li>
-            </ol>
-            <p><strong>Total estimated cost:</strong> ~$60-110 with Opus (vs $1,500+ for naive approach)</p>
-            <p><strong>Next step:</strong> Build prototype to process one forum thread and validate the extraction approach.</p>
+            <p><strong>Phase:</strong> Prototype extraction validated - ready to scale</p>
+            <p><strong>Prototype results:</strong> Successfully extracted structured knowledge from 4 forum threads and 99 chat Q&A pairs using Claude Sonnet. Extraction quality is high.</p>
+            <p><strong>What we extracted:</strong></p>
+            <ul>
+                <li><strong>Forum threads:</strong> LoRA details, workflow requirements, settings, 6+ issues/solutions per thread, contributor attribution</li>
+                <li><strong>Chat Q&A:</strong> Troubleshooting fixes, tips, recommended settings, concept explanations</li>
+            </ul>
+            <p><strong>Actual costs from prototype:</strong></p>
+            <ul>
+                <li>Forum thread (394 msgs): ~17K tokens, ~$0.05 with Sonnet</li>
+                <li>Chat Q&A (99 pairs): ~9K tokens, ~$0.03 with Sonnet</li>
+                <li>Projected for all 209 forum threads: <strong>~$10-15</strong></li>
+            </ul>
+            <p><strong>Next step:</strong> Build batch processing scripts and decide on output format (static pages vs search vs chat).</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 1, 2026</div>
+                <h3>Prototype extraction successful</h3>
+
+                <p>Built and tested extraction scripts for both forum threads and chat Q&A. Results are high quality.</p>
+
+                <p><strong>Forum thread extraction (4 threads tested):</strong></p>
+                <ul>
+                    <li><strong>FlippinRad Motion Morph LoRA</strong> (394 msgs, 80 reactions) - Extracted LoRA details, requirements, 6 issues with solutions, 8 contributors</li>
+                    <li><strong>Wan HuMo SVI Pro v5 Workflow</strong> (935 msgs) - Lip-sync workflow with HuMo, settings, 5 issues/solutions</li>
+                    <li><strong>SYSTMS Transition Workflow</strong> (140 msgs) - VACE transitions, shift settings, 6 troubleshooting entries</li>
+                    <li><strong>Creative Video Upscaler</strong> (406 msgs) - Multi-pass 480p→1080p upscaling, AnimateDiff techniques</li>
+                </ul>
+
+                <p><strong>Chat Q&A extraction (99 pairs from wan_chatter):</strong></p>
+                <ul>
+                    <li>3 troubleshooting fixes (TEAcache compatibility, VACE frame errors, direction mask inversion)</li>
+                    <li>5 tips (InfiniteTalk recommendation, VACE 14B preference, Qwen LoRAs for likeness)</li>
+                    <li>3 settings recommendations (speed/quality optimization compatibility chart, Krea LoRA settings)</li>
+                    <li>4 concept explanations (direction masks, self forcing, block-based LoRA training)</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Insight:</strong> Forum threads yield richer, more structured knowledge (~$0.05/thread with Sonnet). Chat Q&A is thinner but captures troubleshooting that doesn't appear in forum posts. Both are valuable.
+                </div>
+
+                <p><strong>Scripts created:</strong></p>
+                <ul>
+                    <li><code>scripts/extract_forum_thread.py</code> - Process a single forum thread</li>
+                    <li><code>scripts/extract_chat_qa.py</code> - Extract Q&A pairs from chatter channels</li>
+                </ul>
+
+                <p><strong>Output files:</strong></p>
+                <ul>
+                    <li><code>data/thread_*_knowledge.json</code> - Extracted forum knowledge</li>
+                    <li><code>data/chat_qa_*.json</code> - Extracted Q&A knowledge</li>
+                </ul>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">January 30, 2026 - Morning</div>
                 <h3>Discovered forum structure & planned cost-effective extraction</h3>

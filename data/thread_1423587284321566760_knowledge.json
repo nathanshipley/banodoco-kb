@@ -1,0 +1,95 @@
+{
+  "thread_id": 1423587284321566760,
+  "extracted_at": "2026-02-01T21:06:49.982850Z",
+  "messages_processed": 406,
+  "api_usage": {
+    "input_tokens": 16093,
+    "output_tokens": 1100
+  },
+  "resource": {
+    "title": "Creative Video Upscaler Workflow with AnimateDiff Techniques",
+    "type": "workflow",
+    "description": "Multi-pass video upscaling workflow that uses AnimateDiff techniques to upscale videos from 480p to 1080p with face detailing, image upscaling models, and context options for high VRAM efficiency",
+    "creator": "Cseti",
+    "links": [
+      "https://discord.com/channels/1076117621407223829/1214317473864745000/1280903677271478436"
+    ]
+  },
+  "usage": {
+    "requirements": [
+      "16GB VRAM minimum (optimized for this)",
+      "100GB RAM (can be reduced by using fewer passes or bypassing image upscales)",
+      "ComfyUI with AnimateDiff support",
+      "Various upscaler models (DeJPG, skin enhancer, 4xclearreality, etc.)",
+      "Face detection models",
+      "Context options nodes"
+    ],
+    "recommended_settings": [
+      "3-pass upscale by default (480p->720p->1080p)",
+      "Use context options during upscaling at low denoise",
+      "0.3 denoise strength for upscaling passes",
+      "Different block swap for each pass",
+      "Enable face detailer for separate face upscaling pass"
+    ],
+    "tips": [
+      "Use image upscale models before every sampling",
+      "Context switching is barely noticeable at low denoise",
+      "Can bypass image upscale nodes to reduce RAM usage",
+      "Use different upscaler models for different content types",
+      "Prompt explicitly to avoid unwanted hallucination"
+    ],
+    "workflow_notes": "Complex workflow with multiple basic functionalities - not simple plug-and-play. Can be optimized with loop nodes for iterative passes."
+  },
+  "technical_details": [
+    "81 frames processing capability on 16GB VRAM",
+    "Multi-pass upscaling with image enhancement between steps",
+    "Face segmentation and separate detailing pass",
+    "Context options enable longer video upscales on limited VRAM",
+    "Automated context options based on resolution thresholds",
+    "TensorRT upscaler node integration for speed",
+    "VACE integration for better consistency and reference preservation"
+  ],
+  "issues_and_solutions": [
+    {
+      "issue": "Video start frequently flashes when using context options",
+      "solution": "Issue occurs specifically with context options - needs further testing"
+    },
+    {
+      "issue": "Very high RAM usage (100GB)",
+      "solution": "Bypass image upscale nodes or use fewer passes, add RAM clearing nodes"
+    },
+    {
+      "issue": "Face detailer errors when no face in frames",
+      "solution": "Use custom face composite node that ignores empty masks, adjust mask grow/blur options"
+    },
+    {
+      "issue": "Temporal noise/popping in upscaled videos",
+      "solution": "Use higher shift values, larger resolution, full precision models, face LoRAs for consistency"
+    },
+    {
+      "issue": "Batch processing inconsistencies at cut points",
+      "solution": "Use VACE for transitions between batches, or process as single long sequence with context options"
+    }
+  ],
+  "related_resources": [
+    "VACE (Video Animation using Character Expressions)",
+    "SeedVR2 Video Upscaler",
+    "DeJPG upscaler model",
+    "AnimateDiff",
+    "TensorRT upscaler nodes",
+    "ComfyUI-easy-use loop nodes",
+    "Florence2 for face detection",
+    "Magnific upscaler",
+    "FlashVSR"
+  ],
+  "key_contributors": [
+    "Cseti",
+    "pom",
+    "ingi // SYSTMS",
+    "Hashu",
+    "HeadOfOliver",
+    "Adrien Toupet",
+    "Dever"
+  ],
+  "summary": "A comprehensive multi-pass video upscaling workflow that combines AnimateDiff techniques with modern upscaling models to achieve high-quality 480p to 1080p upscaling on 16GB VRAM. The workflow features face detailing, VACE integration for better consistency, and various optimizations for memory efficiency, though it requires significant RAM and processing time."
+}
