@@ -310,25 +310,56 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Prototype extraction validated - ready to scale</p>
-            <p><strong>Prototype results:</strong> Successfully extracted structured knowledge from 4 forum threads and 99 chat Q&A pairs using Claude Sonnet. Extraction quality is high.</p>
-            <p><strong>What we extracted:</strong></p>
+            <p><strong>Phase:</strong> LTX 2 knowledge extraction in progress</p>
+            <p><strong>Focus:</strong> Extracting comprehensive knowledge from LTX 2 discussions (released Jan 5, 2026) as test case.</p>
+            <p><strong>Extraction approach:</strong> Chunked summarization - process chat in 400-message chunks, extract 12 categories of knowledge including discoveries, troubleshooting, comparisons, tips, settings, resources, limitations, hardware requirements, and community creations.</p>
+            <p><strong>Results so far:</strong></p>
             <ul>
-                <li><strong>Forum threads:</strong> LoRA details, workflow requirements, settings, 6+ issues/solutions per thread, contributor attribution</li>
-                <li><strong>Chat Q&A:</strong> Troubleshooting fixes, tips, recommended settings, concept explanations</li>
+                <li>Jan 6: 4,244 messages → 343 knowledge items ($0.58)</li>
+                <li>Jan 7: 3,429 messages → 449 knowledge items ($0.63)</li>
+                <li>Output: Clean markdown files ready for NotebookLM</li>
             </ul>
-            <p><strong>Actual costs from prototype:</strong></p>
-            <ul>
-                <li>Forum thread (394 msgs): ~17K tokens, ~$0.05 with Sonnet</li>
-                <li>Chat Q&A (99 pairs): ~9K tokens, ~$0.03 with Sonnet</li>
-                <li>Projected for all 209 forum threads: <strong>~$10-15</strong></li>
-            </ul>
-            <p><strong>Next step:</strong> Build batch processing scripts and decide on output format (static pages vs search vs chat).</p>
+            <p><strong>Next:</strong> Process remaining January days, combine into comprehensive LTX 2 knowledge base.</p>
         </section>
 
         <div class="timeline">
             <article class="timeline-entry">
-                <div class="timestamp">February 1, 2026</div>
+                <div class="timestamp">February 1, 2026 - Afternoon</div>
+                <h3>LTX 2 chunked extraction working</h3>
+
+                <p>Built <code>extract_chat_chunks.py</code> - processes chat in time-ordered chunks to capture ALL knowledge, not just Q&A pairs.</p>
+
+                <p><strong>Why chunked approach:</strong> Chat contains more than Q&A - discoveries, comparisons, tips shared proactively, hardware benchmarks, links to resources. Processing in 400-message chunks preserves conversation context.</p>
+
+                <p><strong>12 extraction categories:</strong></p>
+                <ul>
+                    <li>Original 8: discoveries, troubleshooting, comparisons, tips, news, workflows, settings, concepts</li>
+                    <li>New 4: <strong>resources</strong> (links to models/repos), <strong>limitations</strong> (what doesn't work), <strong>hardware</strong> (VRAM/RAM requirements), <strong>community_creations</strong> (LoRAs/nodes people made)</li>
+                </ul>
+
+                <p><strong>Prompt improvements (learned from pom's code):</strong></p>
+                <ul>
+                    <li>Added accuracy guidelines: "Do NOT jump to conclusions unsupported by evidence"</li>
+                    <li>Use reactions as quality signal (marked with ★) but don't over-index</li>
+                    <li>Explicit skip instructions for jokes, casual chat, unsubstantiated claims</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Insight:</strong> The new categories capture critical info. Jan 7 extraction found 46 limitations (things LTX 2 can't do well), 44 hardware requirements (specific VRAM/RAM for different GPUs), and 44 resource links (HuggingFace models, GitHub repos).
+                </div>
+
+                <p><strong>Sample extractions:</strong></p>
+                <ul>
+                    <li><strong>Limitation:</strong> "Can't do people turning around - gets back-to-front mutation horrors"</li>
+                    <li><strong>Hardware:</strong> "3090: safe at 81 frames, OOMs at 121 frames"</li>
+                    <li><strong>Resource:</strong> LTX official workflows link, SageAttention installation guide</li>
+                </ul>
+
+                <p><strong>Output:</strong> <code>data/ltx_chatter_20260106_knowledge.md</code> and <code>data/ltx_chatter_20260107_knowledge.md</code> - clean markdown ready for NotebookLM.</p>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">February 1, 2026 - Morning</div>
                 <h3>Prototype extraction successful</h3>
 
                 <p>Built and tested extraction scripts for both forum threads and chat Q&A. Results are high quality.</p>

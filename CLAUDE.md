@@ -296,17 +296,22 @@ With Sonnet instead of Opus: **~$15-25**
 **Built (prototype phase complete):**
 - `scripts/extract_forum_thread.py` - Process forum threads, extracts resource info, usage, issues/solutions
 - `scripts/extract_chat_qa.py` - Extract Q&A pairs from chatter, filters by reactions/experts
-- Tested on 4 forum threads + 99 chat Q&A pairs with good results
+- `scripts/extract_chat_chunks.py` - **Main extraction script** - processes chat in time-ordered chunks, extracts 12 categories of knowledge
 
-**Prototype results:**
-- Forum thread (394 msgs): ~17K tokens, ~$0.05 with Sonnet
-- Chat Q&A (99 pairs): ~9K tokens, ~$0.03 with Sonnet
-- Quality is high - extracts structured knowledge with attribution
+**Extraction categories (v2 prompt):**
+1. discoveries, troubleshooting, comparisons, tips, news, workflows, settings, concepts
+2. **New:** resources (links), limitations (what doesn't work), hardware (VRAM/RAM), community_creations (LoRAs/nodes)
+
+**LTX 2 extraction (Jan 5-31, 2026 focus):**
+- Jan 6: 4,244 messages → 343 items, $0.58
+- Jan 7: 3,429 messages → 449 items, $0.63
+- Output: Markdown files ready for NotebookLM + JSON for structured use
 
 **To build next:**
-- Batch processing script for all 209 forum threads
-- Output format decision (static pages vs search vs chat interface)
-- Cross-referencing between forum knowledge and chat Q&A
+- Process remaining LTX 2 days (Jan 8-31)
+- Process ltx_resources forum threads (35 threads)
+- Combine into single comprehensive LTX 2 knowledge document
+- Build static HTML knowledge base
 
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:
