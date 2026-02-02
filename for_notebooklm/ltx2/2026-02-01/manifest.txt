@@ -1,0 +1,39 @@
+LTX Video 2 Knowledge Extraction
+=================================
+Extraction Date: February 1, 2026
+Coverage: January 6-31, 2026
+
+Source Files:
+- data/ltx_chatter_20260106_knowledge.md (Jan 6)
+- data/ltx_chatter_20260107_knowledge.md (Jan 7)
+- data/ltx_chatter_20260108_knowledge.md (Jan 8-15)
+- data/ltx_chatter_20260116_knowledge.md (Jan 16-23)
+- data/ltx_chatter_20260124_knowledge.md (Jan 24-31)
+- data/ltx_training_20260101_knowledge.md (full month)
+- data/ltx_gens_20260101_knowledge.md (full month)
+- data/ltx_resources_20260101_knowledge.md (full month)
+
+Stats:
+- Total messages processed: ~44,500
+- Knowledge items extracted: ~4,345
+- Extraction cost: $7.65 (Claude Sonnet)
+
+Channels:
+- ltx_chatter: Main discussion channel (34,751 msgs)
+- ltx_training: Training/fine-tuning discussions (2,850 msgs)
+- ltx_gens: Generation showcase and tips (4,100 msgs)
+- ltx_resources: Shared workflows and resources (2,891 msgs)
+
+Knowledge Categories:
+1. Technical discoveries
+2. Troubleshooting (problems + solutions)
+3. Model comparisons
+4. Tips and best practices
+5. News and updates
+6. Workflows
+7. Settings/parameters
+8. Concepts explained
+9. Resources (links)
+10. Limitations (what doesn't work)
+11. Hardware requirements
+12. Community creations (LoRAs, nodes, tools)
