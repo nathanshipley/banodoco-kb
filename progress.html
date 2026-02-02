@@ -310,21 +310,60 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> LTX 2 January extraction COMPLETE</p>
-            <p><strong>Focus:</strong> Extracted comprehensive knowledge from all LTX 2 channels for January 2026.</p>
-            <p><strong>Extraction approach:</strong> Chunked summarization - process chat in 400-message chunks, extract 12 categories of knowledge including discoveries, troubleshooting, comparisons, tips, settings, resources, limitations, hardware requirements, and community creations.</p>
-            <p><strong>Results:</strong></p>
+            <p><strong>Phase:</strong> LTX 2 KB COMPLETE - Planning Wan extraction</p>
+            <p><strong>Completed:</strong></p>
             <ul>
-                <li>ltx_chatter (full month): 34,751 messages → ~3,053 items ($5.52)</li>
-                <li>ltx_training: 2,850 messages → 358 items ($0.59)</li>
-                <li>ltx_gens: 4,100 messages → 554 items ($0.83)</li>
-                <li>ltx_resources: 2,891 messages → 380 items ($0.71)</li>
-                <li><strong>Total: ~44,500 messages → ~4,345 items ($7.65)</strong></li>
+                <li>LTX 2 extraction: 44,500 messages → 4,345 knowledge items ($7.65)</li>
+                <li>NotebookLM file ready: <code>for_notebooklm/ltx2/2026-02-01/ltx2_january_combined.md</code> (695KB)</li>
+                <li>Static HTML KB live: <a href="kb/ltx2/index.html">kb/ltx2/index.html</a></li>
+                <li>Full project plan documented: <code>docs/project-plan.md</code></li>
             </ul>
-            <p><strong>Next:</strong> Combine extractions into single comprehensive document, test in NotebookLM, build static HTML knowledge base.</p>
+            <p><strong>Key insight:</strong> NotebookLM and static KB serve complementary roles. NotebookLM excels at specific Q&A ("how do I fix X?"). Static KB excels at browsing, decision trees, and rich media (videos, workflows).</p>
+            <p><strong>Next:</strong> Extract Wan ecosystem (~200K messages across 5 channels, ~$35 cost estimate)</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 2, 2026</div>
+                <h3>LTX 2 KB validated - Project plan complete</h3>
+
+                <p>Major milestone: LTX 2 knowledge base is functional end-to-end. NotebookLM tested and "works pretty well" per user feedback. Static HTML KB live.</p>
+
+                <p><strong>What we built:</strong></p>
+                <ul>
+                    <li><strong>NotebookLM upload:</strong> Combined 8 extraction files into <code>for_notebooklm/ltx2/2026-02-01/ltx2_january_combined.md</code> (695KB, organized with section headers)</li>
+                    <li><strong>Static HTML KB:</strong> <a href="kb/ltx2/index.html">kb/ltx2/</a> - Comprehensive page with sticky TOC, collapsible sections, hardware tables, settings tables, troubleshooting guides</li>
+                    <li><strong>KB index:</strong> <a href="kb/index.html">kb/index.html</a> - Model selector page (LTX2 active, Wan/FLUX/others coming soon)</li>
+                    <li><strong>Project plan:</strong> <code>docs/project-plan.md</code> - Full scope, Wan ecosystem breakdown, cost estimates, 4-week timeline</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Key insight - NotebookLM vs Static KB:</strong> These serve complementary roles. NotebookLM excels at specific Q&A ("What VRAM for 720p 97 frames?"). Static KB excels at browsing, decision trees ("Should I use Wan 2.1 or 2.2?"), and rich media (embedded videos, downloadable workflows). Build both.
+                </div>
+
+                <p><strong>Wan ecosystem is complex:</strong> Asked user to test NotebookLM with Wan questions. Learned it's not one model but an entire ecosystem:</p>
+                <ul>
+                    <li><strong>Generations:</strong> Wan 2.1 (standard DiT) vs 2.2 (MoE architecture with High/Low noise split)</li>
+                    <li><strong>Control systems:</strong> VACE (full video control, inpainting, style transfer) vs Fun Control (Canny/Depth/Pose inputs)</li>
+                    <li><strong>Character models:</strong> Phantom (T2V consistency), MagRef (I2V likeness), HuMo (audio-reactive)</li>
+                    <li><strong>Lip-sync:</strong> MultiTalk, InfiniteTalk, HuMo S2V</li>
+                    <li><strong>Optimization LoRAs:</strong> LightX2V, CausVid, Pusa</li>
+                    <li><strong>Implementations:</strong> WanVideoWrapper (Kijai) vs ComfyUI Native</li>
+                </ul>
+
+                <p><strong>Media handling solved:</strong> Discord CDN URLs expire, but @pom built a refresh API endpoint. Will use that initially; migrate to Cloudflare R2 if reliability issues arise.</p>
+
+                <p><strong>Cost estimates for full project:</strong></p>
+                <ul>
+                    <li>LTX 2: $7.65 (complete)</li>
+                    <li>Wan ecosystem (~200K msgs): ~$35</li>
+                    <li>FLUX (~80K msgs): ~$14</li>
+                    <li>All models combined (~800K msgs): ~$140</li>
+                </ul>
+
+                <p><strong>Next:</strong> Start Wan extraction - scope channels, estimate costs, begin processing.</p>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 1, 2026 - Evening</div>
                 <h3>LTX 2 January extraction COMPLETE</h3>
