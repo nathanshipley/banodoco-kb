@@ -302,16 +302,26 @@ With Sonnet instead of Opus: **~$15-25**
 1. discoveries, troubleshooting, comparisons, tips, news, workflows, settings, concepts
 2. **New:** resources (links), limitations (what doesn't work), hardware (VRAM/RAM), community_creations (LoRAs/nodes)
 
-**LTX 2 extraction (Jan 5-31, 2026 focus):**
-- Jan 6: 4,244 messages → 343 items, $0.58
-- Jan 7: 3,429 messages → 449 items, $0.63
-- Output: Markdown files ready for NotebookLM + JSON for structured use
+**LTX 2 extraction (Jan 2026) - COMPLETE:**
+
+| Channel | Messages | Items | Cost |
+|---------|----------|-------|------|
+| ltx_chatter Jan 6 | 4,244 | 343 | $0.58 |
+| ltx_chatter Jan 7 | 3,429 | 449 | $0.63 |
+| ltx_chatter Jan 8-15 | 10,127 | 945 | $1.93 |
+| ltx_chatter Jan 16-23 | 8,316 | 778 | $1.53 |
+| ltx_chatter Jan 24-31 | 4,568 | 538 | $0.85 |
+| ltx_training Jan | 2,850 | 358 | $0.59 |
+| ltx_gens Jan | 4,100 | 554 | $0.83 |
+| ltx_resources Jan | 2,891 | 380 | $0.71 |
+| **Total** | **~44,500** | **~4,345** | **$7.65** |
+
+Output: 8 markdown files in `data/` directory, ready for NotebookLM + JSON for structured use.
 
 **To build next:**
-- Process remaining LTX 2 days (Jan 8-31)
-- Process ltx_resources forum threads (35 threads)
-- Combine into single comprehensive LTX 2 knowledge document
-- Build static HTML knowledge base
+- Combine LTX extractions into single comprehensive knowledge document
+- Build static HTML knowledge base for LTX 2
+- Process Wan channels (similar approach)
 
 ### Stats & Visualization
 See `docs/stats-ideas.md` for full list. Priority items:

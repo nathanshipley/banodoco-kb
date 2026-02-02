@@ -1,0 +1,1930 @@
+{
+  "channel": "ltx_training",
+  "date_range": "2026-01-01 to 2026-02-01",
+  "messages_processed": 2850,
+  "chunks_processed": 8,
+  "api_usage": {
+    "input_tokens": 97683,
+    "output_tokens": 19758,
+    "estimated_cost": 0.589419
+  },
+  "extracted_at": "2026-02-02T00:11:48.609320Z",
+  "discoveries": [
+    {
+      "finding": "LTX v1 LoRAs work with LTX-2",
+      "details": "Existing LTX v0.96/v1 LoRAs are compatible with LTX-2, visually anyway but audio doesn't get affected",
+      "from": "Fill"
+    },
+    {
+      "finding": "LTX-2 training is significantly faster than other models",
+      "details": "What used to take over 20 hours on Wan2.2 now takes 1 hour on LTX-2. Training is lightning fast compared to previous video models",
+      "from": "oumoumad"
+    },
+    {
+      "finding": "Training stalls after 1.5k steps with minor changes",
+      "details": "Character training progresses quickly up to 1.5k steps then progress becomes very minor, may need higher learning rate",
+      "from": "boorayjenkins"
+    },
+    {
+      "finding": "5x-10x training speedup possible",
+      "details": "Reference to hydraulic press LoRA trained at home in 15 hours with significant speedup methods",
+      "from": "yi"
+    },
+    {
+      "finding": "FP8 vs BF16 makes huge difference in quality",
+      "details": "Training on FP8 produces worse results, using BF16 for inference shows huge quality improvement",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Less character bleeding compared to Wan",
+      "details": "LTX-2 doesn't seem to overfit other characters like Wan does",
+      "from": "NebSH"
+    },
+    {
+      "finding": "LTX-2 converges faster than LTX-1",
+      "details": "Model seems to converge in 1500 steps vs 2000 steps for LTX-1",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Multi-character training in single LoRA works",
+      "details": "Successfully trained 2 characters in one LoRA, though using them separately in generation causes mixing",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Sequential training approach works well",
+      "details": "5000 steps on video data -> 2000 steps on image data -> 1400 steps on NSFW image data produces good results",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "Audio-only training modifications improve LoRA",
+      "details": "Excluding cross attention keys between audio and video from trained LoRA improved results while keeping visual and audio concepts intact",
+      "from": "mamad8"
+    },
+    {
+      "finding": "Model learns background music quickly",
+      "details": "After adding clips with same background music captioned as 'background music: ...', model learned the songs after just 2k steps",
+      "from": "dischordo"
+    },
+    {
+      "finding": "Training order can be video first then images or images first then video - both work",
+      "details": "Images kick start style pickup much faster, but videos are better for voice training plus style",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "Image-only training for animated styles is insufficient",
+      "details": "Gets the look somewhat but movement creates issues, probably because base model is missing that context",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "Mixed video+image training produces best results",
+      "details": "Video + image training had best results compared to video only, image only, or image + video",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "AI Toolkit supports mixed image+video training for LTX2",
+      "details": "Can have separate datasets - mark image datasets as 1f and it works fine. Bug that treated 1f datasets as i2v was fixed",
+      "from": "MOV"
+    },
+    {
+      "finding": "LTX2 can learn character voices from small amounts of data",
+      "details": "At 1000 steps was already getting correct voice, even accidental 2-3 clips with audio taught Japanese accent",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "Scene splitter script in LTX trainer works better than pyscene",
+      "details": "Built-in scene splitter is quite nice for preparing datasets",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "LTX2 is exceptionally good at learning audio/voices",
+      "details": "Multiple users report impressive voice cloning results, with one user saying their 1500 sample LoRA sounds exactly like their wife",
+      "from": "NC17z"
+    },
+    {
+      "finding": "Increasing FPS can improve video generation quality",
+      "details": "User found that simply increasing fps made their generation work better",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "LTX2 captures physical motion well",
+      "details": "User reports that LTX captures jiggling motion that WAN needed specific training for",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "Simple 'Anime style' caption separates character from style effectively",
+      "details": "Just like with WAN, adding 'Anime style' to captions helps separate character learning from style learning",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "Training can be done on 4090 with good performance",
+      "details": "Successfully trained on RTX 4090 at 5.23 sec/iter with no layer offloading, cache text embeddings, low vram setting",
+      "from": "chancelor"
+    },
+    {
+      "finding": "Large datasets require significant cache space",
+      "details": "When caching text embeddings, each dataset item creates 376mb files, leading to 300GB+ storage needs for large datasets",
+      "from": "avataraim"
+    },
+    {
+      "finding": "768x768 training resolution shows better results than 512x512",
+      "details": "Training at 768 resolution produces clearer, more detailed motion learning compared to lower resolutions, though requires more VRAM",
+      "from": "dischordo"
+    },
+    {
+      "finding": "Higher FPS training reduces motion artifacts",
+      "details": "Training at 32fps shows fewer hand distortions and motion artifacts compared to lower fps training, even when generating at 24fps",
+      "from": "MOV"
+    },
+    {
+      "finding": "Custom cropping centered on motion area improves training",
+      "details": "Cropping training data to squares centered on the area of motion works better than letting the model resize whole clips",
+      "from": "dischordo"
+    },
+    {
+      "finding": "Float8 with 4-bit text encoder uses 24-28GB VRAM",
+      "details": "Training configuration allowing LTX2 training on consumer cards with reasonable VRAM usage",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "Audio normalize feature fixes pitch distortion",
+      "details": "Using audio normalize in AI Toolkit fixed high-pitched voice distortion that occurred from FPS mismatches",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "IC LoRA can perform head swapping in videos",
+      "details": "Identity Consistent LoRA trained with 200+ paired video samples can swap heads across video sequences",
+      "from": "Alisson Pereira"
+    },
+    {
+      "finding": "Musubi-Tuner has much smaller cache files than AI-Toolkit",
+      "details": "AI-Toolkit creates 360MB cache files per text encoder while Musubi-Tuner creates only 30MB cache files",
+      "from": "avataraim"
+    },
+    {
+      "finding": "Recent Musubi-Tuner commits broke training",
+      "details": "Multiple users confirmed that newer commits fail to train properly, with bad loss curves and poor results",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "Older Musubi-Tuner commit works properly",
+      "details": "Commit 90e1559a7c73ff41ade497605e1f5b1850270711 produces proper loss curves and good results",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "Block swapping affects VRAM usage significantly",
+      "details": "30 blockswap uses 18.6GB max VRAM, 26 blockswap uses 21.6GB, 24 blockswap uses 22.9GB for 512res 121f videos",
+      "from": "MOV"
+    },
+    {
+      "finding": "High pitch voice issue can be fixed with audio preserve pitch setting",
+      "details": "Setting fps to match dataset and enabling audio preserve pitch fixed high pitch voices within 500 steps",
+      "from": "crinklypaper"
+    },
+    {
+      "finding": "SDPA attention works better than Sage attention for training",
+      "details": "User switched from Sage attention to SDPA and got better training performance",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "LTX2 base resolution is 1280x720",
+      "details": "Model metadata shows modelspec.resolution: 1280x720 as base resolution",
+      "from": "Choowkee"
+    },
+    {
+      "finding": "Musubi fork provides faster training than AI-toolkit",
+      "details": "User reported 2 it/s on 256x256x169 with Musubi vs 3 it/s with AI-toolkit, but Musubi is actually faster overall",
+      "from": "JonkoXL"
+    },
+    {
+      "finding": "Audio-only training works with proper setup",
+      "details": "Successfully trained voice cloning using only audio files with 5 sec duration",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "finding": "Spatial outpainting possible with IC LoRA",
+      "details": "User trained IC LoRA by removing parts of videos (making them black) as reference and original videos as target",
+      "from": "oumoumad"
+    },
+    {
+      "finding": "Audio LoRA training successful with very small dataset",
+      "details": "Successfully trained with only 20 audio files, each 5 seconds long with simple phrases",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "finding": "YouTube shorts effective for training data",
+      "details": "YouTube shorts are great for cropping out everything but the person, creates better focus for training",
+      "from": "Jonathan Scott Schneberg"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "Fal trainer showing internal server error but training actually succeeds",
+      "solution": "Check logs for lora_file: url= line to download the trained LoRA, training didn't actually fail",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "problem": "Audio causes OOM during preprocessing",
+      "solution": "Need to cleanup text encoder in preprocess script before moving to latent caching",
+      "from": "fearnworks"
+    },
+    {
+      "problem": "Triton dependency prevents Windows training",
+      "solution": "Can use triton-windows manually installed, though official trainer requires Linux",
+      "from": "AshmoTV"
+    },
+    {
+      "problem": "Slow motion effect when generating longer videos than training dataset",
+      "solution": "Include variation in dataset with same effect at different speeds and durations, use prompts mentioning timing like 'quick burst'",
+      "from": "oumoumad"
+    },
+    {
+      "problem": "OOM on dataset preprocessing with 24GB VRAM",
+      "solution": "Need higher VRAM cards or use CPU preprocessing (very slow - 6 minutes for 3 second clip)",
+      "from": "crinklypaper"
+    },
+    {
+      "problem": "Quantization error with fp8 model",
+      "solution": "Set quantization to 'null' if using fp8 model since it's already fp8",
+      "from": "crinklypaper"
+    },
+    {
+      "problem": "Empty conditions folder during preprocessing",
+      "solution": "Change output_file = output_path / output_rel_path to output_file = output_path /'dataset'/ output_rel_path.name - issue with pathlib handling relative paths when folder named 'dataset'",
+      "from": "iGoon"
+    },
+    {
+      "problem": "Out of memory on longer frame training",
+      "solution": "Train on 5-6 seconds instead of 20 seconds, even on H100. 500 frames causes OOM",
+      "from": "NebSH"
+    },
+    {
+      "problem": "T2V produces floating heads and weird anatomy while I2V works fine",
+      "solution": "Consider adding high quality images to training data to improve T2V performance",
+      "from": "daring_ls"
+    },
+    {
+      "problem": "Audio captioning for engine sounds mixed with speech",
+      "solution": "Avoid putting descriptive text like 'There is a reving engine' as character will often say it literally",
+      "from": "vanhex"
+    },
+    {
+      "problem": "Black screen LoRA from training without samples",
+      "solution": "Take at least one sample at 250 steps to make sure it's not broken",
+      "from": "dischordo"
+    },
+    {
+      "problem": "Audio error 'Invalid argument: avcodec_send_frame() NaN/+-Inf' after ~6000 steps",
+      "solution": "Error goes away when removing audio but video becomes black. Doesn't happen at 5600 steps checkpoint",
+      "from": "Lumori"
+    },
+    {
+      "problem": "Multiple character voices combining into one",
+      "solution": "Need to tag each character specifically in SPEECH prompts and separate them properly in dataset",
+      "from": "Lumori"
+    },
+    {
+      "problem": "Slow training speed with full offloading",
+      "solution": "Reduce transformer offloading - went from 9s/it to 5s/it by offloading only 20% instead of 100%",
+      "from": "Critorio"
+    },
+    {
+      "problem": "AI Toolkit convergence issues with newer versions",
+      "solution": "Roll back to first release that supported LTX2 (Jan 13) for normal convergence",
+      "from": "Choowkee"
+    },
+    {
+      "problem": "Training on videos longer than expected frames",
+      "solution": "AI toolkit takes first 121f (or specified amount) and doesn't require exact length",
+      "from": "MOV"
+    },
+    {
+      "problem": "CUDA 13.0 compatibility issues with libnvrtc-builtins",
+      "solution": "Update cuda-toolkit from 12.8 to match the requirements",
+      "from": "burgstall"
+    },
+    {
+      "problem": "Poor training results even after 2000+ steps",
+      "solution": "Ensure source videos are proper aspect ratios (divisible by 32) to avoid cropping important content",
+      "from": "BrainNXDomain"
+    },
+    {
+      "problem": "Cache latent or additional resolution checkboxes causing issues",
+      "solution": "Disabling these checkboxes resolved training problems",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "problem": "High loss starting above 1.0 and not dropping quickly",
+      "solution": "This indicates potential dataset or settings issues - healthy runs should start lower and drop gradually",
+      "from": "Choowkee"
+    },
+    {
+      "problem": "Running out of disk space with text embedding cache",
+      "solution": "Either get larger drive, split training into multiple sessions, or use unload text encoder method",
+      "from": "chancelor"
+    },
+    {
+      "problem": "High-pitched audio in generated videos",
+      "solution": "Set correct FPS in dataset settings and enable audio normalize feature, or use Audio Preserve Pitch option",
+      "from": "MOV"
+    },
+    {
+      "problem": "Poor I2V results when only training T2V",
+      "solution": "Add the same dataset twice, with I2V enabled on one copy to train both modes simultaneously",
+      "from": "MOV"
+    },
+    {
+      "problem": "Cache not updating after changing I2V settings",
+      "solution": "Delete _latent_cache and _t_e_cache folders in dataset directory to force recaching",
+      "from": "MOV"
+    },
+    {
+      "problem": "OOM errors on 5090 with 64GB RAM",
+      "solution": "Quantize transformers to float8 and set offload to 100%",
+      "from": "Jonathan Scott Schneberg"
+    },
+    {
+      "problem": "WSL2 Docker memory limitations on Win11 Home",
+      "solution": "Update WSL2 to break 100GB vxhd limitation, avoid Docker if possible and use direct WSL2 installation",
+      "from": "metaphysician"
+    },
+    {
+      "problem": "High pitch voices in generated audio",
+      "solution": "Set fps to same as dataset and enable audio preserve pitch",
+      "from": "crinklypaper"
+    },
+    {
+      "problem": "Training freezes when VRAM exceeds capacity",
+      "solution": "Some samples go up to 24GB and freeze, adjust block swap settings",
+      "from": "avataraim"
+    },
+    {
+      "problem": "Bad training results with newer Musubi-Tuner versions",
+      "solution": "Roll back to commit 90e1559a7c73ff41ade497605e1f5b1850270711",
+      "from": "Choowkee"
+    },
+    {
+      "problem": "OOM errors during training",
+      "solution": "Set blocks_to_swap to 5 and test what works for your setup",
+      "from": "avataraim"
+    },
+    {
+      "problem": "Sage attention causing training issues",
+      "solution": "Do not use sage attention during training, use SDPA instead",
+      "from": "Benjimon"
+    },
+    {
+      "problem": "Training results very poor with unstable repository versions",
+      "solution": "Use specific stable commit: 2b77b23defc40bea39ee21680fa3ab73765ab3bf",
+      "from": "avataraim"
+    },
+    {
+      "problem": "High VRAM usage when training with audio+video",
+      "solution": "Train video-only first to test, audio training requires more VRAM management",
+      "from": "avataraim"
+    },
+    {
+      "problem": "Poor voice cloning results",
+      "solution": "Need 20-30+ videos minimum for good voice cloning, not just 10 videos",
+      "from": "JonkoXL"
+    },
+    {
+      "problem": "Chrome occupying VRAM during training",
+      "solution": "Disable GPU acceleration in Chrome to free up VRAM",
+      "from": "scf"
+    },
+    {
+      "problem": "AdamW optimizer causing issues",
+      "solution": "User fixed training by not using AdamW optimizer",
+      "from": "Jimi"
+    },
+    {
+      "problem": "Musubi-tuner crashes with OOM on validation sampling",
+      "solution": "User gave up and switched to Simpletuner on Linux",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "problem": "Simpletuner config path errors",
+      "solution": "Fix paths in config JSON - replace system-specific paths like '/home/gleb/.simpletuner/config/lycoris_config.json' with your own system paths",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "problem": "LoRA trained for 4000 steps has basically 0 effect at 256 resolution",
+      "solution": "No solution provided - user asking if LTX2 can't be trained on 256 res, previously worked at 512 res",
+      "from": "protector131090"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "LTX-2 vs Wan2.2 training speed",
+      "verdict": "LTX-2 is dramatically faster - 1 hour vs 20+ hours for similar datasets",
+      "from": "oumoumad"
+    },
+    {
+      "comparison": "Character likeness LTX-2 vs Wan2.2",
+      "verdict": "Character likeness is less good than Wan 2.2, may need more steps or different precision",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "128 rank vs 32 rank LoRAs",
+      "verdict": "128 rank (ltx-trainer) yields nicer results without AI-ish chrome/metal particles, 32 rank less biased to texture changes",
+      "from": "oumoumad"
+    },
+    {
+      "comparison": "LTX-2 vs LTX-1 training speed",
+      "verdict": "LTX-2 is approximately 10x faster to train than WAN, but more sensitive",
+      "from": "crinklypaper"
+    },
+    {
+      "comparison": "FP16 vs FP8 generation quality",
+      "verdict": "FP16 always produces better results - smoother movement, higher quality, more details. Difference is like Veo3.1 vs Veo3.1 fast",
+      "from": "Tonon"
+    },
+    {
+      "comparison": "Dataset size impact",
+      "verdict": "Smaller datasets (108 videos) seem to converge faster than larger ones (830+ videos). Larger datasets may be too restrictive and slow down learning",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "Official LTX trainer vs AI Toolkit",
+      "verdict": "Official trainer is better but annoying to use, AI Toolkit easier but came out recently so may have bugs",
+      "from": "Kiwv"
+    },
+    {
+      "comparison": "Musubi tuner vs AI Toolkit for LTX2",
+      "verdict": "Musubi faster (2it/s vs slower), 1.3it/s for pure video training",
+      "from": "Choowkee"
+    },
+    {
+      "comparison": "WAN 2.2 vs LTX2 training",
+      "verdict": "WAN seemed simpler (crop, keyword, train, ship), LTX2 more complex but can learn and generalize intelligently",
+      "from": "Kiwv"
+    },
+    {
+      "comparison": "Distilled vs base LTX2 model",
+      "verdict": "Distilled is fried with amalgamation and prompt deviation, base model has no issues",
+      "from": "Kiwv"
+    },
+    {
+      "comparison": "LTX2 vs WAN for audio learning",
+      "verdict": "LTX2 is significantly better at learning voices and audio",
+      "from": "Choowkee"
+    },
+    {
+      "comparison": "Different FPS settings for 2D content",
+      "verdict": "24fps performed better than 48fps-60fps for 2D content in testing",
+      "from": "protector131090"
+    },
+    {
+      "comparison": "AI-toolkit vs Musubi tuner fork",
+      "verdict": "Musubi tuner provides more control over parameters and is faster for LTX2 training",
+      "from": "Choowkee"
+    },
+    {
+      "comparison": "Video+image datasets vs image-only",
+      "verdict": "Video datasets produce much more realistic results than image-only, especially for realism",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "comparison": "Musubi tuner vs AI Toolkit speed",
+      "verdict": "Musubi tuner achieves 2.9s/iter with 10% offload vs slower performance in AI Toolkit",
+      "from": "scf"
+    },
+    {
+      "comparison": "Cache sizes: Musubi vs AI Toolkit",
+      "verdict": "Musubi produces cache files ~30MB vs AI Toolkit's 300+MB, 10x smaller",
+      "from": "avataraim"
+    },
+    {
+      "comparison": "Musubi-Tuner vs AI-Toolkit cache size",
+      "verdict": "Musubi-Tuner cache is 12x smaller (30MB vs 360MB per file)",
+      "from": "avataraim"
+    },
+    {
+      "comparison": "Musubi-Tuner vs AI-Toolkit speed",
+      "verdict": "Musubi-Tuner is faster: 11s/it vs 15s/it on same dataset",
+      "from": "MOV"
+    },
+    {
+      "comparison": "Musubi-Tuner vs AI-Toolkit for specific dataset",
+      "verdict": "Musubi-Tuner at 800 steps wins in both quality and audio for this test dataset",
+      "from": "avataraim"
+    },
+    {
+      "comparison": "Training samples vs ComfyUI results",
+      "verdict": "Samples during training are MUCH worse than actual LoRA performance in ComfyUI",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "Musubi vs AI-toolkit for voice training",
+      "verdict": "Musubi produces better voice cloning results - good results in 800 steps vs poor results in AI-toolkit at 2K steps",
+      "from": "avataraim"
+    },
+    {
+      "comparison": "LTX2 vs WAN for eye generalization",
+      "verdict": "WAN 2.1 handles anime eye styles better than LTX2 on same dataset",
+      "from": "Choowkee"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Use varied dataset for motion effects to avoid slow-mo bias",
+      "context": "When training effect LoRAs, include same effect at different speeds and durations",
+      "from": "oumoumad"
+    },
+    {
+      "tip": "Avoid mixing closeups and wide shots in single dataset",
+      "context": "Models can get confused seeing closeups and wide views as separate subjects",
+      "from": "oumoumad"
+    },
+    {
+      "tip": "Use first_frame_conditioning_p: 1.0 for product training",
+      "context": "Key parameter for training LoRAs on objects like cars, specify only one frame for bucket preprocessing",
+      "from": "oumoumad"
+    },
+    {
+      "tip": "2000 steps can cause overfitting with small datasets",
+      "context": "Better results between 1000-1500 steps unless dataset has 24+ varied examples",
+      "from": "oumoumad"
+    },
+    {
+      "tip": "Negative prompts are very important in LTX-2",
+      "context": "Every word has impact, good for fixing issues and minimizing bias, unlike previous LTXV where negative prompts felt ineffective",
+      "from": "oumoumad"
+    },
+    {
+      "tip": "Use BF16 instead of FP8 for better quality",
+      "context": "FP8 training produces worse character likeness, BF16 inference shows huge quality difference",
+      "from": "NebSH"
+    },
+    {
+      "tip": "Use detailed captions with shot-by-shot breakdown for longer videos",
+      "context": "For videos 8-13 seconds with multiple actions or cuts, include overall description, then shot-by-shot breakdowns with audio description",
+      "from": "fearnworks"
+    },
+    {
+      "tip": "Test captioning concept without LoRA first",
+      "context": "Find prompts that get in vague ballpark to help identify right captioning approach",
+      "from": "fearnworks"
+    },
+    {
+      "tip": "Use custom sigmas and specific sampler settings for I2V",
+      "context": "Use undistilled model with distill LoRA at 0.5-0.6 strength, DPM SDE sampler, custom sigmas, 1.0 denoise strength, sometimes reduce precompression",
+      "from": "dischordo"
+    },
+    {
+      "tip": "Checkpoint often and test locally instead of sampling during training",
+      "context": "Sampling during training never looks right",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Tag music uniquely with actual song names rather than generic 'background music'",
+      "context": "Generic tags cause different songs to mix together, especially bad if in different keys",
+      "from": "dischordo"
+    },
+    {
+      "tip": "Normalize audio levels to around -7db",
+      "context": "Model picks up full audio range, good level for training",
+      "from": "dischordo"
+    },
+    {
+      "tip": "Include dialogue in Japanese as romaji in captions",
+      "context": "Don't translate to English, write as 'sou desu ne' etc. and specify language",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Use diverse clips for concept training",
+      "context": "Too few or similar clips cause model to learn unintended specifics like faces, expressions, colors",
+      "from": "SmaX"
+    },
+    {
+      "tip": "Start with 512 res and 65 frames or 256 res and 121 frames for video",
+      "context": "Good starting points for LTX2 video training",
+      "from": "MOV"
+    },
+    {
+      "tip": "Don't overtrain - less steps can be better",
+      "context": "User found 1500 step LoRA performed better than 6000 step version, suggesting overtraining can hurt results",
+      "from": "NC17z"
+    },
+    {
+      "tip": "Use detailed captions for LTX2",
+      "context": "LTX2 may need more detailed captions compared to other models due to DiT-based architecture",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "tip": "Mix images and videos for best results",
+      "context": "500 images + 100 videos combination works well for learning both style and character",
+      "from": "avataraim"
+    },
+    {
+      "tip": "Consider rank size relative to dataset size",
+      "context": "For 20 videos, rank 32 might be too much and could cause overfitting instead of generalization",
+      "from": "Kiwv"
+    },
+    {
+      "tip": "Use keyframes for smoother motion",
+      "context": "Multiple close keyframes with sufficient frames between them produces smoother results",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "tip": "Train both T2V and I2V modes for best results",
+      "context": "When planning to use LoRA for both text-to-video and image-to-video generation",
+      "from": "MOV"
+    },
+    {
+      "tip": "Match training FPS to your dataset FPS",
+      "context": "Prevents audio pitch distortion and timing issues during generation",
+      "from": "MOV"
+    },
+    {
+      "tip": "Use rank 32 for most character LoRAs",
+      "context": "Balance between learning capacity and overfitting for identity/character training",
+      "from": "MOV"
+    },
+    {
+      "tip": "Pad frames minimally to fit bucket sizes",
+      "context": "When preparing video datasets, pad maximum 2-3 frames to fit bucket requirements",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Generate lipsynced I2V for character training instead of interpolating stills",
+      "context": "Preserves natural lipsync when training with audio clips",
+      "from": "MOV"
+    },
+    {
+      "tip": "Use lower rank for character training with images",
+      "context": "To avoid diminished movement and talking ability, try rank 4-8 instead of higher values",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "tip": "Train character with multiple people in final stage",
+      "context": "To counter the issue where LoRA makes everyone look like the trained character",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "tip": "Don't rely on training samples for quality assessment",
+      "context": "Samples are much worse than actual LoRA performance in ComfyUI",
+      "from": "NebSH"
+    },
+    {
+      "tip": "Use 3 second clips around 73 frames for good results",
+      "context": "For training with audio, this duration works well",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Use natural language captions, not keyword-based ones",
+      "context": "For LTX2 training with LLM-based text encoders",
+      "from": "Kiwv"
+    },
+    {
+      "tip": "Caption as if describing for the original LTX2 dataset",
+      "context": "Better results than artificial keyword-style captions",
+      "from": "Kiwv"
+    },
+    {
+      "tip": "Use consistent keywords throughout dataset",
+      "context": "Don't mix 'car', 'automobile', 'racer' - pick one term and stick with it",
+      "from": "LTX Lux"
+    },
+    {
+      "tip": "Audio clips should be 24fps to avoid audio issues",
+      "context": "When preparing video datasets with audio",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Caption audio naturally at end of video captions",
+      "context": "Use format like 'character says \"dialogue\"' and describe background sounds",
+      "from": "crinklypaper"
+    },
+    {
+      "tip": "Aim for overtraining rather than undertraining",
+      "context": "Model learns extremely slowly, need 150+ repeats per data point on average",
+      "from": "dischordo"
+    },
+    {
+      "tip": "Use GUI for Simpletuner on Linux",
+      "context": "When using Simpletuner",
+      "from": "Kiwv"
+    },
+    {
+      "tip": "Sometimes editing config file directly is easier than using complex UI",
+      "context": "When dealing with complex training interfaces",
+      "from": "scf"
+    },
+    {
+      "tip": "Use YouTube shorts for training datasets",
+      "context": "For character training - allows cropping out everything but the person for better focus",
+      "from": "Jonathan Scott Schneberg"
+    }
+  ],
+  "news": [
+    {
+      "update": "LTX-2 trainer supports multiple training modes",
+      "details": "Standard LoRA Training (Video-Only), Audio-Video LoRA Training, Full Model Fine-tuning, In-Context LoRA (IC-LoRA) Training",
+      "from": "NebSH"
+    },
+    {
+      "update": "Fal.ai LTX-2 trainer available but image-only",
+      "details": "Fal trainer currently only supports images, not video training",
+      "from": "NebSH"
+    },
+    {
+      "update": "Audio training toggle available but needs tweaking",
+      "details": "Audio training option exists but default settings need adjustment, being worked on",
+      "from": "Dragonyte"
+    },
+    {
+      "update": "AI Toolkit now officially supports LTX-2 LoRA training",
+      "details": "Ostris announced official support and trained Carl Sagan LoRA on RTX 5090",
+      "from": "Arts Bro"
+    },
+    {
+      "update": "AI Toolkit added I2V training support",
+      "details": "Ostris pushed I2V training capabilities to AI Toolkit",
+      "from": "fearnworks"
+    },
+    {
+      "update": "VRAM usage reduction in AI Toolkit",
+      "details": "Recent commit allows proper caching of latents, drastically reducing VRAM usage during training",
+      "from": "MOV"
+    },
+    {
+      "update": "LTX2 training tutorial coming soon",
+      "details": "Finishing touches on tutorial, hope to have live in a day or so",
+      "from": "LTX Lux"
+    },
+    {
+      "update": "Official LTX2 training tutorial released",
+      "details": "Training Custom LoRAs with LTX-2 (Full Workflow) on YouTube",
+      "from": "LTX Lux"
+    },
+    {
+      "update": "Planned AI Toolkit improvements",
+      "details": "PRs coming for audio-only training, video+image training together, prodigyscheduler_free optimizer, multiple dataset folders with balancing, tensorboard logging",
+      "from": "mamad8"
+    },
+    {
+      "update": "Musubi tuner fork fixed audio-only datasets",
+      "details": "Audio-only training with dummy video was broken but has been fixed",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "update": "LTX model had git commit pulled back causing re-downloads",
+      "details": "Recent git commit in LTX repo was reverted, causing users to see updates and re-download all files",
+      "from": "BrainNXDomain"
+    },
+    {
+      "update": "Musubi-Tuner LTX-2 fork available",
+      "details": "Fork by AkaneTendo25 supports LTX Video 2 training",
+      "from": "avataraim"
+    },
+    {
+      "update": "Recent Musubi-Tuner updates broke training",
+      "details": "Updates from last few days caused training failures, author working on fixes",
+      "from": "Choowkee"
+    },
+    {
+      "update": "Koyha working on official LTX training support",
+      "details": "Official support for LTX training coming to Musubi-Tuner soon",
+      "from": "JonkoXL"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "Music video generation using camera control LoRAs",
+      "use_case": "Generate start images then run with LTXV 0.97 distilled 13B using randomly assigned camera control LoRAs",
+      "from": "burgstall"
+    },
+    {
+      "workflow": "Character dataset creation from interviews",
+      "use_case": "Use pyscene to extract clips from interviews - 10 min video becomes ~177 training clips",
+      "from": "NebSH"
+    },
+    {
+      "workflow": "Video-first then image training",
+      "use_case": "Train 5000 steps on videos first to get motion/sound, then continue with images to improve style accuracy",
+      "from": "crinklypaper"
+    },
+    {
+      "workflow": "Sequential dataset training",
+      "use_case": "5000 steps video -> 2000 steps images -> 1400 steps specific content images for comprehensive character/style learning",
+      "from": "crinklypaper"
+    },
+    {
+      "workflow": "AMV-style video-to-video training",
+      "use_case": "Extract keyframes from AMV, repeat first frame until scene changes to create reference video for transition training",
+      "from": "Alisson Pereira"
+    },
+    {
+      "workflow": "Multi-stage training approach",
+      "use_case": "Train on videos first then switch to images, or vice versa, by stopping and resuming from checkpoint",
+      "from": "crinklypaper"
+    },
+    {
+      "workflow": "Character + environment training",
+      "use_case": "Train room separately with token, then person in room with both tokens, crop different shots for variety",
+      "from": "MOV"
+    },
+    {
+      "workflow": "Gemini captioning workflow",
+      "use_case": "Use Gemini with custom tool to caption video datasets including Japanese dialogue",
+      "from": "crinklypaper"
+    },
+    {
+      "workflow": "Image + Video dataset combination",
+      "use_case": "Training both style and character simultaneously using 500 images + 100 videos with audio",
+      "from": "avataraim"
+    },
+    {
+      "workflow": "Head swap IC LoRA training",
+      "use_case": "Training for face swapping by using head-swapped first frames with Humo processing at 0.7 denoise",
+      "from": "Alisson Pereira"
+    },
+    {
+      "workflow": "Multi-keyframe generation",
+      "use_case": "Using 4 keyframes with 25fps processing and 121 frames for smooth character motion",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "workflow": "Whisper + Qwen-VL captioning workflow",
+      "use_case": "Automated video captioning for training with speech transcription and visual description",
+      "from": "MOV"
+    },
+    {
+      "workflow": "IC LoRA head swap training",
+      "use_case": "Train identity-consistent LoRA for video head swapping using paired video samples",
+      "from": "Alisson Pereira"
+    },
+    {
+      "workflow": "Mixed dataset training",
+      "use_case": "Training with both videos (512x512, 73 frames) and images (768x768) for character LoRAs",
+      "from": "avataraim"
+    },
+    {
+      "workflow": "Character training with diverse dataset",
+      "use_case": "Using 94 images and 59 videos with audio for character LoRA, achieved good results at 3.5k-5k steps",
+      "from": "crinklypaper"
+    },
+    {
+      "workflow": "Audio-only training with Simpletuner",
+      "use_case": "Voice cloning using only audio files",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "workflow": "Spatial outpainting with IC LoRA",
+      "use_case": "Remove parts of videos (make black) as reference, use originals as target for outpainting training",
+      "from": "oumoumad"
+    },
+    {
+      "workflow": "Audio 2 Audio with voice LoRA",
+      "use_case": "Provide audio source of intended performance and apply voice LoRA on top, using Kijai's node with audio trained on black frames and Video/Audio LoRA",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "workflow": "Repurposing character LoRAs for voice only",
+      "use_case": "Using existing character LoRAs but only extracting their voice component with Kijai's node",
+      "from": "Guey.KhalaMari"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "Learning rate",
+      "value": "0.0002",
+      "reason": "Used successfully for tear effect LoRA training",
+      "from": "oumoumad"
+    },
+    {
+      "setting": "Steps",
+      "value": "1000-1500",
+      "reason": "Better results than 2000 steps unless dataset is very varied (24+ examples)",
+      "from": "oumoumad"
+    },
+    {
+      "setting": "Resolution",
+      "value": "512x different buckets",
+      "reason": "Used successfully for 121 frame video training in ~1 hour",
+      "from": "KevenG"
+    },
+    {
+      "setting": "Frames",
+      "value": "121 frames",
+      "reason": "Good balance of quality and training speed for video LoRAs",
+      "from": "KevenG"
+    },
+    {
+      "setting": "Quantization",
+      "value": "null",
+      "reason": "Set to null if using fp8 model since it's already fp8, otherwise will error",
+      "from": "crinklypaper"
+    },
+    {
+      "setting": "Rank",
+      "value": "64-128",
+      "reason": "128 rank produces better quality than 32 rank, but 32 rank less texture biased",
+      "from": "oumoumad"
+    },
+    {
+      "setting": "learning_rate",
+      "value": "1e-4 (default), 2e-5 for stability",
+      "reason": "4e-4 is too high, 2e-5 recommended by Kiwv",
+      "from": "Kiwv"
+    },
+    {
+      "setting": "rank and alpha",
+      "value": "32",
+      "reason": "Standard setting used by multiple successful trainers",
+      "from": "NebSH"
+    },
+    {
+      "setting": "first_frame_conditioning_p",
+      "value": "0.5 for both T2V/I2V, 1.0 for I2V only, 0.0 for T2V only",
+      "reason": "0.5 works for both modes, adjust based on desired capabilities",
+      "from": "mamad8"
+    },
+    {
+      "setting": "training steps",
+      "value": "1500 steps typical, sweet spot 7k-9k for style",
+      "reason": "LTX-2 converges faster than LTX-1, style accuracy peaks around 7k-9k steps",
+      "from": "NebSH"
+    },
+    {
+      "setting": "resolution buckets",
+      "value": "960x544x41 through 960x544x137",
+      "reason": "Standard resolution buckets used by successful trainers",
+      "from": "Cseti"
+    },
+    {
+      "setting": "Frame count",
+      "value": "121 frames at 25fps",
+      "reason": "Standard for LTX2, avoids slow motion/sped up issues",
+      "from": "SmaX"
+    },
+    {
+      "setting": "Audio normalization",
+      "value": "-7db",
+      "reason": "Good level that model picks up well",
+      "from": "dischordo"
+    },
+    {
+      "setting": "Transformer offloading",
+      "value": "20% instead of 100%",
+      "reason": "Better speed (9s/it to 5s/it) without full VRAM usage",
+      "from": "Critorio"
+    },
+    {
+      "setting": "Training resolution",
+      "value": "5 second clips at 25fps for video",
+      "reason": "Recommended by AI-toolkit author, should match intended generation length",
+      "from": "SmaX"
+    },
+    {
+      "setting": "Clip length variety",
+      "value": "2-8 seconds acceptable",
+      "reason": "Won't completely mess up training, just affects learning",
+      "from": "amli"
+    },
+    {
+      "setting": "Video resolution",
+      "value": "768x512 (preferred), 512x512, 768x768, 1024x768",
+      "reason": "Must be divisible by 32 due to VAE spatial compression factor",
+      "from": "BrainNXDomain"
+    },
+    {
+      "setting": "Training steps for small datasets",
+      "value": "5000 steps",
+      "reason": "General recommendation, but stop when results look good",
+      "from": "Kiwv"
+    },
+    {
+      "setting": "Frame count and resolution",
+      "value": "512 resolution with 49 frames, or 256 resolution with 79 frames",
+      "reason": "Works well on 4090 with 18GB VRAM usage",
+      "from": "avataraim"
+    },
+    {
+      "setting": "Rank for IC LoRA",
+      "value": "128",
+      "reason": "Higher rank helped significantly for IC LoRA training compared to typical 64",
+      "from": "Alisson Pereira"
+    },
+    {
+      "setting": "Video duration",
+      "value": "2 seconds",
+      "reason": "Works well for cartoon/animated content training",
+      "from": "avataraim"
+    },
+    {
+      "setting": "Resolution for consumer cards",
+      "value": "512x512 at 121 frames",
+      "reason": "Fits in 24GB VRAM with slight headroom",
+      "from": "MOV"
+    },
+    {
+      "setting": "768 bucket at 121 frames",
+      "value": "Works on A6000 without offloading",
+      "reason": "Provides better motion learning for unique concepts",
+      "from": "dischordo"
+    },
+    {
+      "setting": "Audio scale",
+      "value": "Tested values: 0.75, 0.8, 0.85, 1.0, 1.5",
+      "reason": "Different values for lipsync intensity testing",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "setting": "Offload percentage",
+      "value": "75% works, 100% recommended for 24GB cards",
+      "reason": "VRAM management for consumer hardware",
+      "from": "avataraim"
+    },
+    {
+      "setting": "Rank",
+      "value": "16-32 for identity LoRAs, 64+ for complex concepts",
+      "reason": "Balance learning capacity with overfitting prevention",
+      "from": "MOV"
+    },
+    {
+      "setting": "rank",
+      "value": "4-8 for character training",
+      "reason": "Higher ranks can cause diminished movement and talking ability",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "setting": "learning_rate",
+      "value": "1e-4 default",
+      "reason": "Standard rate, but may need adjustment for small datasets",
+      "from": "CJ"
+    },
+    {
+      "setting": "blocks_to_swap",
+      "value": "5-10 for 4090",
+      "reason": "Balance between VRAM usage and speed",
+      "from": "avataraim"
+    },
+    {
+      "setting": "training steps",
+      "value": "3k-8k steps",
+      "reason": "Sufficient for good results without overtraining",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "setting": "blocks_to_swap",
+      "value": "0 for RTX 5090, 5 for RTX 4090, 20+ for lower VRAM",
+      "reason": "VRAM optimization",
+      "from": "avataraim"
+    },
+    {
+      "setting": "network_dim/network_alpha",
+      "value": "32/32 recommended over 32/16",
+      "reason": "32/16 gives horrible results in LTX2 unlike other models",
+      "from": "Choowkee"
+    },
+    {
+      "setting": "learning_rate",
+      "value": "1.5e-4",
+      "reason": "Used in working training configuration",
+      "from": "Jimi"
+    },
+    {
+      "setting": "max_train_steps",
+      "value": "400-800 steps for good results",
+      "reason": "Sufficient for character training with proper dataset",
+      "from": "avataraim"
+    },
+    {
+      "setting": "audio duration",
+      "value": "5 seconds for audio clips",
+      "reason": "Works well for voice cloning",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "setting": "video count for voice training",
+      "value": "20-30+ videos minimum",
+      "reason": "10 videos insufficient for good voice cloning",
+      "from": "crinklypaper"
+    },
+    {
+      "setting": "Audio training dataset",
+      "value": "20 audio files, 5 seconds each",
+      "reason": "Sufficient for basic audio LoRA training",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "setting": "Character LoRA training dataset",
+      "value": "25 photos of a person with captions in txt",
+      "reason": "Standard dataset size for character training",
+      "from": "protector131090"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "In-Context LoRA (IC-LoRA)",
+      "explanation": "Training mode supported by LTX-2 for vid2vid pairs",
+      "from": "Persoon"
+    },
+    {
+      "term": "Bucket preprocessing",
+      "explanation": "Maximum bucket size limited by shortest video in dataset - if shortest video has 41 frames, that's the max bucket size even if other videos are longer",
+      "from": "oumoumad"
+    },
+    {
+      "term": "Multi frame conditioning",
+      "explanation": "LTX-2 feature that can help bias generation to desired outcomes",
+      "from": "oumoumad"
+    },
+    {
+      "term": "first_frame_conditioning_p",
+      "explanation": "Probability of using first frame as conditioning (0.0-1.0). Controls I2V vs T2V capability retention during training",
+      "from": "mamad8"
+    },
+    {
+      "term": "Frame bucket number",
+      "explanation": "Number after resolution (e.g. 89, 113) refers to frame count the model was trained on, not resolution bucket",
+      "from": "NebSH"
+    },
+    {
+      "term": "Cross attention keys exclusion",
+      "explanation": "Technique to exclude cross attention keys between audio and video modalities from trained LoRA, potentially improving results",
+      "from": "mamad8"
+    },
+    {
+      "term": "Frame count buckets",
+      "explanation": "System for organizing training data by frame counts, one of the training pitfalls to manage",
+      "from": "dischordo"
+    },
+    {
+      "term": "Audio normalization",
+      "explanation": "Process to standardize audio levels across training clips to avoid volume inconsistencies",
+      "from": "dischordo"
+    },
+    {
+      "term": "Resolution buckets",
+      "explanation": "1920x1080 goes into 1536 bucket (1920+1080=3000, so ~1536x1536 square format)",
+      "from": "MOV"
+    },
+    {
+      "term": "Layer offloading",
+      "explanation": "Moving model layers between GPU and CPU RAM to save VRAM, affects training speed",
+      "from": "MOV"
+    },
+    {
+      "term": "DiT-based architecture",
+      "explanation": "LTX2 uses DiT (Diffusion Transformer) which may require different captioning approaches compared to non-DiT models like WAN",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "term": "VAE spatial compression factor",
+      "explanation": "LTX2 uses compression factor of 32, requiring input dimensions to be divisible by 32",
+      "from": "BrainNXDomain"
+    },
+    {
+      "term": "IC LoRA",
+      "explanation": "Image Conditioning LoRA - trains with control and target video datasets to transform one type of video into another",
+      "from": "Alisson Pereira"
+    },
+    {
+      "term": "Text embedding cache",
+      "explanation": "Creates large cache files (376MB per dataset item) to avoid recomputing text encodings, but requires significant storage",
+      "from": "chancelor"
+    },
+    {
+      "term": "IC LoRA",
+      "explanation": "Identity Consistent LoRA - specialized training approach for maintaining character identity across video generations",
+      "from": "Alisson Pereira"
+    },
+    {
+      "term": "Bucket size",
+      "explanation": "Training resolution dimensions, not the same as final output resolution",
+      "from": "dischordo"
+    },
+    {
+      "term": "Rank",
+      "explanation": "Controls how many model weights the LoRA affects - higher rank = more layers affected = more VRAM but potentially more learning",
+      "from": "MOV"
+    },
+    {
+      "term": "LTX2 i2v mode",
+      "explanation": "Forces first frame to be input image but still generates based on text prompt, not trained as dedicated i2v",
+      "from": "Kiwv"
+    },
+    {
+      "term": "Mixed datasets in LTX2",
+      "explanation": "May prioritize videos over images during training",
+      "from": "Choowkee"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "LTX-2 Trainer GitHub",
+      "url": "https://github.com/Lightricks/LTX-2/tree/main/packages/ltx-trainer",
+      "type": "repo",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Training modes documentation",
+      "url": "https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/training-modes.md",
+      "type": "documentation",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Fal.ai LTX-2 trainer",
+      "url": "https://fal.ai/models/fal-ai/ltx2-video-trainer",
+      "type": "platform",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Tear effect LoRA",
+      "url": "https://huggingface.co/oumoumad/LTX-2-19b-LoRA-TEAR",
+      "type": "model",
+      "from": "oumoumad"
+    },
+    {
+      "resource": "Gemma-3-12b Abliterated for LTX2",
+      "url": "https://huggingface.co/FusionCow/Gemma-3-12b-Abliterated-LTX2/tree/main",
+      "type": "model",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "LTX-2 training paper",
+      "url": "https://arxiv.org/pdf/2601.03233",
+      "type": "paper",
+      "from": "fearnworks"
+    },
+    {
+      "resource": "Hydraulic press LoRA with speedup tips",
+      "url": "https://huggingface.co/kabachuha/ltx2-hydraulic-press#ltx-2-hydraulic-press-trained-at-home-in-just-15-hours",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "Sprout LoRA for LTX-2",
+      "url": "https://huggingface.co/oumoumad/LTX-2-19b-LoRA-SPROUT",
+      "type": "model",
+      "from": "oumoumad"
+    },
+    {
+      "resource": "IceKiub's LTX-2 Docker template",
+      "url": "docker pull icekiub/icyltx2:latest",
+      "type": "tool",
+      "from": "Alisson Pereira"
+    },
+    {
+      "resource": "IceKiub template tutorial",
+      "url": "https://youtu.be/JlfQIyjxx2k?t=178",
+      "type": "tutorial",
+      "from": "Alisson Pereira"
+    },
+    {
+      "resource": "Scooby Doo style LoRA",
+      "url": "https://civitai.com/models/2308294?modelVersionId=2597100",
+      "type": "model",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "LTX-2 official trainer repository",
+      "url": "https://github.com/Lightricks/LTX-2/tree/main/packages/ltx-trainer",
+      "type": "repo",
+      "from": "NebSH"
+    },
+    {
+      "resource": "TartanAir dataset for IC LoRA",
+      "url": "https://tartanair.org/",
+      "type": "dataset",
+      "from": "Cseti"
+    },
+    {
+      "resource": "LoRA Captioner Tool",
+      "url": "https://huggingface.co/spaces/comfyuiman/loracaptionertaz",
+      "type": "tool",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Deep Zoom LoRA",
+      "url": "https://discord.com/channels/1076117621407223829/1461346143161028702/1461346143161028702",
+      "type": "lora",
+      "from": "oumoumad"
+    },
+    {
+      "resource": "Ostris LTX2 settings",
+      "url": "https://x.com/ostrisai/status/2011070979066450171",
+      "type": "settings",
+      "from": "Choowkee"
+    },
+    {
+      "resource": "Cakeify Dataset",
+      "url": "https://huggingface.co/datasets/Lightricks/Cakeify-Dataset",
+      "type": "dataset",
+      "from": "matanby"
+    },
+    {
+      "resource": "AI Toolkit Easy Install",
+      "url": "https://github.com/Tavris1/AI-Toolkit-Easy-Install",
+      "type": "tool",
+      "from": "MOV"
+    },
+    {
+      "resource": "Archive.org music videos",
+      "url": "https://archive.org/details/artsandmusicvideos",
+      "type": "dataset",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Archive.org cartoons",
+      "url": "https://archive.org/details/vintage_cartoons",
+      "type": "dataset",
+      "from": "NebSH"
+    },
+    {
+      "resource": "LTX trainer quickstart",
+      "url": "https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/quick-start.md",
+      "type": "documentation",
+      "from": "ColinUrbs"
+    },
+    {
+      "resource": "Scooby Doo Style LoRA",
+      "url": "https://civitai.com/models/2308294/scooby-doo-style-lora-ltx2?modelVersionId=2597100",
+      "type": "lora",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Official LTX2 captioning prompts",
+      "url": "provided in message",
+      "type": "prompt",
+      "from": "BrainNXDomain"
+    },
+    {
+      "resource": "Musubi tuner fork",
+      "url": "https://github.com/AkaneTendo25/musubi-tuner",
+      "type": "repo",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "resource": "LTX-2 dataset preparation docs",
+      "url": "https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/docs/dataset-preparation.md",
+      "type": "documentation",
+      "from": "Choowkee"
+    },
+    {
+      "resource": "Head swap LoRA for Flux",
+      "url": "https://civitai.com/models/2027766",
+      "type": "model",
+      "from": "Alisson Pereira"
+    },
+    {
+      "resource": "Qwen2.5-Omni-7B",
+      "url": "mentioned",
+      "type": "model",
+      "from": "BrainNXDomain"
+    },
+    {
+      "resource": "Musubi Tuner LTX-2 fork",
+      "url": "https://github.com/AkaneTendo25/musubi-tuner/tree/ltx-2",
+      "type": "repo",
+      "from": "avataraim"
+    },
+    {
+      "resource": "LTX2 Training Docker image",
+      "url": "https://www.reddit.com/r/StableDiffusion/comments/1q8nknf/ltx2_lora_training_docker_imagerunpod/",
+      "type": "tool",
+      "from": "metaphysician"
+    },
+    {
+      "resource": "Video captioning tool",
+      "url": "https://huggingface.co/spaces/comfyuiman/loracaptionertaz_v2",
+      "type": "tool",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Captioning guide",
+      "url": "https://civitai.com/articles/24082/tazs-ultimate-imagevideo-easy-captioning-tool-gemini-qwen-vl",
+      "type": "workflow",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Golden Boy LoRA",
+      "url": "https://civitai.com/models/2334302?modelVersionId=2625818",
+      "type": "model",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "BFS Head Swap LoRA",
+      "url": "https://huggingface.co/Alissonerdx/BFS-Best-Face-Swap-Video",
+      "type": "model",
+      "from": "Alisson Pereira"
+    },
+    {
+      "resource": "Oxen.ai training livestream",
+      "url": "https://www.youtube.com/watch?v=QMRuOZ_JVXg",
+      "type": "resource",
+      "from": "LTX Lux"
+    },
+    {
+      "resource": "SD Finetuning guide",
+      "url": "https://github.com/spacepxl/demystifying-sd-finetuning/",
+      "type": "resource",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "resource": "Musubi-Tuner LTX-2 fork",
+      "url": "https://github.com/AkaneTendo25/musubi-tuner.git",
+      "type": "repo",
+      "from": "avataraim"
+    },
+    {
+      "resource": "Working Musubi-Tuner commit",
+      "url": "https://github.com/kohya-ss/musubi-tuner/tree/90e1559a7c73ff41ade497605e1f5b1850270711",
+      "type": "repo",
+      "from": "Choowkee"
+    },
+    {
+      "resource": "ComfyUI API helper",
+      "url": "https://github.com/deimos-deimos/comfy_api_simplified",
+      "type": "tool",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "resource": "Gemma model for training",
+      "url": "https://huggingface.co/google/gemma-3-12b-it-qat-q4_0-unquantized",
+      "type": "model",
+      "from": "avataraim"
+    },
+    {
+      "resource": "Musubi LTX2 fork - stable version",
+      "url": "https://github.com/AkaneTendo25/musubi-tuner/tree/2b77b23defc40bea39ee21680fa3ab73765ab3bf",
+      "type": "repo",
+      "from": "avataraim"
+    },
+    {
+      "resource": "Flash Attention prebuilt wheels",
+      "url": "https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.7.11/flash_attn-2.8.3+cu128torch2.8-cp312-cp312-win_amd64.whl",
+      "type": "tool",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Flash Attention packages documentation",
+      "url": "https://github.com/mjun0812/flash-attention-prebuild-wheels/blob/main/doc/packages.md",
+      "type": "repo",
+      "from": "crinklypaper"
+    },
+    {
+      "resource": "Older branch of Musubi Tuner for audio",
+      "url": "not provided",
+      "type": "tool",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "resource": "Simpletuner installation",
+      "url": "git clone repo, then pip install '.[cuda13-stable]'",
+      "type": "tool",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "resource": "Simpletuner UI command",
+      "url": "simpletuner server --ssl --port 8080",
+      "type": "tool",
+      "from": "avataraim"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "Dataset must be homogeneous",
+      "details": "Either all videos or all images, mixing is not supported in training",
+      "from": "crinklypaper"
+    },
+    {
+      "limitation": "Fal trainer reliability issues",
+      "details": "Multiple users reporting failures and inconsistent results with fal trainer",
+      "from": "multiple users"
+    },
+    {
+      "limitation": "Windows compatibility requires manual setup",
+      "details": "Official trainer requires Linux, Windows needs manual triton installation",
+      "from": "boorayjenkins"
+    },
+    {
+      "limitation": "Effect duration tied to training data length",
+      "details": "Training on 3sec clips tends to produce slow motion when generating longer videos",
+      "from": "oumoumad"
+    },
+    {
+      "limitation": "I2V is fussy and does its own thing",
+      "details": "I2V mode often ignores input and generates unexpected content, sometimes just shows initial frame then goes off on its own",
+      "from": "fearnworks"
+    },
+    {
+      "limitation": "Multiple characters in one generation bleed together",
+      "details": "When trying to use 2-character LoRA for generating different characters separately, they get mixed like in WAN",
+      "from": "NebSH"
+    },
+    {
+      "limitation": "Long music training doesn't work well",
+      "details": "Training on 40-90 second music samples performed poorly, likely because base model only trained on 5-10s max",
+      "from": "mamad8"
+    },
+    {
+      "limitation": "Pronunciation issues in non-English languages",
+      "details": "French words often mispronounced with silent letters spoken or wrong sounds, text encoder doesn't reliably encode pronunciation",
+      "from": "NebSH"
+    },
+    {
+      "limitation": "Real movement causes distortion",
+      "details": "Even at 9k steps on image + 12k steps on video, any real movement gets distortion",
+      "from": "crinklypaper"
+    },
+    {
+      "limitation": "Videos without audio tracks cause issues",
+      "details": "Having videos with no audio in dataset may cause inference errors",
+      "from": "Lumori"
+    },
+    {
+      "limitation": "Character voice separation difficulty",
+      "details": "Multiple characters in dataset tend to combine voices into one unless properly separated",
+      "from": "Lumori"
+    },
+    {
+      "limitation": "WAN training parameters don't translate to LTX2",
+      "details": "Training approaches that worked for WAN don't work as well for LTX2",
+      "from": "Choowkee"
+    },
+    {
+      "limitation": "Audio quality cannot be improved through LoRA",
+      "details": "Audio limitations are inherent to LTX2 model itself and cannot be fixed with LoRAs",
+      "from": "Kiwv"
+    },
+    {
+      "limitation": "Logos are difficult to train",
+      "details": "Multiple attempts to train logos failed even after 9000+ steps, suggesting logos may be a pain point for the model",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "limitation": "Small datasets don't work well",
+      "details": "5 videos won't learn anything meaningful, need at least 40 videos for proper training",
+      "from": "Kiwv"
+    },
+    {
+      "limitation": "Character bleed between subjects",
+      "details": "Some character attributes can bleed between different characters in the dataset",
+      "from": "crinklypaper"
+    },
+    {
+      "limitation": "IC LoRA doesn't support audio conditioning during training",
+      "details": "Audio must be added as adaptation to IC LoRA workflow, not trained directly",
+      "from": "Alisson Pereira"
+    },
+    {
+      "limitation": "Image-only training produces poor motion results",
+      "details": "Training with only images gives poor results for video generation compared to video training",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "limitation": "Low FPS training causes motion artifacts",
+      "details": "Training at low FPS creates hand distortions and artifacts during fast movements",
+      "from": "MOV"
+    },
+    {
+      "limitation": "Dataset limited to landscape causes poor vertical video results",
+      "details": "Training primarily on landscape videos results in poor performance on vertical videos with full body visible",
+      "from": "Alisson Pereira"
+    },
+    {
+      "limitation": "Overtraining character LoRAs with images",
+      "details": "Can cause diminished movement and inability for character to talk, even at 250 steps",
+      "from": "CJ"
+    },
+    {
+      "limitation": "Training samples are poor quality indicators",
+      "details": "Samples during training look much worse than actual LoRA performance",
+      "from": "NebSH"
+    },
+    {
+      "limitation": "Recent Musubi-Tuner versions broken",
+      "details": "Latest commits fail to train properly with bad loss curves",
+      "from": "Choowkee"
+    },
+    {
+      "limitation": "Eyes generalization issues",
+      "details": "Model fails to generalize anime eye styles correctly even at 6k steps",
+      "from": "Choowkee"
+    },
+    {
+      "limitation": "Audio generation inconsistency",
+      "details": "Works only 30% of the time and is prompt-dependent",
+      "from": "Jonathan Scott Schneberg"
+    },
+    {
+      "limitation": "8GB VRAM insufficient for training",
+      "details": "Barely possible on 24GB, definitely not feasible on 8GB cards",
+      "from": "Kiwv"
+    },
+    {
+      "limitation": "Outpainting seam issues",
+      "details": "IC LoRA outpainting works but slightly alters original content creating visible seams",
+      "from": "oumoumad"
+    },
+    {
+      "limitation": "LTX2 isn't like a one-shot voice cloner",
+      "details": "Mileage that audio LoRA can give seems limited",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "limitation": "Simpletuner validation during training doesn't work yet",
+      "details": "Plus need to convert LoRAs to ComfyUI format",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "limitation": "Possible resolution limitation for training",
+      "details": "LoRA trained at 256 resolution had no effect, while 512 resolution previously worked",
+      "from": "protector131090"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "VRAM for training",
+      "details": "RTX 6000 Pro uses ~48GB VRAM for training at 992x544x185 without audio, 37-44GB with fp8 model",
+      "from": "fearnworks"
+    },
+    {
+      "requirement": "Full model fine-tuning",
+      "details": "Requires significant resources, likely multiple H100s",
+      "from": "burgstall"
+    },
+    {
+      "requirement": "Minimum VRAM estimate",
+      "details": "Looking like 44GB VRAM minimum for training, though AI Studio might enable 24GB",
+      "from": "Kiwv"
+    },
+    {
+      "requirement": "System RAM usage",
+      "details": "Uses tons of RAM, 64GB recommended for smooth operation",
+      "from": "crinklypaper"
+    },
+    {
+      "requirement": "Text encoder size",
+      "details": "Gemma text encoder is 23.5GB",
+      "from": "crinklypaper"
+    },
+    {
+      "requirement": "H100 training stats",
+      "details": "Peak GPU memory: 45.45 GB, 0.30 steps/second, 111.9 minutes total time",
+      "from": "NebSH"
+    },
+    {
+      "requirement": "H100 VRAM usage with specific buckets",
+      "details": "60-70GB VRAM usage with resolution buckets 960x544x41 through 960x544x137",
+      "from": "Cseti"
+    },
+    {
+      "requirement": "RTX 3090/4090 training possible",
+      "details": "Sub-24GB training possible but slow, image-only training works on 24GB",
+      "from": "ZeusZeus"
+    },
+    {
+      "requirement": "RTX 3090 training requirements",
+      "details": "Need 128GB+ RAM, float8 model, 4-bit text encoder, 256 resolution, 72 frames (3 seconds) might work",
+      "from": "Kiwv"
+    },
+    {
+      "requirement": "24GB VRAM training setup",
+      "details": "Possible with 128GB RAM, float8 model and text encoder, 100% offload, 512 resolution 5s videos, 30s/it speed",
+      "from": "MOV"
+    },
+    {
+      "requirement": "Minimum GPU for training",
+      "details": "Tested on 5090+, 4090 might work for images with heavy quantization and offloading but will be slow with poor quality",
+      "from": "LTX Lux"
+    },
+    {
+      "requirement": "5090 VRAM usage",
+      "details": "14GB VRAM utilization during training with offloading enabled",
+      "from": "Choowkee"
+    },
+    {
+      "requirement": "3090 capability",
+      "details": "Can train locally with 100% offload, good for 512res videos and 1024res images",
+      "from": "MOV"
+    },
+    {
+      "requirement": "24GB VRAM limitation",
+      "details": "Too little for proper LTX training, can only do images with heavy quantization and offloading",
+      "from": "Kiwv"
+    },
+    {
+      "requirement": "H100 speed",
+      "details": "<1s/it on H100 with LTX trainer, ~7.9s/it on H100 with AI Toolkit",
+      "from": "scf"
+    },
+    {
+      "requirement": "VRAM for video training",
+      "details": "100 videos at 512 resolution with 49 frames uses 18GB VRAM on 4090, with 7.30 sec/iter speed",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "Storage for text embedding cache",
+      "details": "Large datasets require 300GB+ storage space for cached embeddings",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "RTX 4090 performance",
+      "details": "5.23 sec/iter for image training, 6-7 sec/iter for video training with audio",
+      "from": "chancelor"
+    },
+    {
+      "requirement": "Memory usage during training",
+      "details": "Training shows 74.8% memory usage (17.9GB/24GB) on RTX 4090",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "24GB VRAM minimum for video training",
+      "details": "512x512x121 frames with rank 32 and audio training uses 22.5-23GB VRAM in AI Toolkit",
+      "from": "MOV"
+    },
+    {
+      "requirement": "768x768 training needs A6000 class",
+      "details": "768 resolution at 121 frames requires high-end professional cards without offloading",
+      "from": "dischordo"
+    },
+    {
+      "requirement": "Consumer 24GB cards work with optimization",
+      "details": "RTX 4090/3090 can train with float8, 4-bit text encoder, and full offloading",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "Cache storage needs",
+      "details": "400 videos + 400 images = ~300GB cache files in AI Toolkit, 30MB in Musubi",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "VRAM usage with block swapping",
+      "details": "512res 121f videos: 30 swap=18.6GB, 26 swap=21.6GB, 24 swap=22.9GB max VRAM",
+      "from": "MOV"
+    },
+    {
+      "requirement": "Training speed on 4090",
+      "details": "5-6 it/sec for 512 video + 768 images, 10 it/sec for video only",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "Training speed on 5090",
+      "details": "Around 3.30s/it for 512x512 video with images",
+      "from": "JonkoXL"
+    },
+    {
+      "requirement": "Cache storage requirements",
+      "details": "TE cache for 720 image dataset is 265GB, can quickly fill SSD",
+      "from": "izashin"
+    },
+    {
+      "requirement": "RTX 4090 VRAM usage",
+      "details": "Can run with blocks_to_swap=5, but may freeze with audio+video training",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "RTX 5090 VRAM usage",
+      "details": "Can run with blocks_to_swap=0, training speed 3.62 iter/sec",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "A6000 performance",
+      "details": "Works well for training, used when 4090 had issues",
+      "from": "avataraim"
+    },
+    {
+      "requirement": "Minimum VRAM for training",
+      "details": "24GB barely sufficient, 8GB not feasible for quality training",
+      "from": "Kiwv"
+    },
+    {
+      "requirement": "VRAM for musubi-tuner",
+      "details": "16 VRAM, still got OOM on validation sampling at 512x512x49",
+      "from": "Gleb Tretyak"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "Tear effect LoRA",
+      "type": "lora",
+      "description": "Trained tear/ripping effect, available in 32 and 128 rank versions",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Sprout LoRA",
+      "type": "lora",
+      "description": "Plant sprouting effect retrained for LTX-2 with fine detail improvements",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Character LoRAs",
+      "type": "lora",
+      "description": "Various character LoRAs trained on interview footage using pyscene extraction",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Camera control LoRAs",
+      "type": "lora",
+      "description": "20 camera control LoRAs trained for LTXV 0.97 distilled",
+      "from": "NebSH"
+    },
+    {
+      "creation": "NSFW LoRAs",
+      "type": "lora",
+      "description": "Handjob and other adult content LoRAs trained successfully",
+      "from": "KevenG"
+    },
+    {
+      "creation": "IceKiub's LTX-2 Docker template",
+      "type": "tool",
+      "description": "Free template with interface for LTX-2 training, available on Runpod or local Docker",
+      "from": "Alisson Pereira"
+    },
+    {
+      "creation": "Audio-only training modifications",
+      "type": "tool",
+      "description": "Modified LTX-2 trainer for audio-only training, significantly reduces memory usage",
+      "from": "mamad8"
+    },
+    {
+      "creation": "Scooby Doo style LoRA",
+      "type": "lora",
+      "description": "Character and style LoRA trained on Scooby Doo content with voice capabilities",
+      "from": "crinklypaper"
+    },
+    {
+      "creation": "South Park LoRA",
+      "type": "lora",
+      "description": "Style LoRA trained on 4 episodes, 889 videos, produces authentic South Park style",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Video segmentation script",
+      "type": "tool",
+      "description": "Bash script for bulk segmenting videos into 5s 24fps files",
+      "from": "ZeusZeus"
+    },
+    {
+      "creation": "IC Light LoRA for LTX-2",
+      "type": "lora",
+      "description": "Useful for audio react workflows, reference input can be basic white on black audio react map to drive luminance",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Lum Particles LoRA",
+      "type": "lora",
+      "description": "Use any basic white on black video to drive luminance, handy for audio react workflows",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Musubi tuner fork for LTX2",
+      "type": "tool",
+      "description": "Community fork adding LTX2 support to Kohya's training tools, faster than AI Toolkit",
+      "from": "Choowkee"
+    },
+    {
+      "creation": "Custom checkpoint selector node",
+      "type": "node",
+      "description": "ComfyUI node to easily select training checkpoints by index from a directory path",
+      "from": "avataraim"
+    },
+    {
+      "creation": "Dataset loader node",
+      "type": "node",
+      "description": "ComfyUI node that loads videos and captions from dataset path, supports JSON or separate files",
+      "from": "avataraim"
+    },
+    {
+      "creation": "Multi-run generation node",
+      "type": "node",
+      "description": "Allows running 50+ video generations with single click for easy checkpoint comparison",
+      "from": "avataraim"
+    },
+    {
+      "creation": "Whisper ComfyUI node",
+      "type": "node",
+      "description": "Custom node for running Whisper speech recognition in ComfyUI workflows",
+      "from": "MOV"
+    },
+    {
+      "creation": "Gradio interface for LTX Musubi",
+      "type": "tool",
+      "description": "Easy interface to create datasets, generate toml files, cache, and train with live terminal view",
+      "from": "avataraim"
+    },
+    {
+      "creation": "Firefox extension for Twitch clips",
+      "type": "tool",
+      "description": "Scrape and download multiple clips from Twitch as mp4 for dataset creation",
+      "from": "crinklypaper"
+    },
+    {
+      "creation": "Batch setup files for Musubi-Tuner",
+      "type": "workflow",
+      "description": "Easy .bat setup for Windows users with install, cache, and train scripts",
+      "from": "avataraim"
+    },
+    {
+      "creation": "Kijai's node for voice LoRA",
+      "type": "node",
+      "description": "Works for repurposing character LoRAs for voice only and audio-trained LoRAs",
+      "from": "Guey.KhalaMari"
+    }
+  ]
+}

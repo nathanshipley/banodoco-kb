@@ -1,0 +1,2971 @@
+{
+  "channel": "ltx_gens",
+  "date_range": "2026-01-01 to 2026-02-01",
+  "messages_processed": 4100,
+  "chunks_processed": 11,
+  "api_usage": {
+    "input_tokens": 132359,
+    "output_tokens": 29166,
+    "estimated_cost": 0.834567
+  },
+  "extracted_at": "2026-02-02T00:23:07.704599Z",
+  "discoveries": [
+    {
+      "finding": "LTX Video 2 supports text-to-video generation with audio",
+      "details": "Model generates both video and audio simultaneously in T2V mode",
+      "from": "Multiple users"
+    },
+    {
+      "finding": "Old LoRAs from LTX 0.97 are compatible with LTX Video 2",
+      "details": "NebSH confirmed compatibility and demonstrated multiple LoRAs working without conversion",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Model has strong cartoon/animation memorization",
+      "details": "Generates perfect Peppa Pig voices and characters, Amazing World of Gumball style, SpongeBob recognition",
+      "from": "Phr00t"
+    },
+    {
+      "finding": "LTX 2 supports multiple languages for audio generation",
+      "details": "French audio generation confirmed working with proper accents",
+      "from": "V\u00e9role"
+    },
+    {
+      "finding": "NebSH's 0.97 camera LoRAs work with LTX-2 out of the box",
+      "details": "Old 0.9x LoRAs applied to LTX-2 work without processing - tested 62 different camera motion LoRAs including dolly out, 360 orbit, whip pan, crash zoom, dutch angle, etc.",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Vertical motion works better with specific prompting techniques",
+      "details": "Describing mouth movement and other specific movements creates better results than just prompting 'she says...' which didn't move image at all",
+      "from": "gopnik"
+    },
+    {
+      "finding": "LTX-2 can generate music and sound effects",
+      "details": "Model acts as music generator - can create realistic sound effects and music matching video content",
+      "from": "Fictiverse"
+    },
+    {
+      "finding": "Scene transitions need 2-3 seconds between cuts to avoid confusion",
+      "details": "Model leans towards one long shot rather than cutting scenes, needs adequate time between transitions",
+      "from": "cyncratic"
+    },
+    {
+      "finding": "BF16 has considerable quality difference over FP8",
+      "details": "Noticeable quality improvement when using BF16 full model versus FP8 quantized version",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Short prompts work better when given audio input",
+      "details": "Simple prompts like 'A punk rock music video in a public bathroom. A Man wearing sunglasses and a leather jacket' work well with audio latents",
+      "from": "305792526629994496"
+    },
+    {
+      "finding": "Distill LoRA affects skin rendering",
+      "details": "The model likes to make shiny skin, and the distill lora might have an impact on this",
+      "from": "Owlie"
+    },
+    {
+      "finding": "Using different LoRA configurations affects output",
+      "details": "Comparison shows detailer lora on stage 1 vs stage 2 vs both stages produces different results",
+      "from": "gopnik"
+    },
+    {
+      "finding": "LTX2 can handle multi-language audio",
+      "details": "Model performs well with German and French language generation, with some spelling complexities in French",
+      "from": "gopnik"
+    },
+    {
+      "finding": "Big negative prompts can cause stuttery outputs",
+      "details": "Large default negative prompts may be causing stuttery video outputs",
+      "from": "TK_999"
+    },
+    {
+      "finding": "Model supports audio conditioning and masking",
+      "details": "Can use audio masking to preserve original audio in specific time ranges",
+      "from": "Dragonyte"
+    },
+    {
+      "finding": "CFG1 distilled models ignore encoding, so can reuse single encoding to save time",
+      "details": "When using distilled models with CFG1, the encoding is ignored anyway, so you can reuse a single encoding to save processing time",
+      "from": "TK_999"
+    },
+    {
+      "finding": "LTX2 might work as world model base",
+      "details": "LTX2 could potentially be used as a foundation for world models in the future",
+      "from": "TK_999"
+    },
+    {
+      "finding": "Music has big effect on motion speed",
+      "details": "The audio/music input significantly affects the speed and intensity of generated motion in videos",
+      "from": "Benjimon"
+    },
+    {
+      "finding": "No background gives better results",
+      "details": "Cropping out backgrounds or using no background naturally seems to produce better generation results",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "finding": "Model can sync dancing to audio beat",
+      "details": "LTX2 can generate dancing that is timed to the beat of input audio",
+      "from": "Marco_vdm"
+    },
+    {
+      "finding": "Distilled model needs adjustment for better quality",
+      "details": "To avoid plastic look with distilled model, add detail LoRA on both samplers, reduce distilled LoRA to 0.6, and use detail daemon with enhance image node",
+      "from": "dj47"
+    },
+    {
+      "finding": "Grid patterns appear in dark scenes",
+      "details": "Strong grid patterns visible in dark scenes, can be adjusted with LTXV Spatio Temporal Tiled VAE Decode settings",
+      "from": "garbus"
+    },
+    {
+      "finding": "Natural looking breathing makes videos appear more alive",
+      "details": "Breathing animation improves realism in character videos",
+      "from": "Rainsmellsnice"
+    },
+    {
+      "finding": "Changed fps from 24 to 25 fixed temporal jerkyness",
+      "details": "Temporal upscaler expects 25 fps, works even at high frame counts like 461 frames",
+      "from": "HeadOfOliver"
+    },
+    {
+      "finding": "Empty audio latent for upscale stage improves audio quality",
+      "details": "Instead of running first stage audio latent output into upscale, use new empty audio latent for better i2v audio",
+      "from": "dischordo"
+    },
+    {
+      "finding": "Negative distill lora at -0.50 removes film grain",
+      "details": "Using negative distill lora strength helps remove excessive film grain and damage artifacts",
+      "from": "Nathan Shipley"
+    },
+    {
+      "finding": "FlowMatchEuler scheduler maintains sharpness in long videos",
+      "details": "FlowMatch scheduler doesn't degrade video quality over time, keeps sharp last frames even on 15 steps",
+      "from": "neofuturo"
+    },
+    {
+      "finding": "Increasing FPS helps reduce blur and improve detail quality",
+      "details": "Higher FPS makes videos less blurry and increases detail, but reduces effective video length you can render",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "finding": "LTX2 can generate stereo audio with spatial positioning",
+      "details": "Model supports stereo audio generation and has some sense of spatial audio positioning",
+      "from": "ezMan"
+    },
+    {
+      "finding": "Detail LoRA is primarily for v2v upscaling",
+      "details": "Detail LoRA is more used with video-to-video upscaling rather than initial generation",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "finding": "Motion blur may be from overtrained dataset or latent space compression",
+      "details": "The mushiness/motion blur issues could be from being overtrained on motion blur or a side effect of latent space compression",
+      "from": "nikolatesla20"
+    },
+    {
+      "finding": "LTX2 doesn't need large datasets for camera/effect LoRAs",
+      "details": "Can train effective camera movement and effect LoRAs with as few as 6 generated AI videos",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Audio generation may be random when not explicitly prompted",
+      "details": "Background music generation appears random when audio description isn't included in prompt",
+      "from": "ezMan"
+    },
+    {
+      "finding": "Distilled 8-step with custom sigmas works well",
+      "details": "Using er_sde sampler with distilled model and 8-step custom sigmas produces high quality results",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "finding": "48fps conditioning gives less blurry speech generation",
+      "details": "Using 48fps as conditioning frame rate reduces blur during speech, then can export back to 24fps for cinematic feel",
+      "from": "ucren"
+    },
+    {
+      "finding": "Distilled LoRA with negative strength improves likeness",
+      "details": "Using distilled LoRA at negative strength (like -0.4) helps fix overbaked distilled model and improves face consistency",
+      "from": "ucren"
+    },
+    {
+      "finding": "Multiple frame extension workflow (FFLF) works well",
+      "details": "First, middle, last frame workflow with multiplier node allows adding more frames for extensions",
+      "from": "neofuturo"
+    },
+    {
+      "finding": "LTX2 knows character voices well",
+      "details": "Model can generate Rick and Morty voices without pre-generated audio clips, just from prompting",
+      "from": "herpderpleton"
+    },
+    {
+      "finding": "Inpainting maintains better likeness",
+      "details": "Using inpainting/extending with many latent samples helps maintain face consistency better than straight generation",
+      "from": "ucren"
+    },
+    {
+      "finding": "Audio latent strength can be reduced",
+      "details": "Using latent multiply at 0.75 strength on audio latent reduces exaggerated expressions",
+      "from": "ucren"
+    },
+    {
+      "finding": "Second masked upscale pass improves audio sync",
+      "details": "Adding a second masked upscale pass significantly helps with audio extend/clone quality",
+      "from": "ucren"
+    },
+    {
+      "finding": "Distilled model can be 'debaked' using distill LoRA at negative values",
+      "details": "Using distill LoRA at -0.4 makes a huge difference on plastic skin issues",
+      "from": "ucren"
+    },
+    {
+      "finding": "GGUF lipsync solution found",
+      "details": "Use one stage Kijai-based workflow with GGUF distilled model, distilled lora at -0.3, and normal connector on clip (not distilled)",
+      "from": "Alpha-Neo"
+    },
+    {
+      "finding": "Frame count formula discovered",
+      "details": "Frame count must be 8n+1 (e.g., 241 frames for 10 seconds at 24fps)",
+      "from": "N0NSens"
+    },
+    {
+      "finding": "Tiled VAE decoding causes visible grid patterns in dark scenes",
+      "details": "Grid patterns appear as double lines where tiles overlap, visible in dark scenes but masked in bright areas",
+      "from": "ucren"
+    },
+    {
+      "finding": "Audio normalization issues in v2v extend",
+      "details": "Huge volume changes and distortion occur when using v2v extend functionality",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "Two-stage vs one-stage workflow differences",
+      "details": "One stage workflow has better camera adherence and prompt following, two-stage is hit and miss",
+      "from": "Alpha-Neo"
+    },
+    {
+      "finding": "LTX2 can handle very long videos with RTX 5090",
+      "details": "5090 can generate 1000 frames at 1280x720 resolution",
+      "from": "NebSH"
+    },
+    {
+      "finding": "Frame injection technique for controlled transitions",
+      "details": "Can inject 3-5 frames at specific frame indexes for precise control over video transitions",
+      "from": "neofuturo"
+    },
+    {
+      "finding": "Camera static LoRA combined with negative distill LoRA improves stability",
+      "details": "Camera static LoRA at 0.5 and distill LoRA at -0.3 resolved camera static issues",
+      "from": "mdkb"
+    },
+    {
+      "finding": "Audio-to-video works well with musical content",
+      "details": "Model shows good audio reactivity and can generate music videos from audio input",
+      "from": "multiple users"
+    },
+    {
+      "finding": "Dev model with distill LoRA at lower strength reduces oversaturation",
+      "details": "Using dev model with distill LoRA at 0.6 helps control oversaturation compared to pure distilled model",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "Charlie generated 1500 frames in one go with LTX2",
+      "details": "Successfully generated 1500 frames in a single generation",
+      "from": "Charlie"
+    },
+    {
+      "finding": "Direct resolution at 1504/832 gives better motion than 1280/720 then upscale",
+      "details": "First pass at higher resolution produces better motion quality than upscaling from lower resolution",
+      "from": "V\u00e9role"
+    },
+    {
+      "finding": "Charlie can do 2000 frames in 1 go",
+      "details": "Extended frame generation capability demonstrated",
+      "from": "Charlie"
+    },
+    {
+      "finding": "LTX2 supports text-to-image generation",
+      "details": "Model can generate static images as well as video, described as realistic",
+      "from": "hicho"
+    },
+    {
+      "finding": "Prompt structure affects i2v vs t2v behavior",
+      "details": "Simple prompts like 'woman is walking and sings' maintain i2v mode, complex prompts not matching reference image switch to t2v mode",
+      "from": "hicho"
+    },
+    {
+      "finding": "Audio prompting order matters for speech generation",
+      "details": "Structure like 'person speaks in harsh low voice and says' works better than 'person speaks saying [text] in harsh low voice'",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "T2AV (text-to-audio-video) prompting works well",
+      "details": "Single pass t2v audio prompting produces good results",
+      "from": "152993277631528960"
+    },
+    {
+      "finding": "Heavy noise helps LTX output quality",
+      "details": "Adding noise to input improves generation results",
+      "from": "152993277631528960"
+    },
+    {
+      "finding": "Keeping everything in silhouette avoids artifacts",
+      "details": "Silhouette approach reduces visual artifacts in generations",
+      "from": "152993277631528960"
+    },
+    {
+      "finding": "Motion LoRA on first pass produces better results",
+      "details": "Using motion LoRA at 1920/1088 first pass then upscale preferred over preprocessor on first stage",
+      "from": "V\u00e9role"
+    },
+    {
+      "finding": "LTX2 knows Super Mario Bros Super Show content",
+      "details": "Key phrase 'A cartoon from the Super Mario Bros Super Show' enables character generation from that series",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "Using dev+lora at 0.6 strength helps maintain face quality during camera rotation",
+      "details": "User reports improved face consistency when using this configuration",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "IC detailer lora at 0.5 strength works for T2V but breaks I2V/V2V",
+      "details": "Using IC detailer lora on I2V or V2V messes up matching and changes faces significantly",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "finding": "Static camera control lora helps prevent camera wandering",
+      "details": "Testing shows it definitely helps keep the camera from moving unexpectedly",
+      "from": "Benjimon"
+    },
+    {
+      "finding": "New LTX Multimodal Guider shows significant improvement over old guider",
+      "details": "Comparison shows dramatically better results with the new guider",
+      "from": "garbus"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "I2V outputs static for 3 seconds then deforms",
+      "solution": "Lower noise mask to 0.6 (strength parameter on native workflow)",
+      "from": "Dragonyte"
+    },
+    {
+      "problem": "Out of memory errors on first run",
+      "solution": "Run batch of 2 - first will fail, second will work",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "problem": "CLIP encoder causing OOM errors",
+      "solution": "Use fp8 gemma 3 model",
+      "from": "Phr00t"
+    },
+    {
+      "problem": "Audio quality is tinny/wonky",
+      "solution": "Listed as known issue, no solution provided yet",
+      "from": "burgstall"
+    },
+    {
+      "problem": "OOM/crashes during VAE decode on longer videos",
+      "solution": "Use tiled VAE decode, increase RAM, or reduce resolution/frame count",
+      "from": "Tachyon"
+    },
+    {
+      "problem": "Tensor mismatch in native workflow",
+      "solution": "Use shared working workflows from community members",
+      "from": "HeadOfOliver"
+    },
+    {
+      "problem": "Model occasionally produces slideshow-like images with no motion",
+      "solution": "Unknown trigger, appears random in automatic scene generation",
+      "from": "Simonj"
+    },
+    {
+      "problem": "Green squares appear on screen during high-resolution long renders",
+      "solution": "Reboot system - likely unstable overclock/downvolt issue",
+      "from": "305792526629994496"
+    },
+    {
+      "problem": "Custom audio not working",
+      "solution": "Issue with custom audio functionality, still unresolved",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "problem": "Static video with short prompts",
+      "solution": "Use longer, more detailed prompts. Short prompts result in static videos that barely move",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "problem": "Enhancer node causing errors",
+      "solution": "Remove the prompt enhancer node from workflow to fix mat1/mat2 errors",
+      "from": "GalaxyTimeMachine(RTX4090)"
+    },
+    {
+      "problem": "OOM errors on second sampler",
+      "solution": "Set aggressive tiling settings, use reserve VRAM setting at 6, ensure using FP8 models",
+      "from": "D'Squarius Green, Jr."
+    },
+    {
+      "problem": "Face warping and eye issues in T2V",
+      "details": "Common issue where faces get melting effects and eyes become black holes, happens in both T2V and I2V",
+      "from": "gopnik"
+    },
+    {
+      "problem": "Preview mode causing mat1/mat2 errors",
+      "solution": "Disable preview mode to fix matrix multiplication errors",
+      "from": "gopnik"
+    },
+    {
+      "problem": "Cursed fingers with distilled model",
+      "solution": "Full model needs 40 steps to avoid cursed fingers, distilled gets it mostly right but changes the face",
+      "from": "421114995925843968"
+    },
+    {
+      "problem": "Plastic look with distilled model",
+      "solution": "Add detail LoRA on both samplers, reduce distilled LoRA to 0.6, add detail daemon and enhance image node",
+      "from": "dj47"
+    },
+    {
+      "problem": "Grid patterns in dark scenes",
+      "solution": "Adjust LTXV Spatio Temporal Tiled VAE Decode settings - 2/8/16/8 appears best but doubles VRAM use",
+      "from": "garbus"
+    },
+    {
+      "problem": "Image degradation when using last frame for continuation",
+      "solution": "Still looking for solution to maintain continuation while avoiding degradation",
+      "from": "NebSH"
+    },
+    {
+      "problem": "Blotchy face in wider shots during character motion in I2V",
+      "solution": "No specific solution provided, user asking for advice",
+      "from": "Choowkee"
+    },
+    {
+      "problem": "I2V produces garbage with short prompts",
+      "solution": "LTX2 requires long prompts same as LTX 0.9.8 did - short prompts produce garbage",
+      "from": "cyncratic"
+    },
+    {
+      "problem": "Audio has hissing and distortion",
+      "solution": "Need more steps or different sampler during upscale, multistep/complex schedulers seem better",
+      "from": "garbus"
+    },
+    {
+      "problem": "Temporal jerkyness in upscaler above 241 frames",
+      "solution": "Change fps to 25 instead of 24, upscaler expects 25 fps",
+      "from": "HeadOfOliver"
+    },
+    {
+      "problem": "i2v was broken, generations taking longer",
+      "solution": "Use negative node in workflow, switch to ksampler approach",
+      "from": "hicho"
+    },
+    {
+      "problem": "Extend workflow spitting out input video",
+      "solution": "Install 2 prerequisites for gemma to work with gemma 3 model loader node",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "problem": "Jerkyness every few frames",
+      "solution": "Decrease detail-lora strength or change fps to 25",
+      "from": "N0NSens"
+    },
+    {
+      "problem": "Background elements appearing jittery/boiling even with minimal movement",
+      "solution": "Use dpmpp_sde + normal (50% slower) or res_2s (4x slower) samplers",
+      "from": "Arts Bro"
+    },
+    {
+      "problem": "NoneType object has no attribute 'Params' on checkpoint node",
+      "solution": "Delete the 'ckpt_name' thing and select everything manually",
+      "from": "Zueuk"
+    },
+    {
+      "problem": "GEMMA model load destroys hardware on 3090",
+      "solution": "Try using quantized GEMMA or GGUF GEMMA",
+      "from": "Tachyon"
+    },
+    {
+      "problem": "Upscaling uses all 24GB VRAM regardless of GGUF model size",
+      "solution": "Model size doesn't affect latent frame buffer - VRAM usage depends on latent video frames at resolution, not model size",
+      "from": "Volkin"
+    },
+    {
+      "problem": "Image-to-video often produces still images",
+      "solution": "Use audio+image to video instead of just image to video for better motion",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "problem": "Loss of lip sync with faster workflows",
+      "solution": "Speed improvements may come at cost of lip sync quality - trade-off between speed and sync",
+      "from": "Simonj"
+    },
+    {
+      "problem": "Face changes too much in I2V with audio",
+      "solution": "Use distilled LoRA at negative strength (-0.4 to -0.6), reduce audio latent strength to 0.75, and consider using non-famous faces",
+      "from": "ucren"
+    },
+    {
+      "problem": "Sage attention errors with FP32",
+      "solution": "Use KJ checkpoint loader to force FP16 loading to avoid sage switching to pytorch attention",
+      "from": "nikolatesla20"
+    },
+    {
+      "problem": "OOM errors on high resolution long videos",
+      "solution": "Use --reserve-vram 2.0 startup parameter and Kijai's Chunk Feed Forward node",
+      "from": "garbus"
+    },
+    {
+      "problem": "Motion artifacts in longer extensions",
+      "solution": "Higher conditioning fps (48fps) creates more motion artifacts in long extensions, 24fps conditioning works better for longer clips",
+      "from": "ucren"
+    },
+    {
+      "problem": "LTXVPREPROCESS node causing issues",
+      "solution": "Set LTXVPREPROCESS node to 0",
+      "from": "Jonathan Scott Schneberg"
+    },
+    {
+      "problem": "Tiled VAE decode grid artifacts in dark scenes",
+      "solution": "Increase tiled overlap to 256 or use non-tiled decoding with 1 tile and 0 overlap",
+      "from": "ucren"
+    },
+    {
+      "problem": "No lipsync with GGUF Q8 dev model",
+      "solution": "Use distilled model with distilled LoRA at -0.3 and normal clip connector",
+      "from": "Alpha-Neo"
+    },
+    {
+      "problem": "Frozen frame issues with GGUF at higher resolutions",
+      "solution": "Balance LTXImgToVideoInPlace (start at 0.4) and LTXVPreprocess (10-33, usually 25) settings",
+      "from": "mdkb"
+    },
+    {
+      "problem": "Audio volume inconsistency in v2v extend",
+      "solution": "Create audio normalization node that analyzes video before segment and auto-normalizes",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "problem": "Prompt control varies between resolutions",
+      "solution": "Need to rebalance LTXImgToVideoInPlace and LTXVPreprocess when changing resolution",
+      "from": "mdkb"
+    },
+    {
+      "problem": "Character loses likeness in audio-driven video",
+      "solution": "Adjust mask timing - too early preserves likeness but loses mouth movement, too late gets movement but loses likeness",
+      "from": "Nekodificador"
+    },
+    {
+      "problem": "Video extension consistency issues and RAM problems",
+      "solution": "Use Kijai's new memory efficiency nodes and NAG for better control",
+      "from": "mdkb"
+    },
+    {
+      "problem": "Frame count error for video extension",
+      "solution": "Need 1 + 8 * x frames (e.g., 1, 9, 17, ...). Sometimes need to add +1 to frame count manually",
+      "from": "mdkb"
+    },
+    {
+      "problem": "Audio volume jumps when switching to LTX generation",
+      "solution": "Use audio enhancement and normalization nodes with auto mode that analyzes first 3 seconds of source audio",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "problem": "High CFG causing artifacts",
+      "solution": "User had CFG set too high, switching back to CFG 1.0 for distilled model fixed artifacts",
+      "from": "Nekodificador"
+    },
+    {
+      "problem": "Color bug with vertical upscale outputs over 1536 pixels",
+      "solution": "Top and bottom get blue hue and hallucinations at high vertical resolutions",
+      "from": "dischordo"
+    },
+    {
+      "problem": "Frame count issues in video processing",
+      "solution": "Change inbound video to 146 frames or reduce cutoff frames in increments of 1 until finding working number",
+      "from": "mdkb"
+    },
+    {
+      "problem": "FPS related generation issues",
+      "solution": "Set FPS to 25 to fix the problem",
+      "from": "boop"
+    },
+    {
+      "problem": "Memory issues on 5080 16GB with controlnet",
+      "solution": "Use GGUF models in fp4, or try KJ loader and force fp16",
+      "from": "hicho"
+    },
+    {
+      "problem": "Grid deforming faces in generations",
+      "solution": "Issue acknowledged but no specific fix provided yet",
+      "from": "hicho"
+    },
+    {
+      "problem": "Video codec playback issues",
+      "solution": "Use standard h.264 MP4 format with VHS node for better compatibility",
+      "from": "152993277631528960"
+    },
+    {
+      "problem": "Wrong aspect ratio in prompt causes split screen effect",
+      "solution": "Ensure correct aspect ratio is specified in the prompt",
+      "from": "152993277631528960"
+    },
+    {
+      "problem": "Face drift and identity loss during generation",
+      "solution": "Attempted using identity lora but results were similar - issue persists",
+      "from": "NebSH"
+    },
+    {
+      "problem": "Face gets messed up during camera rotation prompts",
+      "solution": "Switch to dev+lora at 0.6, use manual sigma settings with euler, and use IC detailer lora at 0.5 for T2V only",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "LTX 2 vs WAN 2.2",
+      "verdict": "LTX has better everything except per-pixel resolution and physics. WAN better for texture fidelity",
+      "from": "dj47"
+    },
+    {
+      "comparison": "LTX 2 vs Sora 2",
+      "verdict": "Both have character dialogue assignment issues, but LTX has less problems",
+      "from": "dj47"
+    },
+    {
+      "comparison": "Dev model vs Distilled model for movement",
+      "verdict": "Dev model helps with movement quality, recommend 40 steps with dev then 3 with distill for upscale",
+      "from": "Benjimon"
+    },
+    {
+      "comparison": "Portrait vs landscape orientation",
+      "verdict": "Portrait works fine, Sora portrait often better than landscape",
+      "from": "VK"
+    },
+    {
+      "comparison": "Full model vs FP8 for LoRA quality",
+      "verdict": "Considerable quality difference with BF16 full model being superior",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "Distill workflow vs full model workflow",
+      "verdict": "Full model workflow has better prompt adherence and detail due to higher CFG and more steps",
+      "from": "gopnik"
+    },
+    {
+      "comparison": "T2V vs I2V stability",
+      "verdict": "Getting more stable results overall with T2V than I2V",
+      "from": "305792526629994496"
+    },
+    {
+      "comparison": "Motion quality at different resolutions",
+      "verdict": "Motion is not as good at higher resolution",
+      "from": "Benjimon"
+    },
+    {
+      "comparison": "Stage 2 vs both stages for LoRA",
+      "verdict": "Stage 2 alone produces more natural car movement, both stages makes it look floating",
+      "from": "Tonon"
+    },
+    {
+      "comparison": "Different upscalers",
+      "verdict": "res_2s takes extra 100s to generate compared to euler_a",
+      "from": "chancelor"
+    },
+    {
+      "comparison": "T2V vs original video idea",
+      "verdict": "LTX2 T2V got surprisingly close to replicating video concepts, though not exact",
+      "from": "garbus"
+    },
+    {
+      "comparison": "Distilled vs full model quality",
+      "verdict": "Full model produces better quality but distilled is faster - distilled has plastic look",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "8 steps distill vs 40 steps full model",
+      "verdict": "Full model at 40 steps produces more natural look than distilled at 8 steps",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "Distilled vs Dev model for audio/video masking",
+      "verdict": "Distilled has more motion and grain, more overcooked and angry; Dev matches original footage better, less angry",
+      "from": "Nathan Shipley"
+    },
+    {
+      "comparison": "LTX-2 vs WAN 2.2 for car lifting prompt",
+      "verdict": "WAN 2.2 did it in one shot, LTX-2 took over 20 workflow runs",
+      "from": "nikolatesla20"
+    },
+    {
+      "comparison": "15 steps distilled vs dev model for i2v",
+      "verdict": "15 steps on distilled works like a charm, dev model produces crap with i2v",
+      "from": "neofuturo"
+    },
+    {
+      "comparison": "LTX western cartoon vs anime capability",
+      "verdict": "LTX2 knows how to do western cartoon somewhat, but struggles with anime",
+      "from": "Choowkee"
+    },
+    {
+      "comparison": "LTX2 vs Wan2",
+      "verdict": "Wan has better character retention and physics, but LTX2 has sound, higher FPS, dynamic motion and realistic speed. Currently a tie with LTX2 having better potential as base",
+      "from": "dj47"
+    },
+    {
+      "comparison": "Non-distilled vs distilled for audio",
+      "verdict": "Non-distilled often produces better sound quality than distilled version",
+      "from": "ezMan"
+    },
+    {
+      "comparison": "Phroot merge fp8 vs distilled gguf q4km",
+      "verdict": "Phroot merge in fp8 format is about 1.5x larger but actually faster in all parts",
+      "from": "patientx"
+    },
+    {
+      "comparison": "LTX2 vs WAN for visual quality",
+      "verdict": "LTX2 has watery effects and detail loss similar to WAN 2.1, behind WAN 2.2 in visual quality but faster",
+      "from": "Juan Gea"
+    },
+    {
+      "comparison": "LTX2 vs InfiniteTalk for face consistency",
+      "verdict": "InfiniteTalk better for face consistency, LTX2 changes faces too much but much faster (82 seconds vs 8 minutes)",
+      "from": "nikolatesla20"
+    },
+    {
+      "comparison": "LTX2 vs WAN speed",
+      "verdict": "LTX2 much faster - can generate 8 seconds in 30 seconds vs WAN taking much longer",
+      "from": "152993277631528960"
+    },
+    {
+      "comparison": "Dev vs Distilled model quality",
+      "verdict": "Dev + distill lora @0.6 seems same quality as distilled for most cases",
+      "from": "ucren"
+    },
+    {
+      "comparison": "Flux Klein vs Flux Kontext for image editing",
+      "verdict": "Klein is smaller, faster (4-5 seconds on RTX 3090), and produces better results than the older Kontext model",
+      "from": "nikolatesla20"
+    },
+    {
+      "comparison": "LTX vs InfiniteTalk with Magref for lipsync",
+      "verdict": "InfiniteTalk produces better 'communique' results, LTX attempts were disappointing and more challenging than expected",
+      "from": "mdkb"
+    },
+    {
+      "comparison": "One-stage vs two-stage workflow",
+      "verdict": "One-stage superior with better camera adherence like 'kling 2.6', two-stage makes more blancmange artifacts",
+      "from": "Alpha-Neo"
+    },
+    {
+      "comparison": "Dev model vs distilled model",
+      "verdict": "Dev with distill LoRA at 0.6 gives less washed out results but takes twice as long as pure distilled",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "comparison": "LTX2 vs WAN model",
+      "verdict": "LTX2 system prompt is essential unlike WAN which works with simple sentences",
+      "from": "hicho"
+    },
+    {
+      "comparison": "GGUF Q5 models vs full models",
+      "verdict": "GGUF Q5 can generate high resolution (3072x2048) on lower VRAM but takes 20-30 minutes",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "comparison": "LTX2 vs WAN for video-to-video",
+      "verdict": "LTX2 v2v with latent low denoise is very bad unlike WAN, but LTX2 IC LoRA with controlnet works better",
+      "from": "hicho"
+    },
+    {
+      "comparison": "Motion LoRA vs preprocessor on first stage",
+      "verdict": "Motion LoRA on first pass preferred over preprocessor",
+      "from": "V\u00e9role"
+    },
+    {
+      "comparison": "Single resolution vs upscale workflow",
+      "verdict": "Direct high resolution (1504/832) better motion than lower resolution (1280/720) then upscale",
+      "from": "V\u00e9role"
+    },
+    {
+      "comparison": "Old guider vs new LTX Multimodal Guider",
+      "verdict": "New guider produces significantly better results",
+      "from": "garbus"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Videos have time to breathe and linger, allowing realistic pacing",
+      "context": "Unlike cramming everything into 5 seconds",
+      "from": "KakerMix"
+    },
+    {
+      "tip": "Try other languages for different voice effects",
+      "context": "Model supports multiple languages with proper accents",
+      "from": "garbus"
+    },
+    {
+      "tip": "Use WAN upscaling on LTX 2 output for quality improvement",
+      "context": "Hybrid workflow for better final results",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "tip": "Use dolly out camera LoRA for better vertical motion",
+      "context": "When trying to achieve vertical movement in videos",
+      "from": "gopnik"
+    },
+    {
+      "tip": "Describe specific movements in prompts rather than generic actions",
+      "context": "For better animation results - describe mouth moving rather than just 'she says'",
+      "from": "gopnik"
+    },
+    {
+      "tip": "Close Civitai tabs during generation for better performance",
+      "context": "Having Civitai tabs open affects performance especially in final VAE decode step",
+      "from": "Hell G."
+    },
+    {
+      "tip": "Use timestamp prompting for scene control",
+      "context": "[0-3s] format works well with LTX-2 and can handle cuts/transitions",
+      "from": "brent"
+    },
+    {
+      "tip": "Sequential prompting works without markup",
+      "context": "Can prompt sequentially without timestamp notation",
+      "from": "TK_999"
+    },
+    {
+      "tip": "Use detailed prompting for better results",
+      "context": "Prompting rewrites improve the quality of the result quite a bit",
+      "from": "chancelor"
+    },
+    {
+      "tip": "Use LLM nodes for prompt enhancement",
+      "context": "Create workflow that uses LLM nodes to help with prompting, taking image and text prompts to create video prompts",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "tip": "Sound helps video stability",
+      "context": "Including sound in generations helps with overall video stability",
+      "from": "Benjimon"
+    },
+    {
+      "tip": "Different samplers may help with skin issues",
+      "context": "To address shiny skin problems, try different samplers like sa_solver or lcm",
+      "from": "Phr00t"
+    },
+    {
+      "tip": "Image preprocessing recommended",
+      "context": "Use image compression preprocessing node for better I2V results",
+      "from": "Phr00t"
+    },
+    {
+      "tip": "Use frame slice node to get proper frame count",
+      "context": "GIF needs to be 8n+1 frames - had to slice off 1 frame to get 17 frames",
+      "from": "Scruffy"
+    },
+    {
+      "tip": "Add your own smearish frame in middle",
+      "context": "Adding custom intermediate frames can improve motion",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "tip": "Use LLM to enhance prompts",
+      "context": "Copy instructions from enhancer node and put through LLM for better I2V prompts",
+      "from": "Choowkee"
+    },
+    {
+      "tip": "Long prompts work better",
+      "context": "LTX2 requires long detailed prompts like LTX 0.9.8, short prompts produce poor results",
+      "from": "cyncratic"
+    },
+    {
+      "tip": "Sometimes big prompt changes do nothing, single words change everything",
+      "context": "After 200 prompt tweaks, learned that prompting behavior is unpredictable",
+      "from": "jiffyam"
+    },
+    {
+      "tip": "For i2v, less intricate prompts work much better",
+      "context": "Complex prompts cause loss of input image quickly",
+      "from": "Arts Bro"
+    },
+    {
+      "tip": "Use dev fp8 + 0.5 distilled lora with half the steps",
+      "context": "Get quality results with fewer steps by combining models",
+      "from": "Arts Bro"
+    },
+    {
+      "tip": "40-50fps better for fast motion",
+      "context": "Higher fps helps with fast motion sequences",
+      "from": "nikolatesla20"
+    },
+    {
+      "tip": "Videos need couple seconds at least, should be long enough for intended action/dialogue",
+      "context": "Many people don't give enough time for the action they want",
+      "from": "garbus"
+    },
+    {
+      "tip": "Simple prompts sometimes work better than detailed ones",
+      "context": "LTX prompting can be unpredictable",
+      "from": "HeadOfOliver"
+    },
+    {
+      "tip": "Using Sora2 system prompt works with LTX",
+      "context": "Cross-model prompting techniques",
+      "from": "hicho"
+    },
+    {
+      "tip": "Use ChatGPT with specific formatting for better prompts",
+      "context": "Give ChatGPT a structured format template, then describe what you want and it will format prompts for LTX-2 that work better than manual typing",
+      "from": "nikolatesla20"
+    },
+    {
+      "tip": "Lower LoRA strength when combining multiple effects",
+      "context": "When using snorricam LoRA with outfit change, had to lower snorricam to 0.4 for better results",
+      "from": "NebSH"
+    },
+    {
+      "tip": "Use 'interrupted' instead of 'disturbed' for character interactions",
+      "context": "Better word choice for prompting character dialogue interruptions",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "tip": "Create x2 interpolation after generation for smoother results",
+      "context": "Generate at 32 fps then apply 2x interpolation for better detail and smoothness",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "tip": "Use separate passes for upscaling quality control",
+      "context": "Output first low-res pass, check if it's OK, then send to upscaler pass",
+      "from": "N0NSens"
+    },
+    {
+      "tip": "Be very specific in prompts for crowd scenes",
+      "context": "For busy sidewalk scenes, specify exact movements like 'he pushes past the people' rather than vague descriptions",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Use LLMs for prompt enhancement",
+      "context": "ChatGPT 4o mini, Gemma3, Qwen3 via OpenRouter work well for enhancing prompts",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Include spoken text in prompts for better results",
+      "context": "When doing audio-driven generation, typing out what the character says in the prompt can help, especially for inpainting continuations",
+      "from": "ucren"
+    },
+    {
+      "tip": "Lower diffused lora strength for longer generations",
+      "context": "Reduce to about 0.6 to help with focus issues on longer generations",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "tip": "Keep models loaded for faster generation",
+      "context": "When doing series of similar generations, keeping models loaded speeds up process significantly",
+      "from": "152993277631528960"
+    },
+    {
+      "tip": "Use minimal prompting for i2v",
+      "context": "More descriptive prompts cause model to ignore image and add unwanted elements",
+      "from": "mdkb"
+    },
+    {
+      "tip": "Include non-masked audio in prompt for v2v",
+      "context": "Helps with audio continuity when extending videos",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Normalize audio to loud levels like -14LUFS",
+      "context": "Helps with lipsync quality",
+      "from": "mdkb"
+    },
+    {
+      "tip": "Use negative prompts for accent control",
+      "context": "Can control unwanted accents by putting them in negative prompt",
+      "from": "mdkb"
+    },
+    {
+      "tip": "Do 5-10 seconds setup then extend with fresh prompt",
+      "context": "Works well for lazy prompting approach instead of highly structured prompts",
+      "from": "garbus"
+    },
+    {
+      "tip": "Use system prompt for better results",
+      "context": "LTX2 system prompt is essential for good results unlike other models",
+      "from": "hicho"
+    },
+    {
+      "tip": "Static shots can go very long without degradation",
+      "context": "For mostly static shots with little motion, can generate very long videos",
+      "from": "garbus"
+    },
+    {
+      "tip": "Mask input image for video extension",
+      "context": "When getting errors in video extension, try masking the input image",
+      "from": "mdkb"
+    },
+    {
+      "tip": "Use smaller first stage then upscale",
+      "context": "Start with small resolution like 480x420 then upscale for better results",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "tip": "First and last frame workflow works better with specific weights",
+      "context": "Use 1.0 for first frame, 0.75 for subsequent frames, and change second frame to 1.00 for better results",
+      "from": "VRGameDevGirl84"
+    },
+    {
+      "tip": "Use simple prompts for image-to-video to avoid switching to text-to-video mode",
+      "context": "When you want to maintain reference image fidelity",
+      "from": "hicho"
+    },
+    {
+      "tip": "Structure speech prompts as 'person speaks in [voice] and says [text]'",
+      "context": "For better audio generation results",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Generate at 1920x1080 resolution for better quality",
+      "context": "Low resolution always looks poor, higher resolution helps significantly",
+      "from": "nikolatesla20"
+    },
+    {
+      "tip": "Usually generate with at least 960x960 for good results",
+      "context": "General generation guidelines, though higher resolution is always better",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Add 'GLITCH' in various prompt places to create artifacts",
+      "context": "For intentional glitch effects",
+      "from": "305792526629994496"
+    },
+    {
+      "tip": "Use phrase 'A cartoon from the Super Mario Bros Super Show' to generate Mario content",
+      "context": "For generating content from that specific animated series",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Create T2V with complex prompt, take first frame, convert to desired style, then use same prompt in I2V",
+      "context": "Workflow for style transfer and consistency",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "tip": "Only use IC detailer lora on T2V, not I2V or V2V",
+      "context": "Using it on I2V/V2V will mess up matching and change faces",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Bad audio can be replaced with groove music to change the video's tone",
+      "context": "Can transform epic war scenes into fashion show-style content",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "tip": "Create perfect loops by copying and pasting end to end",
+      "context": "4-second loops can be extended to any length needed",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "news": [
+    {
+      "update": "ComfyUI templates added for LTX Video 2",
+      "details": "Official templates available in ComfyUI pull request",
+      "from": "LukeG89"
+    },
+    {
+      "update": "Training scripts released for LTX Video 2",
+      "details": "Model is trainable with open source training scripts",
+      "from": "AshmoTV"
+    },
+    {
+      "update": "LoRA training documentation released including audio training",
+      "details": "Official documentation available for training LoRAs with audio capabilities",
+      "from": "305792526629994496"
+    },
+    {
+      "update": "Wallace and Gromit LoRA available on HuggingFace",
+      "details": "Community LoRA working with LTX-2",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "update": "LTX team is impressed with community creations",
+      "details": "Team spoke about being super impressed with community work",
+      "from": "210245371002093570"
+    },
+    {
+      "update": "Community showcase video created featuring recent work",
+      "details": "Showcase video made featuring cool community creations from recent days",
+      "from": "210245371002093570"
+    },
+    {
+      "update": "LTX devs have fix for audio stability coming soon",
+      "details": "Developers said they had a good idea for fixing audio stability issues but it didn't make it in time for current release, will be in next release",
+      "from": "TK_999"
+    },
+    {
+      "update": "New workflow and nodes released",
+      "details": "Updated nodes and new workflow released that helped stop still images and no talking issues",
+      "from": "130694557913317377"
+    },
+    {
+      "update": "VHS LoRA trained on old tapes",
+      "details": "LoRA trained on VHS tapes from late 80s/early 90s with commercials and desert footage",
+      "from": "305792526629994496"
+    },
+    {
+      "update": "AnimateDiff LoRA available",
+      "details": "AnimateDiff style LoRA for LTX2 available on HuggingFace",
+      "from": "neofuturo"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "ChainneR app for reusing I2V workflows",
+      "description": "JSON input system for easier workflow reuse",
+      "use_case": "Streamlining I2V generation process",
+      "from": "magix"
+    },
+    {
+      "workflow": "LTX 2 to WAN upscaling pipeline",
+      "description": "Generate with LTX 2 then upscale with WAN at 0.5 strength",
+      "use_case": "Improving final video quality",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "workflow": "Two-stage rendering: 20 steps half-res then distill at full-res",
+      "use_case": "High quality renders - splits first 20 steps at half resolution then 4 distill steps at full resolution",
+      "from": "305792526629994496"
+    },
+    {
+      "workflow": "Automatic scene generation from Reddit stories",
+      "use_case": "One-click conversion from text stories to video scenes using multiple LLM calls",
+      "from": "Simonj"
+    },
+    {
+      "workflow": "Audio input workflow for custom sound",
+      "use_case": "Adding custom audio with selectable start point and duration",
+      "from": "Helikaon23s"
+    },
+    {
+      "workflow": "LLM-enhanced prompting with random image generation",
+      "use_case": "Uses LLM nodes with zimage to create random images, then LLM takes image and text prompt to create new image-to-video prompt",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "Kijai's Audio Continuity workflow",
+      "use_case": "For maintaining audio continuity across video generation",
+      "from": "Tachyon"
+    },
+    {
+      "workflow": "Video extension using latent concatenation",
+      "use_case": "Continue videos by giving multiple frames instead of single image, similar to Google Flow extend",
+      "from": "421114995925843968"
+    },
+    {
+      "workflow": "Multi-scene automated generation",
+      "use_case": "Automated workflow for creating multiple scenes with scheduler applet",
+      "from": "magix"
+    },
+    {
+      "workflow": "Extension from audio using image and audio driving to video",
+      "use_case": "Creating videos that sync motion to audio beat",
+      "from": "V\u00e9role"
+    },
+    {
+      "workflow": "Flux2 keyframes with character reference then LTX",
+      "use_case": "Character consistency across video sequences",
+      "from": "magix"
+    },
+    {
+      "workflow": "Single frame from each segment as input",
+      "use_case": "Creating longer sequences by using keyframes",
+      "from": "magix"
+    },
+    {
+      "workflow": "Extend with last frame of each sequence or add picture at start",
+      "use_case": "Video extension using z-image and qwen edit 2511",
+      "from": "V\u00e9role"
+    },
+    {
+      "workflow": "Half res generation then upscaled 4 step distill",
+      "use_case": "Managing VRAM constraints while maintaining quality",
+      "from": "305792526629994496"
+    },
+    {
+      "workflow": "Keyframes made in Flux 2 then LTX",
+      "use_case": "Creating longer narrative content with consistent characters",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "workflow": "I2V 640x640 1st sampler + 1280x1280 upscaler",
+      "use_case": "Two-stage upscaling process for better quality",
+      "from": "Elvaxorn"
+    },
+    {
+      "workflow": "Audio re-take workflow for perfect video with new sound",
+      "use_case": "When video is perfect but audio needs retrying",
+      "from": "garbus"
+    },
+    {
+      "workflow": "Video continue/extend using gemma 3 model loader",
+      "use_case": "Extending existing video clips",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "workflow": "T2V/I2V GGUF workflows with updated video VAE",
+      "use_case": "Efficient generation on 12GB/48GB systems",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "workflow": "T2I2V pipeline with auto-prompting LLMs",
+      "use_case": "Text to image to video with automated prompt generation using LLMs and z-image creation",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "workflow": "First/Last/Middle keyframe workflow",
+      "use_case": "Creating videos with multiple keyframes but struggles with lip sync",
+      "from": "Simonj"
+    },
+    {
+      "workflow": "Frame-to-frame implementation",
+      "use_case": "Processing with 3 random frames for faster generation but loses lip sync",
+      "from": "neofuturo"
+    },
+    {
+      "workflow": "FFLF (First, Middle, Last Frame) extension",
+      "use_case": "Extending videos by using key frames with multiplier nodes",
+      "from": "neofuturo"
+    },
+    {
+      "workflow": "48fps conditioning with frame interpolation",
+      "use_case": "Interpolate source to 48fps, use for conditioning, then export back to 24fps for better speech quality",
+      "from": "ucren"
+    },
+    {
+      "workflow": "Multi-stage upscaling with masking",
+      "use_case": "Two-pass rendering with masked upscale for better audio sync quality",
+      "from": "ucren"
+    },
+    {
+      "workflow": "Audio-driven I2V with automatic calculations",
+      "use_case": "Modified workflow that auto-calculates frames from audio duration and separates vocals",
+      "from": "nikolatesla20"
+    },
+    {
+      "workflow": "Klein image edit for character consistency",
+      "use_case": "Create multiple poses and scenes from single starting image without LoRAs",
+      "from": "nikolatesla20"
+    },
+    {
+      "workflow": "Partial automation workflow for music videos",
+      "use_case": "Full video generation in 40 minutes including transitions",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "IC Control workaround for GGUF lipsync",
+      "use_case": "Generate i2v first for camera control, then use IC Control for lipsync - slower but works",
+      "from": "Alpha-Neo"
+    },
+    {
+      "workflow": "Three-stage upscaling pipeline",
+      "use_case": "LTX2 Undistilled with CFG > distilled + detailed LoRAs with CFG=1 > FlashVSR for high resolution outputs",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "workflow": "Audio-to-video workflow for 16GB VRAM",
+      "use_case": "Can generate 1000 frames of 1280x720px videos from audio + text prompt on RTX 5080",
+      "from": "meakwa23"
+    },
+    {
+      "workflow": "Frame injection with 2 nodes",
+      "use_case": "Guide nodes for general guidance, inplace nodes for precise frame positioning like 'on frame 54'",
+      "from": "neofuturo"
+    },
+    {
+      "workflow": "LTX automation with re-do feature",
+      "use_case": "Full automation workflow with ability to re-do specific scenes by index number",
+      "from": "VRGameDevGirl84"
+    },
+    {
+      "workflow": "2-chunk 20-second video generation for 40-second output",
+      "use_case": "Creating longer videos by combining multiple chunks",
+      "from": "V\u00e9role"
+    },
+    {
+      "workflow": "T2AV, TA2V, I2V, or IA2V all-in-one workflow",
+      "use_case": "Universal workflow supporting multiple input types",
+      "from": "V\u00e9role"
+    },
+    {
+      "workflow": "Using SRT files for automated scene timing in music videos",
+      "use_case": "Creating music videos with precise scene cuts based on timing data",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "Auto beat node for music video generation",
+      "use_case": "Automatically adding cuts based on beats in songs, with inputs for drums and bass",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "Hybrid CGI-AI production setup",
+      "use_case": "Commercial automotive work where product is CGI but enhanced with AI",
+      "from": "520191580007563264"
+    },
+    {
+      "workflow": "Using Flux Klein 9B for keyframe generation with LoRA and reference image",
+      "use_case": "Enhanced keyframe generation for video production",
+      "from": "520191580007563264"
+    },
+    {
+      "workflow": "Film grain and color filtering in CapCut for AI look reduction",
+      "use_case": "Post-processing to make AI-generated content appear more natural",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "2-stage workflow with audio and image inputs",
+      "use_case": "Creating videos with synchronized audio",
+      "from": "Janosch Simon"
+    },
+    {
+      "workflow": "T2AV 1-pass generation",
+      "use_case": "Single-pass text-to-audio-video generation",
+      "from": "152993277631528960"
+    },
+    {
+      "workflow": "I2V with new nodes",
+      "use_case": "Image-to-video generation using updated workflow components",
+      "from": "NebSH"
+    },
+    {
+      "workflow": "Using Midjourney for images, CosyVoice 3 for TTS, then LTX2 for video",
+      "use_case": "Multi-tool pipeline for complete video creation",
+      "from": "Janosch Simon"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "Noise mask/strength for I2V",
+      "value": "0.6",
+      "reason": "Prevents static output and deformation",
+      "from": "Dragonyte"
+    },
+    {
+      "setting": "Steps for basic generation",
+      "value": "8 steps",
+      "reason": "Sufficient for decent quality at 5 second clips",
+      "from": "Owlie"
+    },
+    {
+      "setting": "WAN upscale denoise",
+      "value": "0.3",
+      "reason": "Good balance for v2v upscaling",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "setting": "Sampler",
+      "value": "res_2s",
+      "reason": "LTX team recommended over euler, improves quality but increases generation time",
+      "from": "498275793852432384"
+    },
+    {
+      "setting": "Steps for dev + distill combo",
+      "value": "40 steps dev + 3 steps distill",
+      "reason": "Good balance for upscaling workflow",
+      "from": "Benjimon"
+    },
+    {
+      "setting": "FPS options",
+      "value": "16, 24, 48 fps",
+      "reason": "Various frame rates supported and tested",
+      "from": "TK_999"
+    },
+    {
+      "setting": "LoRA strength testing",
+      "value": "0.6, 0.8, 0.9",
+      "reason": "Different strengths tested, can disable on upscaler stage",
+      "from": "NebSH"
+    },
+    {
+      "setting": "CFG",
+      "value": "3.5",
+      "reason": "Used in high-quality 1920x1088 generation",
+      "from": "gopnik"
+    },
+    {
+      "setting": "Steps",
+      "value": "40",
+      "reason": "Used for detailed high-resolution outputs",
+      "from": "gopnik"
+    },
+    {
+      "setting": "FPS",
+      "value": "24",
+      "reason": "Standard frame rate for cinematic results",
+      "from": "gopnik"
+    },
+    {
+      "setting": "Sampler",
+      "value": "euler_ancestral",
+      "reason": "Produces good results in high-resolution generations",
+      "from": "gopnik"
+    },
+    {
+      "setting": "Distilled LoRA strength",
+      "value": "1",
+      "reason": "Full strength when using distilled model",
+      "from": "gopnik"
+    },
+    {
+      "setting": "Detailer LoRA strength",
+      "value": "0.75",
+      "reason": "Applied to both stage 1 and 2 for enhanced detail",
+      "from": "gopnik"
+    },
+    {
+      "setting": "Reserve VRAM",
+      "value": "6",
+      "reason": "Prevents OOM errors on RTX 4090",
+      "from": "gopnik"
+    },
+    {
+      "setting": "CFG",
+      "value": "4",
+      "reason": "Used with Euler sampler for audio continuity workflow",
+      "from": "Tachyon"
+    },
+    {
+      "setting": "Compression",
+      "value": "33",
+      "reason": "Used for first and last frame processing",
+      "from": "V\u00e9role"
+    },
+    {
+      "setting": "Force",
+      "value": "1",
+      "reason": "Used with compression setting for frame processing",
+      "from": "V\u00e9role"
+    },
+    {
+      "setting": "Denoise",
+      "value": "0.3",
+      "reason": "Used with LoRA generation",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "setting": "Distilled LoRA strength",
+      "value": "0.5",
+      "reason": "Used with 20 steps cfg 3 for distill",
+      "from": "NebSH"
+    },
+    {
+      "setting": "CFG",
+      "value": "3",
+      "reason": "Used with distill 0.5 20 steps",
+      "from": "NebSH"
+    },
+    {
+      "setting": "CFG",
+      "value": "4",
+      "reason": "Used with no distill 40 steps",
+      "from": "NebSH"
+    },
+    {
+      "setting": "VAE Decode tiling",
+      "value": "2/8/16/8",
+      "reason": "Best setting for reducing grid patterns but doubles VRAM use",
+      "from": "garbus"
+    },
+    {
+      "setting": "Detail daemon start",
+      "value": "0.8",
+      "reason": "Set start point for detail daemon sampler",
+      "from": "jiffyam"
+    },
+    {
+      "setting": "FPS",
+      "value": "25",
+      "reason": "Temporal upscaler expects 25 fps, fixes jerkyness",
+      "from": "HeadOfOliver"
+    },
+    {
+      "setting": "Distilled lora strength",
+      "value": "-0.50",
+      "reason": "Removes excessive film grain and artifacts",
+      "from": "Nathan Shipley"
+    },
+    {
+      "setting": "Steps for distilled model",
+      "value": "15",
+      "reason": "Works well for 720p single stage, good quality",
+      "from": "neofuturo"
+    },
+    {
+      "setting": "CFG for dev model",
+      "value": "5",
+      "reason": "Avoids mess that occurs at CFG 4",
+      "from": "Nathan Shipley"
+    },
+    {
+      "setting": "Animatediff lora strength",
+      "value": "2.0",
+      "reason": "Higher strength helps with effect, works well with deforum loras",
+      "from": "NebSH"
+    },
+    {
+      "setting": "Audio normalization",
+      "value": "-23 default",
+      "reason": "Helps improve audio quality",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "Custom sigmas for distilled upscale",
+      "value": "0.975, 0.909375, 0.725, 0.421875, 0.0",
+      "reason": "4 steps instead of 3 for better upscaling results",
+      "from": "dischordo"
+    },
+    {
+      "setting": "Sampler configuration",
+      "value": "er_sde with 8 steps using distilled model",
+      "reason": "Produces high quality results",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "setting": "Resolution for detail",
+      "value": "1792x1088 at 32 fps",
+      "reason": "Good balance of detail without being full HD",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "setting": "Maximum frames for 16GB VRAM",
+      "value": "480 frames MAX at 1920x1080 (20 seconds)",
+      "reason": "Hardware limitation regardless of model precision",
+      "from": "Volkin"
+    },
+    {
+      "setting": "Distilled LoRA strength",
+      "value": "-0.4 to -0.6",
+      "reason": "Fixes overbaked distilled model and improves face consistency",
+      "from": "ucren"
+    },
+    {
+      "setting": "Audio latent multiply",
+      "value": "0.75",
+      "reason": "Reduces exaggerated expressions in audio-driven generation",
+      "from": "ucren"
+    },
+    {
+      "setting": "Steps for quality boost",
+      "value": "8->15 steps on first pass",
+      "reason": "Gives noticeable quality improvement",
+      "from": "ucren"
+    },
+    {
+      "setting": "Fast generation settings",
+      "value": "7 steps, 1 CFG, LCM sampler",
+      "reason": "For quick generation when models stay loaded",
+      "from": "152993277631528960"
+    },
+    {
+      "setting": "LTXVPREPROCESS",
+      "value": "0",
+      "reason": "Prevents issues in workflow",
+      "from": "Jonathan Scott Schneberg"
+    },
+    {
+      "setting": "Conditioning fps",
+      "value": "30-48 fps",
+      "reason": "Higher fps helps reduce motion artifacts",
+      "from": "Elvaxorn"
+    },
+    {
+      "setting": "Distill LoRA strength",
+      "value": "-0.4",
+      "reason": "Debakes plastic skin issues in distilled model",
+      "from": "ucren"
+    },
+    {
+      "setting": "Tiled spatial overlap",
+      "value": "256",
+      "reason": "Helps reduce but doesn't eliminate VAE tiling artifacts",
+      "from": "Ablejones"
+    },
+    {
+      "setting": "LTXImgToVideoInPlace",
+      "value": "0.4 starting point",
+      "reason": "Controls image likeness and character consistency, needs adjustment per resolution",
+      "from": "mdkb"
+    },
+    {
+      "setting": "LTXVPreprocess",
+      "value": "10-33, usually 25",
+      "reason": "Prevents blancmange on face, lower if issues return",
+      "from": "mdkb"
+    },
+    {
+      "setting": "Camera static LoRA strength",
+      "value": "0.1",
+      "reason": "Lower strength helps with GGUF lipsync issues",
+      "from": "mdkb"
+    },
+    {
+      "setting": "Frame count for 10 seconds",
+      "value": "247 frames",
+      "reason": "Compensates for LTX cutting 7 frames, following 8n+1 rule gives 241",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "setting": "CFG for undistilled model",
+      "value": "4.0",
+      "reason": "When not using distill LoRA, should use CFG 4.0 instead of 1.0",
+      "from": "NebSH"
+    },
+    {
+      "setting": "Distill LoRA strength for dev model",
+      "value": "0.6",
+      "reason": "Helps control oversaturation while maintaining quality",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "Camera static LoRA",
+      "value": "0.5",
+      "reason": "Combined with distill LoRA at -0.3 to fix camera static issues",
+      "from": "mdkb"
+    },
+    {
+      "setting": "VHS LoRA strength",
+      "value": "2.0 for maximum crispy, 1.3 for better balance",
+      "reason": "Control intensity of VHS effect",
+      "from": "305792526629994496"
+    },
+    {
+      "setting": "Steps for dev + distill workflow",
+      "value": "8 steps first sampler, 3 steps second sampler",
+      "reason": "Efficient workflow with spatial upscale between samplers",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "Distilled LoRA strength on first sampler",
+      "value": "0.2",
+      "reason": "For 10-second FFLF generation with motion enhancement",
+      "from": "Simonj"
+    },
+    {
+      "setting": "Upscale distill strength",
+      "value": "0.6",
+      "reason": "For 3-step upscaling process",
+      "from": "Simonj"
+    },
+    {
+      "setting": "Upscale sampler steps",
+      "value": "20 steps at 1/2 res, 3 steps upscale",
+      "reason": "Memory optimization for 16GB GPU",
+      "from": "Simonj"
+    },
+    {
+      "setting": "Denoise for upscaling",
+      "value": "0.2",
+      "reason": "For 2+2 steps using upscale to ksampler",
+      "from": "hicho"
+    },
+    {
+      "setting": "Guide resolution for 1920x1024 video",
+      "value": "1920x1024",
+      "reason": "Should match generated video resolution",
+      "from": "Simonj"
+    },
+    {
+      "setting": "Manual sigma values Stage 1",
+      "value": "1., 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0",
+      "reason": "8 steps for better quality",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "Manual sigma values Stage 2",
+      "value": "0.8025, 0.6332, 0.3425, 0.0",
+      "reason": "4 steps for refinement",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "Dev+lora strength",
+      "value": "0.6",
+      "reason": "Helps maintain face quality during camera rotation",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "setting": "IC detailer lora strength",
+      "value": "0.5",
+      "reason": "For T2V only - improves detail without breaking consistency",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "Pickletensors",
+      "explanation": "Dangerous .pt models that can contain arbitrary Python code - avoid using them",
+      "from": "cyncratic"
+    },
+    {
+      "term": "Snorricam shot",
+      "explanation": "Camera technique where camera is mounted to subject's chest, keeping them centered while background moves",
+      "from": "NebSH"
+    },
+    {
+      "term": "Stop-motion on twos",
+      "explanation": "Animation technique with stepped/limited timing, held poses every two frames, frame registration wiggle, minimal motion blur",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "term": "Audio latents",
+      "explanation": "Audio spectrograms used as input for video generation, resolution tied to video resolution",
+      "from": "TK_999"
+    },
+    {
+      "term": "Tiled VAE decode",
+      "explanation": "Method to handle memory limitations during video decoding by processing in tiles",
+      "from": "Tachyon"
+    },
+    {
+      "term": "Stage 1 vs Stage 2 LoRA application",
+      "explanation": "LoRAs can be applied to either stage 1, stage 2, or both stages of the two-stage generation process, with different visual effects",
+      "from": "gopnik"
+    },
+    {
+      "term": "Audio masking",
+      "explanation": "Technique to preserve original audio in specific time ranges while allowing model to generate audio in other parts",
+      "from": "Dragonyte"
+    },
+    {
+      "term": "Object POV",
+      "explanation": "Point of view from an object's perspective, used in LoRA training",
+      "from": "NebSH"
+    },
+    {
+      "term": "Transition roll",
+      "explanation": "Camera transition technique that rolls/sweeps between scenes",
+      "from": "NebSH"
+    },
+    {
+      "term": "Hero shot",
+      "explanation": "Cinematic camera technique for dramatic angles, available as LoRA",
+      "from": "NebSH"
+    },
+    {
+      "term": "IC-LoRA training",
+      "explanation": "Powerful training method mentioned in official documentation",
+      "from": "305792526629994496"
+    },
+    {
+      "term": "FFLF",
+      "explanation": "First Frame Last Frame workflow technique",
+      "from": "chancelor"
+    },
+    {
+      "term": "De-baking distill model",
+      "explanation": "Using negative lora strength to reverse distillation effects",
+      "from": "ucren"
+    },
+    {
+      "term": "Temporal stutter artifacts",
+      "explanation": "Jerkyness that appears every few frames in temporal upscaling",
+      "from": "HeadOfOliver"
+    },
+    {
+      "term": "Object permanence in LTX",
+      "explanation": "LTX has trouble maintaining consistent objects like dents throughout a video sequence",
+      "from": "nikolatesla20"
+    },
+    {
+      "term": "Latent frame buffer",
+      "explanation": "The memory space that holds latent video frames during processing - more important for VRAM usage than model size",
+      "from": "Volkin"
+    },
+    {
+      "term": "NAG node",
+      "explanation": "Allows negative conditioning even when using distilled models",
+      "from": "nikolatesla20"
+    },
+    {
+      "term": "Inpainting/extending",
+      "explanation": "Technique where model continues from existing video frames rather than generating from scratch, helps maintain consistency",
+      "from": "ucren"
+    },
+    {
+      "term": "Watery effects",
+      "explanation": "Visual quality issue where details become soft/blurred, common problem in LTX2",
+      "from": "Juan Gea"
+    },
+    {
+      "term": "8n+1 rule",
+      "explanation": "Video frames must follow pattern of 8n+1 (e.g., 121, 241 frames)",
+      "from": "N0NSens"
+    },
+    {
+      "term": "Debaking distilled model",
+      "explanation": "Using distill LoRA at negative values to reduce plastic skin artifacts in distilled models",
+      "from": "ucren"
+    },
+    {
+      "term": "Blancmange",
+      "explanation": "Facial artifact that appears as smooth, featureless texture, controlled by LTXVPreprocess settings",
+      "from": "mdkb"
+    },
+    {
+      "term": "Token limit sweet spot",
+      "explanation": "Every model has a maximum resolution/frame length sweet spot, LTX2 is more forgiving than others",
+      "from": "TK_999"
+    },
+    {
+      "term": "Frame injection",
+      "explanation": "Technique to inject specific frames at precise positions for controlled video transitions",
+      "from": "neofuturo"
+    },
+    {
+      "term": "First Last Frame workflow",
+      "explanation": "Method using specific frame indexes (0 for first, -1 for last) to control video start and end points",
+      "from": "VRGameDevGirl84"
+    },
+    {
+      "term": "FFLF (First Frame Last Frame)",
+      "explanation": "Video generation technique using first and last frame guidance",
+      "from": "Simonj"
+    },
+    {
+      "term": "I2V vs T2V mode switching",
+      "explanation": "LTX2 can switch from image-to-video mode to text-to-video mode when prompts don't match reference image",
+      "from": "hicho"
+    },
+    {
+      "term": "T2AV",
+      "explanation": "Text-to-Audio-Video generation capability",
+      "from": "152993277631528960"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "ComfyUI-LTXVideo workflows",
+      "url": "https://github.com/Lightricks/ComfyUI-LTXVideo/tree/master/example_workflows",
+      "type": "workflow",
+      "from": "xdestroyer"
+    },
+    {
+      "resource": "ComfyUI templates PR",
+      "url": "https://github.com/comfyanonymous/ComfyUI/pull/11652",
+      "type": "repo",
+      "from": "LukeG89"
+    },
+    {
+      "resource": "Merge safetensors tool",
+      "url": "https://github.com/dkotel/merge-safetensors",
+      "type": "tool",
+      "from": "Scruffy"
+    },
+    {
+      "resource": "NebSH's LoRA collection",
+      "url": "https://civitai.com/collections/9825789",
+      "type": "model",
+      "from": "NebSH"
+    },
+    {
+      "resource": "ComfyChainer",
+      "url": "https://github.com/XmYx/ComfyChainer",
+      "type": "tool",
+      "from": "magix"
+    },
+    {
+      "resource": "Wallace and Gromit LoRA",
+      "url": "https://huggingface.co/Cseti/LTXV-13B-LoRA-Wallace_and_Gromit-v1",
+      "type": "lora",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "LTX-2 ComfyUI workflow",
+      "url": "https://civitai.com/models/2287923/ltx-2-workflow-text-to-video-and-image-to-video",
+      "type": "workflow",
+      "from": "Hell G."
+    },
+    {
+      "resource": "LTX-2 prompting guide",
+      "url": "https://ltx.io/model/model-blog/prompting-guide-for-ltx-2",
+      "type": "guide",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "resource": "GalaxyAce LoRA",
+      "url": "",
+      "type": "lora",
+      "from": "gopnik"
+    },
+    {
+      "resource": "Audio input workflow template",
+      "url": "",
+      "type": "workflow",
+      "from": "Helikaon23s"
+    },
+    {
+      "resource": "Official LTX2 prompting guide",
+      "url": "https://ltx.io/model/model-blog/prompting-guide-for-ltx-2",
+      "type": "guide",
+      "from": "GalaxyTimeMachine(RTX4090)"
+    },
+    {
+      "resource": "LTX2 API documentation prompting guide",
+      "url": "https://docs.ltx.video/api-documentation/prompting-guide",
+      "type": "documentation",
+      "from": "Anchorite"
+    },
+    {
+      "resource": "Official prompt template",
+      "url": "https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-core/src/ltx_core/text_encoders/gemma/encoders/prompts/gemma_t2v_system_prompt.txt",
+      "type": "template",
+      "from": "chancelor"
+    },
+    {
+      "resource": "ComfyUI-OpenAI-API",
+      "url": "https://github.com/hekmon/comfyui-openai-api",
+      "type": "tool",
+      "from": "chancelor"
+    },
+    {
+      "resource": "Vast.ai GPU rental",
+      "url": "https://cloud.vast.ai/?ref_id=343946",
+      "type": "service",
+      "from": "Xor"
+    },
+    {
+      "resource": "Official LTX-2 trainer script",
+      "url": "https://github.com/Lightricks/LTX-2/blob/main/packages/ltx-trainer/README.md",
+      "type": "repo",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Inflate LoRA",
+      "url": "https://huggingface.co/kabachuha/ltx2-inflate-it",
+      "type": "model",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "resource": "Audio workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1309520535012638740/1458505971801395424",
+      "type": "workflow",
+      "from": "V\u00e9role"
+    },
+    {
+      "resource": "Hero shot LoRA shared in resources channel",
+      "url": "",
+      "type": "model",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Fable show runner",
+      "url": "",
+      "type": "tool",
+      "from": "dj47"
+    },
+    {
+      "resource": "T2V/I2V GGUF workflows V1.1",
+      "url": "https://civitai.com/models/2304098?modelVersionId=2593987",
+      "type": "workflow",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "resource": "Deforum loras",
+      "url": "https://huggingface.co/mixy89/LTXV_Deforum/tree/main",
+      "type": "model",
+      "from": "GalaxyTimeMachine"
+    },
+    {
+      "resource": "Animatediff lora",
+      "url": "https://huggingface.co/Nebsh/LTX2_Animatediff_Lora/blob/main/AnimateDiff_step2000.safetensors",
+      "type": "model",
+      "from": "210245371002093570"
+    },
+    {
+      "resource": "Community showcase video",
+      "url": "https://www.youtube.com/watch?v=7uaU4Rm7fEo#t=13m27s",
+      "type": "video",
+      "from": "210245371002093570"
+    },
+    {
+      "resource": "Camera techniques video",
+      "url": "https://www.youtube.com/watch?v=j2bUsYemG-M",
+      "type": "educational",
+      "from": "Arts Bro"
+    },
+    {
+      "resource": "ComfyUI_Yvann-Nodes",
+      "url": "https://github.com/yvann-ba/ComfyUI_Yvann-Nodes",
+      "type": "repo",
+      "from": "Golden"
+    },
+    {
+      "resource": "Kijai's LTXV chunk feedforward",
+      "url": "https://github.com/kijai/ComfyUI/blob/ltx2_memory/comfy/ldm/lightricks/av_model.py",
+      "type": "workflow",
+      "from": "Peera"
+    },
+    {
+      "resource": "Twin Peaks Episode 8 reference footage",
+      "url": "https://www.youtube.com/watch?v=Xrnm1dxUIEQ",
+      "type": "reference",
+      "from": "Arts Bro"
+    },
+    {
+      "resource": "ComfyUI-AudioSR",
+      "url": "https://github.com/Saganaki22/ComfyUI-AudioSR",
+      "type": "tool",
+      "from": "ucren"
+    },
+    {
+      "resource": "ComfyUI-NovaSR",
+      "url": "https://github.com/Saganaki22/ComfyUI-NovaSR",
+      "type": "tool",
+      "from": "justinj"
+    },
+    {
+      "resource": "NovaSR",
+      "url": "https://github.com/ysharma3501/NovaSR",
+      "type": "repo",
+      "from": "justinj"
+    },
+    {
+      "resource": "LTX LLM for questions",
+      "url": "https://discord.com/channels/1076117621407223829/1460390123547000935",
+      "type": "tool",
+      "from": "jiffyam"
+    },
+    {
+      "resource": "FirstFrameGo paper",
+      "url": "https://firstframego.github.io/",
+      "type": "research",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Flux Klein Image Edit",
+      "url": "",
+      "type": "model",
+      "from": "nikolatesla20"
+    },
+    {
+      "resource": "ComfyUI-Egregora-Audio-Super-Resolution",
+      "url": "https://github.com/lucasgattas/ComfyUI-Egregora-Audio-Super-Resolution",
+      "type": "tool",
+      "from": "HeadOfOliver"
+    },
+    {
+      "resource": "Test-time training for video",
+      "url": "https://github.com/test-time-training/ttt-video-dit",
+      "type": "repo",
+      "from": "dj47"
+    },
+    {
+      "resource": "AnimateDiff LoRA for LTX2",
+      "url": "https://huggingface.co/Nebsh/LTX2_Animatediff_style/",
+      "type": "lora",
+      "from": "neofuturo"
+    },
+    {
+      "resource": "South Park LoRA",
+      "url": "https://discord.com/channels/1076117621407223829/1464203426496778386",
+      "type": "lora",
+      "from": "NebSH"
+    },
+    {
+      "resource": "Snorricam LoRA",
+      "url": "https://civitai.com/models/1557338/snorricam",
+      "type": "lora",
+      "from": "NebSH"
+    },
+    {
+      "resource": "12GB GGUF Workflows Collection",
+      "url": "https://civitai.com/models/2304098?modelVersionId=2623604",
+      "type": "workflow",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "resource": "ComfyUI AudioTools",
+      "url": "https://github.com/Urabewe/ComfyUI-AudioTools",
+      "type": "tool",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "resource": "VCR LoRA for LTX2",
+      "url": "",
+      "type": "lora",
+      "from": "305792526629994496"
+    },
+    {
+      "resource": "AnimateDiff LoRA",
+      "url": "",
+      "type": "lora",
+      "from": "hell2heights2"
+    },
+    {
+      "resource": "Fill's LTX LoRA Image2Video Adapter",
+      "url": "https://huggingface.co/MachineDelusions/LTX-2_Image2Video_Adapter_LoRa",
+      "type": "lora",
+      "from": "520191580007563264"
+    },
+    {
+      "resource": "HeartMula local music generation",
+      "url": "https://heartmula.github.io/",
+      "type": "tool",
+      "from": "Janosch Simon"
+    },
+    {
+      "resource": "LEVO local music generation",
+      "url": "https://levo-demo.github.io/",
+      "type": "tool",
+      "from": "Janosch Simon"
+    },
+    {
+      "resource": "Suno song example",
+      "url": "https://suno.com/s/EsvTKVKnDv7Tow88",
+      "type": "resource",
+      "from": "V\u00e9role"
+    },
+    {
+      "resource": "YouTube video test example",
+      "url": "https://www.youtube.com/shorts/yn5UOBFls2o?feature=share",
+      "type": "resource",
+      "from": "hicho"
+    },
+    {
+      "resource": "Sample video output",
+      "url": "https://www.huge.com/denrakeiw/160922-ghost-of-the-grid",
+      "type": "resource",
+      "from": "520191580007563264"
+    },
+    {
+      "resource": "Klipy video hosting",
+      "url": "https://klipy.com/gifs/misty-dance-2",
+      "type": "resource",
+      "from": "hicho"
+    },
+    {
+      "resource": "OIIA Spinning Cat weights",
+      "url": "https://civitai.com/models/2018677/oiia-spinning-cat",
+      "type": "model",
+      "from": "710895360981205003"
+    },
+    {
+      "resource": "V2V matching example video",
+      "url": "https://www.youtube.com/watch?v=GUXBpjHIuw0",
+      "type": "example",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "Character dialogue assignment issues",
+      "details": "Actions and dialogue can bleed between characters, making narrative difficult",
+      "from": "dj47"
+    },
+    {
+      "limitation": "Body horror without NSFW training",
+      "details": "Model deliberately not trained on NSFW content leading to anatomy issues",
+      "from": "dj47"
+    },
+    {
+      "limitation": "Audio context not maintained",
+      "details": "Cannot keep same voice/character consistency across generations",
+      "from": "KakerMix"
+    },
+    {
+      "limitation": "Model doesn't recognize some military hardware",
+      "details": "No knowledge of B-17 bombers or flak guns",
+      "from": "Tachyon"
+    },
+    {
+      "limitation": "Model substitutes most celebrities when prompted",
+      "details": "Will replace celebrities with generic faces - only handful of exceptions work",
+      "from": "brent"
+    },
+    {
+      "limitation": "Inconsistent vertical motion",
+      "details": "Not yet sure when vertical motion works and when it doesn't",
+      "from": "gopnik"
+    },
+    {
+      "limitation": "Scene changes difficult to control",
+      "details": "Model prefers continuous shots over cuts, needs specific prompting techniques",
+      "from": "cyncratic"
+    },
+    {
+      "limitation": "Dead air in longer generations with short prompts",
+      "details": "Found a lot of 'dead air' waiting periods when prompt isn't long enough for frame count",
+      "from": "305792526629994496"
+    },
+    {
+      "limitation": "Text generation inconsistency",
+      "details": "LTX prompting guide says you really can't expect consistent text in generated videos",
+      "from": "garbus"
+    },
+    {
+      "limitation": "Model defaults to human-like features",
+      "details": "The model likes to snap to humans a lot of the time, even when generating other subjects",
+      "from": "Benjimon"
+    },
+    {
+      "limitation": "Face quality degradation",
+      "details": "Loss of detail pretty quickly into the video, face warping and eye issues common",
+      "from": "Phr00t"
+    },
+    {
+      "limitation": "Violence and adult content restrictions",
+      "details": "Model has limitations with violence and nudity generation, likely due to training data restrictions",
+      "from": "dj47"
+    },
+    {
+      "limitation": "Audio quality needs improvement",
+      "details": "Audio quality needs a bump, sounds generic like tutorial narrator voice",
+      "from": "HeadOfOliver"
+    },
+    {
+      "limitation": "Japanese language understanding",
+      "details": "LTX2 doesn't understand Japanese very well",
+      "from": "DreamWeebs"
+    },
+    {
+      "limitation": "Prompt comprehension",
+      "details": "Prompt comprehension is poor, takes many generations to get something correct",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Text generation",
+      "details": "Text is generally an issue for LTX",
+      "from": "dj47"
+    },
+    {
+      "limitation": "Character consistency in longer sequences",
+      "details": "Characters change too much in longer sequences",
+      "from": "NebSH"
+    },
+    {
+      "limitation": "Beatboxing concept",
+      "details": "LTX doesn't know what beatboxing is but can work with some prompting",
+      "from": "N0NSens"
+    },
+    {
+      "limitation": "Speed advantage negated by higher steps/detailed samplers",
+      "details": "Using res_2s or higher steps defeats the speed benefits LTX team promotes",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Temporal upscaler artifacts above 241 frames",
+      "details": "Strange temporal stutter artifacts when going above 241 frames",
+      "from": "HeadOfOliver"
+    },
+    {
+      "limitation": "Characters forgotten when moving out of frame",
+      "details": "Model forgets non-human character details when they move out of frame",
+      "from": "Mazrael.Shib"
+    },
+    {
+      "limitation": "Scene cuts break image guidance",
+      "details": "Image guidance doesn't survive when LTX decides to do scene cuts",
+      "from": "BitPoet"
+    },
+    {
+      "limitation": "Prompt comprehension issues",
+      "details": "Complex actions like car lifting require many attempts vs other models",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Detail lora causes problems with flat 2D anime generations",
+      "details": "Using detail lora with anime style causes issues",
+      "from": "Choowkee"
+    },
+    {
+      "limitation": "Can't handle upside down objects well",
+      "details": "Asking for flipped cars or upside down things creates monstrosities",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Fast movement creates mouth and teeth issues",
+      "details": "Any fast movement, even at 2048x800 raw resolution, creates problems with facial features",
+      "from": "Arts Bro"
+    },
+    {
+      "limitation": "Audio quality lacks layers",
+      "details": "Audio needs more layers for background noises like wind, rain, waves, destruction - not just voice",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "limitation": "Struggles with smaller faces",
+      "details": "Generally has trouble with smaller faces in frame, gets better when camera is closer",
+      "from": "Simonj"
+    },
+    {
+      "limitation": "Difficulty following complex prompts accurately",
+      "details": "Hard to get accurate scene following with complex multi-step prompts, may need 10+ generations",
+      "from": "Fictiverse"
+    },
+    {
+      "limitation": "Face consistency in I2V with audio",
+      "details": "LTX2 changes faces significantly when using custom audio, especially with non-famous faces",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Motion artifacts at higher fps for long clips",
+      "details": "48fps conditioning creates more motion artifacts in longer extensions",
+      "from": "ucren"
+    },
+    {
+      "limitation": "Cartoon over-training",
+      "details": "Model seems overtrained on cartoons, defaults to cartoon style easily and has more distortion with animation",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Watery visual effects",
+      "details": "Detail loss and soft/blurred effects that aren't production-ready quality",
+      "from": "Juan Gea"
+    },
+    {
+      "limitation": "People turning/spinning issues",
+      "details": "LTX2 does not handle people turning around or spinning well",
+      "from": "ucren"
+    },
+    {
+      "limitation": "GGUF models have lipsync issues without LoRAs",
+      "details": "Q8 dev model requires distilled LoRA or camera LoRA to achieve lipsync",
+      "from": "Alpha-Neo"
+    },
+    {
+      "limitation": "Prompt control varies between resolutions",
+      "details": "Settings that work at 256p don't work at 480p, requiring rebalancing",
+      "from": "mdkb"
+    },
+    {
+      "limitation": "Tiled VAE decoding artifacts in dark scenes",
+      "details": "Visible grid patterns appear in dark areas, can't be fully eliminated with current implementations",
+      "from": "ucren"
+    },
+    {
+      "limitation": "Audio-video mask timing trade-off",
+      "details": "Early masking preserves likeness but loses mouth movement, late masking gets movement but loses likeness",
+      "from": "Nekodificador"
+    },
+    {
+      "limitation": "Character consistency issues",
+      "details": "LTX does not maintain consistent character appearance across longer generations",
+      "from": "dj47"
+    },
+    {
+      "limitation": "Face consistency issues in video extension",
+      "details": "Consistency degrades over time, eyes don't hold together well, becomes chaotic",
+      "from": "mdkb"
+    },
+    {
+      "limitation": "Color artifacts at high vertical resolutions",
+      "details": "Vertical outputs around or over 1536 pixels get blue color hue and hallucinations at top/bottom",
+      "from": "dischordo"
+    },
+    {
+      "limitation": "Model doesn't recognize specific objects well",
+      "details": "Still doesn't know what drill presses look like",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "Prompt following issues",
+      "details": "LTX doesn't listen to prompts well in either dev or distilled mode",
+      "from": "N0NSens"
+    },
+    {
+      "limitation": "LTX2 struggles with mouth and eyes detail",
+      "details": "Poor quality even on closeups, needs second stage and high resolution",
+      "from": "hicho"
+    },
+    {
+      "limitation": "Low resolution always looks poor",
+      "details": "At low resolution quality is consistently bad",
+      "from": "nikolatesla20"
+    },
+    {
+      "limitation": "32GB RAM insufficient for long video generation",
+      "details": "32GB RAM won't get you far for extended video generation",
+      "from": "Charlie"
+    },
+    {
+      "limitation": "Random switching from I2V to T2V mode",
+      "details": "Sometimes randomly switches to text-to-video instead of maintaining image-to-video, can't force it to happen consistently",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "limitation": "V2V with latent low denoise performs poorly",
+      "details": "Video-to-video with low denoise latent approach is very bad compared to WAN",
+      "from": "hicho"
+    },
+    {
+      "limitation": "Grid artifacts deform faces",
+      "details": "Grid processing causes face deformation issues",
+      "from": "hicho"
+    },
+    {
+      "limitation": "Full AI production still time-consuming in post",
+      "details": "For commercial clients, especially automotive, full AI workflows require extensive post-production work",
+      "from": "520191580007563264"
+    },
+    {
+      "limitation": "Face drift during long generations",
+      "details": "Faces lose consistency and drift significantly during video generation",
+      "from": "NebSH"
+    },
+    {
+      "limitation": "Camera rotation prompts can mess up faces",
+      "details": "360-degree camera rotation prompts often result in face distortion",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "limitation": "IC detailer lora breaks I2V and V2V",
+      "details": "Using IC detailer lora on image-to-video or video-to-video workflows causes mismatching and face changes",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "Minimum VRAM",
+      "details": "Works with 4GB VRAM (reported by someone) and 3060 confirmed, but needs >64GB RAM",
+      "from": "Tachyon"
+    },
+    {
+      "requirement": "3090 performance",
+      "details": "1:45 generation time for 5 second video at 8 steps using system swap",
+      "from": "Owlie"
+    },
+    {
+      "requirement": "4090 capability",
+      "details": "Can handle 1280x1024 resolution without dying",
+      "from": "TK_999"
+    },
+    {
+      "requirement": "High frame counts",
+      "details": "351 frames at 720p possible on 5090, I2V OOMs over 121 frames",
+      "from": "NebSH"
+    },
+    {
+      "requirement": "RTX 6000",
+      "details": "Can handle 1920x1088 at 513 frames in ~10 minutes with full model",
+      "from": "305792526629994496"
+    },
+    {
+      "requirement": "RTX 5090 + 64GB RAM",
+      "details": "Can do 2048x1152, needs 25GB VRAM, maxes out RAM during VAE decode",
+      "from": "el marzocco"
+    },
+    {
+      "requirement": "RTX 4090 + 24GB GPU",
+      "details": "Can handle 609 frames with specific settings",
+      "from": "Benjimon"
+    },
+    {
+      "requirement": "128GB RAM recommended",
+      "details": "Helps significantly with tiled VAE decode and longer generations",
+      "from": "Hell G."
+    },
+    {
+      "requirement": "Full fine-tune needs 8 H100s",
+      "details": "Full model fine-tuning not feasible for most users",
+      "from": "dj47"
+    },
+    {
+      "requirement": "VRAM for different resolutions",
+      "details": "1920x1088 takes 645 seconds on RTX 4090, 1280x1280 121 frames requires aggressive tiling settings even on RTX 5090",
+      "from": "gopnik"
+    },
+    {
+      "requirement": "RAM usage",
+      "details": "Goes up to 96GB RAM usage out of 192GB available, 64GB RAM can be limiting factor",
+      "from": "PATATAJEC"
+    },
+    {
+      "requirement": "Generation times by resolution",
+      "details": "1920x1088: 645 seconds, 480p: 150 seconds on RTX 4090",
+      "from": "gopnik"
+    },
+    {
+      "requirement": "Upscaling performance",
+      "details": "Generation takes 2 minutes, upscaling takes 20 minutes",
+      "from": "N0NSens"
+    },
+    {
+      "requirement": "3060 12GB with 48GB RAM",
+      "details": "Successfully running LTX2",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "requirement": "3090 24GB with 64GB RAM",
+      "details": "Successfully running LTX2",
+      "from": "clockstopper"
+    },
+    {
+      "requirement": "RTX 5090",
+      "details": "Running LTX2 with ComfyUI locally",
+      "from": "Dkamacho"
+    },
+    {
+      "requirement": "1280 x 732 resolution",
+      "details": "792 frames was too many for 1920 resolution, had to use lower res",
+      "from": "305792526629994496"
+    },
+    {
+      "requirement": "VRAM usage doubles",
+      "details": "Using 2/8/16/8 VAE decode settings doubles VRAM usage",
+      "from": "garbus"
+    },
+    {
+      "requirement": "Full HD 20 seconds possible",
+      "details": "Able to generate 1920x1080 20 second videos",
+      "from": "magix"
+    },
+    {
+      "requirement": "VRAM for 1536x1536 video",
+      "details": "Generated in 457.63 seconds on 12GB/48GB system",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "requirement": "VRAM for i2v 1000x1000",
+      "details": "Works on 8GB VRAM, 32GB RAM system, takes about 550 seconds",
+      "from": "cocktailprawn1212"
+    },
+    {
+      "requirement": "RTX 6000 Ada performance",
+      "details": "15 steps render in 5-6 minutes with 48GB VRAM",
+      "from": "Nathan Shipley"
+    },
+    {
+      "requirement": "RAM usage for WAN upscaling",
+      "details": "Uses up to 220GB RAM for 2560x1440x241 upscale, takes 20 minutes",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "VRAM for 10-second 1080p generation",
+      "details": "Can generate 10-second 1080p videos with chunk feedforward modification, up from 6-second limit",
+      "from": "Peera"
+    },
+    {
+      "requirement": "VRAM frame limits",
+      "details": "16GB VRAM can fit 480 frames MAX at 1920x1080 (20 seconds) regardless of FP16/FP8/FP4",
+      "from": "Volkin"
+    },
+    {
+      "requirement": "3060ti performance",
+      "details": "Can generate 2k images in 30 seconds on 3060ti",
+      "from": "neofuturo"
+    },
+    {
+      "requirement": "RTX 5080 16GB VRAM",
+      "details": "Can generate 10 seconds at 1280x704 resolution",
+      "from": "meakwa23"
+    },
+    {
+      "requirement": "System RAM for long videos",
+      "details": "Need adequate system RAM for 20+ second generations, 8-9GB VRAM usage typical",
+      "from": "garbus"
+    },
+    {
+      "requirement": "RTX 5090",
+      "details": "Enables very fast generation - 8 seconds of video in 30 seconds with proper settings",
+      "from": "152993277631528960"
+    },
+    {
+      "requirement": "VRAM for distilled LoRA",
+      "details": "7.5GB LoRA may not fit on 12GB VRAM systems",
+      "from": "mdkb"
+    },
+    {
+      "requirement": "RAM for long frame counts",
+      "details": "Less than 64GB RAM causes pagefile/swapfile usage and delayed generation speed for >241 frames",
+      "from": "Volkin"
+    },
+    {
+      "requirement": "GGUF Q8 model requirements",
+      "details": "RTX 5090 with 64GB RAM generates 10s video, RTX 4080 with 64GB RAM also works",
+      "from": "Alpha-Neo"
+    },
+    {
+      "requirement": "Generation time for 50 seconds",
+      "details": "50 seconds at 480p took 30 minutes on RTX 3060",
+      "from": "mdkb"
+    },
+    {
+      "requirement": "40 seconds generation time",
+      "details": "Took 307 seconds on RTX 5090",
+      "from": "ezMan"
+    },
+    {
+      "requirement": "RTX 5090 for long high-res videos",
+      "details": "32GB VRAM, can handle 1000 frames at 1280x720",
+      "from": "NebSH"
+    },
+    {
+      "requirement": "A4500 for high resolution",
+      "details": "20GB VRAM + 28GB system RAM can generate 3072x2048 videos in 20-30 minutes using GGUF Q5",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "requirement": "RTX 5080 for audio workflows",
+      "details": "16GB VRAM can generate 1000 frames of 1280x720px videos from audio",
+      "from": "meakwa23"
+    },
+    {
+      "requirement": "RTX 3060 12GB still viable",
+      "details": "Can run workflows with proper memory management, good value option",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "requirement": "16GB VRAM performance",
+      "details": "Can handle 10-second FFLF at 1080p with memory optimizations",
+      "from": "Simonj"
+    },
+    {
+      "requirement": "32GB RAM limitation",
+      "details": "32GB RAM insufficient for long video generation workflows",
+      "from": "Charlie"
+    },
+    {
+      "requirement": "2060 card capability",
+      "details": "Successfully generated up to 450 frames on RTX 2060",
+      "from": "hicho"
+    },
+    {
+      "requirement": "5080 16GB memory issues",
+      "details": "Struggles with controlnet, hitting memory issues where renders vary from 1-6 minutes",
+      "from": "VK (5080 128gb)"
+    },
+    {
+      "requirement": "GGUF model performance",
+      "details": "GGUF models are slower, FP4 is better alternative, but can help with memory constraints",
+      "from": "hicho"
+    },
+    {
+      "requirement": "RTX 3090 performance benchmark",
+      "details": "589 seconds (around 10 minutes) to render 1280x720 i2v 15 second video with lipsync external audio",
+      "from": "nikolatesla20"
+    },
+    {
+      "requirement": "Generation time for 2-pass workflow",
+      "details": "~3 minutes for generation, ~10-15 minutes for refinement",
+      "from": "N0NSens"
+    },
+    {
+      "requirement": "Higher resolution needs more GPU power",
+      "details": "User wishes for more computer power to make content at 1080p",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "Snorricam LoRA",
+      "type": "lora",
+      "description": "Creates snorricam camera movement effect",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Switch Focus LoRA",
+      "type": "lora",
+      "description": "Changes focus between subjects in scene",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Bullet Time LoRA",
+      "type": "lora",
+      "description": "Creates Matrix-style bullet time effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Car Chasing LoRA",
+      "type": "lora",
+      "description": "Generates car chase sequences",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Through Object LoRA",
+      "type": "lora",
+      "description": "Camera moves through objects in scene",
+      "from": "NebSH"
+    },
+    {
+      "creation": "62 camera motion LoRAs",
+      "type": "lora",
+      "description": "Collection including dolly out, 360 orbit, whip pan, crash zoom, dutch angle, flying, incline, crane shots, etc.",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Wallace and Gromit LoRA",
+      "type": "lora",
+      "description": "Character style LoRA working with LTX-2",
+      "from": "Cseti"
+    },
+    {
+      "creation": "GalaxyAce LoRA",
+      "type": "lora",
+      "description": "Replicates early 2010s Samsung Galaxy Ace smartphone video style",
+      "from": "gopnik"
+    },
+    {
+      "creation": "Amgery LoRA",
+      "type": "lora",
+      "description": "Custom trained LoRA by community member",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Audio input workflow",
+      "type": "workflow",
+      "description": "ComfyUI workflow for adding custom audio with timing controls",
+      "from": "Helikaon23s"
+    },
+    {
+      "creation": "Deforum style LoRA",
+      "type": "lora",
+      "description": "LoRA trained by Safety Marc that adds deforum-style transformations and effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Character LoRA",
+      "type": "lora",
+      "description": "Double dolly + character LoRA for consistent character generation",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Detailer LoRA",
+      "type": "lora",
+      "description": "LoRA for enhancing detail in generated videos, costs $9 to train",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Hero shot LoRA",
+      "type": "lora",
+      "description": "89 bucket training for cinematic hero shots",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Object POV LoRA",
+      "type": "lora",
+      "description": "Point of view from objects like microwave perspective",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Transition roll LoRA",
+      "type": "lora",
+      "description": "Fast rolling camera transitions sweeping between scenes, T2V tested",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Push to glass LoRA",
+      "type": "lora",
+      "description": "Camera effect LoRA",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Group photo LoRA",
+      "type": "lora",
+      "description": "Step 500 and 750 versions available",
+      "from": "burgstall"
+    },
+    {
+      "creation": "Earth zoom out LoRA",
+      "type": "lora",
+      "description": "Step 500 and 1000 versions, shows zoom out from Earth",
+      "from": "burgstall"
+    },
+    {
+      "creation": "Guitar playing LoRA",
+      "type": "lora",
+      "description": "For guitar playing scenes",
+      "from": "burgstall"
+    },
+    {
+      "creation": "Timelapse Human LoRA",
+      "type": "lora",
+      "description": "Creates timelapse effects with humans",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Outfit check LoRA",
+      "type": "lora",
+      "description": "For outfit checking scenes",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Animatediff lora",
+      "type": "lora",
+      "description": "Creates animatediff-style effects, works well at strength 2.0, combines well with deforum loras",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Scooby Doo lora",
+      "type": "lora",
+      "description": "Character lora for Scooby Doo, creator planning to retrain from scratch",
+      "from": "138234075931475968"
+    },
+    {
+      "creation": "Anime character lora",
+      "type": "lora",
+      "description": "700 steps out of 3000 training, showing typical anime motion",
+      "from": "Choowkee"
+    },
+    {
+      "creation": "South Park lora",
+      "type": "lora",
+      "description": "Works with non-South Park prompts for style transfer",
+      "from": "NebSH"
+    },
+    {
+      "creation": "TouchDesigner lora",
+      "type": "lora",
+      "description": "In training, intended for audioreactive output effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Beauty and the Beast lora",
+      "type": "lora",
+      "description": "Character lora showing good results",
+      "from": "JUSTSWEATERS"
+    },
+    {
+      "creation": "Outfit switch LoRA",
+      "type": "lora",
+      "description": "Allows characters to change outfits during video, works well with other LoRAs",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Nuclear explosion LoRA",
+      "type": "lora",
+      "description": "Creates nuclear explosion effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Hand transition LoRA",
+      "type": "lora",
+      "description": "Creates smooth hand-based scene transitions, trained on only 6 videos",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Handheld run LoRA",
+      "type": "lora",
+      "description": "Creates handheld camera running motion effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Deep Zoom LoRA",
+      "type": "lora",
+      "description": "Creates deep zoom camera effects",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Herocam LoRA",
+      "type": "lora",
+      "description": "Smooths out images, recommended for camera effects",
+      "from": "NebSH"
+    },
+    {
+      "creation": "TouchDesigner + AnimateDiff LoRA combination",
+      "type": "lora",
+      "description": "Style and motion effects for psychedelic visuals",
+      "from": "NebSH"
+    },
+    {
+      "creation": "Anime character LoRA training method",
+      "type": "lora",
+      "description": "Training with videos first, then continuing with images helps establish character likeness",
+      "from": "Choowkee"
+    },
+    {
+      "creation": "Saturday morning cartoons LoRA",
+      "type": "lora",
+      "description": "80s cartoon style LoRA for use with LTX",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "creation": "Static Camera LoRA",
+      "type": "lora",
+      "description": "LoRA for maintaining static camera shots",
+      "from": "nikolatesla20"
+    },
+    {
+      "creation": "Negative training technique LoRA",
+      "type": "lora",
+      "description": "LoRA trained with negative strength (-1) for improved results",
+      "from": "305792526629994496"
+    },
+    {
+      "creation": "Audio normalization node",
+      "type": "node",
+      "description": "Analyzes video before segment and auto-normalizes audio to prevent volume spikes",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "creation": "Frame count calculator",
+      "type": "workflow",
+      "description": "Formula that calculates correct frame count following 8n+1 rule for given duration",
+      "from": "N0NSens"
+    },
+    {
+      "creation": "AnimateDiff Lora for creepy effects",
+      "type": "lora",
+      "description": "LoRA for creating creepy/horror-style animations",
+      "from": "hell2heights2"
+    },
+    {
+      "creation": "ComfyUI AudioTools",
+      "type": "tool",
+      "description": "Audio enhancement and normalization nodes with auto modes for V2V, requires resampy and soundfiles",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "creation": "VHS LoRA",
+      "type": "lora",
+      "description": "Trained on old VHS tapes from late 80s/early 90s with commercials and personal footage",
+      "from": "305792526629994496"
+    },
+    {
+      "creation": "LTX automation workflow with re-do feature",
+      "type": "workflow",
+      "description": "Full automation with ability to re-do specific scenes by index number",
+      "from": "VRGameDevGirl84"
+    },
+    {
+      "creation": "12GB GGUF workflow collection",
+      "type": "workflow",
+      "description": "Complete set of GGUF-based workflows for t2v, i2v, v2v, ia2v, ta2v on 12GB cards",
+      "from": "U\u0337r\u0337a\u0337b\u0337e\u0337w\u0337e\u0337"
+    },
+    {
+      "creation": "VCR LoRA",
+      "type": "lora",
+      "description": "Video generation LoRA trained on captioned dataset, latest version in testing",
+      "from": "305792526629994496"
+    },
+    {
+      "creation": "OIIA Spinning Cat LoRA",
+      "type": "lora",
+      "description": "First LoRA trained for LTX-2, includes sound effects",
+      "from": "710895360981205003"
+    },
+    {
+      "creation": "Music video automation workflow with SRT support",
+      "type": "workflow",
+      "description": "Automated music video generation using SRT files for scene timing",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Python app for SRT file creation",
+      "type": "tool",
+      "description": "App that plays song and lets you tap down arrow for cuts, creates SRT with start/end times",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Auto beat detection node",
+      "type": "node",
+      "description": "Node that adds cuts based on beats in songs, supports separate inputs for drums and bass",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Static camera control lora",
+      "type": "lora",
+      "description": "Helps prevent camera from wandering during generation",
+      "from": "Benjimon"
+    }
+  ]
+}

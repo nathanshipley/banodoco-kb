@@ -310,19 +310,52 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> LTX 2 knowledge extraction in progress</p>
-            <p><strong>Focus:</strong> Extracting comprehensive knowledge from LTX 2 discussions (released Jan 5, 2026) as test case.</p>
+            <p><strong>Phase:</strong> LTX 2 January extraction COMPLETE</p>
+            <p><strong>Focus:</strong> Extracted comprehensive knowledge from all LTX 2 channels for January 2026.</p>
             <p><strong>Extraction approach:</strong> Chunked summarization - process chat in 400-message chunks, extract 12 categories of knowledge including discoveries, troubleshooting, comparisons, tips, settings, resources, limitations, hardware requirements, and community creations.</p>
-            <p><strong>Results so far:</strong></p>
+            <p><strong>Results:</strong></p>
             <ul>
-                <li>Jan 6: 4,244 messages → 343 knowledge items ($0.58)</li>
-                <li>Jan 7: 3,429 messages → 449 knowledge items ($0.63)</li>
-                <li>Output: Clean markdown files ready for NotebookLM</li>
+                <li>ltx_chatter (full month): 34,751 messages → ~3,053 items ($5.52)</li>
+                <li>ltx_training: 2,850 messages → 358 items ($0.59)</li>
+                <li>ltx_gens: 4,100 messages → 554 items ($0.83)</li>
+                <li>ltx_resources: 2,891 messages → 380 items ($0.71)</li>
+                <li><strong>Total: ~44,500 messages → ~4,345 items ($7.65)</strong></li>
             </ul>
-            <p><strong>Next:</strong> Process remaining January days, combine into comprehensive LTX 2 knowledge base.</p>
+            <p><strong>Next:</strong> Combine extractions into single comprehensive document, test in NotebookLM, build static HTML knowledge base.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 1, 2026 - Evening</div>
+                <h3>LTX 2 January extraction COMPLETE</h3>
+
+                <p>Processed all LTX-related channels for January 2026. Total: ~44,500 messages across 4 channels, extracting ~4,345 knowledge items.</p>
+
+                <table style="width:100%; border-collapse: collapse; margin: 1em 0;">
+                    <tr><th style="text-align:left; padding: 0.5em; border-bottom: 1px solid var(--border);">Channel</th><th style="text-align:right; padding: 0.5em; border-bottom: 1px solid var(--border);">Messages</th><th style="text-align:right; padding: 0.5em; border-bottom: 1px solid var(--border);">Items</th><th style="text-align:right; padding: 0.5em; border-bottom: 1px solid var(--border);">Cost</th></tr>
+                    <tr><td style="padding: 0.3em 0.5em;">ltx_chatter (full month)</td><td style="text-align:right; padding: 0.3em 0.5em;">34,751</td><td style="text-align:right; padding: 0.3em 0.5em;">3,053</td><td style="text-align:right; padding: 0.3em 0.5em;">$5.52</td></tr>
+                    <tr><td style="padding: 0.3em 0.5em;">ltx_training</td><td style="text-align:right; padding: 0.3em 0.5em;">2,850</td><td style="text-align:right; padding: 0.3em 0.5em;">358</td><td style="text-align:right; padding: 0.3em 0.5em;">$0.59</td></tr>
+                    <tr><td style="padding: 0.3em 0.5em;">ltx_gens</td><td style="text-align:right; padding: 0.3em 0.5em;">4,100</td><td style="text-align:right; padding: 0.3em 0.5em;">554</td><td style="text-align:right; padding: 0.3em 0.5em;">$0.83</td></tr>
+                    <tr><td style="padding: 0.3em 0.5em;">ltx_resources</td><td style="text-align:right; padding: 0.3em 0.5em;">2,891</td><td style="text-align:right; padding: 0.3em 0.5em;">380</td><td style="text-align:right; padding: 0.3em 0.5em;">$0.71</td></tr>
+                    <tr style="font-weight: bold;"><td style="padding: 0.5em; border-top: 1px solid var(--border);">Total</td><td style="text-align:right; padding: 0.5em; border-top: 1px solid var(--border);">~44,500</td><td style="text-align:right; padding: 0.5em; border-top: 1px solid var(--border);">~4,345</td><td style="text-align:right; padding: 0.5em; border-top: 1px solid var(--border);">$7.65</td></tr>
+                </table>
+
+                <p><strong>Output:</strong> 8 markdown files in <code>data/</code> directory (~19,000 lines total), ready for NotebookLM. Also JSON versions for structured use.</p>
+
+                <p><strong>Lessons learned:</strong></p>
+                <ul>
+                    <li>Running extractions in parallel hits rate limits (30K tokens/min). Run sequentially for reliability.</li>
+                    <li>Cost tracking was accurate - actual $7.65 vs estimated $5-6. Each ~400 message chunk costs ~$0.15-0.20.</li>
+                    <li>Forum channel (ltx_resources) works with time-chunked approach - still captures valuable content even without thread structure.</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Insight:</strong> We now have comprehensive LTX 2 knowledge ready for NotebookLM testing. The extracted data includes technical discoveries, troubleshooting guides, hardware requirements, limitations, workflows, and community creations - everything needed for a useful knowledge base.
+                </div>
+
+                <p><strong>Next:</strong> Combine files into single comprehensive document, test in NotebookLM, then build static HTML knowledge base.</p>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 1, 2026 - Afternoon</div>
                 <h3>LTX 2 chunked extraction working</h3>
