@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banodoco Knowledge Base</title>
+    <title>Knowledge Base - Banodoco</title>
     <style>
         :root {
             --bg: #ffffff;
@@ -52,13 +52,27 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
         }
 
         header {
             margin-bottom: 3rem;
-            text-align: center;
         }
 
         h1 {
@@ -71,31 +85,16 @@
         .subtitle {
             color: var(--text-muted);
             font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto;
         }
 
-        .status-badge {
-            display: inline-block;
-            background: var(--accent-subtle);
-            color: var(--accent);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 1.5rem;
-        }
-
-        .nav-grid {
+        .model-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin: 3rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
-        .nav-card {
+        .model-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -106,60 +105,83 @@
             display: block;
         }
 
-        .nav-card:hover {
+        .model-card:hover {
             border-color: var(--accent);
             transform: translateY(-2px);
         }
 
-        .nav-card h2 {
-            font-size: 1.1rem;
+        .model-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .model-card.coming-soon:hover {
+            border-color: var(--border);
+            transform: none;
+        }
+
+        .model-card h2 {
+            font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
         }
 
-        .nav-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        .nav-card .arrow {
-            margin-left: auto;
+        .model-card .arrow {
             color: var(--text-muted);
             transition: transform 0.2s;
         }
 
-        .nav-card:hover .arrow {
+        .model-card:hover .arrow {
             transform: translateX(4px);
             color: var(--accent);
         }
 
-        .stats-row {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 600;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
+        .model-card.coming-soon:hover .arrow {
+            transform: none;
             color: var(--text-muted);
+        }
+
+        .model-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .model-card .meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .model-card .badge {
+            display: inline-block;
+            background: var(--accent-subtle);
+            color: var(--accent);
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .model-card .badge.coming {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .section-title {
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin: 3rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
 
         footer {
@@ -244,84 +266,105 @@
     </button>
 
     <div class="container">
+        <nav class="breadcrumb">
+            <a href="../index.html">Home</a> <span>/ Knowledge Base</span>
+        </nav>
+
         <header>
-            <h1>Banodoco Knowledge Base</h1>
-            <p class="subtitle">Transforming the Banodoco Discord into a searchable knowledge base for the open source AI community</p>
-            <span class="status-badge">Work in Progress</span>
+            <h1>Knowledge Base</h1>
+            <p class="subtitle">Community-sourced knowledge about open source AI video and image generation tools</p>
         </header>
 
-        <div class="stats-row">
-            <div class="stat">
-                <div class="stat-number">1M+</div>
-                <div class="stat-label">Messages</div>
+        <h3 class="section-title">Video Generation</h3>
+        <div class="model-grid">
+            <a href="ltx2/index.html" class="model-card">
+                <h2>
+                    LTX Video 2
+                    <span class="arrow">→</span>
+                </h2>
+                <p>19B parameter model with integrated audio generation. Fast, high quality, supports text/image/video to video.</p>
+                <div class="meta">
+                    <span class="badge">New</span>
+                    <span>Updated Feb 1, 2026</span>
+                </div>
+            </a>
+
+            <div class="model-card coming-soon">
+                <h2>
+                    Wan 2.1
+                    <span class="arrow">→</span>
+                </h2>
+                <p>Alibaba's video generation suite. Includes T2V, I2V, Fun models, and VACE control module.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
             </div>
-            <div class="stat">
-                <div class="stat-number">6,600+</div>
-                <div class="stat-label">Members</div>
+
+            <div class="model-card coming-soon">
+                <h2>
+                    HunyuanVideo
+                    <span class="arrow">→</span>
+                </h2>
+                <p>Tencent's video generation model. High quality with good motion consistency.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
             </div>
-            <div class="stat">
-                <div class="stat-number">227</div>
-                <div class="stat-label">Channels</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">29</div>
-                <div class="stat-label">Months of Data</div>
+
+            <div class="model-card coming-soon">
+                <h2>
+                    CogVideoX
+                    <span class="arrow">→</span>
+                </h2>
+                <p>Zhipu AI's video generation model. Efficient and capable.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
             </div>
         </div>
 
-        <nav class="nav-grid">
-            <a href="kb/index.html" class="nav-card" style="border-color: var(--accent);">
+        <h3 class="section-title">Image Generation</h3>
+        <div class="model-grid">
+            <div class="model-card coming-soon">
                 <h2>
-                    📚 Knowledge Base
+                    FLUX
                     <span class="arrow">→</span>
                 </h2>
-                <p>Model-specific guides for LTX Video 2, Wan, FLUX, and more. Settings, troubleshooting, tips from the community.</p>
-            </a>
+                <p>Black Forest Labs' flagship model. Excellent prompt following and image quality.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
+            </div>
 
-            <a href="progress.html" class="nav-card">
+            <div class="model-card coming-soon">
                 <h2>
-                    📝 Progress Log
+                    SDXL
                     <span class="arrow">→</span>
                 </h2>
-                <p>Follow along as we build the KB. Timestamped notes on what we're trying, learning, and building.</p>
-            </a>
+                <p>Stability AI's XL model. Mature ecosystem with extensive LoRA library.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
+            </div>
+        </div>
 
-            <a href="database.html" class="nav-card">
+        <h3 class="section-title">Tools & Workflows</h3>
+        <div class="model-grid">
+            <div class="model-card coming-soon">
                 <h2>
-                    📊 Database Overview
+                    ComfyUI
                     <span class="arrow">→</span>
                 </h2>
-                <p>Explore the Discord database structure, message coverage by date, channel categories, and sample AI-generated daily summaries.</p>
-            </a>
-
-            <a href="stats.html" class="nav-card">
-                <h2>
-                    👥 Community Stats
-                    <span class="arrow">→</span>
-                </h2>
-                <p>See the top 20 contributors by message count and which channels they're most active in. Kijai leads with 100K+ messages.</p>
-            </a>
-
-            <a href="https://github.com/nathanshipley/banodoco-kb" class="nav-card">
-                <h2>
-                    💻 GitHub Repository
-                    <span class="arrow">→</span>
-                </h2>
-                <p>View the source code, scripts, and data files. Contributions welcome.</p>
-            </a>
-
-            <a href="https://discord.gg/banodoco" class="nav-card">
-                <h2>
-                    💬 Join the Discord
-                    <span class="arrow">→</span>
-                </h2>
-                <p>The source of all this knowledge. Join 6,600+ members discussing open source AI video and image generation.</p>
-            </a>
-        </nav>
+                <p>Node-based UI for AI generation. Tips, custom nodes, workflow patterns.</p>
+                <div class="meta">
+                    <span class="badge coming">Coming Soon</span>
+                </div>
+            </div>
+        </div>
 
         <footer>
-            <p>Built by <a href="https://nathanshipley.github.io">Nathan Shipley</a> with Claude Code</p>
-            <p style="margin-top: 0.5rem;">Data provided by the Banodoco community</p>
+            <p>Knowledge extracted from <a href="https://discord.gg/banodoco">Banodoco Discord</a> discussions</p>
+            <p style="margin-top: 0.5rem;">Built by <a href="https://nathanshipley.github.io">Nathan Shipley</a> with Claude Code</p>
         </footer>
     </div>
 

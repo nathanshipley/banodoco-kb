@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTX Video 2 Knowledge Base - Banodoco</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066ff;
+            --accent-subtle: rgba(0, 102, 255, 0.08);
+            --warning: #f59e0b;
+            --warning-subtle: rgba(245, 158, 11, 0.1);
+            --success: #10b981;
+            --success-subtle: rgba(16, 185, 129, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0d0d0d;
+                --bg-secondary: #161616;
+                --bg-tertiary: #1f1f1f;
+                --text: #f0f0f0;
+                --text-muted: #888888;
+                --border: #2a2a2a;
+                --accent: #3b82f6;
+                --accent-subtle: rgba(59, 130, 246, 0.12);
+                --warning-subtle: rgba(245, 158, 11, 0.15);
+                --success-subtle: rgba(16, 185, 129, 0.15);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --bg-secondary: #161616;
+            --bg-tertiary: #1f1f1f;
+            --text: #f0f0f0;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+            --accent: #3b82f6;
+            --accent-subtle: rgba(59, 130, 246, 0.12);
+            --warning-subtle: rgba(245, 158, 11, 0.15);
+            --success-subtle: rgba(16, 185, 129, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Layout with sticky TOC */
+        .page-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 3rem;
+        }
+
+        .toc-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+
+        .toc-sidebar h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc-sidebar ul {
+            list-style: none;
+        }
+
+        .toc-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-sidebar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: block;
+            padding: 0.25rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .toc-sidebar a:hover,
+        .toc-sidebar a.active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            max-width: 800px;
+        }
+
+        /* Header */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2 .section-icon {
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+
+        /* Callout boxes */
+        .callout {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.925rem;
+        }
+
+        .callout-warning {
+            background: var(--warning-subtle);
+            border-left: 3px solid var(--warning);
+        }
+
+        .callout-tip {
+            background: var(--success-subtle);
+            border-left: 3px solid var(--success);
+        }
+
+        .callout-info {
+            background: var(--accent-subtle);
+            border-left: 3px solid var(--accent);
+        }
+
+        .callout strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Knowledge items */
+        .knowledge-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .knowledge-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .knowledge-item p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .knowledge-item .attribution {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Code */
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        /* Collapsible sections */
+        details {
+            margin-bottom: 0.75rem;
+        }
+
+        details summary {
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 500;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details summary::before {
+            content: '▶';
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        details[open] summary {
+            border-radius: 8px 8px 0 0;
+            border-bottom: none;
+        }
+
+        details .details-content {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--bg);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: background 0.2s, border-color 0.2s;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+            .page-layout {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="page-layout">
+        <nav class="toc-sidebar">
+            <h3>On This Page</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#hardware">Hardware Requirements</a></li>
+                <li><a href="#settings">Recommended Settings</a></li>
+                <li><a href="#discoveries">Technical Discoveries</a></li>
+                <li><a href="#limitations">Known Limitations</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#workflows">Workflows & Tips</a></li>
+                <li><a href="#comparisons">Model Comparisons</a></li>
+                <li><a href="#training">Training & LoRAs</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <nav class="breadcrumb">
+                <a href="../../index.html">Home</a> / <a href="../index.html">Knowledge Base</a> / LTX Video 2
+            </nav>
+
+            <header>
+                <h1>LTX Video 2</h1>
+                <p class="subtitle">19B parameter video generation model with integrated audio, released January 5, 2026</p>
+                <div class="meta">
+                    <span class="meta-item">📅 Last updated: February 1, 2026</span>
+                    <span class="meta-item">💬 Source: ~44,500 Discord messages</span>
+                    <span class="meta-item">📊 ~4,345 knowledge items</span>
+                </div>
+            </header>
+
+            <div class="callout callout-info">
+                <strong>Chat with this knowledge base</strong>
+                This content is also available in <a href="https://notebooklm.google.com">NotebookLM</a> for interactive Q&A.
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview">
+                <h2><span class="section-icon">📖</span> Overview</h2>
+                <p>LTX Video 2 is a 19B parameter video generation model released by Lightricks in partnership with NVIDIA on January 5, 2026. It features integrated audio generation, built-in upscaling, and supports text-to-video, image-to-video, and video-to-video generation.</p>
+
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Integrated Audio:</strong> Generates spatially-aware audio that responds to visual content</li>
+                    <li><strong>Fast Generation:</strong> Near real-time with distilled model (~6 seconds for 121 frames at 720p on RTX 4090)</li>
+                    <li><strong>Built-in Upscaling:</strong> Spatial and temporal upscalers included</li>
+                    <li><strong>24 FPS Output:</strong> Higher frame rate than most competitors</li>
+                    <li><strong>Low VRAM Option:</strong> Can run on 8GB VRAM with RAM offloading</li>
+                </ul>
+
+                <h3>Model Variants</h3>
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>Size</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>ltx-video-2-1 (fp8)</td>
+                        <td>~27GB</td>
+                        <td>Full model with VAE + audio, recommended for quality</td>
+                    </tr>
+                    <tr>
+                        <td>ltx-video-2-1 (GGUF Q8)</td>
+                        <td>~20GB</td>
+                        <td>Quantized version, good balance of quality/size</td>
+                    </tr>
+                    <tr>
+                        <td>Distilled LoRA</td>
+                        <td>+384MB</td>
+                        <td>8-step generation instead of 20, slight quality trade-off</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Hardware Section -->
+            <section id="hardware">
+                <h2><span class="section-icon">🖥️</span> Hardware Requirements</h2>
+
+                <div class="callout callout-tip">
+                    <strong>Good news for low VRAM users</strong>
+                    LTX Video 2 can run on 8GB VRAM with 64GB+ system RAM using offloading. Use <code>--reserve-vram 20</code> flag.
+                </div>
+
+                <table>
+                    <tr>
+                        <th>GPU</th>
+                        <th>VRAM</th>
+                        <th>Capability</th>
+                    </tr>
+                    <tr>
+                        <td>RTX 5090</td>
+                        <td>32GB</td>
+                        <td>832x480, 241 frames with fp8 + distill LoRA</td>
+                    </tr>
+                    <tr>
+                        <td>RTX 4090</td>
+                        <td>24GB</td>
+                        <td>720p, 121 frames (~6 sec with distilled)</td>
+                    </tr>
+                    <tr>
+                        <td>RTX 3090</td>
+                        <td>24GB</td>
+                        <td>720p generation confirmed working</td>
+                    </tr>
+                    <tr>
+                        <td>RTX 4070 Ti Super</td>
+                        <td>16GB</td>
+                        <td>Works with GGUF models + offloading</td>
+                    </tr>
+                    <tr>
+                        <td>8GB cards</td>
+                        <td>8GB</td>
+                        <td>Possible with 64GB+ RAM, heavy offloading</td>
+                    </tr>
+                </table>
+
+                <div class="knowledge-item">
+                    <h4>RAM Requirements for Offloading</h4>
+                    <p>When using VRAM offloading, ensure you have sufficient system RAM. 64GB recommended for comfortable operation with 8GB VRAM GPUs.</p>
+                    <span class="attribution">— Kijai</span>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings">
+                <h2><span class="section-icon">⚙️</span> Recommended Settings</h2>
+
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Recommended</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Resolution</td>
+                        <td>1280x720 or higher</td>
+                        <td>Must be divisible by 32. Below 720p tends to perform poorly.</td>
+                    </tr>
+                    <tr>
+                        <td>Duration</td>
+                        <td>≤10 seconds (official)</td>
+                        <td>20s works for some users. Quality degrades at 30s+</td>
+                    </tr>
+                    <tr>
+                        <td>Steps</td>
+                        <td>20 (base) / 8 (distilled)</td>
+                        <td>Use distilled LoRA for faster generation</td>
+                    </tr>
+                    <tr>
+                        <td>Scheduler</td>
+                        <td>Euler (default)</td>
+                        <td>Euler_A better for anime/art content</td>
+                    </tr>
+                    <tr>
+                        <td>Model precision</td>
+                        <td>fp8</td>
+                        <td>Preferred over GGUF for quality</td>
+                    </tr>
+                    <tr>
+                        <td>Frame count formula</td>
+                        <td>(8n)+1</td>
+                        <td>VAE compresses 8 frames to 1 latent</td>
+                    </tr>
+                </table>
+
+                <div class="callout callout-warning">
+                    <strong>Resolution Warning</strong>
+                    Resolutions must be divisible by 32. Portrait orientations don't work well and cause quality/motion issues.
+                </div>
+            </section>
+
+            <!-- Discoveries Section -->
+            <section id="discoveries">
+                <h2><span class="section-icon">🔬</span> Technical Discoveries</h2>
+
+                <details>
+                    <summary>Audio Generation</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>Audio is spatially aware</h4>
+                            <p>Audio changes based on position - footsteps get louder as character approaches camera.</p>
+                            <span class="attribution">— Lodis</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Audio continuation maintains voice consistency</h4>
+                            <p>Can take audio from video input and continue generating with same voice characteristics.</p>
+                            <span class="attribution">— harelcain</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Multi-language support</h4>
+                            <p>Supports multiple languages including Hindi, Russian, and Chinese for audio generation.</p>
+                            <span class="attribution">— Govind Singh</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Context-aware accents</h4>
+                            <p>Model generated Indian accent when Indian doctors appeared in video without being prompted for accent.</p>
+                            <span class="attribution">— Tachyon</span>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Architecture & Performance</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>All-in-one model file</h4>
+                            <p>27GB fp8 model includes video (19B params), audio processing, and VAE all in one file.</p>
+                            <span class="attribution">— Ada</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>VAE compression ratio</h4>
+                            <p>VAE compresses 8 frames to 1 latent frame. 16 latents decode to 121 pixel frames.</p>
+                            <span class="attribution">— Dragonyte</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Near real-time generation</h4>
+                            <p>121 frames at 720p generates in ~6 seconds on RTX 4090 with distilled model.</p>
+                            <span class="attribution">— Kijai</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Depth information included</h4>
+                            <p>LTX Video 2 includes depth information in decoded latents.</p>
+                            <span class="attribution">— Kijai</span>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>I2V & Generation Modes</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>I2V works better at higher resolutions</h4>
+                            <p>1280x720 works well, below that tends to perform poorly.</p>
+                            <span class="attribution">— Tachyon</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Multiple input modes supported</h4>
+                            <p>Text-to-video, image-to-video, video-to-video, and audio-to-video generation capabilities.</p>
+                            <span class="attribution">— l҈u҈c҈i҈f҈e҈r҈</span>
+                        </div>
+                        <div class="knowledge-item">
+                            <h4>Prompt strength vs LoRA</h4>
+                            <p>Camera movement prompts override static camera LoRA settings.</p>
+                            <span class="attribution">— burgstall</span>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Limitations Section -->
+            <section id="limitations">
+                <h2><span class="section-icon">⚠️</span> Known Limitations</h2>
+
+                <div class="knowledge-item">
+                    <h4>Portrait orientation issues</h4>
+                    <p>Portrait aspect ratios cause issues with generation quality and motion. Stick to landscape.</p>
+                    <span class="attribution">— Cubey</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Duration limits</h4>
+                    <p>Out of distribution breakdown at 30 seconds, probably best to keep it to 20 seconds max.</p>
+                    <span class="attribution">— sometimesTwitchy</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Complex motion breakdown</h4>
+                    <p>Model struggles with complex motion like gymnastics where anatomy breaks down during flips.</p>
+                    <span class="attribution">— dj47</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Text generation is weak</h4>
+                    <p>Model struggles with proper looking text generation.</p>
+                    <span class="attribution">— harelcain</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Limited anime training</h4>
+                    <p>The dataset is mainly cinematic landscape videos, wasn't trained on many anime.</p>
+                    <span class="attribution">— dj47</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>832x480 performs poorly</h4>
+                    <p>Most results had no motion, and all outputs didn't look very good at this resolution.</p>
+                    <span class="attribution">— Cubey</span>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Section -->
+            <section id="troubleshooting">
+                <h2><span class="section-icon">🔧</span> Troubleshooting</h2>
+
+                <details open>
+                    <summary>Common Errors & Fixes</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>Problem: ModuleNotFoundError for audio_vae</h4>
+                            <p><strong>Solution:</strong> Install version ≥0.3.0 of ComfyUI-LTXVideo custom node.</p>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: Sampling errors during generation</h4>
+                            <p><strong>Solution:</strong> Disable live preview in ComfyUI settings.</p>
+                            <span class="attribution">— Cubey</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: CUDA out of memory</h4>
+                            <p><strong>Solution:</strong> Use GGUF Q8 model instead of fp8, enable RAM offloading with <code>--reserve-vram</code> flag, or reduce resolution/frame count.</p>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: No motion in output</h4>
+                            <p><strong>Solution:</strong> Increase resolution to at least 720p. Lower resolutions like 832x480 often produce static results.</p>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: Audio not generating</h4>
+                            <p><strong>Solution:</strong> Ensure you're using the full model file that includes audio VAE, not a video-only variant.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Quality Issues</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>Problem: Blurry output at 4K</h4>
+                            <p><strong>Solution:</strong> Generate at 720p/1080p and use external upscaler. Native 4K still has blurriness issues.</p>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: Anatomy breakdown in complex motion</h4>
+                            <p><strong>Solution:</strong> Avoid complex motions like flips/gymnastics. Use shorter clips and simpler movements.</p>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Problem: Quality degradation at long durations</h4>
+                            <p><strong>Solution:</strong> Keep clips under 20 seconds. For longer content, generate multiple clips and stitch together.</p>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Workflows Section -->
+            <section id="workflows">
+                <h2><span class="section-icon">🔄</span> Workflows & Tips</h2>
+
+                <div class="knowledge-item">
+                    <h4>Vid2vid with partial latent masking</h4>
+                    <p>Use latent masking to preserve specific regions while regenerating others. Useful for fixing artifacts or changing specific elements.</p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Use fp8 instead of GGUFs</h4>
+                    <p>fp8 models generally produce better quality than GGUF quantized versions when VRAM allows.</p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Temporal upscaler for smooth motion</h4>
+                    <p>Use built-in temporal latent upscaler to achieve effective double frame rate and reduce deformations.</p>
+                    <span class="attribution">— harelcain</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Distilled LoRA for iteration speed</h4>
+                    <p>Use ltx-2-19b-distilled-lora-384.safetensors at 0.6 weight for 8-step generation when iterating on prompts.</p>
+                    <span class="attribution">— Ada</span>
+                </div>
+            </section>
+
+            <!-- Comparisons Section -->
+            <section id="comparisons">
+                <h2><span class="section-icon">⚖️</span> Model Comparisons</h2>
+
+                <h3>LTX Video 2 vs Wan 2.2</h3>
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>LTX Video 2</th>
+                        <th>Wan 2.2</th>
+                    </tr>
+                    <tr>
+                        <td>Speed</td>
+                        <td>Faster (near real-time with distilled)</td>
+                        <td>Slower</td>
+                    </tr>
+                    <tr>
+                        <td>Audio</td>
+                        <td>Built-in, spatially aware</td>
+                        <td>No native audio</td>
+                    </tr>
+                    <tr>
+                        <td>Dynamic motion</td>
+                        <td>Much better in same duration</td>
+                        <td>More conservative</td>
+                    </tr>
+                    <tr>
+                        <td>Fidelity</td>
+                        <td>Higher</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td>Control options</td>
+                        <td>Limited currently</td>
+                        <td>VACE, Fun models, more mature</td>
+                    </tr>
+                </table>
+
+                <div class="callout callout-info">
+                    <strong>Community consensus</strong>
+                    "LTX2 using full pagefile is still faster than wan2.2, has higher fidelity and better audio" — boop
+                </div>
+            </section>
+
+            <!-- Training Section -->
+            <section id="training">
+                <h2><span class="section-icon">🎓</span> Training & LoRAs</h2>
+
+                <div class="callout callout-warning">
+                    <strong>Training challenges</strong>
+                    The distilled model makes LoRA training difficult. Most community training efforts target the base model.
+                </div>
+
+                <h3>Available LoRAs</h3>
+                <ul>
+                    <li><strong>Distilled LoRA:</strong> ltx-2-19b-distilled-lora-384.safetensors - 8-step generation</li>
+                    <li><strong>Static Camera LoRA:</strong> Reduces camera movement (but can be overridden by prompts)</li>
+                </ul>
+
+                <h3>Training Tips</h3>
+                <ul>
+                    <li>Target the base model, not distilled</li>
+                    <li>Use diverse training data with multiple angles/lighting</li>
+                    <li>Short clips (5-10 seconds) work best for training data</li>
+                </ul>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources">
+                <h2><span class="section-icon">🔗</span> Resources</h2>
+
+                <h3>Official Links</h3>
+                <ul>
+                    <li><a href="https://huggingface.co/Lightricks/LTX-Video-2">Hugging Face - LTX Video 2</a></li>
+                    <li><a href="https://github.com/Lightricks/LTX-Video">GitHub - LTX Video</a></li>
+                </ul>
+
+                <h3>ComfyUI Integration</h3>
+                <ul>
+                    <li><a href="https://github.com/Lightricks/ComfyUI-LTXVideo">ComfyUI-LTXVideo</a> - Official custom nodes</li>
+                    <li><a href="https://github.com/kijai/ComfyUI-LTXVideoWrapper">Kijai's LTXVideo Wrapper</a> - Extended features</li>
+                </ul>
+
+                <h3>Community Resources</h3>
+                <ul>
+                    <li><a href="https://discord.gg/banodoco">Banodoco Discord</a> - #ltx_chatter, #ltx_training, #ltx_resources</li>
+                    <li><a href="https://civitai.com">Civitai</a> - Community LoRAs and models</li>
+                </ul>
+            </section>
+
+            <footer>
+                <p>Knowledge extracted from <a href="https://discord.gg/banodoco">Banodoco Discord</a> discussions (January 2026)</p>
+                <p style="margin-top: 0.5rem;">Built by <a href="https://nathanshipley.github.io">Nathan Shipley</a> with Claude Code</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                    ⚠️ This content was generated using AI. Accuracy is not guaranteed, information may contain errors or omissions.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getCurrentTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return getSystemTheme();
+        }
+
+        function applyTheme(theme) {
+            if (theme === getSystemTheme()) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = getCurrentTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        // Highlight current section in TOC
+        function updateTocHighlight() {
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-sidebar a');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSection = section.id;
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateTocHighlight);
+        updateTocHighlight();
+
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
+</body>
+</html>
