@@ -23,11 +23,54 @@ Build the definitive knowledge base for open source AI video/image generation to
 | Model | Priority | Approx Messages | Status |
 |-------|----------|-----------------|--------|
 | LTX Video 2 | P1 | 45K (Jan 2026) | ✅ Complete |
-| Wan 2.1 | P1 | 200K+ | Not started |
+| **Wan Ecosystem** | P1 | 200K+ | Not started |
 | HunyuanVideo | P2 | 50K+ | Not started |
 | CogVideoX | P2 | 30K+ | Not started |
 | AnimateDiff | P3 | 100K+ (historical) | Not started |
 | Mochi | P3 | 10K+ | Not started |
+
+### Wan Ecosystem Detail
+
+The "Wan" KB is actually an entire ecosystem, not a single model:
+
+**Core Generations:**
+- Wan 2.1 (Feb 2025) - Standard DiT, 1.3B and 14B variants, T2V and I2V
+- Wan 2.2 (July 2025) - MoE architecture, High/Low noise split, 5B hybrid
+
+**Control & Editing Branches:**
+- VACE 2.1 - ControlNet for video (style transfer, inpainting, motion control)
+- VACE 2.2 (Fun VACE) - For Wan 2.2, separate High/Low modules
+- Fun Control - Canny, Depth, Pose, MLSD inputs
+- Fun InP - First-Frame-Last-Frame morphing, video extension
+
+**Character & Audio Models:**
+- Phantom - T2V with high character consistency
+- MagRef - I2V with likeness preservation
+- HuMo - Audio-reactive character performance
+- Wan 2.2 S2V - Speech-to-video
+- MultiTalk / InfiniteTalk - Long-form lip-sync
+
+**Optimization LoRAs:**
+- LightX2V - 4-8 step distillation
+- Lightning - Alternative speed LoRAs
+- Pusa - T2V→I2V capability (~20GB)
+- CausVid - Temporal consistency
+
+**ComfyUI Implementations:**
+- WanVideoWrapper (Kijai) - Bleeding edge, VACE, complex workflows
+- ComfyUI Native - Stable, GGUF support, simpler workflows
+
+**Wan KB Structure (proposed):**
+```
+kb/wan/
+├── index.html          # Overview + navigation
+├── 2.1/                # Wan 2.1 specifics
+├── 2.2/                # Wan 2.2 specifics
+├── vace/               # VACE control system
+├── character/          # Phantom, MagRef, HuMo, lip-sync
+├── optimization/       # LoRAs, speed tips
+└── comfyui/            # Implementation guides
+```
 
 **Image Generation Models:**
 | Model | Priority | Approx Messages | Status |
@@ -185,21 +228,24 @@ kb/
 
 ## Execution Plan
 
-### Week 1: Validate LTX2, Start Wan
+### Week 1: Wan Ecosystem Extraction
 
-**Day 1-2:**
-- [ ] Upload LTX2 NotebookLM file, test with 10 questions
-- [ ] Compare to raw chat NotebookLM experience
-- [ ] Document findings
+**LTX2 Validation:** ✅ Tested in NotebookLM - works well!
 
-**Day 3-5:**
-- [ ] Extract Wan channels (wan_chatter, wan_training, wan_resources, wan_gens)
-- [ ] Estimate: ~200K messages, ~$35, ~2 hours extraction time
-- [ ] Combine for NotebookLM
+**Day 1-2: Scope Wan extraction**
+- [ ] Count messages per Wan channel (wan_chatter, wan_training, wan_resources, wan_gens, wan_comfyui)
+- [ ] Decide date ranges (all-time vs recent focus)
+- [ ] Estimate total cost
 
-**Day 6-7:**
-- [ ] Build Wan static HTML KB page
-- [ ] Test media embedding with refreshed Discord URLs
+**Day 3-5: Extract Wan channels**
+- [ ] Extract all Wan channels (expect ~200K+ messages, ~$35)
+- [ ] Run sequentially to avoid rate limits
+- [ ] Combine into NotebookLM file
+
+**Day 6-7: Wan KB structure**
+- [ ] Design multi-page KB structure for Wan ecosystem
+- [ ] Build index + first sub-page (likely Wan 2.1 or VACE)
+- [ ] Test media embedding with pom's refresh API
 
 ### Week 2: Expand Coverage
 
@@ -271,28 +317,41 @@ kb/
 
 ---
 
+## Decisions Made
+
+1. **Historical depth:** ✅ All-time coverage
+   - Valuable historical knowledge (AnimateDiff, SDXL) should be included
+   - Extract from model release date forward
+
+2. **Refresh frequency:** ✅ Tiered approach
+   - Active models (LTX2, Wan): Weekly
+   - Stable models (AnimateDiff, SDXL): Monthly
+
+3. **Media strategy:** ✅ Discord CDN + refresh API first
+   - Use pom's refresh API to get fresh URLs
+   - Migrate to Cloudflare R2 if reliability issues arise
+
+4. **LTX2 validation:** ✅ NotebookLM tested, works well
+   - Proceeding to Wan extraction
+
 ## Open Questions
 
-1. **Refresh frequency:** How often should we re-extract to capture new knowledge?
-   - Active models (LTX2, Wan): Weekly or bi-weekly?
-   - Stable models (AnimateDiff, SDXL): Monthly?
-
-2. **Historical depth:** How far back should we go for each model?
-   - From model release date?
-   - Last 6 months only?
-   - All time?
-
-3. **Quality control:** How do we catch and fix errors in extracted knowledge?
+1. **Quality control:** How do we catch and fix errors in extracted knowledge?
    - Community flagging system?
    - Manual review of high-stakes info (settings, troubleshooting)?
 
-4. **Attribution:** Should we link back to original Discord messages?
+2. **Attribution:** Should we link back to original Discord messages?
    - Useful for verification
    - But Discord links require login
 
-5. **Contribution:** Should community members be able to suggest edits?
+3. **Contribution:** Should community members be able to suggest edits?
    - GitHub PRs?
    - Simple feedback form?
+
+4. **Wan KB structure:** Single page vs multi-page?
+   - Ecosystem is complex (2.1, 2.2, VACE, Fun, character models, etc.)
+   - Adrien's Notion KB is single page - works but very long
+   - Multi-page with index might be more navigable
 
 ---
 
