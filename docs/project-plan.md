@@ -1,0 +1,304 @@
+# Banodoco Knowledge Base - Project Plan
+
+*Created: February 2, 2026*
+*Last Updated: February 2, 2026*
+
+---
+
+## Vision
+
+Build the definitive knowledge base for open source AI video/image generation tools, sourced from the Banodoco Discord community (and eventually other sources).
+
+**Two output formats:**
+1. **NotebookLM uploads** - For interactive Q&A ("How do I fix X?", "What settings for Y?")
+2. **Static HTML KB** - For browsing/reference with rich media (videos, images, workflows)
+
+---
+
+## Scope
+
+### Phase 1: Banodoco Discord (Current Focus)
+
+**Video Generation Models:**
+| Model | Priority | Approx Messages | Status |
+|-------|----------|-----------------|--------|
+| LTX Video 2 | P1 | 45K (Jan 2026) | ✅ Complete |
+| Wan 2.1 | P1 | 200K+ | Not started |
+| HunyuanVideo | P2 | 50K+ | Not started |
+| CogVideoX | P2 | 30K+ | Not started |
+| AnimateDiff | P3 | 100K+ (historical) | Not started |
+| Mochi | P3 | 10K+ | Not started |
+
+**Image Generation Models:**
+| Model | Priority | Approx Messages | Status |
+|-------|----------|-----------------|--------|
+| FLUX | P1 | 80K+ | Not started |
+| SDXL | P2 | 150K+ (historical) | Not started |
+| Chroma | P3 | 10K+ | Not started |
+| Qwen Image | P3 | 5K+ | Not started |
+
+**Tools & Infrastructure:**
+| Topic | Priority | Notes |
+|-------|----------|-------|
+| ComfyUI | P1 | Core workflow engine |
+| Training/LoRAs | P2 | Across all models |
+| Custom Nodes | P2 | Kijai's nodes, etc. |
+
+**Other:**
+| Topic | Priority | Notes |
+|-------|----------|-------|
+| 3D (Trellis, Hunyuan3D) | P3 | Emerging |
+| Audio (MMAudio) | P3 | Emerging |
+| LivePortrait | P3 | Face animation |
+
+### Phase 2: External Sources (Future)
+
+- GitHub repos (READMEs, issues, discussions)
+- Blog posts / tutorials
+- Reddit threads (r/StableDiffusion, r/comfyui, etc.)
+- YouTube video transcripts
+- Official documentation
+
+---
+
+## Pipeline
+
+### Step 1: Extract Knowledge from Discord
+
+**Tool:** `scripts/extract_chat_chunks.py`
+
+**Process:**
+1. Query messages from Supabase for channel + date range
+2. Process in 400-message time-ordered chunks
+3. Claude Sonnet extracts 12 categories of knowledge
+4. Output: JSON + Markdown files
+
+**12 Categories:**
+1. Technical discoveries
+2. Troubleshooting (problems + solutions)
+3. Model comparisons
+4. Tips and best practices
+5. News and updates
+6. Workflows
+7. Settings/parameters
+8. Concepts explained
+9. Resources (links)
+10. Limitations
+11. Hardware requirements
+12. Community creations
+
+**Cost:** ~$0.17 per 1K messages (~$8 per 50K messages)
+
+**Validation:**
+- [ ] Spot-check 20 random items for accuracy
+- [ ] Compare extraction output to raw chat - are we missing important info?
+- [ ] Check attribution accuracy
+
+### Step 2: Combine for NotebookLM
+
+**Process:**
+1. Concatenate extraction files with section headers
+2. Add metadata header (coverage, date, source)
+3. Save to `for_notebooklm/{model}/{date}/`
+
+**Output Structure:**
+```
+for_notebooklm/
+├── ltx2/
+│   └── 2026-02-01/
+│       ├── ltx2_january_combined.md (695KB) ✅
+│       └── manifest.txt
+├── wan/
+│   └── YYYY-MM-DD/
+│       └── wan_combined.md
+└── ...
+```
+
+**Validation:**
+- [ ] Upload to NotebookLM
+- [ ] Test 10 questions per model, compare answers to raw chat NotebookLM
+- [ ] Check for hallucinations / incorrect info
+- [ ] Get user feedback on usefulness
+
+### Step 3: Build Static HTML KB
+
+**Process:**
+1. Curate best content from extractions
+2. Organize into sections (Overview → Hardware → Settings → etc.)
+3. Add rich media (videos, images, workflow files)
+4. Build HTML page with TOC, collapsible sections, tables
+
+**Media Handling:**
+1. Identify high-value media from `attachments` field in database
+2. Refresh Discord CDN URLs using pom's API endpoint
+3. Embed videos/images inline
+4. Offer workflow JSON files as downloads
+
+**Refresh Media URL API:**
+```bash
+curl -X POST 'https://ujlwuvkrxlvoswwkerdf.supabase.co/functions/v1/refresh-media-urls' \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"message_id": "1465702490467995718"}'
+```
+
+**Output Structure:**
+```
+kb/
+├── index.html (model selector)
+├── ltx2/
+│   └── index.html ✅
+├── wan/
+│   └── index.html
+├── flux/
+│   └── index.html
+└── ...
+```
+
+**Validation:**
+- [ ] Can users find answers to common questions?
+- [ ] Do embedded videos/images display correctly?
+- [ ] Is navigation intuitive?
+- [ ] Mobile responsive?
+- [ ] Get user feedback
+
+### Step 4: Media Asset Pipeline (To Build)
+
+**Goal:** Download and host media reliably (Discord URLs expire)
+
+**Options:**
+1. **Discord CDN + refresh API** - Use pom's API to refresh URLs on-demand
+2. **Cloudflare R2** - Download once, host permanently (~$0.50/mo for 10GB)
+3. **GitHub LFS** - Free 1GB, then $5/mo per 50GB pack
+
+**Recommended approach:**
+- Start with Discord CDN + refresh API (simplest)
+- If reliability issues, migrate to R2
+
+**Process (if R2):**
+1. Identify media to include (high-reaction messages, referenced in KB)
+2. Download from Discord
+3. Upload to R2 bucket
+4. Update URLs in KB pages
+
+---
+
+## Execution Plan
+
+### Week 1: Validate LTX2, Start Wan
+
+**Day 1-2:**
+- [ ] Upload LTX2 NotebookLM file, test with 10 questions
+- [ ] Compare to raw chat NotebookLM experience
+- [ ] Document findings
+
+**Day 3-5:**
+- [ ] Extract Wan channels (wan_chatter, wan_training, wan_resources, wan_gens)
+- [ ] Estimate: ~200K messages, ~$35, ~2 hours extraction time
+- [ ] Combine for NotebookLM
+
+**Day 6-7:**
+- [ ] Build Wan static HTML KB page
+- [ ] Test media embedding with refreshed Discord URLs
+
+### Week 2: Expand Coverage
+
+- [ ] Extract FLUX
+- [ ] Extract HunyuanVideo
+- [ ] Build static KB pages for both
+- [ ] Test NotebookLM uploads
+
+### Week 3: Complete P1, Start P2
+
+- [ ] Complete ComfyUI extraction
+- [ ] Start P2 models (CogVideoX, SDXL, Training)
+- [ ] Refine HTML KB based on feedback
+
+### Week 4+: P2/P3 Models, Polish
+
+- [ ] Complete remaining models
+- [ ] Add search/filter to KB
+- [ ] Consider media hosting migration if needed
+- [ ] Document process for future updates
+
+---
+
+## Cost Estimates
+
+### Extraction Costs (One-time)
+
+| Model/Topic | Est. Messages | Est. Cost |
+|-------------|---------------|-----------|
+| LTX Video 2 | 45K | $7.65 ✅ |
+| Wan 2.1 | 200K | ~$35 |
+| FLUX | 80K | ~$14 |
+| HunyuanVideo | 50K | ~$9 |
+| CogVideoX | 30K | ~$5 |
+| AnimateDiff | 100K | ~$17 |
+| SDXL | 150K | ~$26 |
+| ComfyUI | 100K | ~$17 |
+| Other (Mochi, Chroma, etc.) | 50K | ~$9 |
+| **Total** | **~800K** | **~$140** |
+
+### Ongoing Costs
+
+| Item | Cost |
+|------|------|
+| GitHub Pages hosting | Free |
+| Media hosting (if R2) | ~$0.50/mo |
+| Refresh extractions monthly | ~$20/mo (for active models) |
+
+---
+
+## Success Metrics
+
+### NotebookLM
+- Users can get accurate answers to technical questions
+- Answers include attribution to community members
+- No hallucinations or incorrect info
+- Faster than searching raw Discord
+
+### Static HTML KB
+- Users can find information within 30 seconds
+- Media (videos, workflows) displays correctly
+- Mobile-friendly
+- Useful enough that people bookmark/share it
+
+### Overall
+- Positive feedback from Banodoco community
+- Reduces repeated questions in Discord
+- Becomes go-to resource for model-specific knowledge
+
+---
+
+## Open Questions
+
+1. **Refresh frequency:** How often should we re-extract to capture new knowledge?
+   - Active models (LTX2, Wan): Weekly or bi-weekly?
+   - Stable models (AnimateDiff, SDXL): Monthly?
+
+2. **Historical depth:** How far back should we go for each model?
+   - From model release date?
+   - Last 6 months only?
+   - All time?
+
+3. **Quality control:** How do we catch and fix errors in extracted knowledge?
+   - Community flagging system?
+   - Manual review of high-stakes info (settings, troubleshooting)?
+
+4. **Attribution:** Should we link back to original Discord messages?
+   - Useful for verification
+   - But Discord links require login
+
+5. **Contribution:** Should community members be able to suggest edits?
+   - GitHub PRs?
+   - Simple feedback form?
+
+---
+
+## Reference
+
+- **LTX2 KB (live):** https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
+- **Wan Notion KB (inspiration):** https://nathanshipley.notion.site/Wan-2-1-Knowledge-Base-1d691e115364814fa9d4e27694e9468f
+- **Extraction script:** `scripts/extract_chat_chunks.py`
+- **Media refresh API:** See "Refresh Media URL API" above
