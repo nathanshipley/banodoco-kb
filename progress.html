@@ -310,19 +310,46 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> LTX 2 KB COMPLETE - Planning Wan extraction</p>
-            <p><strong>Completed:</strong></p>
+            <p><strong>Phase:</strong> Wan extraction 90% complete - 5 months need retry</p>
+            <p><strong>Wan Extraction Progress (~3.5MB extracted, ~$45):</strong></p>
             <ul>
-                <li>LTX 2 extraction: 44,500 messages → 4,345 knowledge items ($7.65)</li>
-                <li>NotebookLM file ready: <code>for_notebooklm/ltx2/2026-02-01/ltx2_january_combined.md</code> (695KB)</li>
-                <li>Static HTML KB live: <a href="kb/ltx2/index.html">kb/ltx2/index.html</a></li>
-                <li>Full project plan documented: <code>docs/project-plan.md</code></li>
+                <li>wan_chatter: Feb-Jun 2025 ✅, Jul-Nov 2025 ❌ (need retry), Dec 2025-Feb 2026 ✅</li>
+                <li>wan_gens: Complete (487KB)</li>
+                <li>wan_training: Complete (457KB)</li>
+                <li>wan_comfyui: Complete (233KB)</li>
+                <li>wan_resources: Complete (206KB)</li>
             </ul>
-            <p><strong>Key insight:</strong> NotebookLM and static KB serve complementary roles. NotebookLM excels at specific Q&A ("how do I fix X?"). Static KB excels at browsing, decision trees, and rich media (videos, workflows).</p>
-            <p><strong>Next:</strong> Extract Wan ecosystem (~200K messages across 5 channels, ~$35 cost estimate)</p>
+            <p><strong>Pipeline insight:</strong> Raw extraction produces fragmented knowledge items. For static KB, we need: (1) add external sources, (2) synthesize/deduplicate, (3) better attribution ("Discord, Jan 2026" not just usernames).</p>
+            <p><strong>Next:</strong> Retry 5 failed months, then build Wan NotebookLM + static KB.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 3, 2026</div>
+                <h3>Wan extraction 90% complete - Pipeline insights</h3>
+
+                <p>Ran full Wan ecosystem extraction over ~5.5 hours. Most channels complete, 5 monthly chunks failed due to network errors.</p>
+
+                <p><strong>Completed extractions (~3.5MB total):</strong></p>
+                <ul>
+                    <li>wan_chatter: Feb-Jun 2025, Dec 2025-Feb 2026 (8 months)</li>
+                    <li>wan_gens: 487KB - gallery/showcase content</li>
+                    <li>wan_training: 457KB - LoRA training knowledge</li>
+                    <li>wan_comfyui: 233KB - workflow implementation</li>
+                    <li>wan_resources: 206KB - curated resources</li>
+                </ul>
+
+                <p><strong>Failed (need retry):</strong> wan_chatter Jul, Aug, Sep, Oct, Nov 2025 - network connection errors mid-extraction.</p>
+
+                <div class="insight">
+                    <strong>Pipeline insight - Extraction is just step 1:</strong> The raw extraction produces thousands of fragmented knowledge items. For a good static KB, we need additional steps: (1) enrich with external sources (official docs, blog posts), (2) synthesize/deduplicate with another LLM pass, (3) improve attribution format from "— Username" to "— Discord, Jan 2026" with links where possible.
+                </div>
+
+                <p><strong>Updated project plan:</strong> Added Step 3 (External Sources) and Step 4 (Synthesis) to the pipeline. See <code>docs/project-plan.md</code>.</p>
+
+                <p><strong>Actual cost:</strong> ~$45 for Wan (vs $35 estimate) - more messages than expected (316K vs 200K).</p>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 2, 2026</div>
                 <h3>LTX 2 KB validated - Project plan complete</h3>

@@ -1,7 +1,7 @@
 # Banodoco Knowledge Base - Project Plan
 
 *Created: February 2, 2026*
-*Last Updated: February 2, 2026*
+*Last Updated: February 3, 2026*
 
 ---
 
@@ -23,7 +23,7 @@ Build the definitive knowledge base for open source AI video/image generation to
 | Model | Priority | Approx Messages | Status |
 |-------|----------|-----------------|--------|
 | LTX Video 2 | P1 | 45K (Jan 2026) | ✅ Complete |
-| **Wan Ecosystem** | P1 | 200K+ | Not started |
+| **Wan Ecosystem** | P1 | 316K | 🔄 Extraction 90% complete |
 | HunyuanVideo | P2 | 50K+ | Not started |
 | CogVideoX | P2 | 30K+ | Not started |
 | AnimateDiff | P3 | 100K+ (historical) | Not started |
@@ -163,10 +163,47 @@ for_notebooklm/
 - [ ] Check for hallucinations / incorrect info
 - [ ] Get user feedback on usefulness
 
-### Step 3: Build Static HTML KB
+### Step 3: Enrich with External Sources
+
+**Goal:** Discord extractions capture community knowledge, but official docs and blog posts provide authoritative context.
+
+**Sources to add:**
+- Official model documentation (GitHub READMEs)
+- ComfyUI blog posts and guides
+- Model release announcements
+- Tutorial posts from known experts
 
 **Process:**
-1. Curate best content from extractions
+1. Identify high-value external sources for each model
+2. Fetch/scrape content (WebFetch or manual)
+3. Extract relevant knowledge using same categories
+4. Merge with Discord extractions, noting source
+
+### Step 4: Synthesize for Static KB
+
+**Goal:** Transform fragmented extraction items into cohesive, authoritative content.
+
+**Key improvements over raw extraction:**
+1. **Deduplicate** - Consolidate repeated discoveries
+2. **Prioritize** - Highlight authoritative info (Kijai, official docs) over speculation
+3. **Structure** - Create decision trees, comparison tables, step-by-step guides
+4. **Better attribution** - "Discord, Jan 2026" or "ComfyUI Blog, Dec 2025" with links where possible
+
+**Attribution format:**
+- Discord: "— Discord #channel, Month Year"
+- External: "— [Source Name](url), Month Year"
+- Avoid raw usernames without context
+
+**Process:**
+1. Group extraction items by topic
+2. LLM pass to consolidate and synthesize
+3. Add editorial structure (when to use X vs Y, etc.)
+4. Manual review of key sections
+
+### Step 5: Build Static HTML KB
+
+**Process:**
+1. Take synthesized content from Step 4
 2. Organize into sections (Overview → Hardware → Settings → etc.)
 3. Add rich media (videos, images, workflow files)
 4. Build HTML page with TOC, collapsible sections, tables
@@ -205,7 +242,7 @@ kb/
 - [ ] Mobile responsive?
 - [ ] Get user feedback
 
-### Step 4: Media Asset Pipeline (To Build)
+### Step 6: Media Asset Pipeline (To Build)
 
 **Goal:** Download and host media reliably (Discord URLs expire)
 
@@ -228,24 +265,27 @@ kb/
 
 ## Execution Plan
 
-### Week 1: Wan Ecosystem Extraction
+### Week 1: Wan Ecosystem Extraction ✅ MOSTLY COMPLETE
 
 **LTX2 Validation:** ✅ Tested in NotebookLM - works well!
 
-**Day 1-2: Scope Wan extraction**
-- [ ] Count messages per Wan channel (wan_chatter, wan_training, wan_resources, wan_gens, wan_comfyui)
-- [ ] Decide date ranges (all-time vs recent focus)
-- [ ] Estimate total cost
+**Wan Extraction Status (Feb 3, 2026):**
+- [x] wan_chatter Feb-Jun 2025: Complete
+- [ ] wan_chatter Jul-Nov 2025: 5 months failed (network errors), need to retry
+- [x] wan_chatter Dec 2025 - Feb 2026: Complete
+- [x] wan_gens: Complete (487KB)
+- [x] wan_training: Complete (457KB)
+- [x] wan_comfyui: Complete (233KB)
+- [x] wan_resources: Complete (206KB)
 
-**Day 3-5: Extract Wan channels**
-- [ ] Extract all Wan channels (expect ~200K+ messages, ~$35)
-- [ ] Run sequentially to avoid rate limits
-- [ ] Combine into NotebookLM file
+**Total extracted so far:** ~3.5MB of knowledge markdown
+**Actual cost:** ~$45 (vs $35 estimate - more messages than expected)
 
-**Day 6-7: Wan KB structure**
-- [ ] Design multi-page KB structure for Wan ecosystem
-- [ ] Build index + first sub-page (likely Wan 2.1 or VACE)
-- [ ] Test media embedding with pom's refresh API
+**Remaining:**
+- [ ] Retry 5 failed wan_chatter months (Jul-Nov 2025)
+- [ ] Combine all Wan extractions into NotebookLM file
+- [ ] Add external sources (docs, blog posts)
+- [ ] Build static Wan KB with synthesis step
 
 ### Week 2: Expand Coverage
 

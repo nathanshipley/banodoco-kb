@@ -9,24 +9,35 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ---
 
-## Current Status (Feb 2, 2026)
+## Current Status (Feb 3, 2026)
 
-**Phase: LTX2 Complete, Starting Wan Ecosystem**
+**Phase: Wan Extraction 90% Complete**
 
 ### Completed
 - LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
 - NotebookLM upload tested - **works well!**
 - Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
 
-### Next Up: Wan Ecosystem
-The "Wan" KB covers an entire ecosystem, not just one model:
-- **Core generations:** Wan 2.1 (Feb 2025), Wan 2.2 (July 2025)
-- **Control branches:** VACE, Fun Control, Fun InP
-- **Character/audio:** Phantom, MagRef, HuMo, S2V, MultiTalk
-- **Optimization:** LightX2V, Lightning, Pusa, CausVid
-- **ComfyUI:** WanVideoWrapper (Kijai) vs Native
+### Wan Ecosystem Extraction Status
+**Completed (~3.5MB total):**
+- wan_chatter: Feb-Jun 2025, Dec 2025 - Feb 2026
+- wan_gens: Full extraction (487KB)
+- wan_training: Full extraction (457KB)
+- wan_comfyui: Full extraction (233KB)
+- wan_resources: Full extraction (206KB)
 
-See `docs/project-plan.md` for full Wan ecosystem breakdown.
+**Missing (need retry):**
+- wan_chatter: Jul, Aug, Sep, Oct, Nov 2025 (5 months failed due to network errors)
+
+**Cost so far:** ~$45
+
+### Pipeline Insight: Extraction → Synthesis → KB
+Raw extraction produces fragmented knowledge items. For static KB, we need:
+1. **Add external sources:** Official docs, blog posts, GitHub READMEs
+2. **Synthesize:** Deduplicate, consolidate, add editorial structure
+3. **Better attribution:** "Discord, Jan 2026" not just "— Username"
+
+See `docs/project-plan.md` for updated 6-step pipeline.
 
 ---
 

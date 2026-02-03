@@ -1,0 +1,284 @@
+{
+  "channel": "wan_chatter",
+  "date_range": "2026-02-01 to 2026-02-03",
+  "messages_processed": 308,
+  "chunks_processed": 1,
+  "api_usage": {
+    "input_tokens": 9667,
+    "output_tokens": 2810,
+    "estimated_cost": 0.071151
+  },
+  "extracted_at": "2026-02-03T05:42:31.690414Z",
+  "discoveries": [
+    {
+      "finding": "NVFP4 conversion for Wan models",
+      "details": "T2V and I2V models being converted to NVFP4 format for improved performance",
+      "from": "topmass"
+    },
+    {
+      "finding": "MOVA model negative prompts behavior",
+      "details": "Do NOT use Wan's usual negative prompts with MOVA; it fucks up the generation. Let the negative field blank, their hidden negatives seem to work fine",
+      "from": "Stef"
+    },
+    {
+      "finding": "LightX2V LoRAs may work with different models",
+      "details": "Existing LightX2V LoRAs might work with different datasets and 24fps models, though 80% won't be able to",
+      "from": "yi"
+    },
+    {
+      "finding": "8-step distill LoRA training possibility",
+      "details": "8 step 'distill' lora can be easily trained with recent techniques and will preserve more motion than the lightx2v lora",
+      "from": "yi"
+    },
+    {
+      "finding": "SkyReels V3 model compatibility",
+      "details": "SkyReels V3 'V2V' model runs in Pusa workflow - same workflow, just change models. It's distilled already and better than Pusa",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Self-refine video enhancement",
+      "details": "Self-refine significantly improves video quality, worth the extra 50% processing time. Much better quality improvement especially on 1.3B models",
+      "from": "Kijai"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "MOVA installation breaks dependencies",
+      "solution": "It downgrades protobuf which breaks ComfyUI venv. Had to reinstall from scratch and make separate ComfyUI for MOVA experiments",
+      "from": "Stef"
+    },
+    {
+      "problem": "Green noise glitch with Wan2.2 after multiple generations",
+      "solution": "Restarting ComfyUI fixes the issue. Clearing model and execution cache doesn't help",
+      "from": "halkony"
+    },
+    {
+      "problem": "Batch extend with latents doesn't work properly",
+      "solution": "Not properly possible because first latent is single frame, breaks temporal continuity. You get glitches when decoding (1 4 4 4 4 1 4 4 4 pattern)",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Mask visibility in lipsync workflow",
+      "solution": "Use 'Image Composite Masked' with faded edges to composite the masked region to original input. Should always be done as latent masking puts everything through VAE",
+      "from": "Kijai"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "MOVA vs LTX speed",
+      "verdict": "MOVA 1 hour generation for 8 sec 720p videos, but speed complaints unfair since Wan2.2 is same speed. LTX 'cheats' with highly compressed VAE while MOVA has proper VAE handling fine details and fast movements",
+      "from": "yi"
+    },
+    {
+      "comparison": "HuMo vs InfiniteTalk for lipsync",
+      "verdict": "HuMo is SOTA from quality standpoint, but can't do infinite frames natively like InfiniteTalk. Use HuMo as second pass",
+      "from": "Dream Making"
+    },
+    {
+      "comparison": "SkyReels V3 vs Phantom/HuMo",
+      "verdict": "SkyReels reference model doesn't seem as good as Phantom/Humo",
+      "from": "JohnDopamine"
+    },
+    {
+      "comparison": "DMD vs Consistency models",
+      "verdict": "DMD is super destructive distillation method, consistency model is much less destructive alternative. DMD has high quality but collapses variance/diversity",
+      "from": "mallardgazellegoosewildcat2"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Use HuMo in V2V mode",
+      "context": "Feed WanVideoSampler 'samples' input using 'wan encode' and set denoise lower than 1",
+      "from": "Dream Making"
+    },
+    {
+      "tip": "Composite masked regions properly",
+      "context": "Always composite masked region to original input with faded edges since latent masking puts everything through VAE",
+      "from": "Kijai"
+    },
+    {
+      "tip": "SkyReels V3 usage",
+      "context": "Can use Pusa example workflow, just change model and remove the loras. Uses zero noise, not custom noise",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Self-refine integration",
+      "context": "Put self-refine node between wire connecting to sampler's 'image_embeds' input",
+      "from": "JohnDopamine"
+    }
+  ],
+  "news": [
+    {
+      "update": "NVFP4 converted models being uploaded",
+      "details": "T2V wan models and i2v models being converted and uploaded to HuggingFace",
+      "from": "topmass"
+    },
+    {
+      "update": "New reward LoRA for Wan2.1",
+      "details": "CodeGoat24/Wan2.1-T2V-14B-UnifiedReward-Flex-lora released, could work on low noise model",
+      "from": "yi"
+    },
+    {
+      "update": "Causal-Forcing method released",
+      "details": "New technique from thu-ml, though examples show high-contrast, overexposed artifacts typical of CFG issues",
+      "from": "JohnDopamine"
+    },
+    {
+      "update": "TeleStyle released",
+      "details": "Style transfer tool with XL-quality results, works on Wan 2.1 1.3B model with cross-attention style transfer",
+      "from": "Tonon"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "MOVA workflow usage",
+      "use_case": "8GB cards may not work due to model size, requires separate environment to avoid dependency conflicts",
+      "from": "JohnDopamine"
+    },
+    {
+      "workflow": "HuMo as second pass lipsync",
+      "use_case": "Use HuMo for quality, pair with SVI for infinite frames capability",
+      "from": "Dream Making"
+    },
+    {
+      "workflow": "Masked lipsync with SAM3",
+      "use_case": "Use SAM3 for head masking in Infinite V2V workflow for lipsync, composite with faded edges",
+      "from": "Stef"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "MOVA negative prompts",
+      "value": "Leave blank",
+      "reason": "Wan's usual negative prompts break generation, hidden negatives work fine",
+      "from": "Stef"
+    },
+    {
+      "setting": "SVI Pro motion latents",
+      "value": "1",
+      "reason": "Real default value despite tooltip contradiction",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SVI Pro frame overlap",
+      "value": "5",
+      "reason": "Recommended default setting",
+      "from": "JohnDopamine"
+    },
+    {
+      "setting": "TeleStyle video inference steps",
+      "value": "35",
+      "reason": "Increased from default 25 for better results",
+      "from": "Kytra"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "DMD (Distribution Matching Distillation)",
+      "explanation": "Super destructive distillation method that heavily collapses variance, reducing image variety but maintaining high quality. Every DMD distilled model has overexposed, high-contrast artifacts",
+      "from": "yi"
+    },
+    {
+      "term": "High/Low noise expert split",
+      "explanation": "Wan2.2 architecture constraint that some people avoid due to complexity, hence continued Wan2.1 development",
+      "from": "yi"
+    },
+    {
+      "term": "Per token timesteps",
+      "explanation": "Technique used by SkyReels, Pusa, Wan 5B, LTX2 for improved temporal control",
+      "from": "Kijai"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "NVFP4 converted models",
+      "url": "https://huggingface.co/topmass/ComfyUI-NVFP4/tree/main",
+      "type": "model",
+      "from": "topmass"
+    },
+    {
+      "resource": "Wan2.1 UnifiedReward LoRA",
+      "url": "https://huggingface.co/CodeGoat24/Wan2.1-T2V-14B-UnifiedReward-Flex-lora",
+      "type": "lora",
+      "from": "yi"
+    },
+    {
+      "resource": "SCAIL Preview GGUF",
+      "url": "https://huggingface.co/vantagewithai/SCAIL-Preview-GGUF/tree/main",
+      "type": "model",
+      "from": "xwsswww"
+    },
+    {
+      "resource": "Causal-Forcing",
+      "url": "https://github.com/thu-ml/Causal-Forcing",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "TeleStyle",
+      "url": "https://github.com/Tele-AI/TeleStyle",
+      "type": "repo",
+      "from": "Tonon"
+    },
+    {
+      "resource": "ComfyUI WAN I2V Control",
+      "url": "https://github.com/shootthesound/comfyui-wan-i2v-control",
+      "type": "tool",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "resource": "SkyReels V3 V2V model",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/blob/main/SkyReelsV3/Wan21-SkyReelsV3-V2V_fp8_scaled_mixed.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "MOVA hardware requirements",
+      "details": "1 hour generation for 8sec 720p video, won't work with 8GB cards, went OOM on full VRAM setting",
+      "from": "Stef"
+    },
+    {
+      "limitation": "Wan2.2 training complexity",
+      "details": "Twice as hard to train new technologies for Wan2.2 because you have to train it twice (high and low noise)",
+      "from": "Ablejones"
+    },
+    {
+      "limitation": "TeleStyle heavy style limitations",
+      "details": "Breaks with heavy styles like big pixels, pushes toward realism when style image is heavily stylized",
+      "from": "Kytra"
+    },
+    {
+      "limitation": "Self-refine speed on 14B",
+      "details": "Insanely slow on 14B models, can't be bothered to test thoroughly",
+      "from": "Kijai"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "MOVA VRAM/RAM",
+      "details": "Requires more than 8GB VRAM, went OOM on full VRAM setting, had to use mixed mode. Some people still run 8GB VRAM and 16GB RAM",
+      "from": "Stef"
+    },
+    {
+      "requirement": "Wan2.2 vs Wan2.1 resources",
+      "details": "Wan2.2 designed to run much more powerful inference without needing more VRAM than Wan2.1",
+      "from": "Ablejones"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "WanVideoWrapper",
+      "type": "node",
+      "description": "Kijai's wrapper system being sunset in favor of native implementations due to maintenance burden",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Self-refine video node",
+      "type": "node",
+      "description": "Video enhancement sampler that acts like different sampler, improves quality significantly",
+      "from": "Kijai"
+    }
+  ]
+}

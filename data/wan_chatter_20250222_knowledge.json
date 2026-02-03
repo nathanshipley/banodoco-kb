@@ -1,0 +1,4434 @@
+{
+  "channel": "wan_chatter",
+  "date_range": "2025-02-22 to 2025-03-01",
+  "messages_processed": 7572,
+  "chunks_processed": 19,
+  "api_usage": {
+    "input_tokens": 222055,
+    "output_tokens": 44801,
+    "estimated_cost": 1.33818
+  },
+  "extracted_at": "2026-02-02T22:13:23.382758Z",
+  "discoveries": [
+    {
+      "finding": "Wan 2.1 has multiple model variants available",
+      "details": "WanX2.1-T2V-1.3B, WanX2.1-T2V-14B, WanX2.1-I2V-14B-480P, WanX2.1-I2V-14B-720P according to HuggingFace page listings",
+      "from": "wottso"
+    },
+    {
+      "finding": "Model file sizes confirmed",
+      "details": "I2V 14B 720P model is 66GB in fp32, 16.5GB in fp8",
+      "from": "seitanism, Fannovel16 \ud83c\uddfb\ud83c\uddf3"
+    },
+    {
+      "finding": "Model uses 16fps as base frame rate",
+      "details": "All samples posted are at 16fps",
+      "from": "JohnDopamine"
+    },
+    {
+      "finding": "Model has strong prompt adherence",
+      "details": "First try success without needing to finesse prompts, follows complex scene descriptions well",
+      "from": "TK_999, DiXiao"
+    },
+    {
+      "finding": "Model defaults to Asian people for human generation",
+      "details": "Anything involving humans without specification defaults to Asian person",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "finding": "Wan2.1 T2V-1.3B model requires only 8.19 GB VRAM",
+      "details": "Compatible with almost all consumer-grade GPUs, can generate 5-second 480P video on RTX 4090 in about 4 minutes without optimization",
+      "from": "thaakeno"
+    },
+    {
+      "finding": "VAE is very efficient",
+      "details": "VAE is only 250MB in bf16, much smaller than other models",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Model uses 40 transformer blocks",
+      "details": "Architecture appears familiar to other models",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Model supports CFG (Classifier-Free Guidance)",
+      "details": "Has CFG support which makes it more controllable",
+      "from": "Fannovel16"
+    },
+    {
+      "finding": "Text encoder is heavier than the 1.3B model itself",
+      "details": "Uses umt5-xxl text encoder which is around 10-11GB",
+      "from": "Fannovel16"
+    },
+    {
+      "finding": "Models released in fp32 format",
+      "details": "Original weights are in fp32, making them very large but convertible",
+      "from": "Kijai"
+    },
+    {
+      "finding": "VAE is really fast and requires no config file",
+      "details": "Kijai discovered the VAE runs fast and surprisingly doesn't need any configuration file, unlike most models",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Model can generate images like Hunyuan Video",
+      "details": "Similar to HyV, it can also generate images, which helps the model and could potentially be finetuned on images",
+      "from": "Cseti"
+    },
+    {
+      "finding": "Wan 2.1 is 35% smaller than LTX",
+      "details": "The 1.3B model is significantly smaller than LTX while still providing great quality",
+      "from": "Juampab12"
+    },
+    {
+      "finding": "Model follows 'less steps more shift' pattern like Hunyuan",
+      "details": "Similar optimization approach to Hunyuan Video where you can reduce steps and increase shift for better results",
+      "from": "Fannovel16"
+    },
+    {
+      "finding": "Sage-attention 2 can replace flash-attention",
+      "details": "Hacky implementation allows running on 4060 Ti 16GB with torch.compile support",
+      "from": "Pol"
+    },
+    {
+      "finding": "DiffSynth Studio can run Wan 14B under 24GB VRAM",
+      "details": "With their settings, it uses about 20GB VRAM",
+      "from": "ArtOfficial"
+    },
+    {
+      "finding": "Wan has minimum frame count requirement",
+      "details": "81 frames minimum for I2V, 49 frames errors to max_seq_len error",
+      "from": "Kijai"
+    },
+    {
+      "finding": "FP8_fast quantization causes artifacts",
+      "details": "img_embed weights at fp8 caused color/noise issues, keeping them at fp32 fixes this",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Model supports camera movement prompts",
+      "details": "Camera movement effect is very good with appropriate prompts",
+      "from": "Masanlong"
+    },
+    {
+      "finding": "1.3B model can do higher resolutions",
+      "details": "Can be used in 2 passes: 1) generation at 480p, 2) upscaling vid2vid at 720p with low denoise and fewer steps",
+      "from": "CDS"
+    },
+    {
+      "finding": "Hard-coded 81 frame minimum in encode_image function",
+      "details": "The model has 81 hardcoded in the encode_image function with msk = torch.ones(1, 81, height//8, width//8, device=self.device)",
+      "from": "ArtOfficial"
+    },
+    {
+      "finding": "Generated videos have 16 fps output",
+      "details": "Regardless of model used (1.3B, 14B, i2v, t2v), the generated videos have a frame rate of 16 fps as set in wan/configs/shared_config.py",
+      "from": "Juampab12"
+    },
+    {
+      "finding": "Flow shift significantly affects quality",
+      "details": "Lower flow shift values (3-5) produce better details than higher values (6-10), but too low causes coherence issues",
+      "from": "Juampab12"
+    },
+    {
+      "finding": "T2V is much faster than I2V",
+      "details": "T2V generation took 130 seconds vs much longer I2V times for similar settings",
+      "from": "TK_999"
+    },
+    {
+      "finding": "50 steps significantly improves quality over 30 steps",
+      "details": "Quality improvement is noticeable when increasing from 30 to 50 steps, but 70 steps doesn't improve much over 50",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "finding": "Camera movement prompting works well",
+      "details": "Camera movement prompting is working great on Wan, unlike HunyuanVideo where good camera movements were difficult to achieve",
+      "from": "mamad8"
+    },
+    {
+      "finding": "1.3B model can generate 225 frames",
+      "details": "Successfully generated 225 frame t2v videos with the 1.3B model",
+      "from": "TK_999"
+    },
+    {
+      "finding": "Video models perform better at specific resolutions",
+      "details": "From experience, video models perform way better at specific resolutions/ratio, better to target native res and upscale",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "finding": "VAE tiling has no quality impact",
+      "details": "VAE tiling at default settings vs no VAE tiling showed zero difference in quality",
+      "from": "TK_999"
+    },
+    {
+      "finding": "CFG scheduling can speed up generation",
+      "details": "Using cfg 1.0 skips uncond and can potentially make it faster - half the steps at cfg 1.0, ~20 secs to gen with small model",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Model performs well with Chinese text generation",
+      "details": "Chinese text rendering works great in the model",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "finding": "CFG scheduling significantly improves I2V results",
+      "details": "Using variable CFG through generation (e.g., 6 CFG for 18 steps, then 1 CFG for 18 steps) produces better motion and quality",
+      "from": "JmySff"
+    },
+    {
+      "finding": "FP32 text encoder produces sharper results",
+      "details": "FP32 UMT5-XXL encoder shows noticeable quality improvement over BF16, similar improvements seen across T5 family models",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "finding": "Tiled VAE decode fixes washed out frames",
+      "details": "Regular VAE decode causes extremely washed out frames (except first), tiled VAE decode works fine",
+      "from": "Screeb"
+    },
+    {
+      "finding": "Flow shift affects motion speed",
+      "details": "Flow shift value changes motion characteristics - shift 5 vs shift 2 produces different motion qualities",
+      "from": "ezMan"
+    },
+    {
+      "finding": "Wan I2V can be chained for extensions",
+      "details": "Taking last frame and feeding to I2V creates nearly seamless video extensions",
+      "from": "ezMan"
+    },
+    {
+      "finding": "Differential diffusion works well with Wan 1.3B",
+      "details": "Training-free technique that just works with the model",
+      "from": "spacepxl"
+    },
+    {
+      "finding": "Wan I2V model behaves like an inpaint model",
+      "details": "Can feed start and end frames into it",
+      "from": "comfy"
+    },
+    {
+      "finding": "Native implementation has color degradation with fp8",
+      "details": "Yellowish hue appears with fp8 quantization, stronger in some implementations",
+      "from": "Kijai"
+    },
+    {
+      "finding": "PyTorch nightly with --fast flag provides speedup",
+      "details": "Uses fp16 + fp16 accumulation instead of fp16/bf16 + fp32 accumulation, 2x faster on NVIDIA GPUs",
+      "from": "comfy"
+    },
+    {
+      "finding": "LoRAs work with Wan video models using both wrapper and native nodes",
+      "details": "Multiple users successfully tested LoRAs, including character and style LoRAs",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Wan can do video-to-video (v2v) generation",
+      "details": "Both 1.3B and 14B models support v2v functionality",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Training on 256 resolution doesn't translate as well to higher resolutions compared to Hunyuan",
+      "details": "Lower resolution training results don't scale up as effectively",
+      "from": "samurzl"
+    },
+    {
+      "finding": "Wan training is easier than Hunyuan",
+      "details": "Better LoRA results in 2 epochs compared to hundreds with Hunyuan",
+      "from": "samurzl"
+    },
+    {
+      "finding": "Text encoder can be quantized to fp8 without issues",
+      "details": "The text encoder works fine on fp8 quantization",
+      "from": "Kijai"
+    },
+    {
+      "finding": "CLIP vision embeds have weak effect in video models",
+      "details": "Only difference from reference implementation is slightly different scaling to 224x224",
+      "from": "comfy"
+    },
+    {
+      "finding": "WanImageToVideo is native in ComfyUI",
+      "details": "Need to update to use it properly",
+      "from": "Kijai"
+    },
+    {
+      "finding": "VAE caches data that wastes VRAM",
+      "details": "1-2GB completely wasted VRAM even for inference time, fixed in wrapper update",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Wan 1.3B and 14B models have very different performance characteristics",
+      "details": "1.3B produces more realistic looking results while 14B looks sharper but potentially oversharpened",
+      "from": "Draken"
+    },
+    {
+      "finding": "Model can generate beyond 81 frames",
+      "details": "Successfully generated 97 and 121 frames without looping",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "finding": "LoRA trained on 14B partially loads on 1.3B",
+      "details": "Some keys load but outputs change minimally due to dimension differences (1536 vs 5120)",
+      "from": "mamad8"
+    },
+    {
+      "finding": "Chinese prompts work better than English",
+      "details": "Translating prompts to Chinese gives better output 99% of the time",
+      "from": "Juampab12"
+    },
+    {
+      "finding": "Wan LoRAs trained on T2V 14B have impact on I2V 14B",
+      "details": "LoRA trained on T2V 14B works on I2V 14B model, with better likeness preservation. User had to set weight at 1.75 for undertrained LoRA",
+      "from": "mamad8"
+    },
+    {
+      "finding": "Dynamic CFG can boost inference speed",
+      "details": "User testing if dynamic cfg works well for speed improvements, previously used pre_cfg_comfy_nodes",
+      "from": "Rapha\u00ebl"
+    },
+    {
+      "finding": "Sage attention works with one of the sage 2.0 modes for Wan",
+      "details": "Sage works with specific sage 2.0 modes on Wan models",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Training on 244p with high frame count works well for video/motion",
+      "details": "For videos/motion with high frame count, 244p training resolution is very good. For images, 768p would be used instead",
+      "from": "chancelor"
+    },
+    {
+      "finding": "Wan training runs oddly fast compared to Hunyuan",
+      "details": "Training Wan2.1-T2V-1.3B with ~50 videos at 244p, 60 frames, 0.0001 lr runs much faster than expected",
+      "from": "chancelor"
+    },
+    {
+      "finding": "Motion/composition is largely determined by low frequency information in noise",
+      "details": "Motion/composition stays consistent when changing steps but not seed, more so than other video models",
+      "from": "spacepxl"
+    },
+    {
+      "finding": "Noise augmentation prevents blurriness and adds detail",
+      "details": "Generally adds detail and can prevent blurry outputs",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Earlier LoRA blocks capture features/composition, later blocks handle details/style",
+      "details": "First 20 blocks vs last 20 blocks of LoRA show different effects - earlier blocks more for features/composition, latter for details/style",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Context windows might be worth adding for 1.3B model",
+      "details": "1.3B model is fast enough that context windows could be beneficial",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Wan I2V with SageAttention fp8 kernel causes black images",
+      "details": "fp8_cuda kernel leads to black outputs due to precision overflow, while fp16_cuda kernel works correctly",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "finding": "ComfyUI native nodes now batch text encoder processing for 1.3B model",
+      "details": "Text encoder fix makes native implementation faster for 1.3B model",
+      "from": "comfy"
+    },
+    {
+      "finding": "Auto offloading detection in console",
+      "details": "Console prints 'loaded partially' when auto offloading is active, 'loaded completely' when not",
+      "from": "comfy"
+    },
+    {
+      "finding": "Wan can extend videos by using last frame as input",
+      "details": "Model maintains consistency well enough to chain generations using the final frame",
+      "from": "burgstall"
+    },
+    {
+      "finding": "Wan 2.1 has 40 transformer blocks, block swapping moves defined blocks between GPU and CPU during inference",
+      "details": "Each inference step runs through all blocks, block swapping enables offloading for memory management",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SageAttention provides almost 25% speed improvement",
+      "details": "RTX 3090 comparison: with both sage-attention and torchcompile 476.59 seconds (14.78s/it), without both 641.94 seconds (20.31s/it)",
+      "from": "zezo"
+    },
+    {
+      "finding": "SageAttention is the real speedup, almost twice as fast",
+      "details": "Provides significantly more speed benefit than other optimizations",
+      "from": "Kijai"
+    },
+    {
+      "finding": "CFG drop to 0.5 technique can be used with Wan via spline editor",
+      "details": "Can send list of floats to cfg parameter in wrapper, points should match inference steps not frames",
+      "from": "Kijai"
+    },
+    {
+      "finding": "RifleX helps prevent looping in videos longer than 81 frames",
+      "details": "Value of 4 works for Hunyuan, results in more coherent actions",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Q8 GGUF produces better quality than fp8",
+      "details": "No more ugly pixels, clearer results",
+      "from": "JmySff"
+    },
+    {
+      "finding": "GGUF models work with standard text encoder, not gguf text encoder required",
+      "details": "Normal text encoder is compatible with GGUF model files",
+      "from": "JmySff"
+    },
+    {
+      "finding": "Wan model uses CLIP vision model vit-h for image-to-video",
+      "details": "Same old clip vision model, the vit h",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Chinese prompts may provide better results than English",
+      "details": "Better prompt adherence observed when using Chinese language prompts",
+      "from": "JmySff"
+    },
+    {
+      "finding": "fp16 + fp16 accumulate is 10% faster on 5090 for 1.3B model",
+      "details": "Performance improvement observed with specific precision settings",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Wan VAE is best performing VAE so far",
+      "details": "Quality assessment compared to other available VAEs",
+      "from": "Kijai"
+    },
+    {
+      "finding": "UmT5 multilingual T5 model exhibits zero-shot cross-lingual transfer",
+      "details": "If trained on English tasks, can perform reasonably in Chinese without explicit fine-tuning due to shared embedding space",
+      "from": "fredbliss"
+    },
+    {
+      "finding": "Wan 2.1 uses RoBERTa CLIP ViT-H for multilingual support",
+      "details": "Performs slightly worse in English compared to vanilla CLIP ViT-H but provides multilingual capability",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "finding": "Different languages produce visual bias in generated content",
+      "details": "Each language seems to bias toward visual characteristics of that country/culture",
+      "from": "TK_999"
+    },
+    {
+      "finding": "UmT5 allows multi-language prompting across 100+ languages",
+      "details": "All languages share embedding space, enabling mixed-language prompts and potential for undertrained language data",
+      "from": "fredbliss"
+    },
+    {
+      "finding": "Wan author now works at company behind TeaCache",
+      "details": "Suggests potential TeaCache integration for Wan models in future",
+      "from": "guahunyo"
+    },
+    {
+      "finding": "Wan wrapper had critical bug mixing frame count with height dimensions",
+      "details": "Frame count was being taken from height value, causing OOM errors on portraits and generating hundreds of frames instead of intended count",
+      "from": "Kijai"
+    },
+    {
+      "finding": "FP16 accumulation significantly improves speed",
+      "details": "18s/it with bf16 vs 14s/it with fp16 using fp8 weights",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Context schedule working for extended videos",
+      "details": "Successfully generated 165 frames and 329 frames using context scheduling, though transition quality needs work",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Emojis work in prompts with UMT5",
+      "details": "Can use emojis like '\ud83c\udf46' in prompts for classification and generation",
+      "from": "fredbliss"
+    },
+    {
+      "finding": "FP16 weights significantly outperform BF16 for anatomy accuracy during fast motion",
+      "details": "During fast moving scenes like galloping horses, bf16 weights get leg positioning wrong while fp16 maintains correct gait cycles",
+      "from": "Kytra"
+    },
+    {
+      "finding": "FloweEdit works out of the box with Wan models",
+      "details": "No modifications needed, can use existing HunyuanLoom implementation directly with Wan T2V",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Q8 GGUF is superior to FP8 quantization",
+      "details": "FP8 is a 'dumb downcast' while Q8 is more like image compression that preserves the best features",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "finding": "Emoji prompts work through embedding space",
+      "details": "Emojis are tokenized and work as prompts, can be combined with multiple languages for steering",
+      "from": "fredbliss"
+    },
+    {
+      "finding": "Chinese prompts may produce better motion",
+      "details": "Training data mix of Chinese and English, Chinese prompts sometimes help with motion generation",
+      "from": "Kytra"
+    },
+    {
+      "finding": "1.25x latent upscale with 45% denoise on second pass cleans up 1.3B artifacts",
+      "details": "Works as fast as first pass, eliminates need for different model on second pass",
+      "from": "Kytra"
+    },
+    {
+      "finding": "Wan has fewer failed generations compared to HunyuanVideo",
+      "details": "More consistent results, less likely to produce 'bad' outputs",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "finding": "Wan 1.3B model requires very little VRAM",
+      "details": "Uses only 49% VRAM for 81 frames",
+      "from": "David Snow"
+    },
+    {
+      "finding": "Width must divide by 16 for Wan models",
+      "details": "Getting tensor dimension errors at 1920x1080, doesn't divide with 16",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Official default steps are higher than commonly used",
+      "details": "Official repo defaults: 50 steps for i2v, 40 steps for t2v",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "finding": "Default shift values from official repo",
+      "details": "3.0 shift for i2v 480p, 5.0 shift for everything else",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "finding": "H265 encoding reduces noise jitter",
+      "details": "Using h265 has less of that noise jitter",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Longer descriptive prompts improve prompt following",
+      "details": "I usually get better prompt following with longer and more descriptive prompts",
+      "from": "intervitens"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "HuggingFace space gets stuck at 95-100% generation",
+      "solution": "Wait for same amount of time with no progress, then reload page if completely frozen. Timer works separately from percentage",
+      "from": "DiXiao"
+    },
+    {
+      "problem": "HuggingFace space shows 'too many running tasks' error",
+      "solution": "Queue is limited to 10 people, need to wait or try later",
+      "from": "yo"
+    },
+    {
+      "problem": "Generation times inconsistent",
+      "details": "Sometimes 300-450 seconds, sometimes reaches 1000 seconds",
+      "from": "DiXiao"
+    },
+    {
+      "problem": "Git repository is empty",
+      "solution": "Weights are available but code not yet released, expected within hours",
+      "from": "Fannovel16"
+    },
+    {
+      "problem": "Models too large for most GPUs",
+      "solution": "Need quantization to fp16/fp8 or GGUF format for consumer hardware",
+      "from": "multiple users"
+    },
+    {
+      "problem": "PyTorch 2.6 weights_only error when loading models",
+      "solution": "Need to set weights_only=False in torch.load due to PyTorch 2.6 default change",
+      "from": "AJO"
+    },
+    {
+      "problem": "14B model needs excessive VRAM",
+      "solution": "Use offload_model=True parameter, but still requires around 120GB VRAM",
+      "from": "DiXiao"
+    },
+    {
+      "problem": "Flash attention compilation issues on WSL",
+      "solution": "Use precompiled wheels from Kijai's HuggingFace repo",
+      "from": "Alisson Pereira"
+    },
+    {
+      "problem": "PyTorch 2.6 weights_only load failure",
+      "solution": "Modify vae.py line 614 to add weights_only=False parameter to torch.load",
+      "from": "AJO"
+    },
+    {
+      "problem": "T5 in VRAM causing OOM on 720p with 1.3B",
+      "solution": "Use T5 CPU offload with --t5_cpu flag, though it slows generation",
+      "from": "Parker"
+    },
+    {
+      "problem": "Zsh shell expanding * in size parameter",
+      "solution": "Put size parameter in quotes or use 'noglob' before command",
+      "from": "Zopiac"
+    },
+    {
+      "problem": "Flash attention import error",
+      "solution": "Reinstall CUDA/flash attention dependencies",
+      "from": "Kirara"
+    },
+    {
+      "problem": "100 torch compile messages during generation",
+      "solution": "Remove debug print statements from code",
+      "from": "Kijai"
+    },
+    {
+      "problem": "VAE error: 'VAE' object has no attribute 'to'",
+      "solution": "Must use the Wan VAE loader node, not the standard ComfyUI VAE loader",
+      "from": "ArtOfficial"
+    },
+    {
+      "problem": "Nodes failing to import due to triton dependency",
+      "solution": "Install triton or use sdpa instead of sage attention (slower but works)",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Target shape error with sampler",
+      "solution": "Fixed in latest update, pull latest version",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Output resolution doesn't match input settings",
+      "solution": "Model uses aspect ratio of input image and adjusts dimensions, this is expected behavior",
+      "from": "Kijai"
+    },
+    {
+      "problem": "RifleX causing weird tiling artifacts",
+      "solution": "Set RifleX to 0 to disable it - it doesn't work with this model",
+      "from": "Kijai"
+    },
+    {
+      "problem": "UnboundLocalError with target_shape",
+      "solution": "Update Kijai's wrapper nodes",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Can't swap width/height on WanVideo Empty Embeds node",
+      "solution": "Fixed - was tied to widget name",
+      "from": "Kijai"
+    },
+    {
+      "problem": "MPS compatibility issue",
+      "solution": "Change torch.float64 to float32 in model.py file to run on MPS",
+      "from": "jwool"
+    },
+    {
+      "problem": "Standalone ComfyUI missing diffusers",
+      "solution": "Run 'python.exe -m pip install -r custom_nodes\\ComfyUI-WanVideoWrapper\\requirements.txt' in comfy terminal",
+      "from": "Mecha"
+    },
+    {
+      "problem": "Getting wrong subjects (woman and cat instead of dogs)",
+      "solution": "Check workflow settings, remove unnecessary nodes like deeptranslator",
+      "from": "TK_999"
+    },
+    {
+      "problem": "VAE decode OOM after long generation",
+      "solution": "Save latent before VAE decode to preserve the generation",
+      "from": "Juampab12"
+    },
+    {
+      "problem": "AttributeError: module 'comfy.latent_formats' has no attribute 'Wan21'",
+      "solution": "ComfyUI desktop app needed update from Austin Mroz to add format information",
+      "from": "Austin Mroz"
+    },
+    {
+      "problem": "RuntimeError: Input type (float) and bias type (c10::BFloat16) should be the same",
+      "solution": "Related to ComfyUI startup settings, resolved with updates",
+      "from": "moss"
+    },
+    {
+      "problem": "VAE decode OOM during batch generation",
+      "solution": "Save latents instead of decoded videos to prevent losing entire night of generation",
+      "from": "Juampab12"
+    },
+    {
+      "problem": "16GB VRAM OOM on 14B model",
+      "solution": "Use smaller resolution (480x480), increase block swap to 16, set load_device to offload_device",
+      "from": "zelgo_"
+    },
+    {
+      "problem": "Triton compatibility on Windows",
+      "solution": "Use woct0rdho/triton-windows repo, install matching Python version and copy libs",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "problem": "720p model won't generate, stuck at 0its",
+      "solution": "480p model works, issue might be workflow-specific",
+      "from": "BecauseReasons"
+    },
+    {
+      "problem": "Pixelated artifacts in generated videos",
+      "solution": "Issue with corrupted text encoder download, re-download text encoder",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "problem": "Moir\u00e9 pattern in outputs",
+      "solution": "Try different resolutions like 832x480 or 640x480, higher steps help",
+      "from": "ezMan"
+    },
+    {
+      "problem": "Model loops after 81 frames",
+      "solution": "81 frames gives best results, longer durations degrade quality and cause weird behavior",
+      "from": "seitanism"
+    },
+    {
+      "problem": "Sage attention giving NaNs in native",
+      "solution": "First two modes work, avoid certain sage attention options",
+      "from": "Kijai"
+    },
+    {
+      "problem": "patch_embedding.weights error with Kijai's wrapper",
+      "solution": "Remove torch compile args node connection",
+      "from": "PookieNumnums"
+    },
+    {
+      "problem": "OOM issues with bf16 weights",
+      "solution": "Restart ComfyUI without --use-sage-attention flag",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "problem": "Input type mismatch error after node update",
+      "solution": "Update to latest version of Kijai's nodes",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Wrong T5 model causing errors in native nodes",
+      "solution": "Use the T5 model that ComfyOrg shared",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Native nodes don't work under 81 frames",
+      "solution": "Use minimum 81 frames for native implementation",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Memory estimation issues with 14B models",
+      "solution": "Update to latest git for native ComfyUI - there's a fix for memory estimation code",
+      "from": "comfy"
+    },
+    {
+      "problem": "VAE wasting 1-2GB VRAM",
+      "solution": "Update wrapper - VAE caches stuff that wasn't being cleared",
+      "from": "Kijai"
+    },
+    {
+      "problem": "fp8 e4m3fn quantization crashes on 3090/below 4000 series with torch.compile",
+      "solution": "Disconnect torch.compile when using fp8 quantization on 3090s",
+      "from": "Kendo"
+    },
+    {
+      "problem": "I2V workflow freezing at 67%",
+      "solution": "Check model type compatibility - don't mix T2V model with I2V workflow",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Can't generate single frame",
+      "solution": "Minimum is 5 frames, but Kijai changed min to 1 in update",
+      "from": "Kijai"
+    },
+    {
+      "problem": "VAE encode error: 'VAE' object has no attribute 'vae_dtype'",
+      "solution": "Use VAE from ComfyUI or use wrapper node to encode",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Resolution compatibility issues with VAE",
+      "solution": "Width must be compatible with VAE requirements. 856 width doesn't work, try 840 or 848 (divisible by 8). 106 x 8 = 848, 105 x 8 = 840",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Missing WanImageToVideo node after updates",
+      "solution": "Update ComfyUI. It's a core node so won't be found in custom nodes manager",
+      "from": "TK_999"
+    },
+    {
+      "problem": "Tensor dimension error: 'Trying to create tensor with negative dimension'",
+      "solution": "Use correct text encoder - need the one from Comfy-Org, not other versions",
+      "from": "GalaxyTimeMachine"
+    },
+    {
+      "problem": "Matrix multiplication shape error in native",
+      "solution": "Use fp8 text encoder instead of fp32. Download from Comfy-Org/Wan_2.1_ComfyUI_repackaged",
+      "from": "seitanism"
+    },
+    {
+      "problem": "Black output with torch+sage on native",
+      "solution": "Use fp16 sage instead, though may get overexposed flashing yellow output",
+      "from": "seitanism"
+    },
+    {
+      "problem": "Sage attention + compile gives burned output",
+      "solution": "Don't use sage attention with compile together on native WAN",
+      "from": "Ro"
+    },
+    {
+      "problem": "Torch compile doesn't work with GPUs under 40xx series",
+      "solution": "Remove torch compile argument for older GPUs",
+      "from": "\u2727\u0e05\u0e42\u0e51\u2180\u11ba\u2180 \u0e51\u0e43\u0e05\u2727PookieNumnums"
+    },
+    {
+      "problem": "FP8 causing black output in native nodes",
+      "solution": "ComfyUI commit 0270a0b41cef69726694b189f37942a04d762c8a fixes the fp8 issue by upcasting specific operations",
+      "from": "comfy"
+    },
+    {
+      "problem": "Sage FP8 not working properly in native",
+      "solution": "Use 'sageattn_qk_int8_pv_fp16_triton' option, native work broken after update for FP8 weight",
+      "from": "Mngbg"
+    },
+    {
+      "problem": "FP8 burns output yellow for I2V",
+      "solution": "FP8 causes quality issues, wrapper works better as it excludes smaller operations from FP8 for quality",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Strange outputs after ComfyUI update",
+      "solution": "Turn off Torch Compile and set attention to spda to verify if those are causing issues",
+      "from": "chancelor"
+    },
+    {
+      "problem": "TorchAO fp8dqrow compatibility issues",
+      "solution": "Use main device for load device - torchao doesn't like offloading",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Long prompts causing issues",
+      "solution": "Fixed in recent ComfyUI update",
+      "from": "comfy"
+    },
+    {
+      "problem": "VRAM bug in wrapper",
+      "solution": "Kijai fixed a bug that was using 1-2GB VRAM unnecessarily",
+      "from": "Kijai"
+    },
+    {
+      "problem": "I2V generates black images with SageAttention",
+      "solution": "Use fp16_cuda kernel instead of fp8_cuda, or switch to xformers attention",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "CUDA out of memory on 4090 with tiny resolution",
+      "solution": "Switch from wrapper to native nodes which have automatic offloading",
+      "from": "comfy"
+    },
+    {
+      "problem": "Torch compile fails on 3090 with fp8",
+      "solution": "Use fp8_e5m2 format instead of fp8_e4m3fn for torch compile on 3090",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Native workflow extremely slow compared to wrapper",
+      "solution": "Use fp8_e4m3fn models with native nodes instead of full precision models",
+      "from": "Organoids"
+    },
+    {
+      "problem": "Non-blocking transfer not working on some systems",
+      "solution": "Try reducing block count until finding compatible value, or use native workflow which has automatic offloading",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Sage Attention 'auto' mode causing issues in native",
+      "solution": "Select specific sageattention mode instead of auto",
+      "from": "JmySff"
+    },
+    {
+      "problem": "I2V producing completely different results in native",
+      "solution": "Make sure using I2V model, not T2V model - common mistake that surprisingly doesn't error",
+      "from": "seitanism"
+    },
+    {
+      "problem": "Torch compile failing on 3000 series GPUs with fp8_e4m3fn",
+      "solution": "Use e5m2 instead, it's a Triton issue not node-specific",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Native I2V going very slow",
+      "solution": "Check for 'model partially loaded' in log indicating low VRAM mode activated, custom nodes can interfere",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Resolution changing from input (480x480 to 512x512)",
+      "solution": "This is due to complicated divisions/multiplications with area calculations using integer divisions",
+      "from": "seitanism"
+    },
+    {
+      "problem": "TypeError: must be real number, not list when using spline editor",
+      "solution": "Use SamplerCustomAdvanced instead of KSampler, feed spline editor float into Scheduled CFG Guidance",
+      "from": "seitanism"
+    },
+    {
+      "problem": "Unexpected architecture type in GGUF file error",
+      "solution": "Update ComfyUI-GGUF nodes, not just base ComfyUI",
+      "from": "mamad8"
+    },
+    {
+      "problem": "I2V with sage+fp8 producing black or saturated images",
+      "solution": "Monkeypatch to force fp16 in model.py lines 114-115, though still has saturation issues",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "Invalid size error when using enhance video node with I2V",
+      "solution": "Error in attention based on shape, shouldn't be able to change shape - investigation needed",
+      "from": "Kijai"
+    },
+    {
+      "problem": "headdim should be in [64, 96, 128] error on 3080ti",
+      "solution": "Update ComfyUI and refresh page",
+      "from": "Teslanaut"
+    },
+    {
+      "problem": "SageAttention 8+8 kernel causes black image output in I2V on Ada GPUs",
+      "solution": "Use SageAttention 8+16 triton kernel instead (sageattn_qk_int8_pv_fp16_triton)",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "Missing sparge_wan_30_steps_1_iter.pt file",
+      "solution": "File is experimental and requires 5+ hours tuning per model variant - not ready for production use",
+      "from": "Kijai"
+    },
+    {
+      "problem": "ComfyUI loading MMAudio models interferes with workflow processing",
+      "solution": "Use separate workflows - generate I2V first, then queue extensions, then combine and add MMAudio",
+      "from": "Organoids"
+    },
+    {
+      "problem": "OOM errors with 16GB VRAM using wrapper",
+      "solution": "Increase block swapping to 25, 35, or 40. Bug was also causing frame count to be read from height dimension",
+      "from": "Kijai"
+    },
+    {
+      "problem": "SageAttention 2.0 causing import errors",
+      "solution": "Missing Triton compile environment. Run test script from triton windows repo to verify installation",
+      "from": "Kijai"
+    },
+    {
+      "problem": "GGUF models not using fp16 accumulation",
+      "solution": "Use advanced GGUF node to set precision, though some users report it doesn't work consistently",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Exponentially longer generation times with more frames on GGUF",
+      "solution": "Caused by running out of VRAM - 6min for 33 frames vs 2hrs for 81 frames when VRAM exceeded",
+      "from": "Kijai"
+    },
+    {
+      "problem": "mat1 and mat2 shapes cannot be multiplied (512x768 and 4096x1536)",
+      "solution": "Use correct text encoder from Comfy-Org repo, not wrapper models",
+      "from": "MilesCorban"
+    },
+    {
+      "problem": "V2V workflow not working with regular VAE encode",
+      "solution": "Need specific VAE encode node from Kijai's workflow, use bf16 VAE",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "problem": "FP16 accumulation node errors without nightly torch even when disabled",
+      "solution": "Code needs fix to only check torch version when enabling, not when disabling",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "Stippling artifacts in 1.3B model output",
+      "solution": "Use second pass with low denoise or switch to 14B model which doesn't have these issues",
+      "from": "David Snow"
+    },
+    {
+      "problem": "RMSNorm has no attribute comfy_cast_weights error with i2v",
+      "solution": "Use default compute instead of fp16 compute, or use sage 8+8 (but may cause black image)",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "Black image with sage attention on i2v",
+      "solution": "sageattn_qk_int8_pv_fp8_cuda produces black image on Ada GPUs for Wan i2v",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "problem": "Tensor size mismatch at 1920x1080",
+      "solution": "Width must divide by 16, try different resolution",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Duplicates in preview at high resolution",
+      "solution": "Use multipass approach instead of single pass for 1920x1080",
+      "from": "David Snow"
+    },
+    {
+      "problem": "Grid/tile artifacts in output",
+      "solution": "Try disable VAE tiling, use higher steps (50 instead of 20), use better quants (Q8 > fp8)",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Memory management issues with fp16 compute + sage 8+16",
+      "solution": "CPU offloading triggers differently based on VRAM usage variations",
+      "from": "Doctor Shotgun"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "Wan 2.1 vs Hunyuan Video",
+      "verdict": "Wan 2.1 is miles better than Hunyuan Video despite only 1B parameter difference. Massive quality differences between the models",
+      "from": "yi, mamad8"
+    },
+    {
+      "comparison": "Wan 2.1 vs current top closed-source models",
+      "verdict": "About one generation behind current top closed-sources, likely due to only 14B parameters while they use 30B+",
+      "from": "Fannovel16 \ud83c\uddfb\ud83c\uddf3"
+    },
+    {
+      "comparison": "Wan 2.1 I2V vs other I2V models",
+      "verdict": "I2V looks Kling levels of quality according to previews",
+      "from": "yi"
+    },
+    {
+      "comparison": "1.3B model potential vs CogVideo 5B",
+      "verdict": "Heard to be comparable to CogVideo 5B, might be better",
+      "from": "guahunyo"
+    },
+    {
+      "comparison": "Wan2.1 1.3B vs other models",
+      "verdict": "At least Kling 1.0 levels of quality despite much smaller size",
+      "from": "yi"
+    },
+    {
+      "comparison": "Wan2.1 VAE vs other VAEs",
+      "verdict": "Half the size of other VAEs, much more efficient",
+      "from": "Fannovel16"
+    },
+    {
+      "comparison": "Wan 2.1 vs LTX size",
+      "verdict": "Wan 2.1 is 35% smaller than LTX",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "Wan 2.1 quality vs model size",
+      "verdict": "Very impressive quality for just 1.3B parameters, comparable to SD1.5 size but for video",
+      "from": "Cseti"
+    },
+    {
+      "comparison": "Chinese vs US AI labs",
+      "verdict": "Chinese labs are 'lightyears ahead' while US labs fight over autocomplete",
+      "from": "seitanism"
+    },
+    {
+      "comparison": "Wan 1.3B vs Hunyuan",
+      "verdict": "Better than Hunyuan according to some users, much better than CogX and other non-Hunyuan models",
+      "from": "seitanism"
+    },
+    {
+      "comparison": "Wan 14B vs Hunyuan visual quality",
+      "verdict": "Looks worse than Hunyuan in visual fidelity but motion is better",
+      "from": "samurzl"
+    },
+    {
+      "comparison": "Wan 1.3B censorship vs SDXL",
+      "verdict": "Similar to SDXL censorship, way less censored than base SDXL",
+      "from": "yi"
+    },
+    {
+      "comparison": "Wan vs Kling 1.0",
+      "verdict": "Better than Kling 1.0, on par with it, better prompt adherence than Skyreel",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "Wan vs Hunyuan",
+      "verdict": "Better than Hunyuan for sure, which was a decently high bar",
+      "from": "Ro"
+    },
+    {
+      "comparison": "Wan 14B vs 3090 performance",
+      "verdict": "720x480x81 is slower than Hunyuan on 3090",
+      "from": "burgstall"
+    },
+    {
+      "comparison": "Wan vs Veo2 for text creation",
+      "verdict": "Wan is preferred because it showed the creation of text from start to finish, while Veo2 starts mid-way",
+      "from": "orabazes"
+    },
+    {
+      "comparison": "Wan vs HunyuanVideo camera movement",
+      "verdict": "Wan has much better camera movement prompting than HunyuanVideo",
+      "from": "mamad8"
+    },
+    {
+      "comparison": "Wan quality vs competitors",
+      "verdict": "There's a huge gap between Wan and other models, they completely outclass the competition",
+      "from": "deleted_user_2ca1923442ba"
+    },
+    {
+      "comparison": "Wan I2V vs Kling quality",
+      "verdict": "I2V quality is close to Kling 1.5 even 1.6",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "comparison": "fp8 vs bf16 quality on 1.3B",
+      "verdict": "Weird noise issues are exacerbated a bit but otherwise pretty minimal quality loss with fp8",
+      "from": "Benjaminimal"
+    },
+    {
+      "comparison": "bf16 VAE vs fp32 VAE",
+      "verdict": "Significant visual differences - fp32 produces sharper results, changes can be dramatic (different bird species)",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Wan I2V vs other open source models",
+      "verdict": "So much ahead of anything else in open source with Apache 2.0 license, makes everything before redundant",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Speed comparison between models",
+      "verdict": "1.3B model: 2 minutes, 14B model: 20m 43s for same generation",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "comparison": "Wan vs Skyreels",
+      "verdict": "Compared to Wan, Skyreels feels like a toy",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "comparison": "420p vs 720p model motion",
+      "verdict": "420p model motion feels slower than 720p model at same resolution",
+      "from": "ezMan"
+    },
+    {
+      "comparison": "1.3B vs larger models",
+      "verdict": "1.3B is more impressive and efficient, Hunyuan-level quality at same speed with less memory",
+      "from": "Draken"
+    },
+    {
+      "comparison": "480p vs 720p model",
+      "verdict": "480p takes 10 minutes, 720p takes 1 hour for 81 frames on 4090. Not much quality difference, 480p + upscaler recommended",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "Open source vs API costs",
+      "verdict": "1 hour 4090 generation costs ~6 cents in electricity, likely cheaper than API",
+      "from": "burgstall"
+    },
+    {
+      "comparison": "fp8 vs bf16 performance",
+      "verdict": "Both take roughly 30 mins for 30 steps, similar performance",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "comparison": "1.3B vs 14B model capabilities",
+      "verdict": "Anything that works on 1.3B (except LoRAs) works on 14B",
+      "from": "comfy"
+    },
+    {
+      "comparison": "Wan vs other closed platforms cost",
+      "verdict": "Fal costs 40 cents per video, Veo2 costs 50 cents per second",
+      "from": "intervitens"
+    },
+    {
+      "comparison": "Wan 1.3B vs 14B",
+      "verdict": "1.3B: 36 seconds for 512x512x53, more realistic. 14B: 3min 33sec, sharper but potentially fake looking",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "bf16 vs fp32 precision",
+      "verdict": "Only text encoder, img encoder and VAE worth running in fp32, not worth quality gains otherwise",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "comparison": "uni-pc vs euler sampler",
+      "verdict": "uni-pc seems to lower video quality compared to euler+simple",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "comparison": "480p model vs 720p model",
+      "verdict": "480p model is better than 720p model at generating 480p content on 14B",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "Wan vs Skyreels",
+      "verdict": "Wan works much better than skyreels out of the box but needs motion LoRAs to do specific things",
+      "from": "hablaba"
+    },
+    {
+      "comparison": "Wan vs Hunyuan visual quality",
+      "verdict": "Wan has 'ai vid' feel like CogVideo, Hunyuan doesn't give that feel. Hunyuan makes things lower res to avoid AI-ish look",
+      "from": "Draken"
+    },
+    {
+      "comparison": "Native vs Wrapper advantages",
+      "verdict": "Native exists in ComfyUI ecosystem with better compatibility, wrapper lives in its own ecosystem",
+      "from": "TK_999"
+    },
+    {
+      "comparison": "1.3B vs 14B for training costs",
+      "verdict": "14B takes more VRAM, leaving less space for frames, but only about 5% more cost according to one user",
+      "from": "yi"
+    },
+    {
+      "comparison": "480p model vs all other models",
+      "verdict": "480p model is better than all models together on 4090",
+      "from": "Janosch Simon"
+    },
+    {
+      "comparison": "14B vs 1.3B model quality at 720p",
+      "verdict": "14B model significantly better - 1.3B is like 10% quality of 14B at 720p, not 90%. 14B is a whole other beast",
+      "from": "seitanism"
+    },
+    {
+      "comparison": "1.3B vs 14B at 480p",
+      "verdict": "Not too different when both generating at 480p resolution they were trained on",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "FP8_fast vs fp8dqrow speed on 5090",
+      "verdict": "fp8dqrow: 20/20 [00:11<00:00, 1.68it/s] - quite fast without terrible quality loss",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "3B vs 14B model quality and speed",
+      "verdict": "14B is sooo much better quality but 2:12 vs 12:15 generation time",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "comparison": "Wan physics vs other models",
+      "verdict": "Physics seem lacking compared to expectations, prioritizes image fidelity over authentic motion representation",
+      "from": "Zuko"
+    },
+    {
+      "comparison": "Native vs wrapper VRAM usage",
+      "verdict": "About the same VRAM usage, native might be slightly lower with automatic offloading",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "480p vs 720p model memory usage",
+      "verdict": "Both models are 17GB so no difference in memory usage, difference only comes from resolution used",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "Wan vs Cosmos quality",
+      "verdict": "Wan is much cleaner, Cosmos does janky morphing while Wan maintains consistency",
+      "from": "Organoids"
+    },
+    {
+      "comparison": "1.3B vs 14B model quality",
+      "verdict": "14B markedly better than 1.3B, but 1.3B not as bad as expected",
+      "from": "Parker"
+    },
+    {
+      "comparison": "I2V vs T2V models",
+      "verdict": "Don't even seem like same model, like from two different groups",
+      "from": "Draken"
+    },
+    {
+      "comparison": "GGUF vs fp8 quality",
+      "verdict": "Q8 GGUF clearly better quality, no ugly pixels",
+      "from": "JmySff"
+    },
+    {
+      "comparison": "Native vs wrapper speed",
+      "verdict": "Native is amazingly faster when it works",
+      "from": "JmySff"
+    },
+    {
+      "comparison": "bf16 vs fp16 for video",
+      "verdict": "bf16 preferred for video generation and training",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "e4m3fn vs e5m2 casting",
+      "verdict": "Loading e4 and casting to e5 is extra lossy, should use e5 weight or bf16->e5",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "fp8 vs fp8 fast",
+      "verdict": "fp8 fast is faster but substantially worse quality, not worth it",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "Q8 GGUF vs fp8",
+      "verdict": "Q8 is superior to fp8 as it's a smarter way to downsample to same datatype",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "comparison": "res4lyfe samplers - rk vs deis 2m sde",
+      "verdict": "Both have same generation time, visual comparison shows differences in detail",
+      "from": "TK_999"
+    },
+    {
+      "comparison": "bf16 vs fp16 precision",
+      "verdict": "Clear difference in eyes and background detail, though mouth quality bad on both",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Wan vs HunyuanVideo quality",
+      "verdict": "Wan blows away HunyuanVideo according to users",
+      "from": "Ada"
+    },
+    {
+      "comparison": "Wan compute vs other models",
+      "verdict": "Takes 2x compute and slightly bigger than comparable models",
+      "from": "Draken"
+    },
+    {
+      "comparison": "Wan 1.3B vs 14B quality",
+      "verdict": "14B much better quality but significantly slower. 1.3B surprisingly good for size but has artifacts",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "Wan 14B vs Hunyuan I2V speed on 3090",
+      "verdict": "Almost on par speed-wise between the two models",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "comparison": "FP32 vs quantized quality vs speed",
+      "verdict": "FP32 much better quality (690s vs 352s generation time) but very slow. Question whether time difference worth it",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "720p vs 480p models",
+      "verdict": "720p can do 480p but 480p model is better at 480p specifically. 720p adds more detail",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "FP16 vs BF16 weights",
+      "verdict": "FP16 significantly better quality, especially for anatomy in fast motion scenes",
+      "from": "Kytra"
+    },
+    {
+      "comparison": "Q8 GGUF vs FP8",
+      "verdict": "Q8 always better quality, FP8 is dumb downcast while Q8 preserves important features",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "comparison": "Wan vs HunyuanVideo reliability",
+      "verdict": "Wan produces fewer failed generations, more consistent results",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "comparison": "1.3B vs 14B model",
+      "verdict": "14B doesn't have stippling issues but extremely slow, 1.3B fast but needs artifact cleanup",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "HunyuanVideo vs Wan for second pass refinement",
+      "verdict": "HunyuanVideo better for cleaning up Wan 1.3B artifacts and adding detail",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "Wan vs Hunyuan second pass",
+      "verdict": "Hunyuan wins for refinement, looks more alive",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "Q8 vs fp8 quality",
+      "verdict": "Q8 is better than fp8 in quality",
+      "from": "zezo"
+    },
+    {
+      "comparison": "Native ComfyUI vs Wrapper speed",
+      "verdict": "Native is ~10% faster",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "fp8 vs fp16 quality",
+      "verdict": "fp8 quality is still lower",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Multi-pass Wan 1.3B vs 14B model",
+      "verdict": "Multi-pass 1.3B is much faster than using 14B model",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "Wan vs Hunyuan quality",
+      "verdict": "Wan's quality is a bit better",
+      "from": "Doctor Shotgun"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Use '3D anime' style for better results",
+      "context": "When doing 3D anime style, model performs better than proper 2D",
+      "from": "TK_999"
+    },
+    {
+      "tip": "Model works better with Asian datasets",
+      "context": "Heavy bias toward Asian sources in training data",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "tip": "Good for finetuing and LoRA training potential",
+      "context": "Solid base model that should work well for specific tasks with additional training",
+      "from": "Pedro (@LatentSpacer), DiXiao"
+    },
+    {
+      "tip": "Wait for quantized versions",
+      "context": "Unless you have 80GB+ VRAM, better to wait for fp16/fp8 conversions",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Use offloading for larger models",
+      "context": "Can run on 12-14GB VRAM with auto CPU offload",
+      "from": "slmonker"
+    },
+    {
+      "tip": "1.3B model could be finetuned to I2V",
+      "context": "Similar to how skyreels did with Hunyuan, possible on single A100",
+      "from": "Fannovel16"
+    },
+    {
+      "tip": "Use shift 9 and steps 20 for better results",
+      "context": "When running the 1.3B model for optimal quality/speed balance",
+      "from": "Fannovel16"
+    },
+    {
+      "tip": "Try shift 3 for 480p video generation",
+      "context": "Recommended shift parameter specifically for 480p resolution",
+      "from": "\u7247\u30e8\u4ea1\u4ea1\u4e39\u7247"
+    },
+    {
+      "tip": "Can get 4x faster with bf16 and fp8 quantization",
+      "context": "Instead of using fp32 for much faster generation",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Use torch.autocast for fp16 to reduce VRAM",
+      "context": "When running into memory issues",
+      "from": "Fannovel16"
+    },
+    {
+      "tip": "Use camera movement prompts for better effects",
+      "context": "Camera movement effect is very good",
+      "from": "Masanlong"
+    },
+    {
+      "tip": "Use supported resolutions for T2V-1.3B",
+      "context": "Use --size 480*832 or --size 832*480",
+      "from": "AJO"
+    },
+    {
+      "tip": "Start with custom nodes rather than ComfyUI core code",
+      "context": "For learning ComfyUI development",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use Chinese negative prompt for better results",
+      "context": "Real negative prompt in Chinese works better than English",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Use flow shift 4-5 for optimal quality at 30 steps",
+      "context": "Lower values give better details but too low causes coherence loss",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "50 steps significantly better than 30 steps",
+      "context": "Quality improvement visible, worth the extra time",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Lower block swap for 5090 users",
+      "context": "Can afford like 5 blocks with 5090 and sage attention",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Use 10 steps for seed testing, then high steps for quality",
+      "context": "Workflow optimization to find right seed quickly then render final quality",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Specify model variant when posting generations",
+      "context": "Community requested labeling gens as 1.3B or 14B for clarity",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Use fp32 VAE for best quality",
+      "context": "Original VAE is fp32, produces significantly better results than bf16",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "tip": "Target native resolution and upscale later",
+      "context": "Better results than generating at non-native resolutions",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Use --fp32-vae launch flag with original VAE file",
+      "context": "For using original fp32 VAE quality",
+      "from": "comfy"
+    },
+    {
+      "tip": "Use negative prompts to control camera movement",
+      "context": "For static shots, try negatives like 'zoom-in, dolly, push-in' to prevent unwanted camera motion",
+      "from": "mamad8"
+    },
+    {
+      "tip": "Test with smaller steps and FP8 first",
+      "context": "Use lower step count and FP8 fast to find good seeds before running overnight with 50 steps",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Choose good stitching points for extensions",
+      "context": "When chaining I2V generations, ending frames that work well for extension can create nearly seamless results",
+      "from": "ezMan"
+    },
+    {
+      "tip": "Use FP32 for text encoder when possible",
+      "context": "FP32 text encoders produce sharper results across T5 family models, worth the extra VRAM",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "tip": "Hunt seeds with 10 steps, then use 50 steps for final quality",
+      "context": "Faster workflow for quality results",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Use specific resolutions for each model",
+      "context": "720p model for 720x1280, 480p for lower resolutions to avoid artifacts",
+      "from": "wooden tank"
+    },
+    {
+      "tip": "Stick to 81 frames for best results",
+      "context": "Higher frame counts cause quality degradation and looping",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Use flux gens + Kling/Skyreels for dataset creation",
+      "context": "Create training datasets for T2V LoRAs",
+      "from": "Kytra"
+    },
+    {
+      "tip": "Start with 0 block swap and increase by 5 each time you get OOM",
+      "context": "When configuring memory usage",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Use English negative prompts",
+      "context": "When getting color issues or artifacts",
+      "from": "codexq"
+    },
+    {
+      "tip": "50+ steps looks best for animations",
+      "context": "When doing anime content",
+      "from": "Kytra"
+    },
+    {
+      "tip": "Use Subject+Scene+Action prompt structure",
+      "context": "Official prompt guidance from Wan team",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "tip": "Translate prompts to Chinese for better results",
+      "context": "Works 99% of the time for better output",
+      "from": "Juampab12"
+    },
+    {
+      "tip": "Use denoise setting for video2video",
+      "context": "Same as img2img in ComfyUI native nodes",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use 0.5 denoise for v2v by cutting sigmas in half",
+      "context": "For video2video workflows",
+      "from": "Kijai"
+    },
+    {
+      "tip": "1.3B is the best part of Wan release",
+      "context": "Good balance of speed vs quality",
+      "from": "Draken"
+    },
+    {
+      "tip": "Use Chinese translation for prompts",
+      "context": "Both positive and negative prompts should be translated into Chinese before feeding into prompt",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "tip": "Avoid using 'video' in negative prompts",
+      "context": "Using the word 'video' in negative prompts might have adverse effects",
+      "from": "TK_999"
+    },
+    {
+      "tip": "Set Points To Sample = Sampler Steps when using spline editor",
+      "context": "When using KJ nodes spline editor for CFG scheduling",
+      "from": "TK_999"
+    },
+    {
+      "tip": "Use CFG scheduling for speed boost",
+      "context": "At certain point in generation when image/motion is formed, less need for negative prompt, so set cfg=1 for speed",
+      "from": "TK_999"
+    },
+    {
+      "tip": "Always keep backups",
+      "context": "Important for protecting models and data from git accidents",
+      "from": "yi"
+    },
+    {
+      "tip": "Don't lower CFG too much",
+      "context": "Kept getting bad results when lowering CFG",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Prompting well helps significantly",
+      "context": "Good prompting makes a notable difference in output quality",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Use detailed, descriptive prompts",
+      "context": "Claude-generated detailed prompts work well for consistent results",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "tip": "Exclude feedforward layers from fp8_fast",
+      "context": "Doesn't ruin quality but also barely gives speed increase",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use DPM++2M Beta scheduler",
+      "context": "Avoid UniPC + DDIM uniform combination as it produces messed up results",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Use CRF or noise augment for static results",
+      "context": "When getting low motion in I2V generations, try these parameters on same seed",
+      "from": "\u25b2"
+    },
+    {
+      "tip": "Use fp32 text encoder for better prompt adherence",
+      "context": "May improve prompt following but uses more VRAM",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Force fp16 kernel for I2V with SageAttention",
+      "context": "When using SageAttention with I2V to avoid black images",
+      "from": "Miku"
+    },
+    {
+      "tip": "Use cfg_end at 0.8 for better I2V results",
+      "context": "When using GGUF Q8 model",
+      "from": "JmySff"
+    },
+    {
+      "tip": "Stick with 81 frames for best results",
+      "context": "Model works best at this length",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use 480p resolution for optimal performance",
+      "context": "720p less stable due to limited training, 1.3B model capable but not recommended",
+      "from": "Bleedy"
+    },
+    {
+      "tip": "More realistic images need more denoising steps",
+      "context": "Art style affects required steps, realistic content needs more steps",
+      "from": "Draken"
+    },
+    {
+      "tip": "Try different seeds when I2V prompt doesn't match image",
+      "context": "Model sometimes ignores image when prompt doesn't match",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Never go under 1.0 CFG",
+      "context": "When using CFG scheduling",
+      "from": "Kijai"
+    },
+    {
+      "tip": "No more than 200 tokens is good compromise for prompts",
+      "context": "English prompts, less after Chinese translation",
+      "from": "JmySff"
+    },
+    {
+      "tip": "Use video frame interpolation to get to 30fps for much better realism",
+      "context": "Post-processing Wan video outputs",
+      "from": "Shawneau \ud83c\udf41 [CA]"
+    },
+    {
+      "tip": "Try swap as least blocks as you can",
+      "context": "When working with limited VRAM",
+      "from": "Draken"
+    },
+    {
+      "tip": "If using 480p resolution, use the 480p model as it's tuned for that and much faster",
+      "context": "Resolution and model selection",
+      "from": "seitanism"
+    },
+    {
+      "tip": "Use Qwen models for prompt expansion",
+      "context": "Wan was designed to work with Qwen2.5-VL-7B-Instruct for prompt extension, being from Alibaba",
+      "from": "orabazes"
+    },
+    {
+      "tip": "Try close-up shots for better subject focus",
+      "context": "When trying to make subject the main focus of video",
+      "from": "Cubey"
+    },
+    {
+      "tip": "Generate at 480p then upscale with VFI nodes",
+      "context": "Fast workflow that produces better end results than generating at higher resolution",
+      "from": "Shawneau \ud83c\udf41 [CA]"
+    },
+    {
+      "tip": "Portrait/close-up shots need fewer steps (10-15), half-body/full-body need more (20-30)",
+      "context": "I2V generation step recommendations",
+      "from": "slmonker"
+    },
+    {
+      "tip": "Don't go above 40-50 steps",
+      "context": "Maximum recommended steps for Wan",
+      "from": "Kijai"
+    },
+    {
+      "tip": "More steps usually best answer for motion blur, can try stronger schedulers or increasing shift",
+      "context": "Removing motion blur from generations",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Keep Hunyuan denoise at 0.3 or below for V2V refining",
+      "context": "Using Hunyuan as refiner for Wan outputs",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Use fp16 base_precision for better consistency, updated weights give better results without moir\u00e9 noise",
+      "context": "Native ComfyUI implementation improvements",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Use FP16 weights instead of BF16 for better quality",
+      "context": "Especially important for fast motion scenes and anatomy accuracy",
+      "from": "Kytra"
+    },
+    {
+      "tip": "Try Chinese prompts for better motion generation",
+      "context": "Training data includes Chinese prompts, may produce more dynamic results",
+      "from": "Kytra"
+    },
+    {
+      "tip": "Use dpmpp_2m sampler to avoid soft/denoised look",
+      "context": "UniPC sampler was causing overly soft appearance",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Combine emojis with multiple languages for creative prompting",
+      "context": "Embedding space allows mixing languages and emojis for unique steering",
+      "from": "fredbliss"
+    },
+    {
+      "tip": "Use 1.25x latent upscale between KSamplers for artifact cleanup",
+      "context": "Fast alternative to using different model for second pass on 1.3B",
+      "from": "Kytra"
+    },
+    {
+      "tip": "Use multipass rendering for better results",
+      "context": "Helps significantly with quality",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Use PatchSageAttention node over --use-sage-attention",
+      "context": "Gives you more control",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "tip": "Use 'clean' inputs for Wan",
+      "context": "Contrary to LTX, Wan likes clean inputs",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "tip": "Higher steps improve quality",
+      "context": "Steps should help with grid artifacts and overall quality",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Q6-K is good balance for 3090 users",
+      "context": "Q6-K is go-to quant for most things, Q8 may OOM on 3090",
+      "from": "Benjaminimal"
+    }
+  ],
+  "news": [
+    {
+      "update": "Model name changed from WanX to Wan",
+      "details": "Likely due to international feedback on the original name",
+      "from": "NebSH"
+    },
+    {
+      "update": "Wan 2.1 I2V 14B 720P model released",
+      "details": "Available on HuggingFace, 66GB fp32 / 16.5GB fp8",
+      "from": "seitanism"
+    },
+    {
+      "update": "Release confirmed for Beijing time night",
+      "details": "Direct communication from Wan team confirmed release timing",
+      "from": "guahunyo"
+    },
+    {
+      "update": "1.3B model intended as 'SD1.5 of video field'",
+      "details": "Internal model used for various experiments, meant to be widely adoptable base model",
+      "from": "guahunyo"
+    },
+    {
+      "update": "Wan2.1 models officially released",
+      "details": "Both 1.3B T2V and 14B I2V models available on HuggingFace",
+      "from": "multiple users"
+    },
+    {
+      "update": "Model name changed from WanX to Wan",
+      "details": "Alibaba changed the model name, likely for branding reasons",
+      "from": "yi"
+    },
+    {
+      "update": "Code expected to be released at 23:00 UTC+8",
+      "details": "Official announcement indicates code release timing",
+      "from": "Fannovel16"
+    },
+    {
+      "update": "Wan 2.1 code officially released",
+      "details": "GitHub repository is now public with full implementation",
+      "from": "Fannovel16"
+    },
+    {
+      "update": "Official training script available",
+      "details": "LoRA training is supported with official training scripts already provided",
+      "from": "Fannovel16"
+    },
+    {
+      "update": "14B T2V example script has wrong slice count",
+      "details": "Shows 7 slices but repo only has 6, will be corrected",
+      "from": "Masanlong"
+    },
+    {
+      "update": "Kijai released ComfyUI wrapper for Wan",
+      "details": "ComfyUI-WanVideoWrapper available on GitHub",
+      "from": "Kijai"
+    },
+    {
+      "update": "Wan 2.1 open source broadcast available",
+      "details": "Available on Alibaba_Wan Twitter/X",
+      "from": "ramonguthrie"
+    },
+    {
+      "update": "1.3B T2V model released",
+      "details": "Kijai released 1.3B T2V model on HuggingFace",
+      "from": "Kijai"
+    },
+    {
+      "update": "DMP++ SDE scheduler added",
+      "details": "Added dmp++_sde scheduler option",
+      "from": "Kijai"
+    },
+    {
+      "update": "I2V bug fixed",
+      "details": "I2V was broken with T2V update but now fixed",
+      "from": "Kijai"
+    },
+    {
+      "update": "720P I2V model released",
+      "details": "14B 720P I2V model available in fp8 format",
+      "from": "Kijai"
+    },
+    {
+      "update": "fp32 VAE uploaded",
+      "details": "Original fp32 VAE now available for better quality",
+      "from": "Kijai"
+    },
+    {
+      "update": "14B T2V model released",
+      "details": "14B T2V model in fp8 format now available",
+      "from": "Kijai"
+    },
+    {
+      "update": "Native ComfyUI implementation available",
+      "details": "Official ComfyUI support with repackaged models and workflows",
+      "from": "comfy"
+    },
+    {
+      "update": "CFG schedule support added",
+      "details": "Added CFG scheduling functionality to potentially speed up generation",
+      "from": "Kijai"
+    },
+    {
+      "update": "ComfyUI added native SaveWEBM node",
+      "details": "Frontend not implemented yet but functional for saving webm files without custom nodes",
+      "from": "comfy"
+    },
+    {
+      "update": "ComfyUI Desktop compatibility fixed",
+      "details": "Austin Mroz pushed update to fix Wan format information for desktop version",
+      "from": "Austin Mroz"
+    },
+    {
+      "update": "LoRA training available for Wan",
+      "details": "diffusion-pipe repo supports Wan LoRA training, works with both 1.3B T2V and drops into ComfyUI",
+      "from": "pro.evolution"
+    },
+    {
+      "update": "Native ComfyUI implementation released",
+      "details": "Comfy released native WanImageToVideo node, uses different text encoder format",
+      "from": "comfy"
+    },
+    {
+      "update": "City96 working on GGUF quantization",
+      "details": "GGUF versions in development for better memory efficiency",
+      "from": "Kijai"
+    },
+    {
+      "update": "Native ComfyUI nodes added for Wan",
+      "details": "Official ComfyUI support implemented alongside Kijai's wrapper",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "update": "City added GGUF models for Wan",
+      "details": "Quantized versions now available",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "update": "First Wan LoRAs created and shared",
+      "details": "Community members successfully trained and shared character and style LoRAs",
+      "from": "Kytra"
+    },
+    {
+      "update": "HunyuanVideo showing official I2V examples",
+      "details": "Posted on Twitter, looks really good",
+      "from": "samurzl"
+    },
+    {
+      "update": "HunyuanVideo keyframe control LoRA released",
+      "details": "I2V with end frame support available on HuggingFace",
+      "from": "yi"
+    },
+    {
+      "update": "TeaCache support commented out in wrapper",
+      "details": "Would need model-specific coefficient values to work",
+      "from": "Kijai"
+    },
+    {
+      "update": "GGUF torch.compile support added",
+      "details": "Bit faster but not full 30% speedup",
+      "from": "Kijai"
+    },
+    {
+      "update": "Native ComfyUI support added for Wan",
+      "details": "ComfyUI now has native support for Wan models",
+      "from": "QANICS\ud83d\udd50"
+    },
+    {
+      "update": "Performance improvements for fp8 models",
+      "details": "Great news for GGUF users - can go back to GGUFs since Wave and TeaCache provide speed boost with fp8 models",
+      "from": "ramonguthrie"
+    },
+    {
+      "update": "1.3B I2V not on roadmap",
+      "details": "Wan2.1 Image-to-Video roadmap shows 14B model integration but 1.3B I2V is not listed",
+      "from": "Mngbg"
+    },
+    {
+      "update": "ComfyUI fixed FP8 native implementation",
+      "details": "Commit 0270a0b41cef69726694b189f37942a04d762c8a fixes fp8 issues by upcasting specific operations",
+      "from": "comfy"
+    },
+    {
+      "update": "Kijai added noise augment and other features",
+      "details": "Added noise augmentation and other functionality to the wrapper",
+      "from": "Kijai"
+    },
+    {
+      "update": "Kijai added LoRA block selection support",
+      "details": "Added block selection functionality to WAN LoRA node",
+      "from": "Kijai"
+    },
+    {
+      "update": "Long prompt support fixed",
+      "details": "Issues with long prompts have been resolved in recent update",
+      "from": "comfy"
+    },
+    {
+      "update": "Kijai working on SpargeAttn tuning for speed improvements",
+      "details": "6 minutes per step on 4090 for tuning, will create shareable model files for faster inference",
+      "from": "Kijai"
+    },
+    {
+      "update": "ComfyUI switched to Flux RoPE implementation",
+      "details": "Changed from original to flux implementation for better compatibility",
+      "from": "comfy"
+    },
+    {
+      "update": "RifleX node added for native Wan",
+      "details": "New patcher to help with videos longer than 81 frames, prevents looping",
+      "from": "Kijai"
+    },
+    {
+      "update": "New GGUF models available for I2V",
+      "details": "Q8 and other quantizations now available for I2V 480p model",
+      "from": "yi"
+    },
+    {
+      "update": "Bitsandbytes 12.8 CUDA released",
+      "details": "Version 0.45.3 with CUDA 12.8 builds available via pip install -U bitsandbytes",
+      "from": "AJO"
+    },
+    {
+      "update": "720p Q8 I2V GGUF model coming tomorrow from city96",
+      "details": "GGUF quantized version of 720p I2V model expected",
+      "from": "seitanism"
+    },
+    {
+      "update": "Comfy released fp16 weights converted from full fp32",
+      "details": "Available at Comfy-Org/Wan_2.1_ComfyUI_repackaged, gives very close results to full fp32",
+      "from": "comfy"
+    },
+    {
+      "update": "Enhance video node added to wrapper",
+      "details": "New feature for improving video quality, runs every block on every step",
+      "from": "Kijai"
+    },
+    {
+      "update": "City96 released Wan2.1-I2V-14B-720P-gguf model",
+      "details": "GGUF quantized version now available for lower VRAM usage",
+      "from": "AJO"
+    },
+    {
+      "update": "ComfyUI --fast 2 now supports fp16 accumulation with fp8 weights",
+      "details": "Requires latest PyTorch nightly for fp16 accumulation with fp8 weights",
+      "from": "comfy"
+    },
+    {
+      "update": "City96 uploaded 720p GGUF models",
+      "details": "Available at huggingface.co/city96/Wan2.1-I2V-14B-720P-gguf",
+      "from": "seitanism"
+    },
+    {
+      "update": "ComfyUI examples updated with shift node",
+      "details": "Updated examples available at comfyanonymous.github.io/ComfyUI_examples/wan/ including proper shift configuration",
+      "from": "comfy"
+    },
+    {
+      "update": "FP32 weights available for 1.3B model",
+      "details": "Single file fp32 weights at huggingface.co/Wan-AI/Wan2.1-T2V-1.3B/blob/main/diffusion_pytorch_model.safetensors",
+      "from": "Kijai"
+    },
+    {
+      "update": "Updated FP16 models available",
+      "details": "New FP16 1.3B models released that eliminate noise issues",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "update": "FloweEdit compatibility confirmed",
+      "details": "Existing HunyuanLoom FloweEdit implementation works out of the box with Wan",
+      "from": "Kijai"
+    },
+    {
+      "update": "Zuko creating new FlowEdit fork",
+      "details": "Making I2V-specific implementation since logtd is stepping back from ComfyUI development",
+      "from": "Zuko"
+    },
+    {
+      "update": "PyTorch nightly dropping CUDA 124 support",
+      "details": "According to official repo code",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "update": "ModelSamplingSD3 node added recently to ComfyUI workflow",
+      "details": "Should always be used for I2V",
+      "from": "Miku"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "Basic T2V generation with custom parameters",
+      "use_case": "python generate.py --task t2v-1.3B --size 832*480 --ckpt_dir ./Wan2.1-T2V-1.3B --sample_shift 8 --sample_guide_scale 6 --prompt 'your prompt'",
+      "from": "Parker"
+    },
+    {
+      "workflow": "High resolution generation with offloading",
+      "use_case": "Use --size 1280*720 --offload_model True --t5_cpu --sample_shift 9 --sample_guide_scale 6 --sample_steps 20 for 720p",
+      "from": "Alisson Pereira"
+    },
+    {
+      "workflow": "Download models using huggingface-cli",
+      "use_case": "huggingface-cli download <model_name> --local-dir <output_folder>",
+      "from": "Alisson Pereira"
+    },
+    {
+      "workflow": "Two-pass upscaling with Wan 1.3B",
+      "use_case": "Generate at 480p then upscale to 720p using vid2vid with low denoise",
+      "from": "CDS"
+    },
+    {
+      "workflow": "RIFE interpolation for 24fps output",
+      "description": "Use RIFE workflow to interpolate from 16fps to 24fps",
+      "use_case": "Converting native 16fps output to smoother 24fps",
+      "from": "JohnDopamine"
+    },
+    {
+      "workflow": "T2V workflow available",
+      "description": "Working T2V workflow shared",
+      "use_case": "Text to video generation",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "workflow": "10 steps for testing, 50 steps for final",
+      "use_case": "Efficient workflow to find good seeds quickly then render high quality",
+      "from": "seitanism"
+    },
+    {
+      "workflow": "I2V for animation work",
+      "use_case": "Best I2V model for animation according to users",
+      "from": "DevouredBeef"
+    },
+    {
+      "workflow": "Video2Video processing",
+      "use_case": "1.3B model works well for vid2vid applications",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "I2V extension chaining",
+      "use_case": "Creating longer videos by taking last frame and feeding to I2V repeatedly",
+      "from": "ezMan"
+    },
+    {
+      "workflow": "Overnight batch generation",
+      "use_case": "Save latents instead of videos to prevent OOM during VAE decode ruining entire batch",
+      "from": "Juampab12"
+    },
+    {
+      "workflow": "Seed hunting with step progression",
+      "use_case": "Generate multiple seeds at 10 steps, then refine best ones at 50 steps",
+      "from": "seitanism"
+    },
+    {
+      "workflow": "480p generation + upscaling",
+      "use_case": "Faster generation with quality upscaling instead of native 720p",
+      "from": "Juampab12"
+    },
+    {
+      "workflow": "LoRA training with diffusion-pipe repo",
+      "use_case": "Training character and style LoRAs for Wan models",
+      "from": "Kytra"
+    },
+    {
+      "workflow": "Native ComfyUI workflow with LoraLoaderModelOnly",
+      "use_case": "Testing LoRAs with native nodes",
+      "from": "Kytra"
+    },
+    {
+      "workflow": "Latent upscaling from 480x320 with 1.5x scaling",
+      "use_case": "Improving resolution of generated videos",
+      "from": "\u25b2"
+    },
+    {
+      "workflow": "Video2video using denoise",
+      "use_case": "Converting existing videos with Wan models",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Multi-resolution training",
+      "use_case": "LoRA training with 384/512/768/1024 square resolutions",
+      "from": "mamad8"
+    },
+    {
+      "workflow": "Multi-step upscaling using 1.3B",
+      "use_case": "Generate 480p on 1.3B, then upscale to 1080p in 2 upscale steps",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "workflow": "I2V2V pipeline",
+      "use_case": "Use Wan I2V then Hunyuan V2V as refiner",
+      "from": "Colin"
+    },
+    {
+      "workflow": "T2V with 1.3B model for fast iteration",
+      "use_case": "Quick testing and experimentation - very fast generation times",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "workflow": "Generate at low steps then refine good ones",
+      "use_case": "Efficient workflow since motion stays consistent when changing steps",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "workflow": "16GB VRAM I2V workflow",
+      "use_case": "Kijai's wrapper with block swaps 12-16, 480x480 resolution, ~10 steps, torch compile + sage",
+      "from": "zelgo_"
+    },
+    {
+      "workflow": "Video extension using last frame",
+      "use_case": "Creating longer videos by chaining generations with final frame as input",
+      "from": "burgstall"
+    },
+    {
+      "workflow": "Native nodes with automatic offloading",
+      "use_case": "Running large resolutions on limited VRAM without manual block swapping",
+      "from": "comfy"
+    },
+    {
+      "workflow": "Using spline editor for CFG scheduling",
+      "use_case": "Implementing CFG drop technique in wrapper",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Block swapping for memory management",
+      "use_case": "Running larger models on limited VRAM by moving blocks between GPU/CPU",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Vid2vid using VAE encode with denoise <1",
+      "use_case": "Generate at 480p with low steps, then improve with 720p high steps for temporal consistency",
+      "from": "hablaba"
+    },
+    {
+      "workflow": "Chinese translation in VLM workflow",
+      "use_case": "Translate English prompts to Chinese for better results",
+      "from": "JmySff"
+    },
+    {
+      "workflow": "CFG scheduling from high to low values",
+      "use_case": "Start with CFG 6 for first 15 steps, then CFG 1 for last 15 steps - twice as fast but may degrade quality",
+      "from": "seitanism"
+    },
+    {
+      "workflow": "Multi-stage video extension with MMAudio",
+      "use_case": "Generate first I2V, then queue extensions, combine segments, add audio",
+      "from": "Organoids"
+    },
+    {
+      "workflow": "Discord bot integration with 1.3B model",
+      "use_case": "Automated video generation through Discord interface",
+      "from": "AJO"
+    },
+    {
+      "workflow": "Wan 1.3B + Hunyuan refiner",
+      "use_case": "Cleaning up artifacts from 1.3B model while maintaining speed advantage over 14B",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "Vid2vid using any model including Wan",
+      "use_case": "Video-to-video generation, works nicely with Wan models",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Context schedule for extended videos",
+      "use_case": "Generating very long videos (165-329 frames) though transitions need work",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Wan + HunyuanVideo two-pass refinement",
+      "use_case": "Generate with Wan 1.3B then refine with HunyuanVideo V2V at low denoise to clean artifacts",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "1.25x latent upscale two-pass with same model",
+      "use_case": "Clean up 1.3B artifacts using latent upscale and 45% denoise second pass",
+      "from": "Kytra"
+    },
+    {
+      "workflow": "FloweEdit video editing with Wan",
+      "use_case": "Use existing HunyuanLoom nodes for video-to-video editing with flow guidance",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Multi-language emoji prompting",
+      "use_case": "Combine Chinese, English, Hebrew, and emojis for creative prompt steering",
+      "from": "fredbliss"
+    },
+    {
+      "workflow": "Two-pass Wan 1.3B + Hunyuan refinement",
+      "use_case": "Fast generation with quality refinement",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "Linear blended windowing for long videos",
+      "use_case": "161 frames with 24 frame windows and 12 frame stride",
+      "from": "Benjaminimal"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "Frame rate",
+      "value": "16fps",
+      "reason": "Base frame rate for all model outputs",
+      "from": "JohnDopamine"
+    },
+    {
+      "setting": "VRAM requirement",
+      "value": "8.19 GB for 1.3B model",
+      "reason": "Official specification for consumer GPU compatibility",
+      "from": "thaakeno"
+    },
+    {
+      "setting": "Generation time",
+      "value": "4 minutes for 5-second 480P video",
+      "reason": "On RTX 4090 without optimization",
+      "from": "thaakeno"
+    },
+    {
+      "setting": "shift parameter for 480p",
+      "value": "3.0",
+      "reason": "Recommended in documentation for 480p video generation",
+      "from": "\u7247\u30e8\u4ea1\u4ea1\u4e39\u7247"
+    },
+    {
+      "setting": "optimal 1.3B settings",
+      "value": "shift 9, steps 20",
+      "reason": "Good quality/speed balance",
+      "from": "Fannovel16"
+    },
+    {
+      "setting": "sample_guide_scale",
+      "value": "6",
+      "reason": "Standard guidance scale used in examples",
+      "from": "Parker"
+    },
+    {
+      "setting": "default fps",
+      "value": "16",
+      "reason": "Standard frame rate for generated videos",
+      "from": "Parker"
+    },
+    {
+      "setting": "sample_shift",
+      "value": "8",
+      "reason": "Default recommended setting",
+      "from": "AJO"
+    },
+    {
+      "setting": "sample_guide_scale",
+      "value": "6",
+      "reason": "Default recommended setting",
+      "from": "AJO"
+    },
+    {
+      "setting": "sample_steps",
+      "value": "50",
+      "reason": "Default, though 10 steps can work for some cases",
+      "from": "AJO"
+    },
+    {
+      "setting": "torch_dtype",
+      "value": "torch.float8_e4m3fn",
+      "reason": "For FP8 quantization in DiffSynth",
+      "from": "Rapha\u00ebl"
+    },
+    {
+      "setting": "minimum frames",
+      "value": "81",
+      "reason": "Model requirement for I2V",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Steps",
+      "value": "50 steps",
+      "reason": "Significantly better quality than 30 steps, worth the extra time",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Flow shift",
+      "value": "4-5",
+      "reason": "Better details than 6-10, but 3 causes coherence issues",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Resolution for speed",
+      "value": "480x480",
+      "reason": "Faster than 512x512 default",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Block swap for 5090",
+      "value": "5 blocks",
+      "reason": "Can afford lower block swap with more VRAM",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Negative prompt",
+      "value": "\u8272\u8c03\u8273\u4e3d\uff0c\u8fc7\u66dd\uff0c\u9759\u6001\uff0c\u7ec6\u8282\u6a21\u7cca\u4e0d\u6e05\uff0c\u5b57\u5e55\uff0c\u98ce\u683c\uff0c\u4f5c\u54c1\uff0c\u753b\u4f5c\uff0c\u753b\u9762\uff0c\u9759\u6b62\uff0c\u6574\u4f53\u53d1\u7070\uff0c\u6700\u5dee\u8d28\u91cf\uff0c\u4f4e\u8d28\u91cf\uff0cJPEG\u538b\u7f29\u6b8b\u7559\uff0c\u4e11\u964b\u7684\uff0c\u6b8b\u7f3a\u7684\uff0c\u591a\u4f59\u7684\u624b\u6307\uff0c\u753b\u5f97\u4e0d\u597d\u7684\u624b\u90e8\uff0c\u753b\u5f97\u4e0d\u597d\u7684\u8138\u90e8\uff0c\u7578\u5f62\u7684\uff0c\u6bc1\u5bb9\u7684\uff0c\u5f62\u6001\u7578\u5f62\u7684\u80a2\u4f53\uff0c\u624b\u6307\u878d\u5408\uff0c\u9759\u6b62\u4e0d\u52a8\u7684\u753b\u9762\uff0c\u6742\u4e71\u7684\u80cc\u666f\uff0c\u4e09\u6761\u817f\uff0c\u80cc\u666f\u4eba\u5f88\u591a\uff0c\u5012\u7740\u8d70",
+      "reason": "Chinese negative prompt works better",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Steps",
+      "value": "50 steps recommended",
+      "reason": "Significant quality improvement over 30 steps, 70 steps doesn't improve much over 50",
+      "from": "seitanism"
+    },
+    {
+      "setting": "Steps for testing",
+      "value": "10 steps",
+      "reason": "Good for finding the right seed quickly",
+      "from": "seitanism"
+    },
+    {
+      "setting": "RifleX",
+      "value": "0",
+      "reason": "Doesn't work with Wan models, causes tiling artifacts",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Resolution for 1.3B T2V",
+      "value": "720x480",
+      "reason": "Working well at this resolution",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "setting": "FPS",
+      "value": "16fps over 24fps",
+      "reason": "24fps seems a bit too fast",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "setting": "CFG 1.0",
+      "value": "1.0 for speed",
+      "reason": "Skips uncond computation, can halve generation time",
+      "from": "Kijai"
+    },
+    {
+      "setting": "CFG and Flow shift for 14B I2V",
+      "value": "CFG 6, Flow 5 for 50 steps",
+      "reason": "Good balance found through testing",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Block swap for 16GB VRAM",
+      "value": "Block swap 16",
+      "reason": "Allows 480x480 generation on 16GB VRAM",
+      "from": "zelgo_"
+    },
+    {
+      "setting": "Steps and model for quality",
+      "value": "50 steps better than 30 steps",
+      "reason": "Improved quality worth the extra time",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Supported resolutions for 720p model",
+      "value": "832*480, 1280*720, 1024*1024, 720*1280, 480*832",
+      "reason": "Official supported resolutions",
+      "from": "Benjimon"
+    },
+    {
+      "setting": "Steps",
+      "value": "40 steps recommended for I2V",
+      "reason": "Official recommendation from Wan repository",
+      "from": "yi"
+    },
+    {
+      "setting": "Frames",
+      "value": "81 frames maximum",
+      "reason": "Best quality, hardcoded limit in original code",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Scheduler",
+      "value": "dpm++_sde",
+      "reason": "Best quality but slowest",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Resolution",
+      "value": "480x848 with 73 frames",
+      "reason": "Optimal performance at 3 seconds per frame",
+      "from": "huangkun1985"
+    },
+    {
+      "setting": "Block swap for fp8",
+      "value": "39 blocks instead of 35",
+      "reason": "Needed for proper memory management with fp8 quantization",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "setting": "Learning rate for LoRA training",
+      "value": "bfloat16 precision",
+      "reason": "Successful training results",
+      "from": "Kytra"
+    },
+    {
+      "setting": "Training resolution",
+      "value": "512 max resolution",
+      "reason": "Nearly caps 24GB VRAM, could do 1024 with bigger GPU",
+      "from": "Kytra"
+    },
+    {
+      "setting": "Video training frames",
+      "value": "16 frames for 420 bucket",
+      "reason": "Fits in 23GB VRAM",
+      "from": "Cubey"
+    },
+    {
+      "setting": "Steps for 1.3B model",
+      "value": "15 steps",
+      "reason": "Good balance of speed vs quality",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "setting": "Precision settings",
+      "value": "fp32 for text encoder, img encoder, VAE; bf16 for transformer",
+      "reason": "Best quality without excessive compute",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "setting": "Sampler choice",
+      "value": "uni-pc",
+      "reason": "Used in official code",
+      "from": "comfy"
+    },
+    {
+      "setting": "Video2video denoise",
+      "value": "0.5",
+      "reason": "Half the sigmas for proper v2v",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Minimum frames",
+      "value": "5 frames minimum, but updated to allow 1",
+      "reason": "Technical limitation, but now adjustable",
+      "from": "Kijai"
+    },
+    {
+      "setting": "CFG scheduling",
+      "value": "Start 0.0 end 0.6, max 6",
+      "reason": "Good balance for quality and speed",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "setting": "Steps",
+      "value": "30",
+      "reason": "Standard setting used in testing",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "setting": "Resolution",
+      "value": "856x480 for 16:9",
+      "reason": "Good 16:9 aspect ratio",
+      "from": "Janosch Simon"
+    },
+    {
+      "setting": "Resolution",
+      "value": "848x480",
+      "reason": "Works well for most generations",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "setting": "Block swap",
+      "value": "20 with compile for 1280x544",
+      "reason": "Enables higher resolution on limited VRAM",
+      "from": "David Snow"
+    },
+    {
+      "setting": "Block swap",
+      "value": "40 for 1280x720x81f",
+      "reason": "Required for high resolution I2V",
+      "from": "Juampab12"
+    },
+    {
+      "setting": "Noise augmentation",
+      "value": "0.05",
+      "reason": "Produces clean results with good texture detail",
+      "from": "Zuko"
+    },
+    {
+      "setting": "Steps for quality/speed balance",
+      "value": "20-30 steps",
+      "reason": "30 steps recommended, not much difference between 30-40 steps",
+      "from": "seitanism"
+    },
+    {
+      "setting": "CFG",
+      "value": "Don't go too low",
+      "reason": "Lower CFG produces bad results",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "setting": "Block swaps for 16GB",
+      "value": "12-16 blocks",
+      "reason": "Works reliably on 16GB VRAM for I2V",
+      "from": "zelgo_"
+    },
+    {
+      "setting": "Resolution for 3090 optimal",
+      "value": "848x480x81 frames",
+      "reason": "Good balance of quality and speed on 24GB VRAM",
+      "from": "Organoids"
+    },
+    {
+      "setting": "4090 high resolution",
+      "value": "1280x720x81f with offloading",
+      "reason": "Maximum practical resolution with automatic memory management",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "setting": "SageAttention kernel for I2V",
+      "value": "fp16_cuda",
+      "reason": "Avoids black images from fp8 precision overflow",
+      "from": "Miku"
+    },
+    {
+      "setting": "Block swap value for wrapper",
+      "value": "Lower than 20",
+      "reason": "Earlier offloading to prevent VRAM issues",
+      "from": "PookieNumnums"
+    },
+    {
+      "setting": "Optimal 16:9 resolution",
+      "value": "480x848x73 frames",
+      "reason": "Optimal size and performance according to testing",
+      "from": "Organoids"
+    },
+    {
+      "setting": "RifleX freq index",
+      "value": "4",
+      "reason": "Works for Hunyuan, results in more coherent actions",
+      "from": "Kijai"
+    },
+    {
+      "setting": "CFG schedule",
+      "value": "Linear ramp down or drop to 0.8",
+      "reason": "Better quality results, used in stable video diffusion",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Inference steps vs frames",
+      "value": "Points to sample should be number of steps, not frames",
+      "reason": "Proper spline editor configuration",
+      "from": "seitanism"
+    },
+    {
+      "setting": "Resolution recommendation",
+      "value": "480p",
+      "reason": "Optimal performance, 720p less stable due to limited training",
+      "from": "Bleedy"
+    },
+    {
+      "setting": "CFG scheduling",
+      "value": "6.0 to 1.0 over 30 steps",
+      "reason": "Last 15 steps twice as fast, though may degrade quality",
+      "from": "seitanism"
+    },
+    {
+      "setting": "Frame count default",
+      "value": "1 for T2I, 81 for other tasks",
+      "reason": "Default values from Wan codebase",
+      "from": "Captain of the Dishwasher"
+    },
+    {
+      "setting": "Prompt length for Chinese",
+      "value": "80-100 characters",
+      "reason": "Suggested in Wan's prompt upscaling code",
+      "from": "TK_999"
+    },
+    {
+      "setting": "Performance mode",
+      "value": "--fast flag with latest pytorch nightly",
+      "reason": "Enables fp16 compute for better performance",
+      "from": "comfy"
+    },
+    {
+      "setting": "SageAttention kernel selection",
+      "value": "sageattn_qk_int8_pv_fp16_triton for I2V, sageattn_qk_int8_pv_fp8_cuda for T2V on Ada GPUs",
+      "reason": "Prevents black image output in I2V",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "setting": "Quantization for speed",
+      "value": "fp8_e4m3fn with SageAttention",
+      "reason": "Fastest option when VRAM limited",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Best quality/speed balance",
+      "value": "fp16 + fp16 accumulate if VRAM allows, or fp8 weights with fp16 compute",
+      "reason": "Optimal quality without significant speed loss",
+      "from": "comfy"
+    },
+    {
+      "setting": "BF16 for 4090",
+      "value": "bf16 reduces step time to 18s/step on 720x480 73 frames",
+      "reason": "Further speed optimization",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "setting": "Steps for I2V",
+      "value": "10-15 for portraits, 20-30 for full body",
+      "reason": "Depends on image complexity and shot type",
+      "from": "slmonker"
+    },
+    {
+      "setting": "Hunyuan denoise for refining",
+      "value": "0.3 or below",
+      "reason": "Higher levels don't work well for V2V",
+      "from": "David Snow"
+    },
+    {
+      "setting": "Block swapping",
+      "value": "25, 35, or 40",
+      "reason": "For 16GB VRAM to avoid OOM",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Maximum steps",
+      "value": "40-50",
+      "reason": "Diminishing returns beyond this range",
+      "from": "Kijai"
+    },
+    {
+      "setting": "FP16 compute dtype",
+      "value": "enabled",
+      "reason": "Significantly faster inference on supported GPUs",
+      "from": "Kijai"
+    },
+    {
+      "setting": "FP16 accumulation",
+      "value": "enabled with pytorch 2.7.0 nightly",
+      "reason": "Best performance with FP16 weights",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Second pass denoise",
+      "value": "45% for latent upscale method",
+      "reason": "Cleans artifacts without over-processing",
+      "from": "Kytra"
+    },
+    {
+      "setting": "V2V denoise for HunyuanVideo refinement",
+      "value": "low denoise",
+      "reason": "Removes Wan artifacts while preserving motion",
+      "from": "David Snow"
+    },
+    {
+      "setting": "Frame count",
+      "value": "832x480x65 frames for 4060 8GB",
+      "reason": "Fits in VRAM with 6-8 min generation times",
+      "from": "Googol"
+    },
+    {
+      "setting": "Resolution scaling",
+      "value": "1920x1080 to 656x368",
+      "reason": "Reduces VRAM usage for longer sequences",
+      "from": "3Dmindscaper2000"
+    },
+    {
+      "setting": "Shift value",
+      "value": "3.0 for i2v 480p, 5.0 for everything else",
+      "reason": "Official repo defaults",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "setting": "Steps",
+      "value": "50 for i2v, 40 for t2v",
+      "reason": "Official repo defaults",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "setting": "Sage attention",
+      "value": "8+8 for compatibility, 8+16 for speed",
+      "reason": "8+16 may cause issues with some setups",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "setting": "Base precision",
+      "value": "fp16 over bf16",
+      "reason": "fp16 seems superior though difference is small",
+      "from": "Benjaminimal"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "3D VAE benefits",
+      "explanation": "3D VAE helps solve issues like hands, long necks, weird buttons that are common in image models",
+      "from": "Draken, Pedro (@LatentSpacer)"
+    },
+    {
+      "term": "Wanxiang",
+      "explanation": "Chinese term meaning 'all phenomena' or 'the universe', can also mean everything is renewed or complex diversity",
+      "from": "wange1002"
+    },
+    {
+      "term": "shift parameter",
+      "explanation": "Noise schedule shift parameter that affects temporal dynamics, needs adjustment based on resolution",
+      "from": "\u7247\u30e8\u4ea1\u4ea1\u4e39\u7247"
+    },
+    {
+      "term": "NSFW Score",
+      "explanation": "Training data classification system, not necessarily a filter - used to separate training data types",
+      "from": "DawnII"
+    },
+    {
+      "term": "MoE architecture",
+      "explanation": "Wan 2.2 will use Mixture of Experts with High/Low noise expert split in 5B hybrid model",
+      "from": "context"
+    },
+    {
+      "term": "Flow shift",
+      "explanation": "Parameter that affects detail quality and coherence - lower values give better details but can cause coherence issues if too low",
+      "from": "Juampab12"
+    },
+    {
+      "term": "Block swap",
+      "explanation": "More block swap = less VRAM usage but slower speed",
+      "from": "Juampab12"
+    },
+    {
+      "term": "Flow shift",
+      "explanation": "Parameter affecting motion characteristics - different values (2 vs 5 vs 8) produce different motion qualities",
+      "from": "ezMan"
+    },
+    {
+      "term": "CFG scheduling",
+      "explanation": "Using variable CFG values during generation (e.g., high CFG early, low CFG later) for better results",
+      "from": "JmySff"
+    },
+    {
+      "term": "Differential diffusion",
+      "explanation": "Training-free technique that works with many models for better control",
+      "from": "spacepxl"
+    },
+    {
+      "term": "I2V dataset creation",
+      "explanation": "Same as T2V dataset, only difference is how you condition the model (freeze frame 0)",
+      "from": "spacepxl"
+    },
+    {
+      "term": "Block swapping",
+      "explanation": "Uses system RAM to manage VRAM limitations during inference",
+      "from": "Kijai"
+    },
+    {
+      "term": "MoE architecture",
+      "explanation": "Wan 2.2 uses Mixture of Experts with High/Low noise expert split",
+      "from": "context"
+    },
+    {
+      "term": "First-Frame-Last-Frame morphing",
+      "explanation": "Fun InP feature for video extension and morphing",
+      "from": "context"
+    },
+    {
+      "term": "Subject+Scene+Action prompt structure",
+      "explanation": "Official guidance - Subject (humans/animals/characters), Scene (environment/setting), Action (movement/camera motion)",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "term": "VAE caching",
+      "explanation": "VAE stores data that isn't cleared properly, wasting VRAM during inference",
+      "from": "Kijai"
+    },
+    {
+      "term": "TeaCache",
+      "explanation": "Acceleration method that needs model-specific coefficient values to work",
+      "from": "Kijai"
+    },
+    {
+      "term": "Spline editor CFG scheduling",
+      "explanation": "Create a line from top to bottom in middle, connects float output to CFG input for dynamic CFG control",
+      "from": "seitanism"
+    },
+    {
+      "term": "Points To Sample",
+      "explanation": "Parameter in spline editor that should equal the number of sampler steps",
+      "from": "TK_999"
+    },
+    {
+      "term": "Low frequency noise information",
+      "explanation": "Determines motion and composition in diffusion models - why motion stays consistent when changing steps but not seed",
+      "from": "spacepxl"
+    },
+    {
+      "term": "Ancestral vs deterministic samplers",
+      "explanation": "Ancestral samplers (like euler_a) change composition with step changes, deterministic samplers (like euler, DPM) don't",
+      "from": "spacepxl"
+    },
+    {
+      "term": "clip_vision_h",
+      "explanation": "Refers to XLM-Roberta-Large-Vit-L-14 model from HuggingFace",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "term": "SpargeAttn tuning",
+      "explanation": "Training-free attention optimization that calculates parameters for speedup, saves tiny files with tuned params",
+      "from": "Kijai"
+    },
+    {
+      "term": "Auto offloading",
+      "explanation": "Automatic memory management that moves model parts between VRAM and RAM based on usage",
+      "from": "comfy"
+    },
+    {
+      "term": "fp8 precision overflow",
+      "explanation": "Mathematical overflow in fp8 format causing NaN values and black image outputs",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "term": "Block swapping",
+      "explanation": "Moving transformer blocks between GPU and CPU memory during inference to manage VRAM usage",
+      "from": "Kijai"
+    },
+    {
+      "term": "fp8 casting precision loss",
+      "explanation": "Loading e4 weight and casting to e5 loses both exponent and mantissa, should use matching precision",
+      "from": "Kijai"
+    },
+    {
+      "term": "RifleX",
+      "explanation": "Technique to reduce attention to high frequency movements, allowing more attention to low frequency movements via softmax",
+      "from": "deleted_user_2ca1923442ba"
+    },
+    {
+      "term": "Enhance video",
+      "explanation": "Uses fancy math to enhance attention results, runs every block on every step",
+      "from": "Kijai"
+    },
+    {
+      "term": "Force offload",
+      "explanation": "Setting that controls memory management for the sampler",
+      "from": "Shawneau \ud83c\udf41 [CA]"
+    },
+    {
+      "term": "Feta args",
+      "explanation": "Parameters for the enhance video functionality, optimal values still being determined",
+      "from": "Kijai"
+    },
+    {
+      "term": "UmT5 (Unified multilingual T5)",
+      "explanation": "Multilingual text encoder that shares embedding space across 100+ languages, enabling cross-lingual transfer",
+      "from": "fredbliss"
+    },
+    {
+      "term": "SpargeAttention",
+      "explanation": "Attention optimization requiring model-specific tuning, taking ~5 hours per iteration with minimal speed gains",
+      "from": "Kijai"
+    },
+    {
+      "term": "fp16 accumulation",
+      "explanation": "Higher precision accumulation for matrix operations while using lower precision weights",
+      "from": "comfy"
+    },
+    {
+      "term": "Shift",
+      "explanation": "Adjusts the sigma schedule - higher values affect the denoising curve, can't be negative with video models",
+      "from": "Kijai"
+    },
+    {
+      "term": "Context schedule",
+      "explanation": "Method for generating extended video sequences beyond normal frame limits",
+      "from": "Kijai"
+    },
+    {
+      "term": "Block swapping",
+      "explanation": "Memory management technique in wrapper to handle larger models on limited VRAM",
+      "from": "Kijai"
+    },
+    {
+      "term": "FP16 accumulation",
+      "explanation": "PyTorch feature for doing all FP16 GEMM accumulation in FP16 for increased performance on Volta+ GPUs, at cost of numerical precision",
+      "from": "Kijai"
+    },
+    {
+      "term": "FETA in FlowEdit",
+      "explanation": "Flow editing strength parameter, typically set to 0.2 for Wan vs 2.0 for HunyuanVideo",
+      "from": "Zuko"
+    },
+    {
+      "term": "Embedding space steering",
+      "explanation": "Using different languages and emojis to steer generation through shared embedding space of UMT5",
+      "from": "fredbliss"
+    },
+    {
+      "term": "fp16 accumulation",
+      "explanation": "When doing matmul on fp16 tensors, the sum variable (accumulation) is computed in fp32 for stability, then recast to fp16",
+      "from": "Benjaminimal"
+    },
+    {
+      "term": "Grid/tile artifacts",
+      "explanation": "Pattern artifacts that appear as stipple-like patterns, often related to quantization quality",
+      "from": "N0NSens"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "Wan 2.1 I2V 14B 720P",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-I2V-14B-720P",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "Wan 2.1 HuggingFace Space",
+      "url": "https://huggingface.co/spaces/Wan-AI/Wan2.1",
+      "type": "demo",
+      "from": "various"
+    },
+    {
+      "resource": "Alibaba Wan Twitter",
+      "url": "https://x.com/Alibaba_Wan",
+      "type": "social",
+      "from": "yi"
+    },
+    {
+      "resource": "Wan API documentation",
+      "url": "https://help-aliyun-com.translate.goog/zh/model-studio/developer-reference/image-to-video-api-reference",
+      "type": "documentation",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "resource": "Timestamp converter tool",
+      "url": "https://sesh.fyi/timestamp/",
+      "type": "tool",
+      "from": "Fannovel16 \ud83c\uddfb\ud83c\uddf3"
+    },
+    {
+      "resource": "Wan2.1-T2V-1.3B",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B/",
+      "type": "model",
+      "from": "Fannovel16"
+    },
+    {
+      "resource": "Wan2.1-I2V-14B-720P",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-I2V-14B-720P/tree/main",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "DiffSynth-Studio pipeline code",
+      "url": "https://github.com/modelscope/DiffSynth-Studio/blob/af7d305f00c67e3fa16d9f902f77980170e1ef38/diffsynth/pipelines/wan_video.py#L22",
+      "type": "repo",
+      "from": "Fannovel16"
+    },
+    {
+      "resource": "Wan2.1 official space",
+      "url": "https://huggingface.co/spaces/Wan-AI/Wan2.1",
+      "type": "tool",
+      "from": "wange1002"
+    },
+    {
+      "resource": "Official Wan 2.1 Repository",
+      "url": "https://github.com/Wan-Video/Wan2.1",
+      "type": "repo",
+      "from": "Fannovel16"
+    },
+    {
+      "resource": "DiffSynth-Studio implementation",
+      "url": "https://github.com/modelscope/DiffSynth-Studio/tree/main/examples/wanvideo",
+      "type": "repo",
+      "from": "Juampab12"
+    },
+    {
+      "resource": "Precompiled Flash Attention wheels",
+      "url": "https://huggingface.co/Kijai/PrecompiledWheels/tree/main",
+      "type": "tool",
+      "from": "Alisson Pereira"
+    },
+    {
+      "resource": "Live stream on X",
+      "url": "https://x.com/i/broadcasts/1lPJqMaokNeJb",
+      "type": "tool",
+      "from": "ResTrading"
+    },
+    {
+      "resource": "ComfyUI-WanVideoWrapper",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "DiffSynth-Studio Wan examples",
+      "url": "https://github.com/modelscope/DiffSynth-Studio/tree/main/examples/wanvideo",
+      "type": "repo",
+      "from": "ArtOfficial"
+    },
+    {
+      "resource": "Wan2_1-I2V-14B-480P_fp8_e4m3fn.safetensors",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1-I2V-14B-480P_fp8_e4m3fn.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "WSL disk expansion guide",
+      "url": "https://learn.microsoft.com/en-us/windows/wsl/disk-space#how-to-expand-the-size-of-your-wsl-2-virtual-hard-disk",
+      "type": "tool",
+      "from": "TK_999"
+    },
+    {
+      "resource": "uv package manager",
+      "url": "https://docs.astral.sh/uv/",
+      "type": "tool",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "1.3B T2V model",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1-T2V-1_3B_fp8_e4m3fn.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Training scripts",
+      "url": "DiffSynth repo examples",
+      "type": "repo",
+      "from": "Kytra"
+    },
+    {
+      "resource": "Prompt extend system prompts",
+      "url": "https://github.com/Wan-Video/Wan2.1/blob/main/wan/utils/prompt_extend.py",
+      "type": "repo",
+      "from": "TK_999"
+    },
+    {
+      "resource": "Wan 720P I2V model",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1-I2V-14B-720P_fp8_e4m3fn.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Wan fp32 VAE",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1_VAE_fp32.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Wan 14B T2V model",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1-T2V-14B_fp8_e4m3fn.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "ComfyUI native implementation",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files",
+      "type": "repo",
+      "from": "comfy"
+    },
+    {
+      "resource": "ComfyUI WanVideo wrapper",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "type": "repo",
+      "from": "NebSH"
+    },
+    {
+      "resource": "ComfyUI commit for native support",
+      "url": "https://github.com/comfyanonymous/ComfyUI/commit/63023011b97b85087896683b73eab5d1a6d95a05",
+      "type": "repo",
+      "from": "comfy"
+    },
+    {
+      "resource": "FP32 UMT5-XXL encoder",
+      "url": "https://huggingface.co/Nap/umt5-xxl-encoder-only-fp32-safetensors/tree/main",
+      "type": "model",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "resource": "FP32 visual encoder",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/open-clip-xlm-roberta-large-vit-huge-14_visual_fp32.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Triton for Windows",
+      "url": "https://github.com/woct0rdho/triton-windows",
+      "type": "tool",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "Wrapper workflows",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/main/example_workflows",
+      "type": "workflow",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "Kijai's WanVideoWrapper",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "type": "repo",
+      "from": "garbus"
+    },
+    {
+      "resource": "diffusion-pipe LoRA training",
+      "url": "https://github.com/tdrussell/diffusion-pipe",
+      "type": "repo",
+      "from": "pro.evolution"
+    },
+    {
+      "resource": "Test LoRA",
+      "url": "https://huggingface.co/tdrussell/wan-1.3b-grayscale-lora-test",
+      "type": "model",
+      "from": "pro.evolution"
+    },
+    {
+      "resource": "Comfy repackaged models",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files",
+      "type": "model",
+      "from": "comfy"
+    },
+    {
+      "resource": "City96 GGUF models",
+      "url": "https://huggingface.co/city96/Wan2.1-T2V-14B-gguf",
+      "type": "model",
+      "from": "\ud83e\udd99rishappi"
+    },
+    {
+      "resource": "ComfyOrg Wan repackaged models",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files",
+      "type": "model",
+      "from": "Kytra"
+    },
+    {
+      "resource": "Grayscale LoRA test",
+      "url": "https://huggingface.co/tdrussell/wan-1.3b-grayscale-lora-test",
+      "type": "lora",
+      "from": "Screeb"
+    },
+    {
+      "resource": "Character LoRA (Kylie Jenner)",
+      "url": "https://www.mediafire.com/file/0d46wdbmxklarp8/adapter_model.safetensors/file",
+      "type": "lora",
+      "from": "Kirara"
+    },
+    {
+      "resource": "Diffusion-pipe repo",
+      "url": "",
+      "type": "training tool",
+      "from": "Kytra"
+    },
+    {
+      "resource": "ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "comfy"
+    },
+    {
+      "resource": "HunyuanVideo keyframe control LoRA",
+      "url": "https://huggingface.co/dashtoon/hunyuan-video-keyframe-control-lora",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "TeaCache GitHub issue",
+      "url": "https://github.com/ali-vilab/TeaCache/issues/1",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "Mngbg"
+    },
+    {
+      "resource": "Pre-CFG ComfyUI nodes",
+      "url": "https://github.com/Extraltodeus/pre_cfg_comfy_nodes_for_ComfyUI",
+      "type": "repo",
+      "from": "Rapha\u00ebl"
+    },
+    {
+      "resource": "Comfy-Org Wan text encoders",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files/text_encoders",
+      "type": "model",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "resource": "Video comparison tool",
+      "url": "",
+      "type": "tool",
+      "from": "mamad8"
+    },
+    {
+      "resource": "GGUF T2V 14B model",
+      "url": "https://huggingface.co/city96/Wan2.1-T2V-14B-gguf/tree/main",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "Miku"
+    },
+    {
+      "resource": "XLM-Roberta-Large-Vit-L-14",
+      "url": "https://huggingface.co/M-CLIP/XLM-Roberta-Large-Vit-L-14",
+      "type": "model",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "AlekPet Custom Nodes",
+      "url": "https://github.com/AlekPet/ComfyUI_Custom_Nodes_AlekPet",
+      "type": "repo",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "resource": "FP32 T5 text encoder",
+      "url": "https://huggingface.co/Nap/umt5-xxl-encoder-only-fp32-safetensors/tree/main",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "NF4 quantized 14B models",
+      "url": "https://civitai.com/models/1299436/wan21-nf4-quantizations",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "SpargeAttn repository",
+      "url": "https://github.com/thu-ml/SpargeAttn",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Wan 2.1 I2V GGUF models",
+      "url": "https://huggingface.co/city96/Wan2.1-I2V-14B-480P-gguf",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "Wan 2.1 T2V GGUF models",
+      "url": "https://huggingface.co/city96/Wan2.1-T2V-14B-gguf",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "Draken"
+    },
+    {
+      "resource": "Wan GGUF models",
+      "url": "https://huggingface.co/calcuis/wan-gguf/tree/main",
+      "type": "model",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "ComfyUI-WanVideoWrapper",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "type": "repo",
+      "from": "Draken"
+    },
+    {
+      "resource": "Comfy-Org repackaged models",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files",
+      "type": "model",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "resource": "city96 GGUF models",
+      "url": "https://huggingface.co/city96/Wan2.1-I2V-14B-480P-gguf/tree/main",
+      "type": "model",
+      "from": "burgstall"
+    },
+    {
+      "resource": "Comfy fp16 repackaged models",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged",
+      "type": "model",
+      "from": "comfy"
+    },
+    {
+      "resource": "Wan prompt extension code",
+      "url": "https://github.com/Wan-Video/Wan2.1/blob/main/wan/utils/prompt_extend.py",
+      "type": "repo",
+      "from": "TK_999"
+    },
+    {
+      "resource": "720p bf16 I2V model",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/blob/main/split_files/diffusion_models/wan2.1_i2v_720p_14B_bf16.safetensors",
+      "type": "model",
+      "from": "Cubey"
+    },
+    {
+      "resource": "Wan2.1-I2V-14B-720P-gguf",
+      "url": "https://huggingface.co/city96/Wan2.1-I2V-14B-720P-gguf",
+      "type": "model",
+      "from": "AJO"
+    },
+    {
+      "resource": "xDiT project",
+      "url": "https://github.com/xdit-project/xDiT",
+      "type": "repo",
+      "from": "fredbliss"
+    },
+    {
+      "resource": "Goku MovieGen benchmark viewer",
+      "url": "https://huggingface.co/spaces/benjamin-paine/goku-moviegen-bench-viewer",
+      "type": "tool",
+      "from": "Benjaminimal"
+    },
+    {
+      "resource": "HunyuanVideo Penguin benchmark prompts",
+      "url": "https://github.com/Tencent/HunyuanVideo/blob/main/assets/PenguinVideoBenchmark.csv",
+      "type": "dataset",
+      "from": "fredbliss"
+    },
+    {
+      "resource": "SpargeAttn research paper",
+      "url": "https://arxiv.org/abs/2502.20126",
+      "type": "paper",
+      "from": "yi"
+    },
+    {
+      "resource": "720p GGUF models",
+      "url": "https://huggingface.co/city96/Wan2.1-I2V-14B-720P-gguf/tree/main",
+      "type": "model",
+      "from": "seitanism"
+    },
+    {
+      "resource": "ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "comfy"
+    },
+    {
+      "resource": "FP32 1.3B weights",
+      "url": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B/blob/main/diffusion_pytorch_model.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "ComfyUI-GGUF node",
+      "url": "https://github.com/city96/ComfyUI-GGUF",
+      "type": "node",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Genmo prompts for inspiration",
+      "url": "https://www.genmo.ai/play",
+      "type": "resource",
+      "from": "David Snow"
+    },
+    {
+      "resource": "Official ComfyUI Wan examples",
+      "url": "https://comfyanonymous.github.io/ComfyUI_examples/wan/",
+      "type": "workflow",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "resource": "Comfy-Org Wan 2.1 repackaged models",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main",
+      "type": "model",
+      "from": "MilesCorban"
+    },
+    {
+      "resource": "HunyuanLoom FlowEdit nodes",
+      "url": "https://github.com/logtd/ComfyUI-HunyuanLoom",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "FP16 model weights",
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/tree/main/split_files/diffusion_models",
+      "type": "model",
+      "from": "Juampab12"
+    },
+    {
+      "resource": "Kagi emoji translator",
+      "url": "https://translate.kagi.com/?from=auto&to=emoji&text=",
+      "type": "tool",
+      "from": "fredbliss"
+    },
+    {
+      "resource": "Extended windowing code for long videos",
+      "url": "https://github.com/painebenjamin/taproot/blob/main/src/taproot/tasks/generation/video/wan/model/pipeline.py",
+      "type": "repo",
+      "from": "Benjaminimal"
+    },
+    {
+      "resource": "PyTorch nightly CUDA 128 builds",
+      "url": "https://download.pytorch.org/whl/nightly/cu128",
+      "type": "tool",
+      "from": "Benjaminimal"
+    },
+    {
+      "resource": "Two-pass workflow with Hunyuan refinement",
+      "url": "",
+      "type": "workflow",
+      "from": "David Snow"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "I2V model not good for anime",
+      "details": "Lots of morphing issues with anime-style input images",
+      "from": "Miku"
+    },
+    {
+      "limitation": "Only 5 second generation length",
+      "details": "All samples and API limited to 5 seconds despite claims of longer videos",
+      "from": "wottso"
+    },
+    {
+      "limitation": "Heavy Asian bias in human generation",
+      "details": "Defaults to Asian people for any human generation without specific ethnicity prompts",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "limitation": "1.3B model is T2V only",
+      "details": "No I2V capability in the smaller model",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "limitation": "Large model sizes in fp32",
+      "details": "14B model is around 66GB, needs quantization for most users",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "No inference code initially",
+      "details": "Only weights released initially, code came later",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "1.3B model is T2V only currently",
+      "details": "No I2V capability in the 1.3B variant, only text-to-video",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "limitation": "14B model requires excessive VRAM",
+      "details": "Takes around 120GB VRAM and estimates 30 minutes for 50 steps",
+      "from": "samurzl"
+    },
+    {
+      "limitation": "Hunyuan image generation quality issues",
+      "details": "1 frame videos are always pony style and bad quality compared to proper image models",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "Camera movement accuracy",
+      "details": "Sometimes pans in instead of out as prompted, but not bad overall",
+      "from": "DawnII"
+    },
+    {
+      "limitation": "Minimum 81 frames required for I2V",
+      "details": "Anything less than 81 frames with I2V errors out",
+      "from": "ArtOfficial"
+    },
+    {
+      "limitation": "No 1.3B I2V model available",
+      "details": "Only T2V model released for 1.3B variant",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "Grid/speckle artifacts from VAE",
+      "details": "Strided convolutions and VGG LPIPS loss cause artifacts",
+      "from": "spacepxl"
+    },
+    {
+      "limitation": "FP8_fast quantization causes noise artifacts",
+      "details": "Especially with img_embed weights",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Hardcoded 81 frame minimum",
+      "details": "Cannot generate less than 81 frames due to hardcoded values in encode_image function",
+      "from": "ArtOfficial"
+    },
+    {
+      "limitation": "Poor quality above 81 frames",
+      "details": "121 frames consistently produces nightmare fuel/static content",
+      "from": "Ro"
+    },
+    {
+      "limitation": "Celebrity censorship",
+      "details": "Model doesn't know celebrities, appears censored",
+      "from": "yi"
+    },
+    {
+      "limitation": "T2V not implemented in 1.3B initially",
+      "details": "Only I2V 14B available at first, T2V 1.3B came later",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "Poor prompt following",
+      "details": "Complex prompts not followed well, model interprets differently than intended",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "14B model is very slow",
+      "details": "14B takes over 20 minutes compared to 1.3B taking 2 minutes",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "limitation": "720P I2V extremely slow on lower-end GPUs",
+      "details": "1280x720x81 I2V took almost 1 hour to generate",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "4060Ti 16GB struggles with 14B",
+      "details": "14B i2v model causes GPU overload, 260 seconds per inference step",
+      "from": "wange1002"
+    },
+    {
+      "limitation": "img2vid2vid not working well",
+      "details": "Video to video conversion not quite there yet",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "1.3B model produces glitchy results at 30 steps",
+      "details": "30 step generations on 1.3B T2V are very glitchy",
+      "from": "TK_999"
+    },
+    {
+      "limitation": "No 1.3B I2V model available",
+      "details": "Only T2V available for 1.3B variant",
+      "from": "mamad8"
+    },
+    {
+      "limitation": "Speed is very slow",
+      "details": "CFG is particularly slow, 1h per video for 720p I2V on some setups",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Can't achieve static camera easily",
+      "details": "I2V tends to add camera movement/zoom even when trying for static shots",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "Can't generate fisheye lens perspective",
+      "details": "T2V unable to produce fisheye lens footage",
+      "from": "Ghost"
+    },
+    {
+      "limitation": "Video extensions won't be fully seamless",
+      "details": "Without velocity/acceleration info from input frames, perfect seamless joining is mathematically impossible",
+      "from": "Screeb"
+    },
+    {
+      "limitation": "FP8 fast causes quality issues",
+      "details": "FP8 fast produces blocky artifacts, only good for composition testing",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "Frame count hardcoded to 81",
+      "details": "Model starts looping or degrading after 81 frames",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "High VRAM usage for 720p",
+      "details": "16GB GPU can only handle 49 frames at 512x768 with 14B I2V",
+      "from": "wange1002"
+    },
+    {
+      "limitation": "Cannot interchange model resolutions",
+      "details": "720p model doesn't work well for 480p resolution and vice versa",
+      "from": "AJO"
+    },
+    {
+      "limitation": "LoRAs not compatible between model sizes",
+      "details": "1.3B and 14B have different architectures, LoRAs won't transfer",
+      "from": "Fannovel16"
+    },
+    {
+      "limitation": "Native nodes require minimum 81 frames",
+      "details": "Won't work with frame counts below 81",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "LoRAs don't transfer between 1.3B and 14B models",
+      "details": "Models have different architectures (30 vs 40 blocks, different inner dimensions)",
+      "from": "comfy"
+    },
+    {
+      "limitation": "14B model is very slow",
+      "details": "Takes 1200 seconds for 1280x720 15 steps",
+      "from": "Kirara"
+    },
+    {
+      "limitation": "No 1.3B I2V model available",
+      "details": "Only T2V model exists for 1.3B variant",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "English text generation breaks down",
+      "details": "Good at single words but sentences become garbled, affects both 1.3B and 14B",
+      "from": "DawnII"
+    },
+    {
+      "limitation": "LoRA compatibility between model sizes",
+      "details": "14B LoRAs won't work on 1.3B due to dimension differences (5120 vs 1536)",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Quality suffers outside 81 frames",
+      "details": "While longer sequences possible, quality degrades",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "480p model doesn't generalize to 720p well",
+      "details": "720p model performs worse at 480p than dedicated 480p model",
+      "from": "Juampab12"
+    },
+    {
+      "limitation": "Sage attention doesn't work with I2V in native",
+      "details": "Cannot use --use-sage-attention startup flag with I2V models in native mode",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "Text generation produces gibberish in I2V",
+      "details": "Text generation ends up being gibberish in image-to-video, may work better on text-to-video",
+      "from": "Ro"
+    },
+    {
+      "limitation": "Compile artifacts with fp8_e5m2",
+      "details": "Using compile with fp8_e5m2 quantization creates artifacts in video output on 3090",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "limitation": "High resolution generates poor quality",
+      "details": "4K output (3840x2160) doesn't produce good results despite working",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "FP8_fast doesn't provide significant speed benefits",
+      "details": "When feedforward layers excluded to maintain quality, speed increase is minimal",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "14B model tough on 12GB VRAM",
+      "details": "Challenging to run 14B model effectively with only 12GB VRAM",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "720x720 resolution causes device errors",
+      "details": "RuntimeError about tensors on different devices (cuda:0 and cpu) when trying 720x720, 640x640 works",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "Physics accuracy issues",
+      "details": "Foot going through skateboard, lacks authentic motion representation, prioritizes image fidelity",
+      "from": "Zuko"
+    },
+    {
+      "limitation": "Very slow generation times for 14B model",
+      "details": "65 frames at 720p takes 2190 seconds (36+ minutes)",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "SageAttention fp8 kernel fails with I2V",
+      "details": "Causes black images due to precision overflow, only affects I2V not T2V",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "limitation": "14B LoRA training requires 50GB+ VRAM",
+      "details": "480p videos cause RAM swap on 24GB cards making training extremely slow",
+      "from": "chancelor"
+    },
+    {
+      "limitation": "Issues going past 81 frames",
+      "details": "While frame limit is uncapped, problems occur beyond 81 frames",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "fp8_fast has lower quality",
+      "details": "Works but produces lower quality results than standard fp8",
+      "from": "comfy"
+    },
+    {
+      "limitation": "720p resolution instability",
+      "details": "Less stable than 480p due to limited training at higher resolution",
+      "from": "Bleedy"
+    },
+    {
+      "limitation": "I2V sometimes ignores input image",
+      "details": "When prompt doesn't match image, model may only use text prompt like IPAdapter",
+      "from": "Draken"
+    },
+    {
+      "limitation": "Long videos start looping",
+      "details": "Model begins looping after certain point, around 81 frames",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "1.3B model quality issues",
+      "details": "Described as 'janky' compared to 14B model",
+      "from": "Parker"
+    },
+    {
+      "limitation": "GGUF not supported in wrapper",
+      "details": "Would require significant work to implement, not currently planned",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "CFG scheduling not compatible with most input nodes",
+      "details": "Most inputs don't expect lists, need specific nodes like Scheduled CFG Guidance",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "32GB model won't fit fully in 32GB VRAM",
+      "details": "Will get offloaded partly making it slower unless quantized",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "Aggressive CFG scheduling degrades quality",
+      "details": "Going from 8/9 to 6 to 1, or 8->7->6->1 messes up a lot",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "96 frames causes extreme slowdown",
+      "details": "Over 1000 seconds per iteration reported, though may have been a glitch",
+      "from": "\u2727\u0e05\u0e42\u0e51\u2180\u11ba\u2180 \u0e51\u0e43\u0e05\u2727PookieNumnums"
+    },
+    {
+      "limitation": "Object permanence issues",
+      "details": "Objects remain visible after explosions or destruction events",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "SpargeAttention minimal performance gains",
+      "details": "Only 0.3s/it improvement (3s to 2.7s) with 5+ hour tuning requirement",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Language translation loses meaning",
+      "details": "Translating between Chinese and English loses nuance, especially with very different language structures",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "14B T2V LoRAs load onto I2V but compatibility unclear",
+      "details": "Loading works but effectiveness not confirmed",
+      "from": "Cubey"
+    },
+    {
+      "limitation": "1.3B model has artifacts and fuzzy distant objects",
+      "details": "Pixel-to-pixel consistency issues at distance, likely VAE related. Affects bigger model too but less noticeable",
+      "from": "Draken"
+    },
+    {
+      "limitation": "Context schedule transitions aren't great",
+      "details": "Motion carries over well but transition quality needs improvement for extended videos",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SpargeAttn not viable yet",
+      "details": "Requires training, nothing changes currently",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "GGUF generation becomes exponentially slower with more frames when VRAM exceeded",
+      "details": "6min for 33 frames vs 2hrs for 81 frames when running out of VRAM",
+      "from": "Seb"
+    },
+    {
+      "limitation": "1.3B model produces stippling artifacts",
+      "details": "Requires second pass or upscaling to clean up, 14B doesn't have this issue",
+      "from": "David Snow"
+    },
+    {
+      "limitation": "FP8_fast ruins quality",
+      "details": "Despite 30% speed improvement, quality degradation makes it unusable",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "GGUF may not work with multi-GPU setups",
+      "details": "Only native nodes support GGUF, wrapper may have issues",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "limitation": "Wan dataset appears compressed/washed",
+      "details": "Latent space highly compressed compared to other models",
+      "from": "TK_999"
+    },
+    {
+      "limitation": "High resolution single-pass creates duplicates",
+      "details": "1920x1080 single pass shows duplicates in preview",
+      "from": "David Snow"
+    },
+    {
+      "limitation": "Width must be divisible by 16",
+      "details": "Gets tensor errors otherwise",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Sage attention compatibility issues with i2v",
+      "details": "sageattn_qk_int8_pv_fp8_cuda produces black images on Ada GPUs",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "limitation": "Poor prompt adherence",
+      "details": "Still at level of trying to get reasonable output each seed, let alone following prompts",
+      "from": "deleted_user_2ca1923442ba"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "Model size",
+      "details": "I2V 14B model: 66GB in fp32, 16.5GB in fp8",
+      "from": "Fannovel16 \ud83c\uddfb\ud83c\uddf3, seitanism"
+    },
+    {
+      "requirement": "1.3B model VRAM",
+      "details": "8.19 GB VRAM required, compatible with consumer GPUs",
+      "from": "thaakeno"
+    },
+    {
+      "requirement": "14B model size",
+      "details": "Around 66GB in fp32, 40GB+ in bf16, needs high-end hardware",
+      "from": "multiple users"
+    },
+    {
+      "requirement": "RTX 4090 performance",
+      "details": "4 minutes for 5-second 480P video generation",
+      "from": "thaakeno"
+    },
+    {
+      "requirement": "1.3B model generation time",
+      "details": "About 4 minutes on RTX 4090 for 50 steps, 3 minutes for basic generation",
+      "from": "Parker"
+    },
+    {
+      "requirement": "14B model VRAM",
+      "details": "Around 120GB VRAM required, doesn't work on single H100 without offloading",
+      "from": "samurzl"
+    },
+    {
+      "requirement": "4060 Ti 16GB compatibility",
+      "details": "Can run 1.3B model with sage-attention 2 and torch.compile modifications",
+      "from": "Pol"
+    },
+    {
+      "requirement": "720p generation time",
+      "details": "Says 6:19 remaining for 720p on 4090",
+      "from": "Parker"
+    },
+    {
+      "requirement": "14B model VRAM",
+      "details": "Runs under 24GB VRAM with DiffSynth settings, uses about 20GB",
+      "from": "ArtOfficial"
+    },
+    {
+      "requirement": "1.3B model performance",
+      "details": "3.6-4.1s/it generation speed reported",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "I2V generation time",
+      "details": "15 minutes for 50 steps on unspecified hardware",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "VRAM for I2V 14B",
+      "details": "Fits under 20GB VRAM, max allocated 16.763 GB",
+      "from": "burgstall"
+    },
+    {
+      "requirement": "4090 performance",
+      "details": "50 steps takes 10m, 30 steps 6m at 480x480x81 frames",
+      "from": "Juampab12"
+    },
+    {
+      "requirement": "5090 performance",
+      "details": "544x704x129 frames at 10 steps takes 4 minutes",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "3090 performance",
+      "details": "720x480x81 at 22s/it, slower than Hunyuan",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "requirement": "4060ti 16GB compatibility",
+      "details": "Can run 544*960 resolution 10 steps 49 frames",
+      "from": "wange1002"
+    },
+    {
+      "requirement": "3060 12GB limitation",
+      "details": "Cannot run 14B model, gets stuck on sampler",
+      "from": "ArcherEmiya"
+    },
+    {
+      "requirement": "1.3B T2V VRAM usage",
+      "details": "11GB VRAM for 200+ frames, 7GB for 480x840 30 steps 81 frames",
+      "from": "TK_999"
+    },
+    {
+      "requirement": "720P I2V VRAM usage",
+      "details": "Less than 7GB VRAM for 1280x720x81 frames on 1.3B",
+      "from": "burgstall"
+    },
+    {
+      "requirement": "4060Ti 16GB performance",
+      "details": "480x848 resolution: 65s per step, 544x960 resolution: 260s per step",
+      "from": "wange1002"
+    },
+    {
+      "requirement": "4090 performance",
+      "details": "30 steps: 11 min, 50 steps: 19:30 min, 10 steps: 4 min at 480x800",
+      "from": "Parker"
+    },
+    {
+      "requirement": "3090 performance",
+      "details": "720P generation takes 20+ minutes, only utilizing 33% VRAM",
+      "from": "burgstall"
+    },
+    {
+      "requirement": "Max memory usage example",
+      "details": "Max allocated: 5.309GB, Max reserved: 6.875GB for 1280x720x81",
+      "from": "burgstall"
+    },
+    {
+      "requirement": "1.3B model on RTX 3060",
+      "details": "9.5 s/it with ComfyUI native",
+      "from": "CDS"
+    },
+    {
+      "requirement": "14B model timing",
+      "details": "4090: 6-9 minutes for I2V (61-73 frames), 4x3090ti: supports 480x832",
+      "from": "ezMan"
+    },
+    {
+      "requirement": "VRAM for 720p",
+      "details": "24GB VRAM needs block swapping, 35 blocks works for 1280x720",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "requirement": "16GB VRAM support",
+      "details": "Can run 480x480 with block swap 16 and offloading",
+      "from": "zelgo_"
+    },
+    {
+      "requirement": "4090 performance benchmarks",
+      "details": "25 frames 720x1280: 177s, 49 frames 544x960: 174s, optimal 73 frames 480x848: 225s",
+      "from": "huangkun1985"
+    },
+    {
+      "requirement": "VRAM usage",
+      "details": "1.3B T2V uses 5-6GB inference, I2V 14B 720p 97 frames max 10.2GB",
+      "from": "Draken"
+    },
+    {
+      "requirement": "5090 speed",
+      "details": "480x720x81 frames in 5 minutes with 30 steps",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "3090 limitations",
+      "details": "1 hour estimated for 81 frames on 3090 vs 30 minutes on 4090",
+      "from": "wooden tank"
+    },
+    {
+      "requirement": "LoRA training VRAM",
+      "details": "Nearly caps 24GB VRAM at 512 resolution, 26GB for 256 video training up to 65 frames",
+      "from": "Kytra"
+    },
+    {
+      "requirement": "14B model inference",
+      "details": "Uses 23GB VRAM on 4090, takes 524 seconds for 30 steps",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "requirement": "1.3B model performance",
+      "details": "19% VRAM usage with 20 block swap, 158 seconds execution time",
+      "from": "GalaxyTimeMachine (RTX4090)"
+    },
+    {
+      "requirement": "Video training memory",
+      "details": "512x videos with up to 65 frames uses 45GB on A40",
+      "from": "samurzl"
+    },
+    {
+      "requirement": "14B I2V on 3090",
+      "details": "512x512x65 frames: 25min, 45s/it at 20 steps",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "requirement": "14B I2V on 4090",
+      "details": "1280x720 81 frames: 34-58min depending on steps",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "requirement": "1.3B vs 14B speed on 4090",
+      "details": "1.3B: 36sec vs 14B: 3min 33sec for 512x512x53",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "14B training on A40",
+      "details": "42.5GB VRAM usage, LoRA rank 64, multi-resolution",
+      "from": "mamad8"
+    },
+    {
+      "requirement": "1.3B training memory",
+      "details": "13GB memory for 1280x704 images only",
+      "from": "Cseti"
+    },
+    {
+      "requirement": "Ada 6000 performance",
+      "details": "11 minutes for I2V generation",
+      "from": "comfy"
+    },
+    {
+      "requirement": "VRAM for 1.3B T2V",
+      "details": "3090 can do 480x720x81 in 3 minutes, works well on 12GB cards",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "requirement": "VRAM for 14B I2V",
+      "details": "Takes 15-20 minutes on 3090, 1 hour on 4090 at 1280x720x81f with blockswap 40",
+      "from": "Juampab12"
+    },
+    {
+      "requirement": "5090 performance",
+      "details": "30% speed increase over 4090, 1280x720x81 takes 3 minutes on 1.3B T2V with sage+compile",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "4K generation",
+      "details": "3840x2160x33 takes 2128 seconds (35+ minutes) on high-end hardware",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "40GB VRAM for full bf16 model",
+      "details": "Native ComfyUI implementation needs ~40GB for full precision model",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "5090 performance",
+      "value": "20/20 steps in 11 seconds with fp8dqrow (1.68it/s)",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "4090 performance with 1.3B",
+      "details": "31 seconds for 33 frames at 20 steps",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "requirement": "4060 Ti performance",
+      "details": "832x480x81 frames getting 80s/it with 31 blocks swapped on I2V 14B fp8",
+      "from": "Colin"
+    },
+    {
+      "requirement": "12GB VRAM minimum",
+      "details": "Can run 512x512 I2V with SageAttention and torch optimizations",
+      "from": "Miku"
+    },
+    {
+      "requirement": "4090 capabilities",
+      "details": "Can handle 768x768x81 with auto offloading, 1280x720x81f with manual offloading",
+      "from": "comfy"
+    },
+    {
+      "requirement": "3090 performance",
+      "details": "848x480x81 frames at ~22s/it with fp8 models and torch compile",
+      "from": "Organoids"
+    },
+    {
+      "requirement": "Torch compile speed boost",
+      "details": "20-30% speed improvement on compatible GPUs",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "14B 720p generation",
+      "details": "Takes 36 minutes for 3 seconds on 4090, 30+ minutes for 5 seconds on 4080",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "14B 480p generation",
+      "details": "10-20 minutes on RTX 3090, 9 minutes for 81 frames at 848x480 with GGUF Q8",
+      "from": "B1naryV1k1ng"
+    },
+    {
+      "requirement": "VRAM for bf16 vs fp8",
+      "details": "24GB VRAM would OOM with load_device main_device on bf16, fp8 weights much more manageable",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "5090 performance estimates",
+      "details": "Expected 25-30% faster than 4090, not 50% as initially hoped",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "Memory management",
+      "details": "GGUF can be faster than non-gguf when regular model spills over/gets offloaded",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "VRAM for 720p bf16 I2V",
+      "details": "32.8GB model size, needs >32GB VRAM to fit fully or will offload",
+      "from": "Shawneau \ud83c\udf41 [CA]"
+    },
+    {
+      "requirement": "Performance on RTX 5000 Ada",
+      "details": "90 seconds per iteration for 81 frames at 1280x720 with fp8 I2V",
+      "from": "Shawneau \ud83c\udf41 [CA]"
+    },
+    {
+      "requirement": "Performance on 5090",
+      "details": "832x480x81 on 1.3B model: 20/20 steps in 37 seconds (1.86s/it)",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "RAM recommendations",
+      "details": "32GB not enough, 64GB insufficient, 96GB recommended for comfortable usage",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "3080Ti I2V capability",
+      "details": "Can run I2V at default settings, 363 seconds for standard generation",
+      "from": "Teslanaut"
+    },
+    {
+      "requirement": "4x3090Ti multi-GPU setup",
+      "details": "30 s/it for 14B 720x1280 I2V with tweaks",
+      "from": "intervitens"
+    },
+    {
+      "requirement": "4090 performance with different kernels",
+      "details": "43 s/it with SageAttention 8+8, 51 s/it with 8+16, 75 s/it with xformers",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "requirement": "5090D 32GB performance",
+      "details": "30s/step to 13s/step improvement with optimizations, 18s/step with bf16",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "requirement": "12GB VRAM options",
+      "details": "GGUF Q4 or native fp8, with GGUF needed for LoRA support",
+      "from": "ZEALOT"
+    },
+    {
+      "requirement": "14B T2V VRAM usage",
+      "details": "832x480x81 frames on 4090 with optimizations: 4min 41sec total",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "1280x720x81 frames memory",
+      "details": "Only 24GB VRAM usage, better scaling than Hunyuan at high resolution",
+      "from": "pagan"
+    },
+    {
+      "requirement": "3090 performance",
+      "details": "1.3B FP16: 8sec/it for 30 steps 65 frames. 832x480x65 takes 300 seconds total",
+      "from": "\u02d7\u02cf\u02cb\u26a1\u02ce\u02ca-"
+    },
+    {
+      "requirement": "1.3B model size",
+      "details": "5GB in fp32, only 1.5GB in fp8. With text encoders totals ~11GB disk space",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "8GB cards support",
+      "details": "Only 1.3B model could fit with reasonable inference times",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "4060 8GB can run 832x480x65 frames",
+      "details": "6-8 minute generation times on RTX 4060 with 8GB VRAM",
+      "from": "Googol"
+    },
+    {
+      "requirement": "4090 recommended for FP16 accumulation",
+      "details": "Best performance with FP16 compute and accumulation enabled",
+      "from": "Kytra"
+    },
+    {
+      "requirement": "PyTorch 2.7.0 nightly needed for FP16 accumulation",
+      "details": "Required for torch.backends.cuda.matmul.allow_fp16_accumulation feature",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "5090 performance",
+      "details": "832x480x49 frames: 6.90s/it, 1280x720: 19.61s/it, uses 26GB VRAM with fp8",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "4090 performance",
+      "details": "1280x720x81f: 38 s/it with fp8 weights, fp16 compute, torch compile, sage 8+8",
+      "from": "Doctor Shotgun"
+    },
+    {
+      "requirement": "3090 VRAM limits",
+      "details": "BARELY able to fit T2V 14B at Q8, I2V might OOM. Q6-K recommended",
+      "from": "Benjaminimal"
+    },
+    {
+      "requirement": "3090 optimization limitations",
+      "details": "No native fp8 support, Q8 and fp8 execute at same speed due to casting overhead",
+      "from": "Benjaminimal"
+    },
+    {
+      "requirement": "Generation time comparison",
+      "details": "640x352x49f takes 3-4min, considered very slow",
+      "from": "N0NSens"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "Sage-attention 2 implementation",
+      "type": "tool",
+      "description": "Hacky implementation to replace flash-attention for running on lower VRAM GPUs like 4060 Ti 16GB",
+      "from": "Pol"
+    },
+    {
+      "creation": "Dynamic height/width patch",
+      "type": "tool",
+      "description": "Code modification for DiffSynth to make height/width dynamic based on input image",
+      "from": "ArtOfficial"
+    },
+    {
+      "creation": "ComfyUI-WanVideoWrapper",
+      "type": "node",
+      "description": "ComfyUI wrapper for Wan video models",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Quantized FP8 model weights",
+      "type": "model",
+      "description": "FP8 quantized version of Wan I2V 14B model",
+      "from": "Kijai"
+    },
+    {
+      "creation": "WanVideoWrapper",
+      "type": "node",
+      "description": "ComfyUI wrapper for Wan video models with I2V and T2V support",
+      "from": "Kijai"
+    },
+    {
+      "creation": "WanVideo ComfyUI wrapper",
+      "type": "node",
+      "description": "ComfyUI integration for Wan video models",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Native ComfyUI implementation",
+      "type": "node",
+      "description": "Official ComfyUI support with repackaged models",
+      "from": "comfy"
+    },
+    {
+      "creation": "UMT5-XXL encoder extraction scripts",
+      "type": "tool",
+      "description": "Scripts to merge model shards and extract encoder-only version",
+      "from": "Pedro (@LatentSpacer)"
+    },
+    {
+      "creation": "Wan LoRA training setup",
+      "type": "workflow",
+      "description": "Easy setup using diffusion-pipe, works with 1.3B model",
+      "from": "Kytra"
+    },
+    {
+      "creation": "Native ComfyUI nodes",
+      "type": "node",
+      "description": "WanImageToVideo node for native implementation",
+      "from": "comfy"
+    },
+    {
+      "creation": "Copic marker style LoRA",
+      "type": "lora",
+      "description": "88MB style LoRA trained on 75 images, epoch 7 = 1400 steps",
+      "from": "Kytra"
+    },
+    {
+      "creation": "Retro anthro style LoRA",
+      "type": "lora",
+      "description": "Style LoRA trained on 528 images for 3 epochs",
+      "from": "Kytra"
+    },
+    {
+      "creation": "WanVideoWrapper",
+      "type": "node",
+      "description": "Kijai's wrapper implementation for ComfyUI",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Wan training info channel request",
+      "type": "community request",
+      "description": "Channel specifically for LoRA training info and feedback",
+      "from": "mamad8"
+    },
+    {
+      "creation": "Wan2.1 I2V Motion Video Prompt Generator",
+      "type": "prompt system",
+      "description": "Structured prompt generator using Subject+Scene+Action framework",
+      "from": "AJO"
+    },
+    {
+      "creation": "Video comparison interface",
+      "type": "tool",
+      "description": "Simple interface where you drop 2 videos and it plays them in loop and in sync",
+      "from": "mamad8"
+    },
+    {
+      "creation": "14B LoRA training",
+      "type": "lora",
+      "description": "Successfully trained character LoRA on 14B model with 16 frames at 420p",
+      "from": "Cubey"
+    },
+    {
+      "creation": "SageAttention selector node",
+      "type": "node",
+      "description": "Custom node for selecting specific SageAttention kernels in ComfyUI",
+      "from": "Miku"
+    },
+    {
+      "creation": "RifleX patch for Wan",
+      "type": "tool",
+      "description": "Adaptation of RifleX temporal consistency for Wan models",
+      "from": "Kijai"
+    },
+    {
+      "creation": "RifleX patcher node",
+      "type": "node",
+      "description": "Helps prevent looping in longer videos by reducing high frequency attention",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Scheduled CFG Guidance node",
+      "type": "node",
+      "description": "Allows CFG scheduling in native sampler",
+      "from": "Kijai"
+    },
+    {
+      "creation": "CFG Schedule node",
+      "type": "node",
+      "description": "Allows CFG scheduling with native workflows",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Enhance video node",
+      "type": "node",
+      "description": "Enhances attention results every block on every step",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Dictionary translation node",
+      "type": "node",
+      "description": "Translates prompts to Chinese for better adherence",
+      "from": "AJO"
+    },
+    {
+      "creation": "WanVideoWrapper",
+      "type": "node",
+      "description": "Kijai's ComfyUI wrapper for Wan models with SageAttention support",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Discord bot with 1.3B model",
+      "type": "tool",
+      "description": "Automated video generation through Discord interface",
+      "from": "AJO"
+    },
+    {
+      "creation": "Multi-GPU implementation",
+      "type": "repo",
+      "description": "4x3090Ti setup with optimizations, repo coming soon",
+      "from": "intervitens"
+    },
+    {
+      "creation": "WanVideoWrapper",
+      "type": "node",
+      "description": "Kijai's ComfyUI wrapper for Wan models with experimental features",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Power consumption comparison tool",
+      "type": "tool",
+      "description": "Compares GPU power usage between different models/configurations",
+      "from": "Benjaminimal"
+    },
+    {
+      "creation": "Sage attention control node",
+      "type": "node",
+      "description": "Allows enabling/disabling sage attention per workflow without global flags",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Modified FlowEdit for I2V",
+      "type": "workflow",
+      "description": "Adapted FlowEdit implementation specifically for Wan I2V model",
+      "from": "Zuko"
+    },
+    {
+      "creation": "Wan+HunyuanVideo refinement workflow",
+      "type": "workflow",
+      "description": "Two-pass system using Wan for generation and HunyuanVideo for artifact cleanup",
+      "from": "David Snow"
+    },
+    {
+      "creation": "FL_Image_Notes node",
+      "type": "node",
+      "description": "Adds black banner with text overlay for comparison videos",
+      "from": "Kytra"
+    }
+  ]
+}

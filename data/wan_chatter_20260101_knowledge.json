@@ -1,0 +1,3238 @@
+{
+  "channel": "wan_chatter",
+  "date_range": "2026-01-01 to 2026-02-01",
+  "messages_processed": 4879,
+  "chunks_processed": 13,
+  "api_usage": {
+    "input_tokens": 165150,
+    "output_tokens": 34079,
+    "estimated_cost": 1.006635
+  },
+  "extracted_at": "2026-02-03T05:41:33.230510Z",
+  "discoveries": [
+    {
+      "finding": "Merging LoRA with fp8 model workflow",
+      "details": "Load model => load lora (like normal workflow) => save model - much easier than expected",
+      "from": "pagan"
+    },
+    {
+      "finding": "SVI Pro difference augmentation for longer videos",
+      "details": "Can generate coherent videos up to 241 frames without running back by using scheduled difference augmentation on frames beyond typical 81 frames",
+      "from": "Ablejones"
+    },
+    {
+      "finding": "SVI memory efficiency improvement",
+      "details": "Setting length to 65fps instead of 81 for each clip makes generation super fast and uses less VRAM",
+      "from": "Elvaxorn"
+    },
+    {
+      "finding": "VAE decode yellowing fix",
+      "details": "Wan's VAE requires large/full temporal window - switch from tiled VAE decode to normal VAE decode to prevent yellowing/banding",
+      "from": "ucren"
+    },
+    {
+      "finding": "1022 LoRA training base",
+      "details": "The wan2.2_i2v_A14b_low_noise_lora_rank64_lightx2v_4step_1022.safetensors was actually trained on wan 2.1 model, causing 170 key mismatch",
+      "from": "Benjimon"
+    },
+    {
+      "finding": "SageAttention speedup increases with generation size",
+      "details": "User confirmed that SageAttention2 provides better performance improvements on larger generation sizes",
+      "from": "Lumifel"
+    },
+    {
+      "finding": "RTX 5090 performance baseline established",
+      "details": "49 minutes for 15 videos (81 frames each, 720x1280, 6 steps) - approximately 3 minutes per video",
+      "from": "42hub"
+    },
+    {
+      "finding": "SVI Pro has slowmotion tendency by design",
+      "details": "SVI by nature is biased towards less motion because of the anchor frame - it's always trying to get back to the anchor frame for consistency",
+      "from": "Ablejones"
+    },
+    {
+      "finding": "Text encoder replacements can change model behavior without retraining",
+      "details": "Changing text encoders CAN make different behaviors even if model doesn't understand new tokens - retrained Qwen3 models work as replacements for same size models",
+      "from": "Scruffy"
+    },
+    {
+      "finding": "MLP layers are sensitive to quantization in some models",
+      "details": "With LongCat, doing MLP in fp8 ruined quality completely. Wan 2.1 had crazy quality hit with fp8 matmuls on MLP but largest speed increase. Wan 2.2 seems fine with it",
+      "from": "Kijai"
+    },
+    {
+      "finding": "VAE precision bug returns on PyTorch 2.11.0",
+      "details": "Cannot decode 640x640x81, affects both wrapper and native implementations",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "finding": "fp32 VAE decoding uses less memory than bf16 when conv3d bug is active",
+      "details": "fp32 is 2x memory use but the bug causes 3x, so fp32 is actually better",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Flash attention works on ROCm and Windows now",
+      "details": "Does small compiling with triton at first use, memory usage is lower, works with wan wrapper when flash-attention is selected",
+      "from": "patientx"
+    },
+    {
+      "finding": "LongVie2 provides depth controlnet for I2V models",
+      "details": "Only depth controlnet available for I2V models, uses depth/spatracker tracks controlnet and can continue from 8 frames",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SVI 2.0 Pro uses anchor latent to mitigate degradation",
+      "details": "The degradation was never about encode-decode process, it's natural with these models, anchor latent in SVI mitigates this",
+      "from": "Kijai"
+    },
+    {
+      "finding": "MoE ksampler ensures proper timestep split",
+      "details": "Makes sure time step split between high and low model is exactly 0.875 (standard), especially important for LoRAs limited to those timesteps",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "finding": "CLIP Vision Tiling improves image-to-video accuracy",
+      "details": "Breaking images into tiles allows CLIP vision to see more detail since it's capped at 256x256. Setting to 2 tiles sees 512x512 (2 tiles = 2x2 tiles essentially)",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "finding": "WanAnimate face detection is more stable than LivePortrait's facecropper",
+      "details": "LivePortrait's facecropper has trouble stabilizing head rotation and scale causing artifacts. WanAnimate's face detection is far more stable and produces less jittery results when used as driving video",
+      "from": "David Snow"
+    },
+    {
+      "finding": "LTX-2 works as fast Wan upscaler",
+      "details": "1080p Wan upscale tests using LTX-2 take just over a minute each using v2v workflow. Need to reduce lora strength as it adds too much detail",
+      "from": "David Snow"
+    },
+    {
+      "finding": "Wan 2.2 low-noise model can run standalone",
+      "details": "You can use lownoise 2.2 model only if you cant fit both high and low in ram. Works better than 2.1 but real difference is using both models. 2.1 is very similar to 2.2 low",
+      "from": "Blink"
+    },
+    {
+      "finding": "Sage made huge improvement for LTX-2, torch compilation didn't notice much difference",
+      "details": "SageAttention provided significant performance boost while torch compilation had minimal impact",
+      "from": "psylent_gamer"
+    },
+    {
+      "finding": "FP8 numbers are discrete sets, not continuous like traditional floats",
+      "details": "Only 256 numbers with big range split into bands, mantissa determines granularity between bands",
+      "from": "phazei"
+    },
+    {
+      "finding": "Pytorch uses caching system to avoid expensive GPU driver allocations",
+      "details": "Pytorch maintains cache of memory allocated from CUDA driver and sub-allocates from this cache to avoid constant driver-level allocations",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "finding": "Skip final model call can reduce inference time by 20% for low-step generations",
+      "details": "For 4-step generations, skipping final model call saves 20% time with practically no quality loss",
+      "from": "Ablejones"
+    },
+    {
+      "finding": "VRGameDevGirl84 created a beat-locked auto video editor",
+      "details": "Gradio app that automatically edits multi-camera video footage to music by analyzing rhythm, energy, and structure. Uses stems to decide shots and locks cuts to musical beats.",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "finding": "Mocha only uses single mask that propagates automatically",
+      "details": "Mocha uses a single frame mask and propagates it automatically to the whole video, not a multi-frame mask",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Can't run HuMo and SCAIL simultaneously",
+      "details": "You can run HuMo as a second pass but not at the same time in the same latent with SCAIL",
+      "from": "Dream Making"
+    },
+    {
+      "finding": "VACE only works with T2V models",
+      "details": "VACE cannot be used with I2V models like SVI",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SVI anchor frame should be first frame for coherent generation",
+      "details": "The anchor latent should be the first frame to get a coherent image, not the last frame",
+      "from": "pagan"
+    },
+    {
+      "finding": "SVI Pro 2.2 can work as a LoRA with strength values 0.7/0.5",
+      "details": "User tested SVI weight at 0.7 and 0.5 with good results for video extension",
+      "from": "Dream Making"
+    },
+    {
+      "finding": "ComfyUI now has asynchronous weight offloading",
+      "details": "ComfyUI offloads unused weights to RAM and juggles active weights between VRAM/RAM asynchronously, so if step compute time is long like with video models, weight moving may not slow it down",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Wan 2.2 FP16 can run on 16GB VRAM despite 53GB model size",
+      "details": "Due to ComfyUI's asynchronous offloading system that manages weights between VRAM and RAM",
+      "from": "SantaHunter"
+    },
+    {
+      "finding": "Face similarity should be part of loss function when training LoRAs",
+      "details": "Would improve face preservation in LoRA training, described as 'crazy that people don't do that'",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "finding": "Embedding training on Wan 1.3B can transfer to other Wan versions",
+      "details": "Since Wan uses same text encoder for all versions, embeddings trained on 1.3B with small images could transfer to larger models",
+      "from": "spacepxl"
+    },
+    {
+      "finding": "Block swap can improve speed even with smaller quants",
+      "details": "User reported 10% speed improvement using block swap with q4/q3 models, even when GPU has enough VRAM",
+      "from": "patientx"
+    },
+    {
+      "finding": "Wrapper version 1.4.0 changed T2V outputs",
+      "details": "After version 1.4.0, T2V generates different outputs with better prompt adherence and more detailed results, but lightx LoRAs may need rebalancing",
+      "from": "garbus"
+    },
+    {
+      "finding": "NAG memory optimizations implemented",
+      "details": "NAG node updated with optional inplace memory saving optimizations that reduce VRAM usage significantly but may slightly change output",
+      "from": "Kijai"
+    },
+    {
+      "finding": "StoryMem RoPE implementation was incomplete",
+      "details": "Original StoryMem repo was missing RoPE offset implementation in code despite mentioning it in paper, recently fixed in latest commit",
+      "from": "Kijai"
+    },
+    {
+      "finding": "WanVideo Apply NAG is not supported with Wan 2.1",
+      "details": "Removing WanVideo Apply NAG made workflow work with Wan 2.1, though it works fine with Wan 2.2",
+      "from": "Juan Gea"
+    },
+    {
+      "finding": "Wan distilled loras work best with shift=5",
+      "details": "They were trained with shift=5, and in general shift depends on resolution - higher resolution needs higher shift due to relationship between resolution, noise level, and signal to noise ratio",
+      "from": "spacepxl"
+    },
+    {
+      "finding": "SVI 2.0 Pro can continue from latent directly without decode/encode",
+      "details": "This is one of its main features and preserves more detail than saving to disk and reloading",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Every diffusion/flow model can be img2img or vid2vid with inpainting and masks",
+      "details": "This is a result of how the models work mathematically, but requires correct code tools/nodes to take advantage",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "finding": "SCAIL has 3D pose data",
+      "details": "Unlike VACE which was possible before, SCAIL provides better pose control with 3D data",
+      "from": "Juampab12"
+    },
+    {
+      "finding": "VHS Load Video (FFmpeg) avoids color shift",
+      "details": "VHS normal loader uses opencv and causes pink/magenta color drift, while FFmpeg version maintains accurate colors like native",
+      "from": "CaptHook"
+    },
+    {
+      "finding": "Self-refine-video technique implemented for Wan models",
+      "details": "Uses restart sampling with uncertainty masking to improve video quality, requires 50% more compute time but produces better results",
+      "from": "Kijai"
+    },
+    {
+      "finding": "Color shift issue identified in VHS video loading nodes",
+      "details": "VHS Load Video and Native Load Video produce color drift when loading videos, only VHS FFmpeg Load Video preserves correct colors",
+      "from": "lostintranslation"
+    },
+    {
+      "finding": "SageAttn provides ~90% quality with 2x speedup",
+      "details": "Using SageAttn attention mechanism gives substantial speedup with minimal quality loss, especially when combined with distill LoRAs",
+      "from": "Kijai"
+    },
+    {
+      "finding": "New UniVerse-1-Base model released",
+      "details": "Ovi-style model trained on Wan 2.1 1.3B, uses ace-step instead of mmaudio, but appears undertrained",
+      "from": "yi"
+    },
+    {
+      "finding": "SkyReels V3 R2V model looks identical to T2V model with no new layers",
+      "details": "The R2V architecture appears to be the same as standard T2V models",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SkyReels V3 R2V model supports 4 reference images maximum",
+      "details": "Model pads with empty slots for unused reference images, max is 4",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SkyReels V3 default frame count is 121 for R2V",
+      "details": "Formula is num_frames = duration * 24 + 1, default 121 frames for R2V",
+      "from": "Kijai"
+    },
+    {
+      "finding": "SkyReels V3 model appears to be distilled",
+      "details": "Model behavior suggests it's a distilled version, explains performance differences",
+      "from": "Kijai"
+    },
+    {
+      "finding": "MOVA is essentially Wan 2.2 A14B with audio, not 32B",
+      "details": "Uses two models like Wan 2.2, fully runnable on consumer GPUs, basically Ovi scaled to Wan 2.2",
+      "from": "yi"
+    },
+    {
+      "finding": "SkyReels V3 consists of 4 different models",
+      "details": "Includes talking avatar, shot model for extending with new shots, extend model, and multitalk weights",
+      "from": "Kijai"
+    },
+    {
+      "finding": "MOVA supports multi-shot and has better character consistency",
+      "details": "Model has better VAE, sound, Apache license, smaller text encoder",
+      "from": "yi"
+    },
+    {
+      "finding": "Double distillation can cause excessive CFG-like effects",
+      "details": "Loading LightX2V on top of already distilled model creates artifacts",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "finding": "Self-Refine is available in testing branch for WanVideoWrapper",
+      "details": "Kijai has self-refine for wrapper in early testing stages on separate branch, see self-refine-video branch",
+      "from": "izashin"
+    },
+    {
+      "finding": "MOVA requires significant VRAM",
+      "details": "Eats ~55 GB VRAM for 94 frames 720p with memory option 'cpu' and 'bfloat16'. 72 GB VRAM / 45 GB RAM for 193 frames",
+      "from": "Stef"
+    },
+    {
+      "finding": "MOVA performs scene cuts spontaneously",
+      "details": "MOVA made scene cuts without prompting them in the generation",
+      "from": "Stef"
+    },
+    {
+      "finding": "Skyreels Extend model is based on Wan 2.1 720p",
+      "details": "Compared tensors and it's almost same as the base 720p model with some distill lora added, very similar to lightx2v",
+      "from": "Kijai"
+    },
+    {
+      "finding": "TalkingAvatar is 95% multitalk code",
+      "details": "Whole model code is multitalk but they don't credit it anywhere",
+      "from": "Kijai"
+    },
+    {
+      "finding": "NVFP4 conversion of Wan 2.2 i2v high reduces model size from 28GB to 7.8GB in 45 seconds",
+      "details": "Conversion completed on 5090, but models are very lossy - proper NVFP4 models need calibration",
+      "from": "topmass"
+    },
+    {
+      "finding": "NVFP4 models provide 30% faster generation after load",
+      "details": "4-step LoRA NVFP4 working fine with 81 frames at 24fps",
+      "from": "topmass"
+    },
+    {
+      "finding": "MOVA is only 1-2 seconds slower per iteration compared to Wan 2.2 a14b",
+      "details": "Performance tested over in different channel",
+      "from": "yi"
+    },
+    {
+      "finding": "Audio models are much smaller than video models",
+      "details": "Audio to video cross-attention slows it down a bit but audio itself is fast",
+      "from": "Kijai"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "VAE decode causing yellowing/banding in videos",
+      "solution": "Switch from tiled VAE decode to normal VAE decode - wan's VAE requires large/full temporal window",
+      "from": "ucren"
+    },
+    {
+      "problem": "SVI causing yellowing after first frame",
+      "solution": "Issue is with zero frame scaling in VAE - SVI uses real zero frames for I2V conditioning and ComfyUI scales them after concat",
+      "from": "Kijai"
+    },
+    {
+      "problem": "170 key mismatch with 1022 low noise LoRA",
+      "solution": "LoRA was trained on wan2.1 model, not wan2.2 - use appropriate base model",
+      "from": "Benjimon"
+    },
+    {
+      "problem": "ComfyUI memory crashes with SVI workflow",
+      "solution": "There are clear models and execution cache options under File/Edit menu, also memory leak issues with model loader",
+      "from": "Tony(5090)"
+    },
+    {
+      "problem": "Random fences and gates appearing in generations",
+      "solution": "Usually caused by pushing LoRA too hard or excess noise - reduce LoRA strength or noise levels",
+      "from": "David Snow"
+    },
+    {
+      "problem": "SageAttention compiled from source crashes ComfyUI",
+      "solution": "SDPA works as alternative",
+      "from": "Lumifel"
+    },
+    {
+      "problem": "Custom SVI node changing faces even without SVI enabled",
+      "solution": "Use native ComfyUI nodes instead of custom 'vibecoded' nodes - native works perfectly",
+      "from": "RRR"
+    },
+    {
+      "problem": "LoRA key not loaded errors with SVI Pro",
+      "solution": "Ignore the errors - they're from 2.1 LoRA layers not present in 2.2, but rest of LoRA applies fine",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Device mismatch error with prev_samples in SVI Pro",
+      "solution": "Use 'denoised' output from Clownshark sampler nodes instead of regular 'output' - it's on correct device",
+      "from": "Ablejones"
+    },
+    {
+      "problem": "RTX 5090 power connector burning/melting",
+      "solution": "Don't use cable that came in box, get third party braided cable set, ensure proper PSU like Corsair RME series",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "problem": "SVI Pro nodes showing as red/missing",
+      "solution": "Switch to nightly build for Kijai nodes or manually pull master branch from custom_nodes/comfyui-kjnodes",
+      "from": "ucren"
+    },
+    {
+      "problem": "Original SVI LoRAs don't work in native workflows",
+      "solution": "Use converted LoRAs from Kijai's repo specifically made for native ComfyUI",
+      "from": "Kijai"
+    },
+    {
+      "problem": "ComfyUI backend freezes when opening workflows",
+      "solution": "Open two windows (not tabs), use one to close and reopen so the working one doesn't change",
+      "from": "Kenk"
+    },
+    {
+      "problem": "Flickering in S2V generation",
+      "solution": "Was caused by bug that didn't pick up the base image",
+      "from": "Kenk"
+    },
+    {
+      "problem": "SVI original LoRAs not working",
+      "solution": "Use SVI LoRAs from Kijai's HuggingFace instead of original ones",
+      "from": "Zueuk"
+    },
+    {
+      "problem": "Previews in subgraphs showing static images",
+      "solution": "Update video helper suite nodes and enable animated previews in options, use Latent2rgb",
+      "from": "Kijai"
+    },
+    {
+      "problem": "PyTorch 2.11.0 causing OOM on VAE decoding",
+      "solution": "Update CUDNN or return to stable PyTorch version, use fp32 VAE as workaround",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "problem": "Invalid buffer size error with SamplerCustomAdvanced",
+      "solution": "No specific solution provided, user seeking help",
+      "from": "buggz"
+    },
+    {
+      "problem": "Getting stretched human-like forms with chibi characters in Wan Animate",
+      "solution": "Greatly expand the mask size (200+ pixels makes massive difference), position reference in same spot as pose video",
+      "from": "David Snow"
+    },
+    {
+      "problem": "5090 power connector issues",
+      "solution": "Triple check cable is seated fully, avoid force bending, slight undervolting or power limiting to 500W, limit reconnections to ~20 times",
+      "from": "Kijai"
+    },
+    {
+      "problem": "SVI 2.2 Pro making black videos in landscape but not portrait",
+      "solution": "No definitive solution provided, one user mentioned prompt weights with SVI causing issues",
+      "from": "mdkb"
+    },
+    {
+      "problem": "ComfyUI-Kitchen error after updating",
+      "solution": "Run 'ComfyUI_Main\\python_embeded\\python.exe -m pip install -U comfy-kitchen' on portable installs",
+      "from": "The Shadow (NYC)"
+    },
+    {
+      "problem": "Color shift between windows in WanAnimate long generations",
+      "solution": "No solution provided, acknowledged as known issue",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "problem": "Slow motion issues with SVI",
+      "solution": "Try higher CFG for faster motion, use smoothwan model, try different lightx loras like old MOE distill lora, use 3 sampler setup where first sampler runs without lightx and higher CFG",
+      "from": "craftogrammer / 42hub"
+    },
+    {
+      "problem": "SageAttention stopped working with ImportError about required packages",
+      "solution": "Use Triton and Sage versions from woct0rdho on Windows",
+      "from": "42hub"
+    },
+    {
+      "problem": "Color match node failing with infinite 'Reconnecting'",
+      "solution": "Try disabling multithread option in the color match node",
+      "from": "Kijai"
+    },
+    {
+      "problem": "SCAIL only working with CUDA 12.8 but user has CUDA 13",
+      "solution": "Upgrade onnxruntime-gpu to nightly version for CUDA 13.x support",
+      "from": "LukeG89"
+    },
+    {
+      "problem": "Context windows erroring on last step with clownshark samplers",
+      "solution": "Use extra_option 'skip_final_model_call'",
+      "from": "Ablejones"
+    },
+    {
+      "problem": "Memory fragmentation in pytorch cache causing OOM",
+      "solution": "Pytorch cache becomes fragmented after long runs with diverse tensor sizes, limiting ability to find contiguous blocks",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "problem": "ComfyUI Manager installing wrong version of WanVideoWrapper",
+      "solution": "Manual installation from fresh zip instead of using manager",
+      "from": "N0NSens"
+    },
+    {
+      "problem": "Mocha workflow failing with tensor size mismatch",
+      "solution": "Mask should be only on first frame, not multi-frame",
+      "from": "Dream Making"
+    },
+    {
+      "problem": "SageAttention CUDA error on RTX 6000 Pro",
+      "solution": "Need to compile SageAttention 2.2 for sm_120 or find pre-compiled .whl",
+      "from": "harrisonwells"
+    },
+    {
+      "problem": "Torch compile stopped working after ComfyUI update",
+      "solution": "Torch compile might be broken since recent ComfyUI update",
+      "from": "pagan"
+    },
+    {
+      "problem": "InfiniteTalk workflow error with more than 4 steps",
+      "solution": "Change scheduler to dpm++_sde or lcm",
+      "from": "Kijai"
+    },
+    {
+      "problem": "ComfyUI memory issues with current version causing lockups",
+      "solution": "Revert to ComfyUI version v0.8.2 from Jan 7 to fix VRAM overshoot issues",
+      "from": "chancelor"
+    },
+    {
+      "problem": "Color burn-in and detail shift in longer SVI generations",
+      "solution": "Use Color Match node, though it only partially helps. HPS and MPS reward LoRAs break generation flow with SVI",
+      "from": "blake37"
+    },
+    {
+      "problem": "SCAIL and HuMo can't work in same workflow",
+      "solution": "Run HuMo as second pass in V2V mode with 0.5 or 0.8 denoise after SCAIL",
+      "from": "Dream Making"
+    },
+    {
+      "problem": "Tensor mismatch errors with Wan 2.2 Fun VACE",
+      "solution": "Check model/VAE/encoder compatibility and ensure frame/resolution count matches",
+      "from": "psylent_gamer"
+    },
+    {
+      "problem": "Normal maps bleeding into output with WAN2.1 VACE after 81 frames",
+      "solution": "Issue occurs when exceeding 81 frames in single batch at 720p",
+      "from": "BEE"
+    },
+    {
+      "problem": "ComfyUI caught in reloading loop after tab refresh",
+      "solution": "Bug in recent frontend version, should be resolved in latest version or try going backwards",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Black output with higher prefetch counts in block swap",
+      "solution": "Keep prefetch at 1, higher values cause NaN tensors which appear faster but don't actually work",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Long loading times for transformer parameters",
+      "solution": "Update ComfyUI, remove conflicting nodes like 'infinitetalk' fork, disable pinned memory if needed",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Segmentation fault on 5090 with WanVideoWrapper",
+      "solution": "Try without block swap node and torch compile node",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Dimension mismatch error",
+      "solution": "Ensure same size in samplers and image_embeds, dim 3 should be height",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Native multitalk not finding model",
+      "solution": "Place model in 'model_patches' folder, not diffusion_models",
+      "from": "Kijai"
+    },
+    {
+      "problem": "WanVideo Apply NAG causing issues with Wan 2.1",
+      "solution": "Remove/disable WanVideo Apply NAG when using Wan 2.1",
+      "from": "Juan Gea"
+    },
+    {
+      "problem": "Lost previews on sampler v2 nodes and VHS nodes",
+      "solution": "Download missing taew2.2 file (needed for 5B model), change UI framerate settings, refresh browser multiple times",
+      "from": "lostintranslation"
+    },
+    {
+      "problem": "Color drift when loading videos with VHS",
+      "solution": "Use VHS Load Video (FFmpeg) instead of regular VHS loader to avoid pink/magenta color shift",
+      "from": "CaptHook"
+    },
+    {
+      "problem": "RuntimeError with SCAIL: shape invalid for input",
+      "solution": "Ensure dimensions are multiples of 32",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "problem": "Frame misalignment in SVI extension reassembly",
+      "solution": "Set correct frame overlap - use 5 frames for one latent (4 per latent +1 bonus), not 4 frames",
+      "from": "lostintranslation"
+    },
+    {
+      "problem": "Extremely slow T5 text encoder loading (85s vs few seconds)",
+      "solution": "Check for RAM paging issues, though root cause unclear - normal load should be few seconds",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Color drift when loading videos for extension workflows",
+      "solution": "Use VHS FFmpeg Load Video node instead of regular VHS Load Video or Native Load Video nodes",
+      "from": "Austin Mroz"
+    },
+    {
+      "problem": "SCAIL execution order issues with Video Combine",
+      "solution": "Use dummy connections or node ID ordering to ensure proper execution sequence",
+      "from": "Kijai"
+    },
+    {
+      "problem": "SCAIL OOM issues with context windows",
+      "solution": "Use only 1 prefetch and adjust block swap settings, disable context windows for shorter videos",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Transformers v5 breaking Florence2",
+      "solution": "Downgrade to Transformers 4.57.3",
+      "from": "JohnDopamine"
+    },
+    {
+      "problem": "Merged LoRA models causing errors",
+      "solution": "Re-merge LoRAs using ComfyUI nodes to fix compatibility issues",
+      "from": "patientx"
+    },
+    {
+      "problem": "WanSelfAttention.normalized_attention_guidance() takes 3-4 arguments but 8 given",
+      "solution": "Disable WanVideo Apply NAG node",
+      "from": "Nao48"
+    },
+    {
+      "problem": "SkyReels V3 R2V won't work as-is with KeyError 'blocks.0.self_attn.k.weight'",
+      "solution": "Model uses diffusers keys, needs conversion",
+      "from": "JohnDopamine"
+    },
+    {
+      "problem": "Clip loader breaking with mat1 and mat2 error",
+      "solution": "Uninstall and reinstall transformers==4.48.0 tokenizers==0.21.0",
+      "from": "Faust-SiN"
+    },
+    {
+      "problem": "Negative prompts not working with distill LoRAs at CFG=1",
+      "solution": "Add NAG to workflow or use delayed negative prompting method",
+      "from": "JohnDopamine"
+    },
+    {
+      "problem": "ComfyUI merge issues with SkyReels - 'Linear' object has no attribute 'weight_scale'",
+      "solution": "Unknown fix mentioned but not provided",
+      "from": "Piblarg"
+    },
+    {
+      "problem": "SVI math for frame overlap causing misalignment",
+      "solution": "Use default 5 frames, formula should be 4 * latents + 1",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Easy Use pack prevents sampler preview from showing",
+      "solution": "Enable 'model preview thumbnails' setting in Easy Use to fix the preview",
+      "from": "lostintranslation"
+    },
+    {
+      "problem": "Slow LoRA loading from disk",
+      "solution": "Update safetensors pip package to fix slow loading issues",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Cannot merge VACE with Skyreels model",
+      "solution": "It's because it's scaled fp8 model, can't really merge it that simply",
+      "from": "Kijai"
+    },
+    {
+      "problem": "Ghosting effect in SVI Pro generations",
+      "solution": "Use smootherstep_blend instead of linear for overlapping to reduce artifacts",
+      "from": "Kenk"
+    },
+    {
+      "problem": "MOVA OOM even with 96GB VRAM",
+      "solution": "Select 'cpu' in offload mode instead of 'none' to avoid OOM",
+      "from": "Stef"
+    },
+    {
+      "problem": "NVFP4 conversion requires both models loaded using around 20GB VRAM",
+      "solution": "After load, generations are about 30% faster despite initial VRAM usage",
+      "from": "topmass"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "SVI Pro 2.0 vs regular workflows",
+      "verdict": "Truly amazing, can generate each clip separately for preview before merging, much more efficient workflow",
+      "from": "Elvaxorn"
+    },
+    {
+      "comparison": "Different LightX2V LoRAs",
+      "verdict": "wan2.2_i2v_A14b_high_noise_lightx2v_4step_1030.safetensors and wan2.2_i2v_A14b_low_noise_lightx2v_4step.safetensors full models are the best at 6 steps with euler",
+      "from": "Benjimon"
+    },
+    {
+      "comparison": "VACE 2.1 vs 2.2 Fun VACE",
+      "verdict": "VACE 2.1 still beats 2.2 Fun VACE for multi-frame interpolation",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "I2V vs T2V for prompt adherence",
+      "verdict": "T2V model better understands prompts and can be used to reprocess I2V videos with Res4lyf to improve quality and prompt comprehension",
+      "from": "Xor"
+    },
+    {
+      "comparison": "Native vs WanVideoWrapper for SVI 2.2 Pro",
+      "verdict": "User found wrapper works better after native runs were wonky",
+      "from": "JohnDopamine"
+    },
+    {
+      "comparison": "HY-Motion full vs LITE model",
+      "verdict": "Full model is more consistent but slower, LITE model is faster and offers more variety with same prompt",
+      "from": "tarn59"
+    },
+    {
+      "comparison": "Open source vs Gemini for video understanding",
+      "verdict": "Open models are very substantially weaker than Gemini, but with finetuning on local video LLM you can beat Gemini on narrow tasks",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "Vast vs RunPod performance",
+      "verdict": "RunPod much faster - 5 seconds per image vs 60 seconds on Vast instance",
+      "from": "Kevin \"Literally Who?\" Abanto"
+    },
+    {
+      "comparison": "SVI vs InfiniteTalk for endless generation",
+      "verdict": "InfiniteTalk seems to actually be infinite over minutes, SVI can be too if you don't diverge from anchor frame too much",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Holocine vs SVI",
+      "verdict": "Holocine not worth it anymore with SVI available",
+      "from": "NebSH"
+    },
+    {
+      "comparison": "LTX-2 vs other models",
+      "verdict": "19B parameters, should fit in 24GB, comes with 4-8 step distilled models",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "comparison": "Wan 2.1 vs 2.2 low-noise only",
+      "verdict": "2.2 low performs better than 2.1, swapping models doesn't break workflows, surprisingly compatible",
+      "from": "Godhand"
+    },
+    {
+      "comparison": "LTX-2 vs Wan 2.2",
+      "verdict": "LTX-2 nowhere close to replacing Wan for I2V, Wan still king for many things especially pose fidelity and lipsync. Nothing touches WanAnimate and SCAIL for pose fidelity",
+      "from": "taoofai / cyncratic"
+    },
+    {
+      "comparison": "Stock GGUF with 1030 lora vs wan remix checkpoint",
+      "verdict": "Checkpoint merges add more motion but mess with likeness",
+      "from": "MarkDalias"
+    },
+    {
+      "comparison": "With tile vs without tile CLIP vision",
+      "verdict": "Tile can cause problems in some cases, without tile sometimes produces better results with more accurate likeness",
+      "from": "David Snow"
+    },
+    {
+      "comparison": "WAN 2.2 vs LTX-2 for T2V",
+      "verdict": "WAN understands human anatomy way better, LTX does weird stuff and 'bollywoods everything'",
+      "from": "b\u0336\u0308\u0301\u0360o\u0336\u0317\u0305n\u0336\u033d\u0312k\u0335\u033d\u033f"
+    },
+    {
+      "comparison": "WAN vs Stepfun",
+      "verdict": "Switched to WAN because it got so much extra stuff added",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "SVI vs VACE for continuations",
+      "verdict": "SVI way better than VACE but suffers from color/brightness shift and degradation. VACE has color shift issues",
+      "from": "Juan Gea"
+    },
+    {
+      "comparison": "Different video models for best results",
+      "verdict": "Best might be Cosmos but only for robot and car videos",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "LTX-2 with WAN Low feels like WAN 2.6",
+      "verdict": "Combining LTX-2 with WAN low produces results that feel like an unreleased WAN 2.6",
+      "from": "hicho"
+    },
+    {
+      "comparison": "LTX2V vs Wan models",
+      "verdict": "User found LTX2V compelling enough to stop using Wan models recently",
+      "from": "hicho"
+    },
+    {
+      "comparison": "NVFP4 vs regular quantization",
+      "verdict": "NVFP4 quality is between Q4 and Q6 gguf, size between Q3 and Q4, but 8x faster. Currently doesn't support ControlNet or LoRAs",
+      "from": "CaptHook"
+    },
+    {
+      "comparison": "SVDQuant vs regular quantization",
+      "verdict": "SVDQuant is superior but requires careful calibration, which is the hard part preventing Wan implementation",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "Wan 2.6 vs LTX-2",
+      "verdict": "LTX-2 is better in almost all aspects except Wan 2.6's cameo feature (reference video to video) which is pretty cool",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "comparison": "Wan quality vs LTX2 quality",
+      "verdict": "Wan has better visual quality than LTX2, LTX2 wins on speed and audio support but Wan is better base model overall",
+      "from": "Piblarg"
+    },
+    {
+      "comparison": "FP16 vs FP8 speed with Wan 2.2",
+      "verdict": "No speed difference noticed between FP8 and FP16, only switching between High and Low model takes longer",
+      "from": "SantaHunter"
+    },
+    {
+      "comparison": "Wan ecosystem vs LTX2",
+      "verdict": "Wan has more tools and modalities but lacks native audio and long duration. LTX2 faster, smaller, longer videos but licensing issues prevent broad adoption",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "Wrapper vs Native for Wan Animate",
+      "verdict": "Animate quality in wrapper is 5x better than native",
+      "from": "asd"
+    },
+    {
+      "comparison": "LTX2 vs Wan 2.5",
+      "verdict": "LTX2 is faster, smaller, higher quality, longer videos - Wan really lost",
+      "from": "ZeusZeus"
+    },
+    {
+      "comparison": "VHS loaders vs Native video loading",
+      "verdict": "Native is faster (19s vs 32s for VHS regular vs 55s for VHS FFmpeg) and has no color drift. VHS FFmpeg is most color accurate but slowest",
+      "from": "lostintranslation"
+    },
+    {
+      "comparison": "SCAIL vs VACE for pose control",
+      "verdict": "SCAIL is superior with 3D pose data vs VACE's basic pose control",
+      "from": "Juampab12"
+    },
+    {
+      "comparison": "SVI vs VACE quality",
+      "verdict": "SVI has much less quality loss and color drift than VACE, but both still exist to some degree",
+      "from": "lostintranslation"
+    },
+    {
+      "comparison": "SCAIL vs LTX2 for pose copying",
+      "verdict": "LTX2 better for facial consistency, SCAIL better for pose accuracy",
+      "from": "Kevin \"Literally Who?\" Abanto"
+    },
+    {
+      "comparison": "Klein 9B vs Nanobanana Pro for background replacement",
+      "verdict": "NBP significantly ahead for relighting and subject preservation",
+      "from": "blake37"
+    },
+    {
+      "comparison": "Magi vs Wan 2.2 vs Stepvideo",
+      "verdict": "Stepvideo and Magi ranked first, Wan 2.2 considered king of local generation due to hardware requirements",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "Self-refine on vs off",
+      "verdict": "Clear improvement in video quality with self-refine, especially for motion consistency",
+      "from": "TK_999"
+    },
+    {
+      "comparison": "SkyReels V3 vs InfiniteTalk",
+      "verdict": "SkyReels V3 does some things differently but unclear if superior to LongCat Avatar",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "MOVA vs LTX2",
+      "verdict": "MOVA examples are much worse quality, limited to 8 seconds vs LTX2's 30+ seconds",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "MOVA vs Ovi",
+      "verdict": "MOVA looks sharper than Ovi, better sound, but Ovi has better visual quality overall",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "comparison": "Wan 2.1 vs 2.2 motion",
+      "verdict": "2.1 far from 2.2 quality with motion",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "LTX2 vs other models for long video",
+      "verdict": "LTX2 absolutely on its own level for long video generation, can do 30s+ with same context",
+      "from": "Kijai"
+    },
+    {
+      "comparison": "MOVA vs Wan 2.2 speed",
+      "verdict": "MOVA is about 1-2 seconds slower per iteration compared to Wan2.2",
+      "from": "yi"
+    },
+    {
+      "comparison": "Wan 2.5/2.6 vs 2.2",
+      "verdict": "Quality of wan 2.5/2.6 is a downgrade from 2.2 in many ways due to shortcuts for speed",
+      "from": "Ruairi Robinson"
+    },
+    {
+      "comparison": "Wan 2.5 vs 2.6",
+      "verdict": "2.6 is bad but 2.5 is way better in quality, dialogue, motion, prompt understanding",
+      "from": "asd"
+    },
+    {
+      "comparison": "MOVA guitar vs stock wan + mmaudio",
+      "verdict": "Stock wan + mmaudio is better than MOVA for music generation",
+      "from": "Benjimon"
+    },
+    {
+      "comparison": "Low quality InfiniteTalk vs other lip-sync methods",
+      "verdict": "Even low quality InfiniteTalk workflow beat the example shown",
+      "from": "Krikross"
+    },
+    {
+      "comparison": "MOVA vs Wan 2.2 a14b performance",
+      "verdict": "MOVA only about 1-2 seconds slower per iteration",
+      "from": "yi"
+    },
+    {
+      "comparison": "HuMo vs other methods for long generations",
+      "verdict": "HuMo can't natively do long generations",
+      "from": "Kijai"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Use old 480 rank64 LoRA instead of 1022 for low model",
+      "context": "1022 LoRA not good with low model, old one much better",
+      "from": "Elvaxorn"
+    },
+    {
+      "tip": "Use 1030 LoRA for better motion than 1022",
+      "context": "For high noise model generations",
+      "from": "Elvaxorn"
+    },
+    {
+      "tip": "Stride input frames to help with movement and speed",
+      "context": "Taking 1 frame every 15 from PNG sequence gives completely different, faster output",
+      "from": "Kenk"
+    },
+    {
+      "tip": "Use VACE for multi-keyframe interpolation instead of SVI",
+      "context": "SVI/2.2 isn't trained for multi-keyframe injection, VACE works better for that use case",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Decode and re-encode latents for SVI anchor changes",
+      "context": "Last latent is actually 4 frames, not 1 - need to decode with VAE and re-encode to get single anchor frame",
+      "from": "Ablejones"
+    },
+    {
+      "tip": "Always start with native ComfyUI, then WanWrapper if not available",
+      "context": "Avoid vibecoded custom nodes - most new features are quickly available in native or Kijai implementations",
+      "from": "ucren"
+    },
+    {
+      "tip": "Use distill LoRA strength at 1.5 on high pass to counter slow-mo effect",
+      "context": "When using SVI Pro and experiencing slowmotion issues",
+      "from": "gilfoyle"
+    },
+    {
+      "tip": "Prompt aggressively to break away from anchor frame in SVI",
+      "context": "Lazy prompting will keep SVI stuck to anchor image due to its consistency mechanism",
+      "from": "Ablejones"
+    },
+    {
+      "tip": "Find front-facing character view as anchor latent for T2V with SVI",
+      "context": "When doing T2V generations involving character appearance before SVI extension",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "tip": "Can regenerate anchor midway in long sequences",
+      "context": "For 10x 5s segments, you can do another anchor when you know something will change in the scene",
+      "from": "pagan"
+    },
+    {
+      "tip": "Use two VACE encode nodes with different strengths for separate control",
+      "context": "One with control net and other with reference at different strengths when you want reference image to matter more than control video or vice versa",
+      "from": "Piblarg"
+    },
+    {
+      "tip": "Use --cache-none to automatically release model and node cache",
+      "context": "When switching between workflows to prevent freezing",
+      "from": "LukeG89"
+    },
+    {
+      "tip": "For non-standard characters, greatly expand the mask",
+      "context": "20, 60, 100, 200 pixel masks show massive improvement with chibi characters",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Position reference in same spot as pose video",
+      "context": "Helps with character consistency in Wan Animate",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Use SCAIL to scale poses to match target proportions",
+      "context": "When working with non-standard character proportions",
+      "from": "ucren"
+    },
+    {
+      "tip": "Padding to 300 + feet in frame helps A LOT",
+      "context": "For better character consistency",
+      "from": "Kav"
+    },
+    {
+      "tip": "Modifying input video is more important than everything else",
+      "context": "After extensive testing with Wan models",
+      "from": "Kav"
+    },
+    {
+      "tip": "Limit node pack count for better performance",
+      "context": "Running 120+ node packs causes slowest startup in the universe",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Undervolt 5090 to 500W from 550W for safety",
+      "context": "Prevents power connector issues and overheating",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Don't use model merges for purposes other than what they're made for",
+      "context": "Quality degrades, especially with AIO models",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use large masks with WanAnimate",
+      "context": "WanAnimate seems to prefer really large masks for better results",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Add motion descriptions in prompts",
+      "context": "For avoiding slow motion in SVI, describe the motion in the prompt",
+      "from": "cyncratic"
+    },
+    {
+      "tip": "Use 3 sampler setup for better motion",
+      "context": "First sampler without lightx and higher CFG, takes more time but improves motion",
+      "from": "42hub"
+    },
+    {
+      "tip": "Generate at higher resolution for better results",
+      "context": "General observation that reasonably higher resolution yields better results",
+      "from": "42hub"
+    },
+    {
+      "tip": "Try SGM-uniform scheduler for better motion",
+      "context": "User found motion improved when switching from euler/simple to sgm-uniform",
+      "from": "cocktailprawn1212"
+    },
+    {
+      "tip": "Can mix WAN high motion with LTX-2 at 0.3 denoise for better results",
+      "context": "Using LTX-2 for v2v processing of WAN output",
+      "from": "hicho"
+    },
+    {
+      "tip": "Use only WAN 2.2 low for upscaling with 2-3 steps",
+      "context": "Upscaling workflow, balance between frames per batch and resolution",
+      "from": "Janosch Simon"
+    },
+    {
+      "tip": "Can upscale better in ComfyUI than any current paid upscaling service",
+      "context": "Using iterative captioned tiled upscale with Flux",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Use res4lyf samplers with specific extra_options for efficiency",
+      "context": "default_dtype=float32, multistep_initial_sampler=euler, skip_final_model_call",
+      "from": "Ablejones"
+    },
+    {
+      "tip": "LN is basically 2.1, HN is where the 2.2 magic is at",
+      "context": "Understanding WAN 2.2 model variants",
+      "from": "mdkb"
+    },
+    {
+      "tip": "Keep entire SVI system step count under 10 steps",
+      "context": "When using multi-sampler SVI setup with high and low noise",
+      "from": "Canin17"
+    },
+    {
+      "tip": "Use portrait crop of first I2V frame as SVI anchor",
+      "context": "SVI works best with closeup portraits for anchor frames",
+      "from": "ucren"
+    },
+    {
+      "tip": "Disable hands in SCAIL for better quality",
+      "context": "When getting poor motion quality with hands flying away",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use reverse image batch node for progressive character entry",
+      "context": "When character only partially visible in initial frames",
+      "from": "David Snow"
+    },
+    {
+      "tip": "Use anchor frame changes and vary SVI weight/denoising for experimental effects",
+      "context": "When doing video extensions with SVI Pro",
+      "from": "Dream Making"
+    },
+    {
+      "tip": "Some LoRAs can go to 2.0 strength but it gets very spicy",
+      "context": "General LoRA usage advice",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Use higher order and/or multi-step samplers with momentum to use fewer steps",
+      "context": "For speeding up generation, moving from Euler to DPM allows using fewer steps",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Train embeddings on Wan 1.3B with small images for speed, then transfer to larger models",
+      "context": "Since all Wan versions use same text encoder",
+      "from": "spacepxl"
+    },
+    {
+      "tip": "Use character LoRA even with Wan Animate for likeness preservation",
+      "context": "Wan Animate still needs character LoRA in testing",
+      "from": "Dream Making"
+    },
+    {
+      "tip": "Use 24fps for SVI-Pro2.2 output",
+      "context": "Works well in most cases for video generation",
+      "from": "JohnDopamine"
+    },
+    {
+      "tip": "Full CFG always helps inpainting",
+      "context": "Even with empty negatives, but requires full steps (40)",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Don't use face points with steadydancer",
+      "context": "Steadydancer doesn't have face control capability",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use higher distill lora strengths and proper CFG with 2.2",
+      "context": "Better than painter-like hacks for getting motion",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use shift=5 with Wan distilled loras",
+      "context": "They were specifically trained with this value",
+      "from": "spacepxl"
+    },
+    {
+      "tip": "Save latents instead of video files for SVI extension",
+      "context": "When you want to preserve maximum detail between extensions and continue workflows later",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Duplicate first frame several times to fix refine pass garbage frames",
+      "context": "Add duplicated frames at beginning, then trim after decoding to avoid garbage first frames in Wan refine pass",
+      "from": "N0NSens"
+    },
+    {
+      "tip": "Use cfg on first step, no cfg on later steps method",
+      "context": "Still valid and recommended approach for sampling",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use VHS Load Video (FFmpeg) for color accuracy",
+      "context": "When you need to avoid color drift that occurs with regular VHS loader",
+      "from": "CaptHook"
+    },
+    {
+      "tip": "Use restart sampling with many steps",
+      "context": "Start with 1000+ steps when experimenting with restart sampling for best results",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Prompt character details when using SCAIL",
+      "context": "Important to describe style and character details when character is turning or moving",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use augment_empty_frames with self-refine",
+      "context": "Combine experimental augment_empty_frames feature with self-refine for more controlled motion",
+      "from": "JohnDopamine"
+    },
+    {
+      "tip": "Save only necessary frames for SVI extensions",
+      "context": "For video extension workflows, only encode the last few frames needed rather than entire long videos",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Use white padding for SkyReels V3 reference images",
+      "context": "When using reference images with the model",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Self-refine sampling works better with more steps",
+      "context": "Because restarts add more noise than SDE samplers",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "Highly recommend upscaling pass for LTX2",
+      "context": "Due to very compressive VAE in spatial dimensions",
+      "from": "yi"
+    },
+    {
+      "tip": "Use delayed negative prompting for first third of steps",
+      "context": "Have blank negative for first portion of generation steps",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "tip": "SVI is not trained to continue from more than one latent",
+      "context": "Can have issues when trying to extend beyond default parameters",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Use DWOpenpose instead of depth for VACE face work",
+      "context": "When doing subject transfer in videos, DWOpenpose will be closer to reference image than depth maps",
+      "from": "Stef"
+    },
+    {
+      "tip": "Don't use DA 3 for VACE",
+      "context": "For VACE workflows, DA 3 made things worse than with DA 2 vitg",
+      "from": "Stef"
+    },
+    {
+      "tip": "Test MOVA properly with correct settings",
+      "context": "Use 121 frames 24fps for proper testing since Hunyuanvideo foley doesn't support framerate other than 24fps",
+      "from": "yi"
+    },
+    {
+      "tip": "Use ComfyUI bridge node for FP8 text encoding",
+      "context": "When wrapper text encoder doesn't support FP8 scaled, use the comfy native text encoding with bridge node",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Just converting to NVFP4 is very lossy - proper NVFP4 models need calibration",
+      "context": "When using NVFP4 conversion tools",
+      "from": "Kijai"
+    },
+    {
+      "tip": "You could use InfiniteTalk or MultiTalk with SVI for better results",
+      "context": "When doing audio-driven video generation",
+      "from": "Kijai"
+    }
+  ],
+  "news": [
+    {
+      "update": "ComfyUI frontend updated to v1.37.1",
+      "details": "Preview bridge mask editor fixed for crop/masking workflows",
+      "from": "ucren"
+    },
+    {
+      "update": "New 1217 LightX2V LoRA released",
+      "details": "Decent for low noise model",
+      "from": "Elvaxorn"
+    },
+    {
+      "update": "New omnivcus has newly trained VACE for 2.2",
+      "details": "Haven't been tested yet but available",
+      "from": "Kijai"
+    },
+    {
+      "update": "HY-Motion-1.0 released by Benji",
+      "details": "Can do climbing obstacles, fighting, crawling, playing instruments, climbing stairs/ladders. Adjustable runtime 1-12 seconds. Could pair well with Wan Animate",
+      "from": "tarn59"
+    },
+    {
+      "update": "Thesby Qwen3VL models got deleted",
+      "details": "User looking for backup of deleted models",
+      "from": "Gleb Tretyak"
+    },
+    {
+      "update": "LTX-2 released",
+      "details": "19B parameters, dev and distilled models (4-8 steps), joint audio-video training, ComfyUI support ready",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "update": "LongVie2 added to Kijai's main branch",
+      "details": "Depth controlnet for I2V models, can continue from 8 frames",
+      "from": "Kijai"
+    },
+    {
+      "update": "NVIDIA bringing back RTX 3060 in Q1 2026",
+      "details": "To tackle memory shortages",
+      "from": "Tachyon"
+    },
+    {
+      "update": "Flash attention now working on ROCm and Windows",
+      "details": "Previously wasn't available for these platforms",
+      "from": "patientx"
+    },
+    {
+      "update": "LTX-2 released",
+      "details": "New open source video model with audio support, 20 second generations, available on HuggingFace",
+      "from": "Ada"
+    },
+    {
+      "update": "ComfyUI-Kitchen added for fp8/fp4 support",
+      "details": "New addition to help with fp8 and fp4 model support",
+      "from": "Tachyon"
+    },
+    {
+      "update": "DreamID-V released by ByteDance",
+      "details": "New video generation model from ByteDance released on GitHub",
+      "from": "AshmoTV"
+    },
+    {
+      "update": "HummingbirdXT - WAN 2.2 5B distill released by AMD",
+      "details": "Lightweight VAE decoder that can substitute for WAN-2.2-5B VAE with reduced computational cost",
+      "from": "yi"
+    },
+    {
+      "update": "VerseCrafter - world model based on WAN released by TencentARC",
+      "details": "New world model architecture built on WAN foundation",
+      "from": "yi"
+    },
+    {
+      "update": "SoulX FlashTalk announced",
+      "details": "New lip-sync/talking head technology",
+      "from": "DawnII"
+    },
+    {
+      "update": "WAN team mentioned releasing lighter version 'for the community to use'",
+      "details": "Suggests 20B-25B parameter model similar to WAN 2.2 coming",
+      "from": "yi"
+    },
+    {
+      "update": "Wan 2.2 NVFP4 quantized models released",
+      "details": "GitMylo released NVFP4 versions but quality may be degraded",
+      "from": "Ada"
+    },
+    {
+      "update": "UniPic3 CM models released by Skywork",
+      "details": "Two distillation methods available: consistency model and DMD distillation",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "update": "Adobe bought Invoke",
+      "details": "Invoke has gone full Adobe according to user",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "update": "ComfyUI now supports asynchronous weight offloading",
+      "details": "Allows better memory management by moving weights between VRAM/RAM asynchronously",
+      "from": "Kijai"
+    },
+    {
+      "update": "New V-RGBX inverse rendering tool works in ComfyUI",
+      "details": "RGB to albedo/normals etc, works with no code changes needed in ComfyUI",
+      "from": "spacepxl"
+    },
+    {
+      "update": "FlashVSR fork with bug fixes released",
+      "details": "Fixes dropped frames, misaligned output, memory leaks, adds 1.1 support and frame chunking",
+      "from": "lostintranslation"
+    },
+    {
+      "update": "InfiniteTalk merged into native ComfyUI",
+      "details": "Commit 16b9aabd52c3b81b365fbf562bbcc4528111ef6b merged into Comfy-Org/ComfyUI",
+      "from": "Kijai"
+    },
+    {
+      "update": "VACE tailored nodes released",
+      "details": "RGnodes released for VACE and other video/mask needs",
+      "from": "rryyaann"
+    },
+    {
+      "update": "OmniVideo2-A14B released",
+      "details": "New model from Fudan-FUXI available on HuggingFace",
+      "from": "yi"
+    },
+    {
+      "update": "StoryMem repo updated with RoPE fixes",
+      "details": "Recent commit added missing RoPE offset implementation",
+      "from": "JohnDopamine"
+    },
+    {
+      "update": "SVI 2.0 Pro available for Wan 2.2",
+      "details": "Extension system now works with Wan 2.2 architecture at github.com/vita-epfl/Stable-Video-Infinity/tree/svi_wan22",
+      "from": "lostintranslation"
+    },
+    {
+      "update": "Native InfiniteTalk Extension Workflow released",
+      "details": "Supports custom audio or TTS, posted to WAN resources",
+      "from": "Elvaxorn"
+    },
+    {
+      "update": "Memory optimization improvements for high res InfiniteTalk",
+      "details": "New optimizations save 1GB+ VRAM for 720p+ generations",
+      "from": "Kijai"
+    },
+    {
+      "update": "Self-refine-video implementation available",
+      "details": "Early testing branch available on ComfyUI-WanVideoWrapper repository",
+      "from": "Kijai"
+    },
+    {
+      "update": "SkyReels V3 announced",
+      "details": "New R2V, A2V, V2V models based on Wan architecture with multishot video extension",
+      "from": "yi"
+    },
+    {
+      "update": "Color shift issue officially acknowledged",
+      "details": "VHS developer confirmed the color space conversion issues and provided technical explanation",
+      "from": "Austin Mroz"
+    },
+    {
+      "update": "OmniTransfer model announced",
+      "details": "New model from lead HuMo developer, similar to OmniInsert but improved version",
+      "from": "JohnDopamine"
+    },
+    {
+      "update": "SkyReels V3 R2V model released",
+      "details": "New reference-to-video model based on Wan 2.1 with 24fps capability",
+      "from": "yi"
+    },
+    {
+      "update": "MOVA (OpenMOSS) released with Apache 2.0 license",
+      "details": "32B parameter video-audio model, actually Wan 2.2 A14B + audio, Apache licensed",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "update": "Self-refine video sampling branch available for testing",
+      "details": "New sampling method in development branch of WanVideoWrapper",
+      "from": "JohnDopamine"
+    },
+    {
+      "update": "NVIDIA FastGen research repo released",
+      "details": "Distillation training stuff featuring Wan, ~2 days old",
+      "from": "JohnDopamine"
+    },
+    {
+      "update": "MOVA ComfyUI implementation available",
+      "details": "Custom node available at HM-RunningHub/ComfyUI_RH_MOVA repo",
+      "from": "Lodis"
+    },
+    {
+      "update": "Modulo support added to KJNodes calculator",
+      "details": "Added modulo operation support to calculator node",
+      "from": "Kijai"
+    },
+    {
+      "update": "Boolean output added to KJNodes calculator",
+      "details": "Calculator node now has boolean output for comparison operations",
+      "from": "Kijai"
+    },
+    {
+      "update": "Wan 2.6 has video reference capability",
+      "details": "Can upload a reference video of a person then do new videos of that person, no training at all",
+      "from": "Ruairi Robinson"
+    },
+    {
+      "update": "MOVA team roadmap includes API and HF space",
+      "details": "They are making an API and HF space along with diffusers implementation",
+      "from": "yi"
+    },
+    {
+      "update": "SVI 2.0 Pro branch doesn't have training code available",
+      "details": "Team states 'We currently have no plans to open-source the training code' - only original 2.1 SVI has training code",
+      "from": "Persoon"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "SVI Pro 2.0 + Longlook motion scale + RCM 2.2 + upscale/interpolation",
+      "use_case": "Budget VEO3 alternative at 832x480 (65 fps per clip)",
+      "from": "Elvaxorn"
+    },
+    {
+      "workflow": "Face-only second pass generation",
+      "use_case": "Generate face separately then comp back in to improve facial animations when face is too small in frame",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "PNG frame encoding method for SVI",
+      "use_case": "Less stressful on RAM for long video interpolation - save frames as PNG then encode back to latent",
+      "from": "Kenk"
+    },
+    {
+      "workflow": "SVI Pro with multiple segments using prev_samples",
+      "use_case": "Extended video generation with consistent character across segments",
+      "from": "BarleyFarmer"
+    },
+    {
+      "workflow": "T2V to SVI Pro extension workflow",
+      "use_case": "Starting with T2V generation then extending with SVI Pro, though seamless transition is challenging",
+      "from": "seitanism"
+    },
+    {
+      "workflow": "HuMo + SVI workflow with anchor swapping",
+      "use_case": "Audio-driven video with ability to change anchor for different sections, supports outfit changes",
+      "from": "JohnDopamine"
+    },
+    {
+      "workflow": "Model alternating steps workflow",
+      "use_case": "Alternate single steps between Wan Animate and SCAIL models for combined benefits",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "workflow": "SVI 2.0 Pro with video extension",
+      "use_case": "Extending existing videos by encoding original and feeding as prev latents with anchor frame",
+      "from": "42hub"
+    },
+    {
+      "workflow": "WanVideoBlender for smooth transitions",
+      "use_case": "Feed two videos with overlap frames (1 usually works) to create smooth transitions",
+      "from": "Tachyon"
+    },
+    {
+      "workflow": "Progressive SVI generation",
+      "use_case": "25 segments of 69 latent frames with different prompts per segment for long videos",
+      "from": "TK_999"
+    },
+    {
+      "workflow": "LongVie2 with depth control",
+      "use_case": "I2V generation with depth controlnet, can extend from original video's first frame",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Using LTX-2 as Wan upscaler",
+      "use_case": "Fast 1080p upscaling of Wan videos in about a minute using v2v detailer workflow",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "WanAnimate face detection for LivePortrait",
+      "use_case": "Use WanAnimate's more stable face detection as driving video for LivePortrait to reduce jitter",
+      "from": "David Snow"
+    },
+    {
+      "workflow": "SCAIL with Context Windows",
+      "use_case": "Can go beyond normal frame count limits for long generations, works best on plain backgrounds",
+      "from": "42hub"
+    },
+    {
+      "workflow": "LTX-2 to WAN 2.2 low v2v with audio transfer",
+      "use_case": "Getting audio capabilities in WAN by using LTX-2 first then processing with WAN",
+      "from": "hicho"
+    },
+    {
+      "workflow": "Batch upscaler using WAN 2.2 low with 1.3-1.5x upscale",
+      "use_case": "Standalone batch processing for long videos with balance between frames and resolution",
+      "from": "Ivoxx"
+    },
+    {
+      "workflow": "Stitching I2Vs with VACE and upscaling with SeedVR2",
+      "use_case": "Long video generation by combining multiple I2V segments and fixing seams",
+      "from": "pom"
+    },
+    {
+      "workflow": "Using Phantom with multiple character references",
+      "use_case": "Multi-character video generation following specific rules",
+      "from": "mdkb"
+    },
+    {
+      "workflow": "Multi-sampler SVI setup with CFG shifting",
+      "use_case": "Using first 2 steps with CFG for structure, then distill LoRA for finishing",
+      "from": "Canin17"
+    },
+    {
+      "workflow": "Wan refine pass after LTX generation",
+      "use_case": "Using Wan as refinement step to improve LTX output quality",
+      "from": "N0NSens"
+    },
+    {
+      "workflow": "Beat-locked video editing with stems",
+      "use_case": "Automatic multi-camera editing synced to music using audio stem analysis",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "workflow": "3-step character replacement process: I2V \u2192 SCAIL \u2192 HuMo V2V",
+      "use_case": "Multi-shot sequences where character starts turned around then reveals target face",
+      "from": "Dream Making"
+    },
+    {
+      "workflow": "Use VACE with Qwen edit for face application before T2V",
+      "use_case": "Applying reference face to video generation",
+      "from": "Dream Making"
+    },
+    {
+      "workflow": "SVI Pro for long generations instead of context windows",
+      "use_case": "Faster long video generation with per-segment prompting control",
+      "from": "blake37"
+    },
+    {
+      "workflow": "Multi-sampler SVI Pro setup",
+      "use_case": "Video extension with custom schedulers like bong_tangent",
+      "from": "garbus"
+    },
+    {
+      "workflow": "NAG with SVI for prompt adherence",
+      "use_case": "Making model follow complex prompts like sprouting wings and flying",
+      "from": "JohnDopamine"
+    },
+    {
+      "workflow": "StoryMem for memory-enhanced generation",
+      "use_case": "Using memory images with temporal positioning",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "SVI Pro extension workflow",
+      "use_case": "Extending videos while preserving quality and minimizing color drift",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "First frame duplication for refine pass",
+      "use_case": "Avoiding garbage frames at start of Wan refine operations by duplicating first frame multiple times",
+      "from": "N0NSens"
+    },
+    {
+      "workflow": "SCAIL pose control",
+      "use_case": "Advanced pose control with 3D pose data for video generation",
+      "from": "Juampab12"
+    },
+    {
+      "workflow": "VACE method for video extension",
+      "use_case": "Using VACE with Steerable Motion node for better video extensions",
+      "from": "JohnDopamine"
+    },
+    {
+      "workflow": "Multiple video extension without saving",
+      "use_case": "Producing extensions to existing videos using SVI while minimizing disk I/O",
+      "from": "lostintranslation"
+    },
+    {
+      "workflow": "Self-refine with regular and distill models",
+      "use_case": "Improving video quality through restart sampling, works better with full models than distills",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "SkyReels V3 R2V with Phantom node",
+      "use_case": "Reference-to-video generation using existing Phantom workflows",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "VACE FFLF combined with InfiniteTalk",
+      "use_case": "Video extension using first-frame-last-frame with infinite talk",
+      "from": "Elvaxorn"
+    },
+    {
+      "workflow": "Two-step workflow for video extension",
+      "use_case": "Generate initial video, then use video-to-video infinite talk for extension",
+      "from": "asd"
+    },
+    {
+      "workflow": "SVI Pro 2.0 color-preserving workflow",
+      "use_case": "For SVI where color shift is almost imperceptible",
+      "from": "Stef"
+    },
+    {
+      "workflow": "Multiple reference images for SVI",
+      "use_case": "Passing multiple reference images like a 3D scene from different angles for better background understanding",
+      "from": "lostintranslation"
+    },
+    {
+      "workflow": "Background change with VACE",
+      "use_case": "Change background while keeping same subject/face using reference image with new background and original video for control",
+      "from": "Albert"
+    },
+    {
+      "workflow": "A2V (Audio to Video) has its own workflow, R2V (Reference to Video) can be used in Phantom workflow",
+      "use_case": "Audio-driven and reference-driven video generation",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "NVFP4 conversion workflow using ComfyUI_Kitchen_nvfp4_Converter",
+      "use_case": "Reducing VRAM usage for Wan models",
+      "from": "topmass"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "diff_augment_scale parameter",
+      "value": "1.6 default, but adjust per video",
+      "reason": "Too high causes scene changes, needs tuning based on content",
+      "from": "Ablejones"
+    },
+    {
+      "setting": "SVI Pro video length",
+      "value": "65 frames instead of 81",
+      "reason": "Makes generation super fast and uses less VRAM",
+      "from": "Elvaxorn"
+    },
+    {
+      "setting": "Motion latent count for SVI",
+      "value": "Minimum 4 frames (goes in increments of 4)",
+      "reason": "Last latent contains 4 frames, need 5 minimum as first frame is different",
+      "from": "Kijai"
+    },
+    {
+      "setting": "LightX2V steps",
+      "value": "6 steps with euler sampler",
+      "reason": "Best performance for the recommended LoRA models",
+      "from": "Benjimon"
+    },
+    {
+      "setting": "RTX 5090 power limit",
+      "value": "90% max power",
+      "reason": "User running at this setting since March to help prevent power connector issues",
+      "from": "AJO"
+    },
+    {
+      "setting": "SVI Pro motion_latent_count",
+      "value": "2 motion latents",
+      "reason": "Better results than 0 or 1 motion latents for T2V to SVI transitions",
+      "from": "seitanism"
+    },
+    {
+      "setting": "MoE timestep split",
+      "value": "0.875",
+      "reason": "Standard training split between high and low models, important for LoRA compatibility",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "setting": "SVI overlap frames",
+      "value": "1",
+      "reason": "Usually works for smooth transitions in WanVideoBlender",
+      "from": "Tachyon"
+    },
+    {
+      "setting": "5090 power limit",
+      "value": "500W",
+      "reason": "Safer than full 550W, prevents power connector issues",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Mask expansion for chibi characters",
+      "value": "200+ pixels",
+      "reason": "Makes massive difference for non-standard character proportions",
+      "from": "David Snow"
+    },
+    {
+      "setting": "LightX2V steps",
+      "value": "4-5 steps",
+      "reason": "Best balance of time vs quality, takes 2ish minutes per gen at 1280x720",
+      "from": "Akshvodae | Joe"
+    },
+    {
+      "setting": "CLIP Vision tiles",
+      "value": "2 tiles for 512x512 effective resolution",
+      "reason": "CLIP vision capped at 256x256, tiling allows seeing more detail",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "setting": "VACE steps",
+      "value": "6 steps better than 4 or 8",
+      "reason": "User found better results at 6 steps, 8 was too much",
+      "from": "Blink"
+    },
+    {
+      "setting": "SVI sampler setup",
+      "value": "i2v 1030 high, i2v 1022 low, 2 steps high, 4 steps low (6 total)",
+      "reason": "Specific configuration for better motion",
+      "from": "MarkDalias"
+    },
+    {
+      "setting": "LightX LoRA strengths",
+      "value": "Variable values shown in workflow image",
+      "reason": "Helps with motion control",
+      "from": "patientx"
+    },
+    {
+      "setting": "WAN 2.2 low upscaling",
+      "value": "0.3 denoise with 2-3 steps",
+      "reason": "Balance between quality and speed for upscaling",
+      "from": "Ivoxx"
+    },
+    {
+      "setting": "LTX-2 v2v processing",
+      "value": "0.3 denoise",
+      "reason": "Good balance for video-to-video processing",
+      "from": "hicho"
+    },
+    {
+      "setting": "res4lyf extra_options",
+      "value": "skip_final_model_call, default_dtype=float32",
+      "reason": "Reduces memory usage and inference time",
+      "from": "Ablejones"
+    },
+    {
+      "setting": "SVI 2.0 Pro LoRA strength",
+      "value": "60% or lower",
+      "reason": "Helps combat stifled motion issues",
+      "from": "DevouredBeef"
+    },
+    {
+      "setting": "SCAIL frame picking",
+      "value": "Every 2 frames",
+      "reason": "Depends on input video motion speed",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Numpy version",
+      "value": "1.26.4 or 1.26.0",
+      "reason": "Avoids breaking LTX and SeedVR2 nodes",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SVI weight",
+      "value": "0.7 or 0.5",
+      "reason": "Good results for video extension, can test higher values",
+      "from": "Dream Making"
+    },
+    {
+      "setting": "Block swap prefetch",
+      "value": "1",
+      "reason": "Higher values cause black output due to NaN tensors",
+      "from": "Kijai"
+    },
+    {
+      "setting": "HuMo denoise for second pass",
+      "value": "0.5 or 0.8",
+      "reason": "When using HuMo as V2V second pass after SCAIL",
+      "from": "Dream Making"
+    },
+    {
+      "setting": "CFG Schedule",
+      "value": "Only use CFG on first step",
+      "reason": "Trick to get more movement with lightx2v distill loras",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Steps for undistilled models",
+      "value": "40 steps (36 also fine)",
+      "reason": "Black Forest Lab's recommended number",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "setting": "SVI split point sigma",
+      "value": "0.9 for I2V, 0.875 for T2V",
+      "reason": "Optimal split points based on sigma values",
+      "from": "Kijai"
+    },
+    {
+      "setting": "NAG parameters",
+      "value": "Scale: 12, tau: 4.0, alpha: 0.4",
+      "reason": "Effective for prompt adherence",
+      "from": "JohnDopamine"
+    },
+    {
+      "setting": "StoryMem RoPE offset",
+      "value": "5 (default)",
+      "reason": "Frame indices spread by factor of 5",
+      "from": "Kijai"
+    },
+    {
+      "setting": "shift",
+      "value": "5",
+      "reason": "Wan distilled loras were trained with this value",
+      "from": "spacepxl"
+    },
+    {
+      "setting": "frame overlap for SVI",
+      "value": "5 frames for one latent",
+      "reason": "Correct formula is 4 frames per latent +1, not just 4 frames",
+      "from": "lostintranslation"
+    },
+    {
+      "setting": "fps for SVI",
+      "value": "24fps",
+      "reason": "Works well with SVI2.2-Pro though not officially recommended",
+      "from": "JohnDopamine"
+    },
+    {
+      "setting": "SCAIL block swap",
+      "value": "~30 blocks for 720p",
+      "reason": "Optimal VRAM usage for 4090, uses under 20GB",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Self-refine step increase",
+      "value": "50% more steps",
+      "reason": "Default implementation increases model calls by 50% for quality improvement",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SageAttn as default",
+      "value": "Enable SageAttn auto mode",
+      "reason": "Provides 2x speedup with ~90% quality retention",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SCAIL prefetch",
+      "value": "1 prefetch only",
+      "reason": "Prevents OOM issues when using context windows",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SkyReels V3 steps with LightX2V",
+      "value": "6 steps",
+      "reason": "Demonstrated working configuration",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Default SkyReels V3 frames",
+      "value": "81 frames in code, 121 for R2V",
+      "reason": "Based on duration * 24 + 1 formula",
+      "from": "Kijai"
+    },
+    {
+      "setting": "SVI frame overlap",
+      "value": "4 * latents + 1",
+      "reason": "Proper mathematical formula for frame alignment",
+      "from": "Kijai"
+    },
+    {
+      "setting": "MOVA memory settings",
+      "value": "cpu offload mode, bfloat16",
+      "reason": "To avoid OOM with high VRAM usage",
+      "from": "Stef"
+    },
+    {
+      "setting": "MOVA recommended resolution",
+      "value": "352*640 for standard, 1280*720 for 720p model",
+      "reason": "Official recommended resolutions",
+      "from": "yi"
+    },
+    {
+      "setting": "motion_latent_count for SVIPro",
+      "value": "0 for 1st sampler, 1 for 2nd sampler",
+      "reason": "To properly continue from previous latent with 5 frame overlap",
+      "from": "Kijai"
+    },
+    {
+      "setting": "Self-refine certain_percentage default",
+      "value": ".999",
+      "reason": "Default setting seems oddly high, worth experimenting with",
+      "from": "JohnDopamine"
+    },
+    {
+      "setting": "Steps for lip-sync generation",
+      "value": "4 steps",
+      "reason": "Default setting used in examples",
+      "from": "Kijai"
+    },
+    {
+      "setting": "NVFP4 generation test",
+      "value": "700x400 px, 81 frames, 24fps",
+      "reason": "Test configuration for NVFP4 model",
+      "from": "topmass"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "SVI (Stable Video Infinity)",
+      "explanation": "Helps with video continuation for keeping consistency, uses last latent from previous generation to continue",
+      "from": "TK_999"
+    },
+    {
+      "term": "Difference augmentation",
+      "explanation": "Mechanism that forces I2V generated frames to move further from initial input frame, useful for nudging I2V output in controllable manner",
+      "from": "Ablejones"
+    },
+    {
+      "term": "Motion latent count",
+      "explanation": "In SVI, refers to number of frames used for continuation - last latent contains 4 frames, first frame is separate reference",
+      "from": "Kijai"
+    },
+    {
+      "term": "Structural repulsion boost",
+      "explanation": "Vague marketing term used by custom node creators - likely refers to painter method but unclear what it actually does",
+      "from": "RRR"
+    },
+    {
+      "term": "SVI anchor mechanism",
+      "explanation": "SVI is biased towards less motion because it's always trying to get back to the anchor frame for consistency - this is how it maintains character consistency",
+      "from": "Ablejones"
+    },
+    {
+      "term": "Mixed precision quantization",
+      "explanation": "ComfyUI mixed format includes info for each layer with settings like activation precision and whether it can use fp8 matmuls. Needs dict in model or quant keys",
+      "from": "Kijai"
+    },
+    {
+      "term": "SVI anchor latent",
+      "explanation": "Method to mitigate quality degradation in extended video generation by providing reference point",
+      "from": "Kijai"
+    },
+    {
+      "term": "MoE timestep split",
+      "explanation": "Division between high and low noise experts in MoE architecture at 0.875 threshold",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "term": "Conv3d memory bug",
+      "explanation": "PyTorch issue affecting VAE decoding, related to CUDNN version, causes 3x memory usage",
+      "from": "Kijai"
+    },
+    {
+      "term": "AIO model",
+      "explanation": "All-in-one model, refers to 2.1 model with multiple LoRAs baked in",
+      "from": "Kijai"
+    },
+    {
+      "term": "CLIP Vision tiling",
+      "explanation": "Breaking images into tiles so CLIP vision can see more detail since it's normally capped at 256x256 resolution",
+      "from": "ingi // SYSTMS"
+    },
+    {
+      "term": "Native vs Wrapper workflows",
+      "explanation": "Native refers to workflows built around KSampler from ComfyUI native, wrapper refers to workflows built around WanVideo Sampler from Kijai's repo",
+      "from": "42hub"
+    },
+    {
+      "term": "High/Low noise models in Wan 2.2",
+      "explanation": "Wan 2.2 uses MoE architecture with separate high and low noise expert models, high model sets motion while low handles detail",
+      "from": "42hub"
+    },
+    {
+      "term": "VACE vs LoRA",
+      "explanation": "VACE is not a LoRA but 'extra model layers' that plug into model loader differently than LoRAs",
+      "from": "42hub"
+    },
+    {
+      "term": "Pytorch memory fragmentation",
+      "explanation": "Cache becomes fragmented after long runs with diverse tensor sizes, making it hard to find contiguous blocks for new large tensors",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Skip final model call",
+      "explanation": "Mathematical denoise by interpolation instead of extra model call, similar to how ComfyUI handles previews",
+      "from": "Ablejones"
+    },
+    {
+      "term": "PyTorch memory fragmentation",
+      "explanation": "PyTorch cache pool can have free memory but be unable to allocate due to fragmentation. Blocks need to be contiguous, free, and in same segment to merge.",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "SVI anchor frame concept",
+      "explanation": "Anchor frame is what you want the likeness anchored to throughout the video sequence, should remain consistent across segments",
+      "from": "42hub"
+    },
+    {
+      "term": "SCAIL structure",
+      "explanation": "I2V model with 20 input channels, pose conditioning temporally concatenated at half resolution",
+      "from": "Kijai"
+    },
+    {
+      "term": "Asynchronous weight offloading",
+      "explanation": "ComfyUI feature that moves unused model weights to RAM while keeping active weights in VRAM, done asynchronously so it doesn't slow down generation if compute time is long",
+      "from": "Kijai"
+    },
+    {
+      "term": "SVI Pro 2.2",
+      "explanation": "LoRA for Wan 2.2 that enables longer I2V generations by chaining segments together using frames from previous generation plus original reference image",
+      "from": "blake37"
+    },
+    {
+      "term": "Prompt adapters vs LoRAs",
+      "explanation": "Prompt adapters tend to be better for things requiring subtlety like character and style, and are lighter weight than LoRAs",
+      "from": "pom"
+    },
+    {
+      "term": "RoPE shift/offset",
+      "explanation": "Temporal positioning method where frame indices are spread by factor of 5, e.g. 3 memory images get -15, -10, -5 positions",
+      "from": "Kijai"
+    },
+    {
+      "term": "Motion latent count",
+      "explanation": "Number of latents used by SVI node, typically last latent which represents 4 frames",
+      "from": "Kijai"
+    },
+    {
+      "term": "Sigma to step conversion",
+      "explanation": "Automatically sets split point based on sigma values instead of manual step selection",
+      "from": "Kijai"
+    },
+    {
+      "term": "SVI anchor system",
+      "explanation": "Uses anchor frames to prevent continuous drift - may drift initially but then stabilizes rather than continuing to degrade",
+      "from": "Ablejones"
+    },
+    {
+      "term": "Wan frame formula",
+      "explanation": "Wan accepts frames according to formula 1 + 4 \u00d7 n, where first frame is reference and then 4 frames per latent",
+      "from": "JohnDopamine"
+    },
+    {
+      "term": "Resolution-dependent shift",
+      "explanation": "Higher resolution increases signal at given noise level, so you increase shift to increase noise level for equivalent SNR",
+      "from": "spacepxl"
+    },
+    {
+      "term": "Self-refine-video",
+      "explanation": "Technique using restart sampling with uncertainty masking to iteratively improve video generation quality",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Uncertainty mask",
+      "explanation": "Masks areas that didn't change from previous restart in self-refine process, though naming is somewhat loose",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "RES sampler",
+      "explanation": "Higher-order explicit Runge Kutta with exponential integrator, actually a bug fix of DPM sampler",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Restart sampling",
+      "explanation": "Sampling technique that adds more noise than SDE, can be combined with SDE for both small per-step noise and big restart noise",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Self-refine video sampling",
+      "explanation": "Uses restart sampling with noise injection, can take you off known trajectory but SDE noise helps get back on track",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Double distillation effects",
+      "explanation": "Loading distillation LoRA on already distilled model causes excessive sharpening and artifacts",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Temporal VAE compression",
+      "explanation": "8x temporal compression makes fast motion difficult for diffusion model, especially human body movement",
+      "from": "spacepxl"
+    },
+    {
+      "term": "Reference concatenation",
+      "explanation": "SkyReels concatenates reference images after noise, not before like VACE",
+      "from": "Kijai"
+    },
+    {
+      "term": "Self-Refine",
+      "explanation": "Similar to restart sampler, implemented for video generation improvement",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Skyreels Extend generation process",
+      "explanation": "First generate a single clip, then extract keyframes with logic based on total length (limited to 200 seconds)",
+      "from": "Kijai"
+    },
+    {
+      "term": "Bypassed nodes behavior",
+      "explanation": "Returns the value of first input from first output, matches output to input",
+      "from": "Kijai"
+    },
+    {
+      "term": "Attention mechanism",
+      "explanation": "Magic that connects different modalities - 'you just connect up different modalities with some attn and magically it works'",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "term": "Neural network performance",
+      "explanation": "Mostly down to cache misses, requires CUDA kernel analysis for proper performance analysis",
+      "from": "mallardgazellegoosewildcat2"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "New 1217 LightX2V LoRA",
+      "url": "https://huggingface.co/lightx2v/Wan2.2-Distill-Loras/blob/main/wan2.2_t2v_A14b_low_noise_lora_rank64_lightx2v_4step_1217.safetensors",
+      "type": "model",
+      "from": "Elvaxorn"
+    },
+    {
+      "resource": "Best LightX2V full models",
+      "url": "https://huggingface.co/lightx2v/Wan2.2-Distill-Models/tree/main",
+      "type": "model",
+      "from": "Benjimon"
+    },
+    {
+      "resource": "ComfyUI StoryMem implementation",
+      "url": "https://github.com/anveshane/Comfyui_StoryMem",
+      "type": "repo",
+      "from": "TK_999"
+    },
+    {
+      "resource": "H1111 story branch with UltraVico",
+      "url": "https://github.com/maybleMyers/H1111/tree/story",
+      "type": "repo",
+      "from": "Benjimon"
+    },
+    {
+      "resource": "StereoPilot for 2D to 3D",
+      "url": "https://huggingface.co/KlingTeam/StereoPilot",
+      "type": "model",
+      "from": "DawnII"
+    },
+    {
+      "resource": "SVI Pro native workflow by Kijai",
+      "url": "https://discord.com/channels/1076117621407223829/1342763350815277067/1454805653599031358",
+      "type": "workflow",
+      "from": "LukeG89"
+    },
+    {
+      "resource": "SVI_v2_PRO LoRAs for native ComfyUI",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/LoRAs/Stable-Video-Infinity/v2.0/",
+      "type": "lora",
+      "from": "LukeG89"
+    },
+    {
+      "resource": "HuMo + SVI workflow resource thread",
+      "url": "https://discord.com/channels/1076117621407223829/1455601193660452995",
+      "type": "workflow",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "HY-Motion-1.0 Hugging Face space",
+      "url": "https://huggingface.co/spaces/tencent/HY-Motion-1.0",
+      "type": "model",
+      "from": "tarn59"
+    },
+    {
+      "resource": "Wan 2.2 fp8 mixed precision models",
+      "url": "https://huggingface.co/silveroxides/Wan_2.2-fp8_scaled_hybrid/tree/main",
+      "type": "model",
+      "from": "Lumifel"
+    },
+    {
+      "resource": "Video understanding LLMs collection",
+      "url": "https://github.com/yunlong10/Awesome-LLMs-for-Video-Understanding",
+      "type": "repo",
+      "from": "buggz"
+    },
+    {
+      "resource": "WanSoundTrajectory node for audio-reactive movement",
+      "url": "https://github.com/drozbay/ComfyUI-WanSoundTrajectory",
+      "type": "node",
+      "from": "Dream Making"
+    },
+    {
+      "resource": "SVI v2.0 Pro LoRAs",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/tree/main/LoRAs/Stable-Video-Infinity/v2.0",
+      "type": "model",
+      "from": "Juan Gea"
+    },
+    {
+      "resource": "WanVideoBlender node",
+      "url": "https://github.com/banodoco/steerable-motion",
+      "type": "tool",
+      "from": "Tachyon"
+    },
+    {
+      "resource": "Wan community timeline",
+      "url": "https://wanx-troopers.github.io/timeline.html",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "SVI workflows collection",
+      "url": "https://wanx-troopers.github.io/svi.html#svi-20-pro",
+      "type": "workflow",
+      "from": "42hub"
+    },
+    {
+      "resource": "LTX-2 model",
+      "url": "https://huggingface.co/Lightricks/LTX-2",
+      "type": "model",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "resource": "LTX-2 repository",
+      "url": "https://github.com/Lightricks/LTX-2",
+      "type": "repo",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "resource": "ComfyUI LTX-2 support",
+      "url": "https://github.com/comfyanonymous/ComfyUI/pull/11632",
+      "type": "repo",
+      "from": "LukeG89"
+    },
+    {
+      "resource": "42hub's Wan resource site",
+      "url": "https://wanx-troopers.github.io/",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "Timeline of Wan developments",
+      "url": "https://wanx-troopers.github.io/timeline.html",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "LightX LoRA information",
+      "url": "https://wanx-troopers.github.io/loras/part-01.html",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "LTX-2 models",
+      "url": "https://huggingface.co/Lightricks/LTX-2/tree/main",
+      "type": "model",
+      "from": "Ada"
+    },
+    {
+      "resource": "ComfyUI-LTXVideo nodes",
+      "url": "https://github.com/Lightricks/ComfyUI-LTXVideo",
+      "type": "tool",
+      "from": "David Snow"
+    },
+    {
+      "resource": "SCAIL AudioReactive",
+      "url": "https://github.com/ckinpdx/ComfyUI-SCAIL-AudioReactive",
+      "type": "tool",
+      "from": "AJO"
+    },
+    {
+      "resource": "Wan 2.2 VACE models",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/tree/main/VACE",
+      "type": "model",
+      "from": "Blink"
+    },
+    {
+      "resource": "DreamID-V support for WAN",
+      "url": "https://github.com/HM-RunningHub/ComfyUI_RH_DreamID-V",
+      "type": "repo",
+      "from": "NebSH"
+    },
+    {
+      "resource": "LongCat Avatar GGUF models",
+      "url": "https://huggingface.co/vantagewithai/LongCat-Video-Avatar-ComfyUI-GGUF/tree/main",
+      "type": "model",
+      "from": "mdkb"
+    },
+    {
+      "resource": "UniVideo - video editing model",
+      "url": "https://github.com/KlingTeam/UniVideo",
+      "type": "repo",
+      "from": "asd"
+    },
+    {
+      "resource": "HummingbirdXT model",
+      "url": "https://huggingface.co/amd/HummingbirdXT",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "VerseCrafter model",
+      "url": "https://huggingface.co/TencentARC/VerseCrafter",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "WAN 2.2 GGUF Storyboard",
+      "url": "https://github.com/chrishill197724-gif/ComfyUI-Wan22-GGUF-Storyboard",
+      "type": "repo",
+      "from": "hicho"
+    },
+    {
+      "resource": "CRT-Nodes for looping",
+      "url": "https://github.com/PGCRT/CRT-Nodes",
+      "type": "repo",
+      "from": "hudson223"
+    },
+    {
+      "resource": "Wan 2.2 FFLF workflow",
+      "url": "https://civitai.com/models/2074404?modelVersionId=2365252",
+      "type": "workflow",
+      "from": "Canin17"
+    },
+    {
+      "resource": "DreamID-V implementation",
+      "url": "https://github.com/bytedance/DreamID-V",
+      "type": "repo",
+      "from": "berserk4501"
+    },
+    {
+      "resource": "UniPic3 CM models",
+      "url": "https://huggingface.co/Skywork/Unipic3_cm",
+      "type": "model",
+      "from": "\ud83e\udd99rishappi"
+    },
+    {
+      "resource": "Wan 2.2 NVFP4 models",
+      "url": "https://huggingface.co/GitMylo/Wan_2.2_nvfp4/tree/main",
+      "type": "model",
+      "from": "Ada"
+    },
+    {
+      "resource": "VACE transition control node",
+      "url": "https://old.reddit.com/r/comfyui/comments/1l93f7w/my_weird_custom_node_for_vace/",
+      "type": "node",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "V-RGBX inverse rendering",
+      "url": "https://github.com/Aleafy/V-RGBX",
+      "type": "repo",
+      "from": "spacepxl"
+    },
+    {
+      "resource": "InsertAnywhere",
+      "url": "https://github.com/myyzzzoooo/InsertAnywhere",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "ReCo model",
+      "url": "https://github.com/HiDream-ai/ReCo",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "Wan timeline resource",
+      "url": "https://wanx-troopers.github.io/timeline.html",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "FlashVSR stable fork",
+      "url": "https://github.com/naxci1/ComfyUI-FlashVSR_Stable",
+      "type": "repo",
+      "from": "lostintranslation"
+    },
+    {
+      "resource": "OmniTransfer (Wan 2.1 based)",
+      "url": "https://github.com/PangzeCheung/OmniTransfer",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "SVI notes",
+      "url": "https://wanx-troopers.github.io/svi.html",
+      "type": "resource",
+      "from": "42hub"
+    },
+    {
+      "resource": "Huggingface prompt tuning docs",
+      "url": "https://huggingface.co/docs/peft/en/package_reference/prompt_tuning",
+      "type": "resource",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "resource": "ComfyUI-RGnodes",
+      "url": "https://github.com/rgamevfx/ComfyUI-RGnodes",
+      "type": "repo",
+      "from": "rryyaann"
+    },
+    {
+      "resource": "OmniVideo2-A14B",
+      "url": "https://huggingface.co/Fudan-FUXI/OmniVideo2-A14B",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "StoryMem repo",
+      "url": "https://github.com/Kevin-thu/StoryMem",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "CamCloneMaster",
+      "url": "https://github.com/KlingTeam/CamCloneMaster",
+      "type": "repo",
+      "from": "sebi"
+    },
+    {
+      "resource": "SVI 2.0 Pro for Wan 2.2",
+      "url": "https://github.com/vita-epfl/Stable-Video-Infinity/tree/svi_wan22",
+      "type": "repo",
+      "from": "lostintranslation"
+    },
+    {
+      "resource": "SCAIL pose control",
+      "url": "https://raw.githubusercontent.com/zai-org/SCAIL/refs/heads/master/resources/community2.gif",
+      "type": "model",
+      "from": "lostintranslation"
+    },
+    {
+      "resource": "FlashVSR upscaler",
+      "url": "https://github.com/naxci1/ComfyUI-FlashVSR_Stable",
+      "type": "repo",
+      "from": "lostintranslation"
+    },
+    {
+      "resource": "DITTO style transfer",
+      "url": "https://github.com/EzioBy/Ditto",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "Wan 2.2 nvfp4 version",
+      "url": "https://huggingface.co/GitMylo/Wan_2.2_nvfp4/tree/main",
+      "type": "model",
+      "from": "dj47"
+    },
+    {
+      "resource": "Quantization conversion tool",
+      "url": "https://github.com/silveroxides/convert_to_quant",
+      "type": "tool",
+      "from": "Shubhooooo"
+    },
+    {
+      "resource": "Image batcher for VACE",
+      "url": "https://huggingface.co/Stkzzzz222/remixXL/blob/main/image_batcher_by_indexz.py",
+      "type": "tool",
+      "from": "Dream Making"
+    },
+    {
+      "resource": "Self-refine-video implementation",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/self-refine-video",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Self-refine-video original paper",
+      "url": "https://github.com/agwmon/self-refine-video",
+      "type": "repo",
+      "from": "Juampab12"
+    },
+    {
+      "resource": "VHS color shift issue report",
+      "url": "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/issues/529",
+      "type": "issue",
+      "from": "CaptHook"
+    },
+    {
+      "resource": "UniVerse-1-Base model",
+      "url": "https://huggingface.co/dorni/UniVerse-1-Base",
+      "type": "model",
+      "from": "yi"
+    },
+    {
+      "resource": "SkyReels V3",
+      "url": "https://github.com/SkyworkAI/SkyReels-V3",
+      "type": "repo",
+      "from": "yi"
+    },
+    {
+      "resource": "Ace-Step v1.5 update",
+      "url": "https://github.com/ace-step/ace-step-v1.5.github.io",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "SkyReels V3 converted model",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/blob/main/SkyReelsV3/Wan21_SkyReels-V3-R2V_fp8_scaled_mixed.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "SkyReels V3 HuggingFace Space",
+      "url": "https://huggingface.co/spaces/Skywork/SkyReels-V3",
+      "type": "demo",
+      "from": "yi"
+    },
+    {
+      "resource": "Self-refine video branch",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/self-refine-video",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "NVIDIA FastGen research",
+      "url": "https://github.com/NVlabs/FastGen",
+      "type": "repo",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "MOVA OpenMOSS models",
+      "url": "https://huggingface.co/OpenMOSS-Team/MOVA-720p/tree/main",
+      "type": "model",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "resource": "SkyReels V3 GitHub",
+      "url": "https://github.com/SkyworkAI/SkyReels-V3",
+      "type": "repo",
+      "from": "Prelifik"
+    },
+    {
+      "resource": "MOVA ComfyUI implementation",
+      "url": "https://github.com/HM-RunningHub/ComfyUI_RH_MOVA",
+      "type": "repo",
+      "from": "Lodis"
+    },
+    {
+      "resource": "Self-refine video branch",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/self-refine-video",
+      "type": "repo",
+      "from": "izashin"
+    },
+    {
+      "resource": "MOVA Twitter announcement",
+      "url": "https://x.com/cheng_qinyuan/status/2017118768040989157?s=20",
+      "type": "announcement",
+      "from": "yi"
+    },
+    {
+      "resource": "SetGet resolver script",
+      "url": "https://github.com/yujianvip/ComfyUI-SetGet-Resolver",
+      "type": "tool",
+      "from": "JohnDopamine"
+    },
+    {
+      "resource": "HQ Image Save nodes",
+      "url": "https://github.com/spacepxl/ComfyUI-HQ-Image-Save",
+      "type": "node",
+      "from": "chrisd0073"
+    },
+    {
+      "resource": "CoCoTools IO nodes",
+      "url": "https://github.com/Conor-Collins/ComfyUI-CoCoTools_IO",
+      "type": "node",
+      "from": "chrisd0073"
+    },
+    {
+      "resource": "ComfyUI_Kitchen_nvfp4_Converter",
+      "url": "https://github.com/tritant/ComfyUI_Kitchen_nvfp4_Converter",
+      "type": "tool",
+      "from": "topmass"
+    },
+    {
+      "resource": "YouTube video showing Wan 2.2",
+      "url": "https://youtu.be/AUcYJczWXT4?t=446",
+      "type": "demo",
+      "from": "hicho"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "SVI/2.2 not good for multi-keyframe injection",
+      "details": "Not trained for keyframe interpolation like VACE, works worse than VACE for that use case",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "StoryMem only works for 2 shots",
+      "details": "Shows glitches between sections even with many steps, not suitable for longer sequences",
+      "from": "Benjimon"
+    },
+    {
+      "limitation": "I2V prompt adherence issues",
+      "details": "Still far from true prompt adherence, often just rolling dice on each generation",
+      "from": "David Snow"
+    },
+    {
+      "limitation": "SteadyDancer has no face control",
+      "details": "Cannot work with face images from pose and face detection nodes",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI Pro tends toward slowmotion",
+      "details": "By design due to anchor frame mechanism - requires aggressive prompting to break away from anchor",
+      "from": "Ablejones"
+    },
+    {
+      "limitation": "SVI reverts character changes like outfit/hair color",
+      "details": "Due to anchor frame consistency mechanism pulling back to original appearance",
+      "from": "Zabo"
+    },
+    {
+      "limitation": "T2V to SVI Pro transition issues",
+      "details": "Difficult to get seamless transition between T2V video and first SVI Pro I2V - always some weird change in first few frames",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "HuMo compatibility with Wan 2.2",
+      "details": "HuMo is trained on Wan 2.1 so workflows using Wan 2.2 HN stage are never completely perfect but work 'well enough'",
+      "from": "Ablejones"
+    },
+    {
+      "limitation": "Video models don't quantize well compared to LLMs",
+      "details": "Video diffusion models have quality issues with quantization while LLMs are happy in 4 bit",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "SVI Pro only works with I2V models",
+      "details": "Cannot be used with T2V models, not compatible with VACE",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Video quality degrades over time with merged models",
+      "details": "More noticeable with base + many LoRAs, degradation compounds with extensions",
+      "from": "LukeG89"
+    },
+    {
+      "limitation": "SVI still has some degradation and color shifts",
+      "details": "After chaining many clips, despite improvements",
+      "from": "seitanism"
+    },
+    {
+      "limitation": "LongVie2 hit and miss when start image isn't exact",
+      "details": "Works better when using original video's first frame as start image",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "5090 power connector rated for only ~20 reconnections",
+      "details": "Terrible design, should avoid frequent disconnecting",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "PyTorch 2.11.0 has stability issues",
+      "details": "Nightly build causes various problems including VAE decoding OOM",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Wan 2.2 high+low requires significant RAM",
+      "details": "Needs 64GB RAM, 32GB is not enough for both models",
+      "from": "Blink"
+    },
+    {
+      "limitation": "Wan slow motion issues",
+      "details": "SVI can produce slow motion results intermittently, various factors affect this including LoRA choice",
+      "from": "cocktailprawn1212"
+    },
+    {
+      "limitation": "SCAIL memory intensive",
+      "details": "NLF processor in SCAIL is memory intensive",
+      "from": "Guey.KhalaMari"
+    },
+    {
+      "limitation": "Relight LoRA causes identity drift",
+      "details": "Using relight LoRA in WanAnimate causes identity drift issues",
+      "from": "harrisonwells"
+    },
+    {
+      "limitation": "LTX-2 bad at fast movements and small details",
+      "details": "LTX struggles with fast movements and fine details compared to Wan",
+      "from": "Zueuk"
+    },
+    {
+      "limitation": "SVI has no controlnet or prompt control",
+      "details": "Makes it too random for planned video shots compared to VACE",
+      "from": "mdkb"
+    },
+    {
+      "limitation": "VACE only takes one reference",
+      "details": "Cannot handle multiple references directly, people experiment with compound images",
+      "from": "42hub"
+    },
+    {
+      "limitation": "SVI flickering issues with end frames",
+      "details": "Weird flickering artifacts when using end frames, different kind of bad when negative prompting flicker",
+      "from": "pom"
+    },
+    {
+      "limitation": "LongCat Avatar can't use WAN LoRAs",
+      "details": "No compatibility with existing WAN LoRA ecosystem",
+      "from": "mdkb"
+    },
+    {
+      "limitation": "Wan 2.2 Vi Pro can't do proper end frame generation",
+      "details": "Someone used different anchor claiming it's last frame but it's not really last frame generation",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "NVFP4 doesn't support ControlNet or LoRAs yet",
+      "details": "Technology is currently half-baked according to user experience",
+      "from": "CaptHook"
+    },
+    {
+      "limitation": "Mocha doubles model input making it very slow",
+      "details": "Mocha is extremely slow, taking about 1 hour for 81 frames",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SCAIL hand detection isn't great",
+      "details": "Hand detection alignment often screws up, especially on closeups",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI Pro has color drift issues in longer generations",
+      "details": "Common issue with color shifting over time, Color Match node only partially helps",
+      "from": "blake37"
+    },
+    {
+      "limitation": "HPS and MPS reward LoRAs break SVI generation flow",
+      "details": "Can't use these LoRAs together with SVI Pro",
+      "from": "blake37"
+    },
+    {
+      "limitation": "SCAIL and HuMo can't work in same workflow",
+      "details": "Need to run as separate passes",
+      "from": "Dream Making"
+    },
+    {
+      "limitation": "Current open source video models limited to non-HD 5 second videos with simple motion",
+      "details": "Questioning what you can actually 'do' with current capabilities",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "Normal maps not officially supported by VACE",
+      "details": "Not a trained VACE modality, though it somewhat works in practice",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "V-RGBX doesn't know what to do with sky, eyes/pupils",
+      "details": "Generalization issues with certain scene elements, needs more AOVs like reflection/refraction",
+      "from": "spacepxl"
+    },
+    {
+      "limitation": "LTX2 licensing restrictions",
+      "details": "Can't commercialize if competing with LTX company, revenue share required for paid licenses",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "Wan missing native audio and length",
+      "details": "Only has Ovi for audio, no native long duration support",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI 2 Pro motion issues",
+      "details": "Stilted motion and reduced prompt adherence, loses SVI benefits below 60% strength",
+      "from": "DevouredBeef"
+    },
+    {
+      "limitation": "StoryMem high lora strength",
+      "details": "Boosting StoryMem lora strength produces demon-like artifacts",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI still has color drift and quality loss",
+      "details": "Much better than VACE but both issues still exist, especially with extreme actions like faces going out of view",
+      "from": "lostintranslation"
+    },
+    {
+      "limitation": "SVI only receives last X frames plus anchor",
+      "details": "No awareness of objects or details that appeared earlier in sequence but not visible in recent frames",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SCAIL masked operations not officially supported",
+      "details": "No official masked SCAIL nodes exist currently, though theoretically possible",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "KJNodes GetNode can't work in subgraphs",
+      "details": "Variables are scoped to each canvas instance rather than global, preventing subgraph use",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Self-refine doesn't work well with distill models",
+      "details": "Motion is defined too early in distill models for self-refine to be as effective",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Self-refine incompatible with er_sde sampler",
+      "details": "Cannot use self-refine technique with er_sde sampling method",
+      "from": "TK_999"
+    },
+    {
+      "limitation": "SCAIL slow with context windows",
+      "details": "Context windows make SCAIL generation very slow, better to disable for shorter videos",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "UniVerse-1-Base undertrained",
+      "details": "Results show the model appears to be undertrained despite being 28GB",
+      "from": "yi"
+    },
+    {
+      "limitation": "Magi model installation complexity",
+      "details": "Requires special attention mechanism and is difficult to install, though not strictly necessary",
+      "from": "Lodis"
+    },
+    {
+      "limitation": "SkyReels V3 based on older Wan 2.1",
+      "details": "Not as good as Wan 2.2 for motion quality",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "MOVA limited to 8 seconds",
+      "details": "Much shorter than LTX2's 30+ second capability",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "MOVA demo clips are poor quality",
+      "details": "Examples shown are significantly worse than competing models",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI is fragile due to training method",
+      "details": "Trained using noise from specific generation setup, not very flexible",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "VAE compression issues for distant subjects",
+      "details": "Very compressive VAE in spatial dimensions makes distant faces/objects require upscaling",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "limitation": "MOVA requires reference image",
+      "details": "Inference script requires --ref_path argument, may not support native T2V",
+      "from": "Shubhooooo"
+    },
+    {
+      "limitation": "MOVA doesn't support fp8 quantization",
+      "details": "Code doesn't do fp8, uses bf16 on everything",
+      "from": "yi"
+    },
+    {
+      "limitation": "MOVA installation complexity",
+      "details": "Need weird dependencies that can conflict with protobuf, more complex than usual custom nodes",
+      "from": "Stef"
+    },
+    {
+      "limitation": "Skyreels Extend has fps issues",
+      "details": "Movement is jerky/unnatural, lipsync feels off despite using 25fps",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "VACE with depth maps poor for facial features",
+      "details": "Depth map doesn't have enough info for eye and mouth movement transfer",
+      "from": "Albert"
+    },
+    {
+      "limitation": "Scaled fp8 models can't be merged simply",
+      "details": "Cannot merge VACE with Skyreels due to fp8 scaling",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "HuMo can't natively do long generations",
+      "details": "Need to combine with other methods like InfiniteTalk or MultiTalk with SVI",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "NVFP4 conversion is very lossy without calibration",
+      "details": "Simple conversion results in quality loss",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "SVI 2.0 Pro branch lacks proper documentation for Wan 2.2 training",
+      "details": "Not well documented for training on Wan 2.2 instead of 2.1",
+      "from": "Persoon"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "SVI workflow memory usage",
+      "details": "Memory blows up after second extension during VAE decode, crashes after 3 hours of testing",
+      "from": "TK_999"
+    },
+    {
+      "requirement": "RAM management on RunPod",
+      "details": "76GB RAM gets frozen, need to restart pod frequently due to memory leaks",
+      "from": "Dannhauer80"
+    },
+    {
+      "requirement": "RTX 5090 performance",
+      "details": "49 minutes for 15 videos (81 frames, 720x1280, 6 steps) with 123GB RAM and AMD Ryzen 9 9950X",
+      "from": "Kevin \"Literally Who?\" Abanto"
+    },
+    {
+      "requirement": "RTX 5090 power connector issues",
+      "details": "16-pin connector problems causing melting/burning. Power consumption ridiculously high. Issues across brands (Gigabyte, ASUS, MSI)",
+      "from": "slmonker(5090D 32GB)"
+    },
+    {
+      "requirement": "PSU recommendation for RTX 5090",
+      "details": "Corsair RME series recommended over Great Wall 1250W 80plus gold which had issues",
+      "from": "Charlie"
+    },
+    {
+      "requirement": "32GB RAM insufficient for Wan 2.2",
+      "details": "Not enough to run Wan 2.2 properly",
+      "from": "Zueuk"
+    },
+    {
+      "requirement": "LTX-2 fits in 24GB VRAM",
+      "details": "19B parameter model should fit in 24GB with offloading",
+      "from": "ZeusZeus (RTX 4090)"
+    },
+    {
+      "requirement": "5090 temperature management",
+      "details": "Regularly hits 85C, undervolting recommended for better performance",
+      "from": "cyncratic"
+    },
+    {
+      "requirement": "Vast vs RunPod performance",
+      "details": "RunPod: 5 seconds per image, Vast: 60 seconds per image with Wan",
+      "from": "Kevin \"Literally Who?\" Abanto"
+    },
+    {
+      "requirement": "RAM for video models",
+      "details": "At least 64GB recommended, some users have 128GB. 32GB minimum for hobby use with GGUFs. One user reported 60GB usage during 1080p LTX generation",
+      "from": "Juampab12 / patientx / David Snow"
+    },
+    {
+      "requirement": "Wan 2.2 high+low VRAM",
+      "details": "Requires significant VRAM to run both models, can use low-noise only if limited",
+      "from": "Blink"
+    },
+    {
+      "requirement": "Linux vs Windows VRAM handling",
+      "details": "Windows has unified shared memory for temporary VRAM spikes, Linux is strict and causes instant OOM. WSL2 provides native Linux speed with Windows shared VRAM benefits",
+      "from": "craftogrammer"
+    },
+    {
+      "requirement": "WAN 2.2 with model splitting",
+      "details": "896x512 2-stage I2V+A at 25 FPS 30 sec took 18 min 40 sec without touching swap file",
+      "from": "psylent_gamer"
+    },
+    {
+      "requirement": "32GB RAM for casual use",
+      "details": "Might survive on 32GB if just playing around, not for serious work",
+      "from": "Juampab12"
+    },
+    {
+      "requirement": "LongCat Avatar VRAM usage",
+      "details": "30 minutes generation time on RTX 3060 for 93 frames at 832x480 with 12 steps",
+      "from": "mdkb"
+    },
+    {
+      "requirement": "RAM usage for multiple models",
+      "details": "User reported 244GB/250GB RAM usage with Flux2, Wan2.2 models, VACE, SVI 2.0 Pro and LoRAs loaded",
+      "from": "seitanism"
+    },
+    {
+      "requirement": "Mocha performance",
+      "details": "Mocha is 50% slower than base model due to doubling model input",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "SCAIL performance",
+      "details": "SCAIL is about 50% slower because it halves pose image resolution",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "Wan 2.2 FP16 VRAM usage",
+      "details": "Can run on 16GB VRAM despite 53GB model size due to ComfyUI's weight offloading",
+      "from": "SantaHunter"
+    },
+    {
+      "requirement": "VRAM requirements depend on model and system",
+      "details": "Can't simply add VRAM and RAM together, depends on specific model and system configuration",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "Block swap speed improvements",
+      "details": "10% speed improvement reported even with q4/q3 models when using block swap",
+      "from": "patientx"
+    },
+    {
+      "requirement": "MultiTalk memory usage",
+      "details": "VRAM usage significantly reduced through mask chunking optimizations",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "NAG memory optimization",
+      "details": "NAG will not increase memory use at all with new optimizations",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "PyTorch 2.10",
+      "details": "Works fine but no major performance improvements, some users experience OOM errors",
+      "from": "topmass"
+    },
+    {
+      "requirement": "VRAM optimization for InfiniteTalk",
+      "details": "New optimizations save 1GB+ VRAM for 720p 81 frames, needs high resolution to be effective",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "Disk speed for T5 encoder",
+      "details": "Should load 11GB umt5-xxl-enc-bf16.safetensors in few seconds on good SSD like Samsung 990 Pro, not 85 seconds",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "SCAIL VRAM usage",
+      "details": "Uses more VRAM than regular Wan, ~20GB for 720p with 30 block swap on 4090",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "12GB VRAM limitations",
+      "details": "Difficult to run newer models like Stepvideo and Magi due to 30+ billion parameters",
+      "from": "mallardgazellegoosewildcat2"
+    },
+    {
+      "requirement": "Self-refine performance impact",
+      "details": "Increases generation time by 50% due to additional model calls",
+      "from": "Kijai"
+    },
+    {
+      "requirement": "MOVA VRAM usage",
+      "details": "55GB VRAM for 94 frames 720p, 72GB VRAM for 193 frames, 45GB RAM",
+      "from": "Stef"
+    },
+    {
+      "requirement": "MOVA generation time",
+      "details": "1h15 gen time for 8 sec 720p video, 5 hours for longer generations",
+      "from": "Stef"
+    },
+    {
+      "requirement": "NVFP4 models initial VRAM usage",
+      "details": "Around 20GB VRAM when both models loaded, but faster generation after load",
+      "from": "topmass"
+    },
+    {
+      "requirement": "NVFP4 conversion speed",
+      "details": "45 seconds conversion time on RTX 5090",
+      "from": "topmass"
+    },
+    {
+      "requirement": "Audio model performance",
+      "details": "Acestep 1.5 requires about 4-10 seconds for 4 min generation",
+      "from": "yi"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "WanEx I2VDifferenceAugmentation",
+      "type": "node",
+      "description": "Renamed node for difference augmentation in longer videos, applies augmentation per frame with scheduling",
+      "from": "Ablejones"
+    },
+    {
+      "creation": "SVI Pro 2.0 workflow with multiple optimizations",
+      "type": "workflow",
+      "description": "Combines SVI Pro + Longlook motion scale + RCM 2.2 + upscale/interpolation for budget VEO3 alternative",
+      "from": "Elvaxorn"
+    },
+    {
+      "creation": "Fast Film Grain Node OOM fix",
+      "type": "workflow",
+      "description": "Use Rebatch Images node before (240 or lower) and after (max value) Fast Film grain node to prevent OOMs",
+      "from": "Elvaxorn"
+    },
+    {
+      "creation": "WanVideoBlender node fork",
+      "type": "node",
+      "description": "Fork of existing node used for making PR",
+      "from": "Ablejones"
+    },
+    {
+      "creation": "SVI v2 Pro wrapper workflow",
+      "type": "workflow",
+      "description": "Example workflow for using SVI v2 Pro with the wrapper",
+      "from": "Juan Gea"
+    },
+    {
+      "creation": "42hub's Wan resource website",
+      "type": "resource",
+      "description": "Comprehensive collection of Wan information, timelines, and LoRA recommendations",
+      "from": "42hub"
+    },
+    {
+      "creation": "ComfyUI-Kitchen",
+      "type": "tool",
+      "description": "Addition to ComfyUI to help with fp8 and fp4 support",
+      "from": "Tachyon"
+    },
+    {
+      "creation": "Generation Timer with bold numbers",
+      "type": "node",
+      "description": "Shows generation time in bold format, more useful than checking terminal",
+      "from": "Elvaxorn"
+    },
+    {
+      "creation": "Batch upscaler workflow for WAN 2.2 low",
+      "type": "workflow",
+      "description": "Standalone batch processing for long videos with frame/resolution balance",
+      "from": "Ivoxx"
+    },
+    {
+      "creation": "Beat-locked auto video editor",
+      "type": "tool",
+      "description": "Gradio app for automatic multi-camera editing synced to music using stem analysis",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Unlimited length video nodes",
+      "type": "node",
+      "description": "Nodes for chunk-based unlimited length video generation with re-do capability",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Prompt splitter node",
+      "type": "node",
+      "description": "Node that splits prompts and uses them on each run",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Face similarity ranking tool",
+      "type": "tool",
+      "description": "Tool to rank/sort/rename faces for similarity comparison using deepface, helpful for dataset preparation",
+      "from": "JohnDopamine"
+    },
+    {
+      "creation": "First Middle Last Frame workflow",
+      "type": "workflow",
+      "description": "Workflow that handles multiple frame inputs including middle frames for music video creation",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "Image sequence overwrite node",
+      "type": "node",
+      "description": "Node being developed to overwrite image sequences in same directory",
+      "from": "VRGameDevGirl84(RTX 5090)"
+    },
+    {
+      "creation": "RGnodes",
+      "type": "nodes",
+      "description": "VACE tailored nodes that also work for other video/mask needs",
+      "from": "rryyaann"
+    },
+    {
+      "creation": "StoryMem RoPE implementation",
+      "type": "code",
+      "description": "Proper RoPE offset implementation for StoryMem functionality",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Memory optimization for attention blocks",
+      "type": "optimization",
+      "description": "Reduces VRAM usage for high resolution InfiniteTalk workflows by 1GB+",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Combined upscale and downscale node",
+      "type": "node",
+      "description": "Combines upscale model with lanczos downscaling to save RAM by avoiding intermediate caching",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Auto-connected node insertion",
+      "type": "workflow tool",
+      "description": "Right-click context menu to add commonly used nodes like GetNode with automatic connections",
+      "from": "Kijai"
+    },
+    {
+      "creation": "WanVideoWrapper self-refine branch",
+      "type": "node",
+      "description": "Implementation of self-refine-video technique for Wan models in ComfyUI",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Color correction workflow solution",
+      "type": "workflow",
+      "description": "Workflow using color correct nodes to compensate for VHS color drift issues",
+      "from": "CaptHook"
+    },
+    {
+      "creation": "SkyReels V3 ComfyUI conversion",
+      "type": "model",
+      "description": "Converted SkyReels V3 R2V model for ComfyUI compatibility",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Diffusers to ComfyUI conversion script",
+      "type": "tool",
+      "description": "Custom script to convert diffusers format models, can strip quantization",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Long sequence generator workflow",
+      "type": "workflow",
+      "description": "Very long sequence generator with image batch joining for multiple premade chunks",
+      "from": "lostintranslation"
+    }
+  ]
+}

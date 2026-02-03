@@ -26,6 +26,10 @@ if env_path.exists():
 
 import anthropic
 
+# Force unbuffered output
+import functools
+print = functools.partial(print, flush=True)
+
 API_URL = "https://ujlwuvkrxlvoswwkerdf.supabase.co/rest/v1"
 API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqbHd1dmtyeGx2b3N3d2tlcmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczNzcyMzcsImV4cCI6MjA4MjczNzIzN30.XSTztghf_6a_bpR62wZdoA4S4oafJFDMoPQDRR4dT08"
 headers = {"apikey": API_KEY}
@@ -36,10 +40,14 @@ CHANNELS = {
     "ltx_resources": 1457981813120176138,
     "ltx_gens": 1458032975982755861,
     "wan_chatter": 1342763350815277067,
+    "wan_gens": 1344057524935983125,
+    "wan_training": 1344309523187368046,
+    "wan_comfyui": 1420053619541283000,
+    "wan_resources": 1373291419434877078,
 }
 
 
-def fetch_messages(channel_id, start_date, end_date, limit=10000):
+def fetch_messages(channel_id, start_date, end_date, limit=100000):
     """Fetch messages from a channel within a date range."""
     messages = []
     offset = 0
@@ -47,7 +55,7 @@ def fetch_messages(channel_id, start_date, end_date, limit=10000):
 
     while len(messages) < limit:
         url = f"{API_URL}/discord_messages?channel_id=eq.{channel_id}&created_at=gte.{start_date}&created_at=lt.{end_date}&select=message_id,author_id,content,created_at,reaction_count,attachments&order=created_at.asc&offset={offset}&limit={batch_size}"
-        resp = requests.get(url, headers=headers)
+        resp = requests.get(url, headers=headers, timeout=60)
         data = resp.json()
 
         if not data:
@@ -55,25 +63,43 @@ def fetch_messages(channel_id, start_date, end_date, limit=10000):
 
         messages.extend(data)
         offset += batch_size
+        print(f"  Fetched {len(messages)} messages...", end='\r')
 
         if len(data) < batch_size:
             break
 
+    print()  # Clear the progress line
     return messages
 
 
 def fetch_author_names(author_ids):
-    """Fetch usernames for author IDs."""
+    """Fetch usernames for author IDs using batch query."""
     names = {}
-    unique_ids = list(set(author_ids))[:200]  # Limit API calls
+    unique_ids = list(set(author_ids))
 
-    for aid in unique_ids:
-        url = f"{API_URL}/discord_members?member_id=eq.{aid}&select=global_name,username"
-        resp = requests.get(url, headers=headers)
-        if resp.json():
-            m = resp.json()[0]
-            names[aid] = m.get('global_name') or m.get('username') or str(aid)
+    # Batch fetch - get all members at once (much faster)
+    # Supabase has a limit, so we'll fetch in batches of 100
+    batch_size = 100
+    total_fetched = 0
 
+    for i in range(0, min(len(unique_ids), 500), batch_size):
+        batch = unique_ids[i:i + batch_size]
+        ids_str = ",".join(str(aid) for aid in batch)
+
+        try:
+            url = f"{API_URL}/discord_members?member_id=in.({ids_str})&select=member_id,global_name,username"
+            resp = requests.get(url, headers=headers, timeout=30)
+            if resp.status_code == 200:
+                for m in resp.json():
+                    mid = m.get('member_id')
+                    names[mid] = m.get('global_name') or m.get('username') or str(mid)
+                total_fetched += len(batch)
+                print(f"  Fetched {total_fetched}/{min(len(unique_ids), 500)} author names...", end='\r')
+        except requests.exceptions.Timeout:
+            print(f"\n  Timeout on author batch, continuing...")
+            continue
+
+    print()  # Clear the progress line
     return names
 
 
@@ -339,10 +365,21 @@ def main():
 
     channel_id = CHANNELS[channel_name]
 
-    # Model context for LTX
+    # Model context
     model_context = ""
     if "ltx" in channel_name.lower():
         model_context = "This discussion is about LTX Video 2, a video generation model released January 5, 2026. It supports text-to-video and image-to-video generation with audio."
+    elif "wan" in channel_name.lower():
+        model_context = """This discussion is about the Wan video generation ecosystem from Alibaba:
+- Wan 2.1 (Feb 2025): Standard DiT architecture, 1.3B and 14B variants, T2V and I2V
+- Wan 2.2 (July 2025): MoE architecture with High/Low noise expert split, 5B hybrid model
+- VACE: Video control system (style transfer, inpainting, subject-driven, outpainting)
+- Fun Control: ControlNet inputs (Canny, Depth, Pose, MLSD)
+- Fun InP: First-Frame-Last-Frame morphing, video extension
+- Character models: Phantom (T2V consistency), MagRef (I2V likeness), HuMo (audio-reactive)
+- Lip-sync: MultiTalk, InfiniteTalk, Wan 2.2 S2V
+- Speed LoRAs: LightX2V, CausVid for faster inference
+- ComfyUI: WanVideoWrapper (Kijai) and native ComfyUI implementations"""
 
     print(f"Fetching messages from {channel_name} ({start_date} to {end_date})...")
     messages = fetch_messages(channel_id, start_date, end_date)
