@@ -1,0 +1,5198 @@
+{
+  "channel": "updates",
+  "date_range": "2023-08-01 to 2026-02-01",
+  "messages_processed": 1987,
+  "chunks_processed": 20,
+  "api_usage": {
+    "input_tokens": 235444,
+    "output_tokens": 49070,
+    "estimated_cost": 1.442382
+  },
+  "extracted_at": "2026-02-03T19:39:51.179767Z",
+  "discoveries": [
+    {
+      "finding": "SDXL Motion Module beta released",
+      "details": "Can produce 1024x1024 16 frame videos, implemented into Comfy within hours by Kosinkadink",
+      "from": "pom"
+    },
+    {
+      "finding": "Motion Scale control for fine-tuned motion",
+      "details": "Allows tuning up and down the amount of motion in output, combined with Motion LoRAs will provide extremely high degree of control",
+      "from": "pom"
+    },
+    {
+      "finding": "SD2.1 CLIP encoding can influence SVD videos",
+      "details": "Can use SD2.1 CLIP encoding to influence Stable Video Diffusion output",
+      "from": "Kijai"
+    },
+    {
+      "finding": "LCM LoRAs with AnimateDiff enable ultra-fast vid2vid",
+      "details": "Processed 2,467 frames in just 81 minutes with good quality results using LCM LoRAs with AnimateDiff multi-controlnet workflow",
+      "from": "CoffeeVectors"
+    },
+    {
+      "finding": "Text to OpenPose skeleton generation",
+      "details": "Workflow that takes text and outputs Openpose skeletons, can be combined with vid2vid for complex motion more reliable than diffusion video models",
+      "from": "unknown user"
+    },
+    {
+      "finding": "IPAdapter batch processing with unfold option",
+      "details": "Allows IPAdapter to process batches with Animatediff, unlocking many new possibilities",
+      "from": "matteo"
+    },
+    {
+      "finding": "Controlnet timestep scheduling",
+      "details": "Allows determining which part of sampling process a controlnet should influence, helps fix weird artifacts",
+      "from": "Kosinkadink"
+    },
+    {
+      "finding": "FreeInit and Noise Layers added to Comfy",
+      "details": "New capabilities added for improved video generation control",
+      "from": "Kosinkadink"
+    },
+    {
+      "finding": "Sample Settings improvements in Comfy",
+      "details": "Enhanced sampling control options added",
+      "from": "Kosinkadink"
+    },
+    {
+      "finding": "FaceID Portrait Models integrated",
+      "details": "Improved resemblance for portrait generation in various styles",
+      "from": "matteo"
+    },
+    {
+      "finding": "Pseudo outline trick for better guidance",
+      "details": "Getting outline of subject instead of line drawings to avoid picking up too much detail on faces/costumes",
+      "from": "Draken"
+    },
+    {
+      "finding": "Unsampling + RGB Video2Video workflow",
+      "details": "Process involving unsampling and SparseRGB for smooth video2video transformation with scarily good results",
+      "from": "whobody"
+    },
+    {
+      "finding": "Motion LoRAs can guide motion with a range of precision from soft to hard",
+      "details": "Unlike vid2vid which tends to guide with hard precision, Motion LoRAs allow you to provide input videos and make motion 'a little bit like that' in combination with other inputs, giving more direction than highly specific guidance",
+      "from": "pom"
+    },
+    {
+      "finding": "Motion LoRAs can stabilize animations and fix artifacts",
+      "details": "Can be used to fix/avoid artifacts in generations by providing good examples at low guidance, such as fixing normal realistic running",
+      "from": "pom"
+    },
+    {
+      "finding": "Tiled IP Adapter works better on non-square images",
+      "details": "Solution to IP adapter issues with wider generations losing detail and causing artifacts, though still experimental",
+      "from": "pom"
+    },
+    {
+      "finding": "IPA Tiling provides higher resolution view by breaking input image into components",
+      "details": "Breaks up input image into multiple components and feeds them in one-by-one so IPA has far higher resolution view, works in batches/with masks",
+      "from": "pom"
+    },
+    {
+      "finding": "IPA Style Transfer for SDXL implemented",
+      "details": "Matteo added style transfer capability for SDXL models",
+      "from": "pom"
+    },
+    {
+      "finding": "Depth maps can adjust movement layers for different motion levels",
+      "details": "Superbeast's workflow uses depth maps to adjust movement so different layers have different levels of motion",
+      "from": "pom"
+    },
+    {
+      "finding": "Motion transplanting possible with MotionThief node",
+      "details": "Allows transplanting motion from one video onto AD generation",
+      "from": "logtd"
+    },
+    {
+      "finding": "Style transfer implemented for SD1.5",
+      "details": "Can be used in Animatediff flows to fix style in particular place for consistent animations",
+      "from": "matt30"
+    },
+    {
+      "finding": "Value scheduling for IPA strength",
+      "details": "Schedule animations for IPAs without masks, making it faster and less resource intensive",
+      "from": "matt30"
+    },
+    {
+      "finding": "Motion Thief can use videos to control motion",
+      "details": "Videos can be used as motion control sources",
+      "from": "logtd"
+    },
+    {
+      "finding": "Steerable Motion 1.4 supports unlimited frames",
+      "details": "Can now do unlimited frames thanks to Matt30's improvements",
+      "from": "ianiamwright"
+    },
+    {
+      "finding": "Spline editor adds major UX improvements to Comfy",
+      "details": "Allows for many new possibilities in workflow creation",
+      "from": "kijai"
+    },
+    {
+      "finding": "CameraCtrl enables granular camera motion control",
+      "details": "Adds ability to control camera motion granularly in generations",
+      "from": "kosinkadink"
+    },
+    {
+      "finding": "Audioreactive dancing workflow",
+      "details": "Building on previous work, adds audio-reactive capabilities to dancing videos with potential for audio-reactive passes on generated videos",
+      "from": "cyncratic"
+    },
+    {
+      "finding": "Vid2Vid upsampling achieves high consistency",
+      "details": "Achieves extremely high-consistency and close to no context issues even on HotShot",
+      "from": "Inner Reflections"
+    },
+    {
+      "finding": "LivePortrait mapping approach for character expressions",
+      "details": "Mapping expressions onto video feels like a WAY better and more dynamic approach than portrait animation for story-telling",
+      "from": "pom"
+    },
+    {
+      "finding": "Higher resolution Clip Vision using tiling",
+      "details": "Tiling Clip Vision to help it see images at higher resolution, catching additional detail and adding coherence to animations",
+      "from": "Matteo"
+    },
+    {
+      "finding": "Cross Window Consistency improvements",
+      "details": "Implementing NaiveReuse and ContextRef and other context shift improving methods into ADE",
+      "from": "Kosinkadink"
+    },
+    {
+      "finding": "CogVideoX vid2vid interprets motion rather than copying exact structure",
+      "details": "Rather than copying the exact structure, it interprets the motion from input videos",
+      "from": "pom"
+    },
+    {
+      "finding": "CogVideoX supports multi-phase prompts",
+      "details": "Can handle complex prompts with scene transitions like 'Scene 1: A blonde female... Transition: A zoom out... Scene 2: A new female...'",
+      "from": "pom"
+    },
+    {
+      "finding": "CogVideo img2vid can render complex reasonably long motion from input images",
+      "details": "Using image inputs seems to elevate the amount of detail the model can render",
+      "from": "pom"
+    },
+    {
+      "finding": "CogVideoX can coherently interpret highly imprecise instruction",
+      "details": "Model can understand what's in gaps with subtle guidance",
+      "from": "pom"
+    },
+    {
+      "finding": "CogVideoX can track lips and faces with pose control",
+      "details": "Face pose controls characters very loosely, can track lip movements",
+      "from": "pom"
+    },
+    {
+      "finding": "Motion drawing now available for CogVideoX via Tora",
+      "details": "Motion drawing working in Comfy with 16GB VRAM",
+      "from": "pom"
+    },
+    {
+      "finding": "Moshi optimized by 16x to run on local GPUs",
+      "details": "Originally required 4x h100s, now runs on local GPUs within 2 days of release",
+      "from": "pom"
+    },
+    {
+      "finding": "LoRA Training for HunYuan works with only images",
+      "details": "Incredibly quick training, very good adherence to subjects, works flexibly in different contexts while retaining details like tattoos",
+      "from": "pom"
+    },
+    {
+      "finding": "Warped Noise technique for guiding video generation",
+      "details": "Netflix released technique, integrated into Comfy by Kijai, works with Cog and AnimateDiff",
+      "from": "pom"
+    },
+    {
+      "finding": "HunYuan can run on just 12GB VRAM",
+      "details": "Workflow shared that enables playing with Hunyuan with only 12GB VRAM",
+      "from": "pom"
+    },
+    {
+      "finding": "HunYuan can generate high quality in 10-15 steps",
+      "details": "Fast generation with good quality results",
+      "from": "pom"
+    },
+    {
+      "finding": "Camera motion control for LTXV",
+      "details": "Technique allows guiding LTXV generations with specific camera motions using different trajectories on same input",
+      "from": "pom"
+    },
+    {
+      "finding": "LTXV 0.9.5 combines excellent control with speed",
+      "details": "Probably the best control of any modern open video model while being incredibly fast at 3600 frames/min",
+      "from": "pom"
+    },
+    {
+      "finding": "Context window shifting works well with Wan 14b",
+      "details": "Shows really nice results with barely noticeable shifts, combining approaches from AnimateDiff ecosystem",
+      "from": "kijai"
+    },
+    {
+      "finding": "Reward LoRA for Hunyuan improves prompt adherence",
+      "details": "Very positive impact on prompt adherence - prompt mentioning 'walking' shows much better adherence with the LoRA",
+      "from": "community member"
+    },
+    {
+      "finding": "Sonic can make very expressive speaking from audio input",
+      "details": "Can even do dogs, available in ComfyUI",
+      "from": "community member"
+    },
+    {
+      "finding": "Wan Control LoRAs can be trained on any condition with input/output video pairs",
+      "details": "Can be used for deblurring, inpainting by training on videos with segments removed, interpolating, drawing trajectories based on optical flow, interpreting hand signals and body movements as motion",
+      "from": "pom"
+    },
+    {
+      "finding": "LTXV 13b is particularly excellent for LoRAs",
+      "details": "Model feels amazing for LoRAs with fast training times, can accomplish high quality results in 60-90 minute training runs",
+      "from": "pom"
+    },
+    {
+      "finding": "Video LoRAs can create content that looks completely unlike closed models",
+      "details": "Hard to distinguish as AI, can combine multiple LoRAs together for unique effects",
+      "from": "pom"
+    },
+    {
+      "finding": "VACE enables Hollywood-level face-swapping in ComfyUI",
+      "details": "Users achieving professional quality face swaps and costume changes with VACE",
+      "from": "pom"
+    },
+    {
+      "finding": "ATI provides finally good motion trajectory control",
+      "details": "ATI released offering trajectory control that feels natural and responsive for video generation",
+      "from": "pom"
+    },
+    {
+      "finding": "Normalized Attention Guidance works on distilled models",
+      "details": "New negative prompting approach that works on distilled models, breaks Flux out of its typical style",
+      "from": "pom"
+    },
+    {
+      "finding": "Clownshark achieved next-level style transfer with HiDream while reducing VRAM by 4GB",
+      "details": "Style/structure transfer without assistant models, achieving MJ sref level versatility",
+      "from": "pom"
+    },
+    {
+      "finding": "4-step distillation method for Wan",
+      "details": "ModelTC team launched LightX2V - a 4-step distillation method for Wan",
+      "from": "pom"
+    },
+    {
+      "finding": "VACE masking technique unlocked",
+      "details": "Magic VACE masking that allows for precise object manipulation and effects",
+      "from": "pom"
+    },
+    {
+      "finding": "Smooth continuations without color distortion achieved",
+      "details": "Finally figured out how to get smooth continuations w/o colour distortion from Wan/VACE",
+      "from": "pom"
+    },
+    {
+      "finding": "Dynamic complete object removal without shadows",
+      "details": "Technique for removing objects completely from video without leaving shadow artifacts",
+      "from": "pom"
+    },
+    {
+      "finding": "Wan upscaling comparable to Topaz",
+      "details": "Open source upscaler that feels at least as good as the new Topaz upscaler while being infinitely configurable and extendable",
+      "from": "pom"
+    },
+    {
+      "finding": "WanAnimate can track facial features very well and even do pupils",
+      "details": "Out of the box it works well for single character animations and can bring static images to life with just 10 steps",
+      "from": "pom"
+    },
+    {
+      "finding": "VitPose with WanAnimate can do animal animations",
+      "details": "Successfully demonstrated with quadruped animals like dogs and hippos",
+      "from": "614602980943069214"
+    },
+    {
+      "finding": "QwenImage 2509 can interpret multi-image inputs and controlnets very impressively",
+      "details": "New version shows significant improvements in multi-image processing capabilities",
+      "from": "pom"
+    },
+    {
+      "finding": "Pusa integration shows promise for video extensions",
+      "details": "Kijai shared integration with example workflow showing good results for video continuations",
+      "from": "pom"
+    },
+    {
+      "finding": "LoRA trained on Animatediff outputs produces unique motion style",
+      "details": "LoRA trained on Animatediff outputs allows for Wan-level motion and image adherence together with distinctly Animatediff-y movement",
+      "from": "pom"
+    },
+    {
+      "finding": "Low strength LoRA application brings subtle motion enhancement",
+      "details": "Using the Animatediff LoRA at low strengths brings a subtly Animatediff-y burst of motion to things, works well at just 6 steps",
+      "from": "pom"
+    },
+    {
+      "finding": "VACE masking degradation can be eliminated",
+      "details": "Latent noise hijinks can eliminate the VACE masking degradation, allowing seamless placement of old man into any video",
+      "from": "pom"
+    },
+    {
+      "finding": "Context transitions enable scene transformations with subject consistency",
+      "details": "Using context transitions allows doing scene transformations while keeping the subject consistent",
+      "from": "pom"
+    },
+    {
+      "finding": "Wan Move represents significant improvement over AI",
+      "details": "Wan Move looks impressive and feels like a huge step-up from AI, works even for abstract and irrational content",
+      "from": "pom"
+    },
+    {
+      "finding": "Water morphing LoRA trained efficiently",
+      "details": "LoRA for water morphing effects trained on just 6 videos for 1,000 steps",
+      "from": "pom"
+    },
+    {
+      "finding": "LTX-1 LoRAs work with LTX-2",
+      "details": "LTX-1 loras all seem to work with LTX-2, and 62 LoRAs from LTX 0.97 were tested to validate compatibility",
+      "from": "380911583074975744/464322697418244096"
+    },
+    {
+      "finding": "LTX-2 supports multiple types of conditioning at launch",
+      "details": "LTX2 can do multiple kinds of conditioning on launch including pose control",
+      "from": "pom"
+    },
+    {
+      "finding": "LTX-2 inpainting appears undetectable",
+      "details": "LTX-2 inpainting capability seems almost undetectable in quality",
+      "from": "pom"
+    },
+    {
+      "finding": "LTX-2 runs efficiently on RTX 3090",
+      "details": "LTX-2 can run on a 3090 GPU with impressive results",
+      "from": "865676776058126386"
+    },
+    {
+      "finding": "Flux Klein models show impressive outpainting/colorization",
+      "details": "New Flux Kleins are quite impressive for relatively small size - 4b can do outpainting/colorisation in seconds",
+      "from": "431893297561337866"
+    },
+    {
+      "finding": "IC-LoRA approach for LTX2 control mechanisms",
+      "details": "LTX released a IC-LoRA approach for training control mechanisms for LTX2, including luminance map references for lighting control",
+      "from": "oumoumad"
+    }
+  ],
+  "troubleshooting": [
+    {
+      "problem": "A1111 extension is broken and various repos have loads of issues",
+      "solution": "Kosinkadink is working on fixing ComfyUI extension and applying learnings to fix A1111",
+      "from": "pom"
+    },
+    {
+      "problem": "Background tends to be very chaotic - jumping all over the place with the main subjects in AD",
+      "solution": "This problem is solvable with fine-tuning - train a model on data with steady backgrounds",
+      "from": "pom"
+    },
+    {
+      "problem": "DragNUWA can't reveal hidden secrets in artworks",
+      "solution": "Acknowledged limitation - technique doesn't understand object nature well enough",
+      "from": "Kijai"
+    },
+    {
+      "problem": "DragNUWA frequently doesn't understand object nature",
+      "solution": "Results in weird transformations - known limitation to be aware of",
+      "from": "whobody"
+    },
+    {
+      "problem": "AnimatedDiff v3 initial compatibility issues",
+      "solution": "Rebalance setup around v3 rather than avoiding it - Connor suggests adapting workflows",
+      "from": "connorrs"
+    },
+    {
+      "problem": "Live Comfy AD link broken with v3",
+      "solution": "Use specific HuggingFace tree link as alternative",
+      "from": "pom"
+    },
+    {
+      "problem": "IP adapters trained at low resolution and only square images cause detail loss and artifacts on wider generations",
+      "solution": "Use tiled IP adapter to work better on non-square images (experimental)",
+      "from": "pom"
+    },
+    {
+      "problem": "ComfyUI_LLMVISION nodes had a security exploit",
+      "solution": "There are instructions on how to deal with it in a Reddit post",
+      "from": "pom"
+    },
+    {
+      "problem": "Tooncrafter can be inflexible and breaks easily, especially with characters in in-between movements",
+      "solution": "No specific solution provided, noted as a limitation",
+      "from": "pom"
+    },
+    {
+      "problem": "Flux VRAM requirements",
+      "solution": "Workflow for getting Flux running with 12GB VRAM",
+      "from": "Inner Reflections"
+    },
+    {
+      "problem": "CogVideoX fragmented ecosystem with different LoRAs/CNs for different versions",
+      "solution": "Could likely be fixed with IPA for unconventional styles",
+      "from": "pom"
+    },
+    {
+      "problem": "CogVideoX tends to frequently break",
+      "solution": "Could likely be controlled with an IPA",
+      "from": "pom"
+    },
+    {
+      "problem": "LTXV breaks down frequently and is overly sensitive to prompting",
+      "solution": "Use RF Inversion with the img2Vid model for better vid2vid results",
+      "from": "pom"
+    },
+    {
+      "problem": "New install anxiety with ComfyUI",
+      "solution": "Custom node for managing Comfy environments with tutorial",
+      "from": "pom"
+    },
+    {
+      "problem": "WanAnimate doesn't do multicharacter animations out of the box",
+      "solution": "This is a known limitation that hasn't been solved yet",
+      "from": "pom"
+    },
+    {
+      "problem": "VRAM limitations for VACE workflows",
+      "solution": "Low VRAM VACE 2.1 workflow that works with under 8GB VRAM",
+      "from": "1006234707375173722"
+    },
+    {
+      "problem": "Motion speed issues with distilled Wan",
+      "solution": "Using Animatediff LoRA helps solve motion speed problems with distilled Wan",
+      "from": "pom"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "SD1.5 vs Realistic Vision 5",
+      "verdict": "Equivalent level of progress can be achieved with AD through fine-tuning",
+      "from": "pom"
+    },
+    {
+      "comparison": "AD progress vs Pika Labs",
+      "verdict": "AD is improving but Pika started from higher base and is improving at fast pace",
+      "from": "pom"
+    },
+    {
+      "comparison": "AnimateDiff vs Stable Video Diffusion",
+      "verdict": "SVD delivers more impressive base outputs especially for 3D motion, but AD's modular approach and ecosystem makes it better for fine-grained control, vid2vid, and creative interpolation. Best used together for different strengths",
+      "from": "pom"
+    },
+    {
+      "comparison": "DragNUWA vs Runway's motion brush",
+      "verdict": "DragNUWA feels like a better version with more control",
+      "from": "pom"
+    },
+    {
+      "comparison": "AnimatedDiff v3 assessment",
+      "verdict": "v3 probably is the best now, requires setup rebalancing but worth adapting to",
+      "from": "connorrs"
+    },
+    {
+      "comparison": "Magnific vs Magnifake workflows",
+      "verdict": "Community workflows replicate $39/month Magnific functionality for free",
+      "from": "Fictiverse"
+    },
+    {
+      "comparison": "SVD 1.1 vs previous version",
+      "verdict": "Small step up but still suffers from inconsistency and degradation throughout frames",
+      "from": "pom"
+    },
+    {
+      "comparison": "AnimateDiff vs Warpfusion (1 year ago)",
+      "verdict": "Warpfusion clip holds up well in comparison",
+      "from": "pom"
+    },
+    {
+      "comparison": "Sora vs AnimateDiff",
+      "verdict": "Sora incredibly impressive but AD overwhelmingly better for precise motion control due to community work",
+      "from": "pom"
+    },
+    {
+      "comparison": "DynamiCrafter vs SVD",
+      "verdict": "DynamiCrafter surpasses SVD in terms of quality/dynamism and is promptable, but struggles outside anime/realistic styles and lacks ecosystem",
+      "from": "pom"
+    },
+    {
+      "comparison": "DynamiCrafter vs AnimateDiff ecosystem",
+      "verdict": "DynamiCrafter won't see AnimateDiff level of improvement due to limited extensibility and ecosystem",
+      "from": "pom"
+    },
+    {
+      "comparison": "ELLA vs SD1.5 and Dall-E",
+      "verdict": "Maybe a juiced-up SD1.5 is all we need",
+      "from": "pom"
+    },
+    {
+      "comparison": "CogVideoX vs other video models",
+      "verdict": "Has good, realistic motion but may not be great for extending",
+      "from": "pom"
+    },
+    {
+      "comparison": "CogVideoX vs closed-source models",
+      "verdict": "Lower resolution/detail than main closed-source models, but has impressive base motion when it works",
+      "from": "pom"
+    },
+    {
+      "comparison": "CogVideoX vs AnimateDiff",
+      "verdict": "CogVideoX motion is promptable unlike AD, but doesn't plug into existing SD1.5 ecosystem",
+      "from": "pom"
+    },
+    {
+      "comparison": "Flux vs CogVideoX",
+      "verdict": "Flux Video will almost certainly beat Cog on metrics, but unknown if better for practical creative tasks",
+      "from": "pom"
+    },
+    {
+      "comparison": "Open models vs Sora and closed models",
+      "verdict": "Expects Sora to destroy open models on head-to-head basis, but believes open source innovation will make them more creatively empowering - similar to how AnimateDiff vs Pika Labs played out",
+      "from": "pom"
+    },
+    {
+      "comparison": "Current AI video vs a year ago",
+      "verdict": "Massive improvement - comparing current AnimateDiff results with similar work from a year ago shows dramatic progress",
+      "from": "pom"
+    },
+    {
+      "comparison": "Hunyuan vs CogVideoX",
+      "verdict": "Hunyuan is better model head-to-head but CogVideoX feels best for control",
+      "from": "pom"
+    },
+    {
+      "comparison": "Wan(x) 14b vs Sora",
+      "verdict": "Wan(x) beats Sora on VBench rankings despite being 14b variant",
+      "from": "pom"
+    },
+    {
+      "comparison": "Open vs closed models prediction",
+      "verdict": "There probably won't be a meaningful gap between open and closed models in 2025 - open models will have considerably more control",
+      "from": "pom"
+    },
+    {
+      "comparison": "Wan vs other models for specific tasks",
+      "verdict": "Wan takes 5+ mins to run, likely only best for tasks requiring cohesive motion, other models better for specific tasks",
+      "from": "pom"
+    },
+    {
+      "comparison": "LTXV vs Wan",
+      "verdict": "LTXV is overwhelmingly faster than Wan and other models, particularly excellent for LoRAs",
+      "from": "pom"
+    },
+    {
+      "comparison": "Cloud 4090 vs Luma for generation",
+      "verdict": "Cloud 4090 costs 20x less than Luma for similar quality, also better quality",
+      "from": "pom"
+    },
+    {
+      "comparison": "VRGameDevGirl's Wan Megamerge vs main Wan model",
+      "verdict": "Megamerge combines multiple detailer and speed LoRAs, produces beautiful results",
+      "from": "pom"
+    },
+    {
+      "comparison": "Causvid vs LightX2V at 4 steps",
+      "verdict": "Test comparison shown by David Snow",
+      "from": "pom"
+    },
+    {
+      "comparison": "Wan VACE vs Warp",
+      "verdict": "Wan VACE described as superior for revisiting pieces",
+      "from": "pom"
+    },
+    {
+      "comparison": "Flux vs. Qwen training",
+      "verdict": "Qwen shows superior training results",
+      "from": "497770368853999628"
+    },
+    {
+      "comparison": "WanAnimate vs other face animation models",
+      "verdict": "Finally competitive with high-end solutions, can do pupils and detailed facial tracking",
+      "from": "pom"
+    },
+    {
+      "comparison": "WanAnimate and VACE vs Sora",
+      "verdict": "WanAnimate and VACE are to art what Sora is to slop - they offer the level of control needed for admirable artwork",
+      "from": "pom"
+    },
+    {
+      "comparison": "New subject LoRA vs Nano + Seedream",
+      "verdict": "Works significantly better than Nano + Seedream for subject + style when paired with InStyle LoRA",
+      "from": "pom"
+    },
+    {
+      "comparison": "Z-Image vs Flux 2",
+      "verdict": "Interesting comparisons shared showing differences between Z-Image (left) and Flux (right) in results",
+      "from": "pom"
+    },
+    {
+      "comparison": "Animatediff LoRA v1 vs v2",
+      "verdict": "Comparisons done between version 1 and version 2 of the Animatediff LoRA",
+      "from": "lostless.visuals"
+    },
+    {
+      "comparison": "SCAIL vs Wan Animate vs other vid2vid approaches",
+      "verdict": "Wan Animate feels so different to SCAIL and other more linear vid2vid approaches",
+      "from": "pom"
+    },
+    {
+      "comparison": "Animatediff LoRA trained for both Wan and LTXV",
+      "verdict": "Interesting differences between the two models when using same LoRA",
+      "from": "743301749086879808"
+    }
+  ],
+  "tips": [
+    {
+      "tip": "Fine-tuning will be key to unlocking AD",
+      "context": "Similar to SD1.5 ecosystem evolution",
+      "from": "pom"
+    },
+    {
+      "tip": "Pair music with art you share",
+      "context": "Makes content feel more alive and impactful",
+      "from": "pom"
+    },
+    {
+      "tip": "Use motion scale to control amount of motion",
+      "context": "When you need to increase or decrease motion in videos like dogs playing poker",
+      "from": "Kijai"
+    },
+    {
+      "tip": "Combine different AI tools for enhanced results",
+      "context": "Use LLM for poem generation, then prompts for prompt travel, then AD for video, then voice gen for narration",
+      "from": "user"
+    },
+    {
+      "tip": "Use attention masking with IPAdapter for better character consistency",
+      "context": "When doing video transformations and maintaining coherent characters",
+      "from": "various users"
+    },
+    {
+      "tip": "Share experimental findings when playing with new models",
+      "context": "Helps others understand capabilities and enables further development",
+      "from": "pom"
+    },
+    {
+      "tip": "Focus on specific domains and go deep",
+      "context": "Better results than trying to do everything - HarrowLogo's logo work as example",
+      "from": "pom"
+    },
+    {
+      "tip": "Reduce friction for frontier explorers",
+      "context": "Create workflows that help others get started with new techniques",
+      "from": "pom"
+    },
+    {
+      "tip": "Push styles and vibes to the max",
+      "context": "High-effort art that pushes techniques to limits inspires mini-art movements",
+      "from": "pom"
+    },
+    {
+      "tip": "Use multiple Motion LoRAs with LoRA masking for different effects throughout video",
+      "context": "Queue multiple LoRAs throughout generation using Kosinkadink's LoRA masking for 'LoRA travel'",
+      "from": "pom"
+    },
+    {
+      "tip": "Build an army of Motion LoRAs for shared repository",
+      "context": "Anyone can add LoRAs to shared repository with description, HuggingFace link, and example video",
+      "from": "pom"
+    },
+    {
+      "tip": "IPA plays very nicely with motion loras for powerful steering",
+      "context": "When using workflows like Purz Context Smashing or Steerable Motion",
+      "from": "pom"
+    },
+    {
+      "tip": "IPA tiling will likely allow you to increase resolution using existing realistic upscale methods while retaining style",
+      "context": "For video upscaling applications",
+      "from": "pom"
+    },
+    {
+      "tip": "Share workflows and learnings openly to help ecosystem thrive",
+      "context": "When exploring and building on top of new technologies",
+      "from": "pom"
+    },
+    {
+      "tip": "Browse through the channel and take time to appreciate the work of others to keep ego in check",
+      "context": "Making art tends to be a very egotistical pursuit",
+      "from": "pom"
+    },
+    {
+      "tip": "Don't do competitions just for the prizes - do it to push yourself to see how good you can make something",
+      "context": "Motivation for entering competitions",
+      "from": "pom"
+    },
+    {
+      "tip": "Create for yourself and not the algo",
+      "context": "General creative advice for artists",
+      "from": "jeru"
+    },
+    {
+      "tip": "Use archival footage approach to mask model limitations",
+      "context": "For compelling storytelling when working with AI video models",
+      "from": "pom"
+    },
+    {
+      "tip": "Use image inputs with CogVideoX to elevate detail quality",
+      "context": "When working with CogVideo img2vid implementation",
+      "from": "pom"
+    },
+    {
+      "tip": "Flux Block LoRA selector helps understand what different LoRA layers are doing",
+      "context": "For targeting generations better",
+      "from": "pom"
+    },
+    {
+      "tip": "Use AnimateDiff as upscaler for CogVideoX when rendering at low sizes",
+      "context": "Works nicely for improving CogVideoX output",
+      "from": "pom"
+    },
+    {
+      "tip": "Combine multiple control methods for precise AI video control",
+      "context": "Key to driving AI video with precision, currently have IPA and CN that can be combined",
+      "from": "pom"
+    },
+    {
+      "tip": "Combining multiple control methods is key to deep creative control",
+      "context": "When using video generation models like Mochi or CogVideoX",
+      "from": "pom"
+    },
+    {
+      "tip": "Share workflows that are useful to others to help them start from a higher point and push even further",
+      "context": "When developing new model workflows",
+      "from": "pom"
+    },
+    {
+      "tip": "Use director personas for style prompting",
+      "context": "When using LTXV - dramatically changes shot characteristics",
+      "from": "pom"
+    },
+    {
+      "tip": "Use refined settings for HunYuan upsampling",
+      "context": "Will be even better once Hunyuan CNs are available",
+      "from": "pom"
+    },
+    {
+      "tip": "Motion LoRAs can create unique artistic capabilities",
+      "context": "Training LoRAs for distinct motion styles and characteristics from source material",
+      "from": "pom"
+    },
+    {
+      "tip": "Specific artistic capabilities and user experience matter more than raw model power",
+      "context": "How good the artistic experience is and predictability/usefulness for creative process",
+      "from": "pom"
+    },
+    {
+      "tip": "Control models and workflows will be extremely important",
+      "context": "For unlocking specific capabilities since txt2vid and img2vid are very limited from control perspective",
+      "from": "pom"
+    },
+    {
+      "tip": "Control LoRAs can potentially stack for AD-level control",
+      "context": "Though it's an open question how well they stack",
+      "from": "pom"
+    },
+    {
+      "tip": "Video LoRAs have extraordinary potential for both unique styles and consistent styles of motion",
+      "context": "For creating cinematic content",
+      "from": "pom"
+    },
+    {
+      "tip": "Use Shift+Esc to mark all spam channels as read",
+      "context": "When dealing with Discord spam",
+      "from": "pom"
+    },
+    {
+      "tip": "React with openmuse emoji to push art to OpenMuse",
+      "context": "Contributing art you're proud of to the community gallery",
+      "from": "pom"
+    },
+    {
+      "tip": "Use continuation nodes and workflows to avoid discoloration",
+      "context": "When working with Wan+",
+      "from": "pom"
+    },
+    {
+      "tip": "Combining models (Multitalk + MAGREF + Uni3c) to achieve impressive results no single model can do",
+      "context": "Reminiscent of Stable Diffusion/Animatediff days approach",
+      "from": "846408309531213867"
+    },
+    {
+      "tip": "Creating anchor images + animating them with edit models for creative exploration",
+      "context": "Using edit models for creative workflows",
+      "from": "994554775980998696"
+    },
+    {
+      "tip": "Use upscaling individual images then vid2vid for better results",
+      "context": "Approach common in AnimateDiff days, now applicable to Wan with excellent results",
+      "from": "1074404980737450065"
+    },
+    {
+      "tip": "Combine context windows and prompts for video continuations",
+      "context": "Can achieve impressive results without complex workflows",
+      "from": "867727155499499520"
+    },
+    {
+      "tip": "Use sliding context windows for long video generation",
+      "context": "Can render 2000 frames of InfiniteTalk in just 12 minutes",
+      "from": "228118453062467585"
+    },
+    {
+      "tip": "Use lower LoRA strengths for subtle motion enhancement",
+      "context": "When wanting to add subtle Animatediff-y motion to content",
+      "from": "pom"
+    },
+    {
+      "tip": "Combine anchor images + Humo to add lipsync to i2v generations",
+      "context": "For adding lip sync functionality to image-to-video generations",
+      "from": "pom"
+    },
+    {
+      "tip": "Share your work to help the open source ecosystem",
+      "context": "People like LTX and Alibaba release models because they believe benefits of being open can outweigh downsides. Sharing work in channels, Twitter, Reddit helps continue this spirit",
+      "from": "pom"
+    },
+    {
+      "tip": "Use well chosen key frames for better results",
+      "context": "Extraordinary results can be accomplished with well chosen key frames",
+      "from": "pom"
+    }
+  ],
+  "news": [
+    {
+      "update": "Banodoco community launched with focus on open source AI video/image generation",
+      "details": "3 main components: Steerable Motion, Img+Img2Vid models, Creative Assistant",
+      "from": "pom"
+    },
+    {
+      "update": "Research product coming soon for building and animating videos key-frame by key-frame",
+      "details": "Will run on local GPU or cloud",
+      "from": "pom"
+    },
+    {
+      "update": "B34STW4RS released first version of repo for fine-tuning Animatediff",
+      "details": "AD-Evo-Tuner - still early but functional",
+      "from": "pom"
+    },
+    {
+      "update": "$8k in compute credits offered for experiments",
+      "details": "For ideas too big or expensive for individual users",
+      "from": "pom"
+    },
+    {
+      "update": "Kosinkadink shipped functional ComfyUI extension after days of work",
+      "details": "Best place for technically-oriented people to experiment with AD",
+      "from": "pom"
+    },
+    {
+      "update": "Monthly equity grants announced - 0.125% each to 8 contributors",
+      "details": "Part of open-source native company building approach",
+      "from": "pom"
+    },
+    {
+      "update": "Ceyuan Yang & Yuwei Guo released Motion LoRAs for Animatediff",
+      "details": "Examples for camera movements but can be used for much more",
+      "from": "pom"
+    },
+    {
+      "update": "HotshotXL released - AD-esque motion module trained on SDXL",
+      "details": "Trained on 8 frames, made for short gifs",
+      "from": "pom"
+    },
+    {
+      "update": "The Tobloron\u00e9s art competition launched",
+      "details": "Theme: 'journeying', deadline Oct 22nd, winner gets 4.5kg Toblerone",
+      "from": "pom"
+    },
+    {
+      "update": "SDXL Motion Module beta released by original AnimateDiff authors",
+      "details": "Beta version available on HuggingFace, produces 1024x1024 16 frame videos",
+      "from": "pom"
+    },
+    {
+      "update": "The Tobloron\u00e9s #2 art competition announced",
+      "details": "Deadline December 20th, theme 'an emotional journey', prize is giant Toblerone",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco monthly equity distribution",
+      "details": "1% equity split monthly among contributors for first 8.5 years, shared between people who ship things aligned with open source AI video goals",
+      "from": "pom"
+    },
+    {
+      "update": "New topic-specific channels created",
+      "details": "Vid2vid and Interpolation channels created for deep topic exploration",
+      "from": "pom"
+    },
+    {
+      "update": "SparseCtrl release from AnimatedDiff team",
+      "details": "Video controlnets with RGB and Scribble variants - first video controlnets available",
+      "from": "pom"
+    },
+    {
+      "update": "AnimatedDiff V3 released",
+      "details": "Latest version with improvements, integrated into Comfy within hours",
+      "from": "pom"
+    },
+    {
+      "update": "HarrlogosXL-v2 release",
+      "details": "New version of logo LoRA with logo video animation for SVD",
+      "from": "HarrowLogo"
+    },
+    {
+      "update": "DragNUWA released by Microsoft",
+      "details": "Drag-based control for SVD generations, multiple community implementations",
+      "from": "pom"
+    },
+    {
+      "update": "IP-Adapter competition announced",
+      "details": "2 NVIDIA 4090s prize sponsored by Glif for creative masking and simple workflow categories",
+      "from": "pom"
+    },
+    {
+      "update": "Steerable Motion 1.1 v.1 released",
+      "details": "Combines IPA with Sparse Ctrl for better creative interpolation",
+      "from": "pom"
+    },
+    {
+      "update": "Exponential ML released Motion LoRA trainer for AnimateDiff v3",
+      "details": "Allows training MotionLora on single video in around 15 minutes for precise motion guidance",
+      "from": "pom"
+    },
+    {
+      "update": "Kosinkadink released huge AnimateDiff ComfyUI 'gen2' update",
+      "details": "Refactors for flexibility, includes scheduling motion model settings, FreeNoise support, View Options, non-looping context options, FreeInit support, multiple model support, improved Mac support",
+      "from": "pom"
+    },
+    {
+      "update": "Stability released SVD 1.1",
+      "details": "Small improvement over previous version but still has consistency and degradation issues",
+      "from": "pom"
+    },
+    {
+      "update": "Kosinkadink opened GitHub and Patreon sponsorship pages",
+      "details": "Community encouraged to support his infrastructure work that enables all workflows",
+      "from": "pom"
+    },
+    {
+      "update": "Zeroscope now available in Comfy",
+      "details": "Cerspense brought the legendary Zeroscope to Comfy with distinct and interesting motion style",
+      "from": "pom"
+    },
+    {
+      "update": "Deforum launched their nodes on Comfy",
+      "details": "Deforum nodes bring all that magic to Comfy, also launched Deforum Studio consumer product",
+      "from": "pom"
+    },
+    {
+      "update": "DynamiCrafter interpolation version released",
+      "details": "New version allows for interpolation from starting image to ending image, Kijai implemented basic version into Comfy",
+      "from": "pom"
+    },
+    {
+      "update": "Dough beta testing ready",
+      "details": "More stable version ready for beta testers, built on top of Steerable Motion and various Comfy nodes",
+      "from": "pom"
+    },
+    {
+      "update": "ControlNet Reference implemented in Comfy",
+      "details": "Kos implemented CN Reference into Comfy, previously only available in A1111",
+      "from": "pom"
+    },
+    {
+      "update": "Matteo became published paper coauthor",
+      "details": "Others released paper featuring Matteo's style transfer work and made him coauthor",
+      "from": "pom"
+    },
+    {
+      "update": "Art Sharing Wednesday converted to YouTube format",
+      "details": "Now a weekly YouTube show up to 10 minutes featuring pieces shared throughout the week",
+      "from": "pom"
+    },
+    {
+      "update": "ELLA implementation available in ComfyUI",
+      "details": "ELLA took the nerd internet by storm and ntialML was quick with Comfy implementation",
+      "from": "ntialML"
+    },
+    {
+      "update": "Face/Bodyswap workflow released by VK",
+      "details": "Workflow allows transforming faces and heads/hair while staying close to context",
+      "from": "VK"
+    },
+    {
+      "update": "Midjourney.Man shared optimized version of VK's workflow",
+      "details": "Iteration with bunch of optimizations",
+      "from": "Midjourney.Man"
+    },
+    {
+      "update": "Banodoco company raising $1m funding at $10m valuation",
+      "details": "First checks in bank, expect to close around end of month",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco had first revenue of \u20ac224.94 from Doughbot testers",
+      "details": "Plans to share profits as it becomes significant",
+      "from": "pom"
+    },
+    {
+      "update": "The Tobleron\u00e9s #3 competition announced",
+      "details": "Theme uses ComfyUI default images, deadline May 24th, prizes include giant Toblerone bars",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco bounties granted to two recipients",
+      "details": "One for training better versions of Animatediff and open source Story Diffusion, another for upgrading art sharing bot",
+      "from": "pom"
+    },
+    {
+      "update": "The Tobloron\u00e9s #3 competition winners announced",
+      "details": "Winners were 'Breaking free' by Brad, 'Alice In LaLaLand' by Material Rabbit, 'Chocolate Land', and 'Comfy Dreams' by Jas",
+      "from": "pom"
+    },
+    {
+      "update": "Tooncrafter released as evolution of {x}_crafter line of interpolation models",
+      "details": "Does impressive interpolation with realistic motion in-between frames, but based on 2.1 so limited other models available",
+      "from": "pom"
+    },
+    {
+      "update": "Mobius SDXL-based fine-tune released on apache-2.0 license",
+      "details": "Results are impressive especially in terms of variety of style possible",
+      "from": "pom"
+    },
+    {
+      "update": "Dough 0.9.5 released, almost a good artistic tool",
+      "details": "Both Dough and Steerable Motion are close to being a great artistic experience",
+      "from": "pom"
+    },
+    {
+      "update": "Dough 0.9.8 released with new Inspiration Engine feature",
+      "details": "Uses LLM + style transfer work to generate hundreds of potential input images to choose from. Pinokio integration coming soon",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco equity sharing for May announced",
+      "details": "Company shares 1% per month for first 7.5 years with ecosystem participants, sharing 100% of proceeds from ownership",
+      "from": "pom"
+    },
+    {
+      "update": "Dough v. 0.9.9 release",
+      "details": "Now stable and good artistic tool, featuring Steerable Motion with more workflows coming. Cheap version ($0.30/GPU hour) coming soon with 75% profit sharing with community",
+      "from": "pom"
+    },
+    {
+      "update": "Flux major release",
+      "details": "Big week for open source with Flux release, multiple community implementations and fine-tunes",
+      "from": "pom"
+    },
+    {
+      "update": "SAM2 launch",
+      "details": "Near-perfect image segmentation capabilities, nearly as big a deal as Flux",
+      "from": "pom"
+    },
+    {
+      "update": "StoryDiffusion training approaching",
+      "details": "Coming close to training time #1 and looking for braintrust of people who've trained models before",
+      "from": "pom"
+    },
+    {
+      "update": "Instruct IP-Adapter for SD3",
+      "details": "Instruction-driven IP-Adapters that allow prompting IPA alongside image reference, includes first IP-Adapter for SD3 and working towards one for Flux",
+      "from": "research team"
+    },
+    {
+      "update": "Ostris released Flux LoRA trainer",
+      "details": "AI-toolkit now supports Flux1 training with tutorial from promptcrafted",
+      "from": "pom"
+    },
+    {
+      "update": "CogVideo released image2video implementation",
+      "details": "Available using Kijai's Comfy nodes, shows promising base motion capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco monthly update and equity announcement for August",
+      "details": "Shared monthly community update",
+      "from": "pom"
+    },
+    {
+      "update": "Motion I2V released 6 months post paper",
+      "details": "Allows guiding AnimateDiff motion by drawing arrows, limited to 16 frames",
+      "from": "pom"
+    },
+    {
+      "update": "FlippingSigmas Unsampling Variant released",
+      "details": "Most coherent vid2vid transformations possible with open models today",
+      "from": "pom"
+    },
+    {
+      "update": "32 frame context LoRA for AnimateDiff",
+      "details": "Continuing quest to defeat AnimatedDiff context switching",
+      "from": "pom"
+    },
+    {
+      "update": "CosyVoice open source voice model",
+      "details": "Very promising for voice2voice capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "Moshi by Genmo released for local GPU",
+      "details": "Optimized to run on local GPUs instead of requiring 4x h100s",
+      "from": "pom"
+    },
+    {
+      "update": "CogVideoX Interpolation released",
+      "details": "Shipped by multiple contributors",
+      "from": "pom"
+    },
+    {
+      "update": "Tora for CogVideoX available",
+      "details": "Motion drawing now working in Comfy with 16GB VRAM",
+      "from": "pom"
+    },
+    {
+      "update": "CogVideoX 1.5 model released",
+      "details": "New version of CogVideoX with improved capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "Lighttricks open sourced LTXV video model",
+      "details": "Speed is primary appeal, produces beautiful results when working well, but breaks down frequently. Full model on open license promised once fully trained",
+      "from": "pom"
+    },
+    {
+      "update": "Huge AnimateDiff ComfyUI update by Kosinkadink",
+      "details": "Major ModelPatcher system rework enabling powerful LoRA masking and scheduling capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "Huanyuan video model released",
+      "details": "Open source model capable of producing high-quality clips on 4090 GPU, with strong vid2vid potential",
+      "from": "pom"
+    },
+    {
+      "update": "Sora expected to drop",
+      "details": "Anticipated release of OpenAI's video model",
+      "from": "pom"
+    },
+    {
+      "update": "New season of Project Odyssey announced",
+      "details": "Competition/art challenge with trailer created",
+      "from": "pom"
+    },
+    {
+      "update": "Discord restructuring completed",
+      "details": "#ad_resources moved to different channel, #ad_comfyui relocated, CogVideoX got new section",
+      "from": "pom"
+    },
+    {
+      "update": "New LTXV model 0.9.1 released",
+      "details": "Better stability, motion, and more while being as fast as previous version",
+      "from": "pom"
+    },
+    {
+      "update": "Framer finally released",
+      "details": "Promising approach that combines interpolation with multiple trajectory drawings, wrapper available",
+      "from": "pom"
+    },
+    {
+      "update": "Hunyuan3D released - SOTA Image to 3D",
+      "details": "New model from Hunyuan team with wrapper available",
+      "from": "pom"
+    },
+    {
+      "update": "New version of Ryanontheinside nodes",
+      "details": "Wide range of improvements and better performance",
+      "from": "pom"
+    },
+    {
+      "update": "Project Odyssey deadline January 16th",
+      "details": "Rendering and VFX category has less than 10 submissions",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV 0.9.5 released",
+      "details": "Best control of any modern open video model, 3600 frames/min speed",
+      "from": "pom"
+    },
+    {
+      "update": "Sonic released",
+      "details": "Can make very expressive speaking from audio input, available in ComfyUI",
+      "from": "pom"
+    },
+    {
+      "update": "Wan(x) from Alibaba released",
+      "details": "14b variant beats Sora on VBench rankings, very impressive results",
+      "from": "pom"
+    },
+    {
+      "update": "ADOS Paris event announced",
+      "details": "March 28/29 at Artifex-Lab, partnership with Lighttricks, capped at 150 people, scholarships available",
+      "from": "pom"
+    },
+    {
+      "update": "Video-Depth-Anything released",
+      "details": "Does very impressive video depth mapping",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV 13b model launched",
+      "details": "New model release that's faster than Wan and particularly good for LoRAs",
+      "from": "pom"
+    },
+    {
+      "update": "OpenMuse platform announced",
+      "details": "New curated space for video LoRAs and art made with them at openmuse.ai",
+      "from": "pom"
+    },
+    {
+      "update": "Control LoRAs training code released",
+      "details": "Training code shared for creating Control LoRAs",
+      "from": "pom"
+    },
+    {
+      "update": "VACE released with causevid for generation in <6 steps",
+      "details": "Speed boost for Wan allowing much faster generation times",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV got huge speed boost with distilled version",
+      "details": "Distilled version provides significant performance improvements",
+      "from": "pom"
+    },
+    {
+      "update": "OpenMuse now includes workflows and improved stability",
+      "details": "Platform updated to allow workflow sharing and better stability",
+      "from": "pom"
+    },
+    {
+      "update": "ATI released with trajectory control",
+      "details": "New system for controlling motion trajectories in video generation",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV beta testers given H100s for testing",
+      "details": "Some community members have access to H100 hardware for training",
+      "from": "pom"
+    },
+    {
+      "update": "LightX2V launched by ModelTC team",
+      "details": "4-step distillation method for Wan video generation",
+      "from": "pom"
+    },
+    {
+      "update": "Multitalk is available on experimental branch",
+      "details": "Works for single subjects, on experimental branch of ComfyUI-WanVideoWrapper",
+      "from": "pom"
+    },
+    {
+      "update": "Kontext is out",
+      "details": "New model release with various community applications",
+      "from": "pom"
+    },
+    {
+      "update": "Official Multitalk support with Context Windows",
+      "details": "Kijai added official Multitalk support to ComfyUI-WanVideoWrapper",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV launched Controlnets and training script",
+      "details": "Controlnets for LTXV and training script for training them in a few hours",
+      "from": "pom"
+    },
+    {
+      "update": "LTXV released new version with very long generations",
+      "details": "New LTXV version capable of generating very long video sequences",
+      "from": "pom"
+    },
+    {
+      "update": "Wan 2.2 released",
+      "details": "Already slicing through the Coca-Coca with a meat cleaver benchmark",
+      "from": "pom"
+    },
+    {
+      "update": "Fun-Control controlnets available for Wan 2.2",
+      "details": "Kijai has implemented them and used them to make pandas do the macarena",
+      "from": "pom"
+    },
+    {
+      "update": "FantasyPortrait now available in Comfy",
+      "details": "Implemented by Kijai",
+      "from": "pom"
+    },
+    {
+      "update": "infiniteTalk landed",
+      "details": "Able to do extremely good mouth layering onto existing videos",
+      "from": "pom"
+    },
+    {
+      "update": "TheMatrix and more world models launched",
+      "details": "Check out dedicated channel for exploration",
+      "from": "pom"
+    },
+    {
+      "update": "HunyuanFoley looks promising as mmaudio successor",
+      "details": "Comfy nodes created by 983060020516249670",
+      "from": "pom"
+    },
+    {
+      "update": "Wan S2V released with pose control",
+      "details": "Audio-video generation capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "Pusa released with Kijai integration",
+      "details": "New model with ComfyUI integration available for video extensions",
+      "from": "pom"
+    },
+    {
+      "update": "WanAnimate released",
+      "details": "New face animation model that can track facial features and pupils effectively",
+      "from": "pom"
+    },
+    {
+      "update": "New VACE for Wan 2.2 by Fun team released",
+      "details": "Shows impressive continuations without degradation and good inpainting capabilities",
+      "from": "pom"
+    },
+    {
+      "update": "QwenImage 2509 released",
+      "details": "New version with multi-image input and controlnet support",
+      "from": "pom"
+    },
+    {
+      "update": "AOOS LA event announced for November 7th",
+      "details": "Event will be at Charlie Chaplin's former soundstage, includes day-time unconference and evening event",
+      "from": "pom"
+    },
+    {
+      "update": "Huggingface offering free LoRA training",
+      "details": "Free GPU compute available for AI-Toolkit training including Wan, Qwen and more",
+      "from": "pom"
+    },
+    {
+      "update": "The Arca Gidan Prize competition launched",
+      "details": "Competition to inspire people in the ecosystem to push their art to its limits, 4 winners get to fly to LA, deadline is 7 days, sponsored by Comfy Org",
+      "from": "pom"
+    },
+    {
+      "update": "Real Time Video Summit in San Francisco",
+      "details": "Event featuring Ryanontheinside, Cerspense, DotSimulate and more speakers",
+      "from": "pom"
+    },
+    {
+      "update": "ADOS LA event happening",
+      "details": "Event in LA with community legends hosting roundtables, talks, and workshops",
+      "from": "pom"
+    },
+    {
+      "update": "Arca Gidan Prize winners announced",
+      "details": "4 prize recipients: 'Static' by nrmopp, 'Duende' by Yurvraj, 'Woven' by PsiClone, 'The Trade' by Kaybroh",
+      "from": "pom"
+    },
+    {
+      "update": "Community member Alexander Morano passed away",
+      "details": "Maintained the Jovimetrix nodepack and moderated the community, passed away in September",
+      "from": "pom"
+    },
+    {
+      "update": "Daydream running 2 week open source live video hackathon",
+      "details": "Interactive AI video program hackathon opportunity",
+      "from": "pom"
+    },
+    {
+      "update": "LTX-2 release week",
+      "details": "LTX-2 launched with audio-based video generation capabilities and multiple conditioning types",
+      "from": "pom"
+    },
+    {
+      "update": "Banodoco Discord going default public",
+      "details": "All data will be public for LLMs to learn from + people to share",
+      "from": "pom"
+    },
+    {
+      "update": "Paris event planned for April 16-19",
+      "details": "Next Banodoco event planned as multiday art hackathon/show in Paris with four months notice",
+      "from": "pom"
+    },
+    {
+      "update": "Wan Move context window support added",
+      "details": "Context window support added to Wan Move",
+      "from": "228118453062467585"
+    },
+    {
+      "update": "Wrapper nodes restructured",
+      "details": "Wrapper nodes restructured to enable magical capabilities of Wan to be combined to greater degree",
+      "from": "228118453062467585"
+    },
+    {
+      "update": "New Banodoco website launched",
+      "details": "New Banodoco website created at banodoco.ai",
+      "from": "pom"
+    },
+    {
+      "update": "SVI-Pro for Wan 2.2 released",
+      "details": "New version of SVI-Pro for Wan 2.2 potentially offers path to endless smooth continuations",
+      "from": "1143887423957377024"
+    },
+    {
+      "update": "LongCat implementation by Kijai",
+      "details": "LongCat implementation available thanks to Kijai's work",
+      "from": "pom"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "Using starting and ending frames with ControlNet reference images to control AD",
+      "use_case": "Interpolation and control",
+      "from": "pom"
+    },
+    {
+      "workflow": "Chaining interpolated clips into coherent clip",
+      "use_case": "Creating longer coherent animations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Vid2vid workflow with sliding context windows",
+      "use_case": "Very powerful video transformations",
+      "from": "pom"
+    },
+    {
+      "workflow": "img2gif/txt2gif + upscale workflow",
+      "use_case": "Creating and upscaling animated content",
+      "from": "pom"
+    },
+    {
+      "workflow": "Background masking workflow",
+      "use_case": "Static/isolated/separately animated backgrounds",
+      "from": "pom"
+    },
+    {
+      "workflow": "QR code ControlNet for logo animation using masks",
+      "use_case": "Logo animation effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Inpainting with AD",
+      "use_case": "Selective animation of image regions",
+      "from": "pom"
+    },
+    {
+      "workflow": "SD/AD combo for infinite zoom",
+      "use_case": "Creating infinite zoom effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Vid 2 QR 2 Vid workflow",
+      "use_case": "Interesting video transformations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Rotoscoping workflow",
+      "use_case": "Basic, consistent transformations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Vid2Vid with SDXL and HotShot",
+      "use_case": "Reskinning existing videos with new characters and styles",
+      "from": "88822364468412416"
+    },
+    {
+      "workflow": "Text to OpenPose workflow",
+      "use_case": "Generate complex motion more reliably than diffusion models alone",
+      "from": "310003312936091650"
+    },
+    {
+      "workflow": "Inpainting with ControlNet",
+      "use_case": "Direct inpainting applications",
+      "from": "586961856271351833"
+    },
+    {
+      "workflow": "Inpainting with OpenPose over existing videos",
+      "use_case": "Replace characters in existing video footage",
+      "from": "586961856271351833"
+    },
+    {
+      "workflow": "FaceDetailer for face consistency",
+      "use_case": "Improve jittery faces that AD often produces",
+      "from": "750969956249632859"
+    },
+    {
+      "workflow": "3-image interpolation",
+      "use_case": "Create smooth transitions between multiple images",
+      "from": "pom"
+    },
+    {
+      "workflow": "Condition Mask Travel",
+      "use_case": "Use combination of CN masks to guide animations with precision",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Video stitching with FiLM",
+      "use_case": "Combine videos from different sources and smooth transitions",
+      "from": "285445203211452416"
+    },
+    {
+      "workflow": "Add motion to still images",
+      "use_case": "Animate static images",
+      "from": "1090035586582196326"
+    },
+    {
+      "workflow": "Target Location workflow",
+      "use_case": "Consistently render animation where object changes to small size in view",
+      "from": "756701878011691029"
+    },
+    {
+      "workflow": "Mandela Maker",
+      "use_case": "Creating beautiful animated mandalas",
+      "from": "400645014541172756"
+    },
+    {
+      "workflow": "IPAdapter Video2Video",
+      "use_case": "Coherent character transformations and soft video transformations",
+      "from": "88822364468412416"
+    },
+    {
+      "workflow": "Character segmentation and greenscreening",
+      "use_case": "Create and use green screen footage with AI",
+      "from": "310003312936091650"
+    },
+    {
+      "workflow": "SVD chaining",
+      "use_case": "Complex movements in shots, though still work-in-progress",
+      "from": "499629400254447616"
+    },
+    {
+      "workflow": "Geometric shapes workflow by Cerspense",
+      "use_case": "Creating distinctive geometric art that others can adapt with unique spins",
+      "from": "Cerspense"
+    },
+    {
+      "workflow": "Cyberbear's personal workflow",
+      "use_case": "Based on Inner Reflections' work, demonstrates advanced techniques",
+      "from": "cyberbear"
+    },
+    {
+      "workflow": "Video inpainting workflow using video matting",
+      "use_case": "Keeps background and foreground completely separate for inpainting over videos",
+      "from": "Siraj"
+    },
+    {
+      "workflow": "Magnifake workflows",
+      "use_case": "Replicating Magnific upscaling functionality to save $39/month",
+      "from": "Fictiverse"
+    },
+    {
+      "workflow": "Screen capture to Comfy workflow",
+      "use_case": "Channeling screen captures directly into Comfy for leveraging faster models",
+      "from": "Impact Frames"
+    },
+    {
+      "workflow": "CybearPunk-Vid2Vid-Hotshotxl workflow",
+      "use_case": "ModelMerge, IPAMultiPorpuse, LoraStack, 4CN, FaceDetailer integration",
+      "from": "cyberbear"
+    },
+    {
+      "workflow": "Character segmentation + CN layer workflow",
+      "use_case": "Segments characters and applies CN to specific layers for vid2vid transformations",
+      "from": "Marcus Aurelius"
+    },
+    {
+      "workflow": "RAVE workflow by Kijai",
+      "use_case": "Advanced video generation with specific techniques",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "Militant Hitchhiker's ControlNet Video Builder",
+      "use_case": "Turning any video input into portable, transferable, and manageable ControlNet videos",
+      "from": "pom"
+    },
+    {
+      "workflow": "Scene Assembler by Dkamacho",
+      "use_case": "Apply different IP-Adapters for background and foreground to achieve specific vid2vid transformations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Audio Reactive IPAdapters by VisualFrisson",
+      "use_case": "Using audio feed to create IP adapter masks for various audio channels for audio reactivity",
+      "from": "pom"
+    },
+    {
+      "workflow": "Kijai's 'Gotta Go Fast' superfast vid2vid",
+      "use_case": "Dramatically increase speed of vid2vid while maintaining high quality",
+      "from": "pom"
+    },
+    {
+      "workflow": "LCM Vid2Vid by Inner Reflections",
+      "use_case": "Near-perfect and near-instantaneous video transformations",
+      "from": "pom"
+    },
+    {
+      "workflow": "LCM Img2vid transformations",
+      "use_case": "Image to video transformations using LCM",
+      "from": "pom"
+    },
+    {
+      "workflow": "Context smashing by Purz",
+      "use_case": "Advanced animation technique with precise control",
+      "from": "pom"
+    },
+    {
+      "workflow": "Subject and Background Isolation with AnimateLCM",
+      "use_case": "Use combination of images to steer character and foreground independently",
+      "from": "pom"
+    },
+    {
+      "workflow": "Motion landscapes",
+      "use_case": "Creating calm, serene landscape animations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Water simulation workflow",
+      "use_case": "Generating water simulations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Image2Vid + Interpolation with IPA Tile",
+      "use_case": "High-quality image to video conversion using IPA tile advances",
+      "from": "pom"
+    },
+    {
+      "workflow": "Smooth loop interpolation",
+      "use_case": "Creating smoother loop animations by interpolating between first and last frames",
+      "from": "pom"
+    },
+    {
+      "workflow": "txt2creepyvid",
+      "use_case": "Text to creepy video generation",
+      "from": "pom"
+    },
+    {
+      "workflow": "Motion Brush Image to Video with IPA",
+      "use_case": "Animate images while sticking closely to input material",
+      "from": "pom"
+    },
+    {
+      "workflow": "Smooth & Deep Steerable Motion",
+      "use_case": "Uses depth maps to adjust movement with different motion levels per layer",
+      "from": "pom"
+    },
+    {
+      "workflow": "Face/Bodyswap with Motion Brush",
+      "use_case": "Transform faces and heads/hair while staying close to context",
+      "from": "VK"
+    },
+    {
+      "workflow": "Video outpainting workflow",
+      "use_case": "Incredible video outpainting results",
+      "from": "nosecretsai"
+    },
+    {
+      "workflow": "AutoMask IPA GDINO-SAM Img/Vid-2-Vid LCM",
+      "use_case": "Advanced vid2vid processing",
+      "from": "AdamAD"
+    },
+    {
+      "workflow": "IP2P vid2vid workflow",
+      "use_case": "Beautiful video to video transformations using Ip2p",
+      "from": "abstract_chroma"
+    },
+    {
+      "workflow": "Fading Weights - daisy chained IPAs",
+      "use_case": "Make pictures move by morphing between images",
+      "from": "klinter"
+    },
+    {
+      "workflow": "Nightmare fuel workflow",
+      "use_case": "Uses Moondream to describe image to become prompt, includes random image selection",
+      "from": "purz"
+    },
+    {
+      "workflow": "Enormous Gif animations",
+      "use_case": "Slices up huge input image to create extremely large gif, great for animated Where's Wally",
+      "from": "pollyanna"
+    },
+    {
+      "workflow": "Audio to Video workflow",
+      "use_case": "Uses Whisper for lyrics extraction and Llama 3 to drive video creation",
+      "from": "fictiverse"
+    },
+    {
+      "workflow": "Isaac's Fully Automatic BeatSync AD",
+      "use_case": "Automated beatsync video generation",
+      "from": "pom"
+    },
+    {
+      "workflow": "5 new Steerable Motion workflows with unique motion and adherence types",
+      "use_case": "Different types of motion control, added to Dough",
+      "from": "pom"
+    },
+    {
+      "workflow": "Face-swapping workflow",
+      "use_case": "Easy face swapping in videos",
+      "from": "pom"
+    },
+    {
+      "workflow": "mgfxer's Animated Weights Transition Factory",
+      "use_case": "Using masks to drive animations in beautiful and subtle ways",
+      "from": "pom"
+    },
+    {
+      "workflow": "Dex's workflow for converting character sheets into animations using Tooncrafter",
+      "use_case": "Character animation from character sheets",
+      "from": "pom"
+    },
+    {
+      "workflow": "Music Visualiser Megaflow by audioreactive user",
+      "use_case": "Audioreactive visualization without requiring input video",
+      "from": "pom"
+    },
+    {
+      "workflow": "ComfyUI TensorRT Real-time Generative Filter achieving 2 fps",
+      "use_case": "Real-time generative filtering",
+      "from": "pom"
+    },
+    {
+      "workflow": "Animating from 3D depth maps",
+      "use_case": "Creating animations from depth map data",
+      "from": "pom"
+    },
+    {
+      "workflow": "Steerable Motion with Auto-Prompting using vision model",
+      "use_case": "Automated prompt generation for better consistency and motion",
+      "from": "pom"
+    },
+    {
+      "workflow": "Dreamzoom - infinite zoom workflow with live-prompting control",
+      "use_case": "Live-controlled infinite zoom videos with Steerable Motion output",
+      "from": "pom"
+    },
+    {
+      "workflow": "SDXL-Turbo Vid2Vid + Automation IP2P Masking",
+      "use_case": "Vid2vid processing on specific parts of video using SDXL",
+      "from": "pom"
+    },
+    {
+      "workflow": "mgfxer's Animatediff Weights 2.0",
+      "use_case": "Mask-driven animations with automatic mask creation and BLIP captioning",
+      "from": "pom"
+    },
+    {
+      "workflow": "Fading Weights #3 with Florence2",
+      "details": "Uses Florence2 to translate nodes into IPA weights and adds stability",
+      "use_case": "Video generation with improved stability",
+      "from": "workflow creator"
+    },
+    {
+      "workflow": "IC Light Changer for Videos",
+      "details": "Relighting videos using IC-Light",
+      "use_case": "Video relighting effects",
+      "from": "Jerry Davos"
+    },
+    {
+      "workflow": "Florence & Kolors image masher",
+      "details": "Using Kolor nodes and Florence2 nodes to create new type of image masher that mixes images beautifully",
+      "use_case": "Image mixing and composition",
+      "from": "workflow creator"
+    },
+    {
+      "workflow": "LivePortrait Animatediff combination",
+      "details": "Adding animatediff backgrounds to LivePortrait still generations for dynamic look",
+      "use_case": "Portrait animation with dynamic backgrounds",
+      "from": "community member"
+    },
+    {
+      "workflow": "Style Mix Master",
+      "details": "Remixing existing images with IPA, Controlnet and more - plug in folder of images and transforms them in various ways",
+      "use_case": "Batch image transformation and style transfer",
+      "from": "Jas"
+    },
+    {
+      "workflow": "Enhanced Visions with Clip Vision Enhancer",
+      "details": "Uses Clip Vision Enhancer for next-level input-image comprehension",
+      "use_case": "Improved image analysis and processing",
+      "from": "Klinter"
+    },
+    {
+      "workflow": "Time dilation workflow",
+      "details": "Workflow used for Project Odyssey piece",
+      "use_case": "Creating time dilation effects in video",
+      "from": "Akatz"
+    },
+    {
+      "workflow": "Vid2Vid morphing with fading weights",
+      "use_case": "Morphs through different influencing images during vid2vid processing",
+      "from": "Cyncratic"
+    },
+    {
+      "workflow": "Flux x SVD Vid2Vid",
+      "use_case": "Uses Flux i2i in combination with SVD for interesting video effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Audioreactive noise patterns",
+      "use_case": "Create audioreactive noise patterns in animation backgrounds",
+      "from": "Akatz"
+    },
+    {
+      "workflow": "Image travel with ADV3 + Hyper SD",
+      "use_case": "Travelling through images using FrameFX nodes & Clip Enhancer",
+      "from": "pom"
+    },
+    {
+      "workflow": "HyperFlux inpainting and upscaling",
+      "use_case": "Inpainting and detailing that works with less than 8gb VRAM",
+      "from": "Akumetsu971"
+    },
+    {
+      "workflow": "Updated LCM vid2vid workflow",
+      "use_case": "Battle-tested through creating many videos",
+      "from": "pom"
+    },
+    {
+      "workflow": "SDXL Video2Video Morph workflow",
+      "use_case": "Result of extensive experimenting for vid2vid SDXL morphs",
+      "from": "pom"
+    },
+    {
+      "workflow": "Simple 2 Step Deflicker workflow",
+      "use_case": "Deflickering videos",
+      "from": "pom"
+    },
+    {
+      "workflow": "Combining interpolation + Tora direction in CogVideoX",
+      "use_case": "Enhanced control for video generation",
+      "from": "pom"
+    },
+    {
+      "workflow": "Mochi Vid2Vid experimental implementation by Kijai",
+      "use_case": "Video-to-video transformation using Mochi model",
+      "from": "pom"
+    },
+    {
+      "workflow": "Audio-reactive denoising masks",
+      "use_case": "Creating audio-reactive visual effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Depth Aware Audio Reactive Particle Systems",
+      "use_case": "Advanced audio-reactive visual effects with depth awareness",
+      "from": "pom"
+    },
+    {
+      "workflow": "Framer frame interpolation + direction drawing",
+      "use_case": "Combined control methods for video generation with interpolation and directional control",
+      "from": "pom"
+    },
+    {
+      "workflow": "Audio-reactive interpolation workflow by Yvann & Liliens",
+      "use_case": "Audio-reactive traveling between images with tutorial provided",
+      "from": "pom"
+    },
+    {
+      "workflow": "In-Context Flux Flora approach",
+      "use_case": "Using logos in different contexts",
+      "from": "pom"
+    },
+    {
+      "workflow": "LTX vid2vid with image reference by VK",
+      "use_case": "Video-to-video with image reference using LTX unsampling",
+      "from": "pom"
+    },
+    {
+      "workflow": "LTX Image2Vid workflow by Avataraim",
+      "use_case": "Refined Image-to-video generation addressing LTX issues",
+      "from": "pom"
+    },
+    {
+      "workflow": "StyleMatch-Flux workflow by Drex",
+      "use_case": "Style-batching depth workflow combining BFL releases",
+      "from": "pom"
+    },
+    {
+      "workflow": "Depth + Redux transfer workflow",
+      "use_case": "Style transfer using depth and redux, available on HuggingFace",
+      "from": "pom"
+    },
+    {
+      "workflow": "Long Controllable Flux + LTXV I2V",
+      "use_case": "Enables long, controllable video generations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Flux Upscaling workflow",
+      "use_case": "New upscaling approach built on top of Flux",
+      "from": "pom"
+    },
+    {
+      "workflow": "Vid2vid workflow with LTXV based on FlowEdit",
+      "use_case": "Video to video transformation",
+      "from": "pom"
+    },
+    {
+      "workflow": "HunYuan upsampling workflow with refined settings",
+      "use_case": "Better quality upsampling",
+      "from": "pom"
+    },
+    {
+      "workflow": "FlowEdit for Wan",
+      "use_case": "Video editing with flow control",
+      "from": "community member"
+    },
+    {
+      "workflow": "Video inpainting with differential diffusion",
+      "use_case": "LTXV video inpainting workflow shared",
+      "from": "community member"
+    },
+    {
+      "workflow": "Hunyuan video inpainting workflow",
+      "use_case": "Video inpainting with mask tracking capabilities",
+      "from": "community member"
+    },
+    {
+      "workflow": "NoiseWarp with SD1.5",
+      "use_case": "New workflow for using NoiseWarp",
+      "from": "community member"
+    },
+    {
+      "workflow": "Control LoRA training for deblurring",
+      "use_case": "SOTA deblurring trained in under a day on a 3090",
+      "from": "pom"
+    },
+    {
+      "workflow": "Room emptying LoRA trained on four images",
+      "use_case": "First image as control, last as target for transformation effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Combining IRL + Blender + AI",
+      "use_case": "For superhero landing effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "VACE workflow for style/structure transfer",
+      "use_case": "Transforming video style while maintaining structure",
+      "from": "Mel"
+    },
+    {
+      "workflow": "ATI trajectory control workflow",
+      "use_case": "Controlling motion paths in video generation",
+      "from": "Adrien"
+    },
+    {
+      "workflow": "Face-swapping workflow using VACE",
+      "use_case": "Hollywood-level face replacement in videos",
+      "from": "ClownShark"
+    },
+    {
+      "workflow": "Fully-self-contained audio-reactive workflow",
+      "use_case": "Never-ending audiovisual painting for wall displays",
+      "from": "users"
+    },
+    {
+      "workflow": "Style + structure transfer with Wan",
+      "details": "Demonstrated working approach for transferring both style and structure",
+      "from": "pom"
+    },
+    {
+      "workflow": "VACE x ATI combination for Lego-style animation",
+      "details": "Tutorial showing how to use combination of tools to make Lego-style animation",
+      "from": "pom"
+    },
+    {
+      "workflow": "Continuation workflow for smooth video extensions",
+      "details": "Workflow for making smooth continuations without color distortion",
+      "from": "pom"
+    },
+    {
+      "workflow": "Vid2Vid with continuation nodes",
+      "details": "Using continuation nodes for video-to-video generation",
+      "from": "pom"
+    },
+    {
+      "workflow": "Style transfer with Kontext",
+      "details": "Approach to do style transfer using Kontext model",
+      "from": "pom"
+    },
+    {
+      "workflow": "Combining Redux & Kontext",
+      "details": "Method for combining Redux and Kontext models",
+      "from": "pom"
+    },
+    {
+      "workflow": "Sliding context windows with 4 different prompts for 337 frames",
+      "use_case": "Extended video generation with Wan 2.2",
+      "from": "Kijai"
+    },
+    {
+      "workflow": "6 steps over two samplers approach",
+      "use_case": "Efficient Wan 2.2 processing",
+      "from": "256636116763934731"
+    },
+    {
+      "workflow": "Phantom + VACE merge workflow",
+      "use_case": "Enhanced video generation capabilities",
+      "from": "88822364468412416"
+    },
+    {
+      "workflow": "VACE with Wan 2.2 for animating famous movie scenes",
+      "use_case": "Movie scene animation",
+      "from": "766051574400417842"
+    },
+    {
+      "workflow": "Upscaling Deforum outputs with Wan 2.2",
+      "use_case": "Combining early-AI motion with modern AI aesthetics",
+      "from": "985830005315633193"
+    },
+    {
+      "workflow": "Flux x Wan x Animatediff combination",
+      "use_case": "Multi-model video generation",
+      "from": "272911326010015745"
+    },
+    {
+      "workflow": "Cocktail of different tools for simple yet intricate scenes",
+      "use_case": "Complex scene creation",
+      "from": "240980243211354113"
+    },
+    {
+      "workflow": "FakeVace 2.2 merge for continuations",
+      "use_case": "Video continuations using merged model",
+      "from": "771193439399444490"
+    },
+    {
+      "workflow": "Endless Travel workflow adaptation",
+      "use_case": "Continuations without degradation based on pom's original workflow",
+      "from": "1074404980737450065"
+    },
+    {
+      "workflow": "Humo & InfiniteTalk combination for music videos",
+      "use_case": "Single-shot music video generation combining multiple models",
+      "from": "330829305477333022"
+    },
+    {
+      "workflow": "SuperMegaGigaUpscaler workflow",
+      "use_case": "Upscaling individual images then applying vid2vid for enhanced quality",
+      "from": "1074404980737450065"
+    },
+    {
+      "workflow": "Travel between images workflow",
+      "use_case": "Creating smooth transitions between different image scenes",
+      "from": "825444296689451039"
+    },
+    {
+      "workflow": "Animatediff LoRA integration workflow",
+      "use_case": "Bringing Animatediff-style motion to Wan generations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Humo megaflow for music videos",
+      "use_case": "Generating full videos based on music with tweakable parameters, similar to Deforum but different approach",
+      "from": "pom"
+    },
+    {
+      "workflow": "Anchor images + Humo for lipsync",
+      "use_case": "Adding lipsync to image-to-video generations",
+      "from": "pom"
+    },
+    {
+      "workflow": "Particle sims + ATI combination",
+      "use_case": "Creating specific visual effects",
+      "from": "pom"
+    },
+    {
+      "workflow": "Multi-image lip syncing workflow",
+      "use_case": "Synchronizing lip movements across multiple images",
+      "from": "pom"
+    },
+    {
+      "workflow": "SCAIL with Uni3c combination",
+      "description": "Combining SCAIL with Uni3c for video generation",
+      "use_case": "Video processing and generation",
+      "from": "1074404980737450065"
+    },
+    {
+      "workflow": "SCAIL with Wan Animate",
+      "description": "Using SCAIL with Wan Animate for more dynamic scenes",
+      "use_case": "Creating dynamic video scenes",
+      "from": "322119599657320448"
+    },
+    {
+      "workflow": "Humo X VACE morph effect",
+      "description": "Replicating Michael Jackson's Black & White morph effect using Humo X VACE",
+      "use_case": "Music video effects that were previously expensive to create",
+      "from": "256636116763934731"
+    },
+    {
+      "workflow": "Humo-automation-workflow-powered music videos",
+      "description": "Full automation workflow for music video creation using Humo",
+      "use_case": "Dynamic music video creation with insane potential",
+      "from": "330829305477333022"
+    },
+    {
+      "workflow": "Z-image denoise deforumy travel for vid2vid",
+      "description": "Using z-image denoise for video-to-video processing",
+      "use_case": "Vid2vid processing",
+      "from": "807028745344385034"
+    },
+    {
+      "workflow": "Black and white replication workflow",
+      "description": "Workflow for recreating classic video effects",
+      "use_case": "Music video effect replication",
+      "from": "256636116763934731"
+    },
+    {
+      "workflow": "Audio-based video generation for LTX-2",
+      "description": "Workflow for generating video from audio input using LTX-2",
+      "use_case": "Audio-driven video creation",
+      "from": "228118453062467585"
+    },
+    {
+      "workflow": "SharkSampler/ClownsharkSampler with LTX-2",
+      "description": "Basic workflow enabling ClownsharkSampler functionality with LTX-2",
+      "use_case": "Enhanced LTX-2 sampling",
+      "from": "256636116763934731"
+    },
+    {
+      "workflow": "Humo x Wan 2.2 SVI workflow",
+      "description": "Workflow combining Humo with Wan 2.2 SVI",
+      "use_case": "Advanced video generation",
+      "from": "256636116763934731"
+    },
+    {
+      "workflow": "Fully automated image-to-video pipeline for songs",
+      "description": "New version using Z-Image + LTX2 for full-length song video creation",
+      "use_case": "Full-length music video automation",
+      "from": "330829305477333022"
+    },
+    {
+      "workflow": "Background separation workflow with Animatediff",
+      "description": "Workflow for separating backgrounds using Animatediff toolset",
+      "use_case": "Video background manipulation",
+      "from": "809159895593123852"
+    }
+  ],
+  "settings": [
+    {
+      "setting": "Motion Scale",
+      "value": "variable based on desired motion amount",
+      "reason": "Controls the amount of motion in output - can increase or decrease as needed",
+      "from": "Kosinkadink"
+    },
+    {
+      "setting": "SparseCtrl RGB control levels",
+      "value": "Every frame vs 1 up to every 15th frame",
+      "reason": "Different levels provide varying control precision vs smoothness",
+      "from": "benejamin"
+    },
+    {
+      "setting": "AnimatedDiff V3 setup",
+      "value": "Rebalance workflows around v3",
+      "reason": "Better performance than trying to make older setups work",
+      "from": "connorrs"
+    },
+    {
+      "setting": "IPA weight_types",
+      "value": "Various new weight types exposed",
+      "reason": "Allows for better control and tweaking of IPA behavior",
+      "from": "pom"
+    },
+    {
+      "setting": "Motion LoRA trained on weekly art",
+      "value": "WAS26 LoRA",
+      "reason": "Smooths out motion in a general way when applied",
+      "from": "pom"
+    },
+    {
+      "setting": "Control LoRA training time",
+      "value": "Under a day on 3090",
+      "reason": "For SOTA deblurring results",
+      "from": "pom"
+    },
+    {
+      "setting": "LTXV LoRA training time",
+      "value": "60-90 minutes",
+      "reason": "Can accomplish high quality results in short training runs",
+      "from": "pom"
+    },
+    {
+      "setting": "VACE generation",
+      "value": "<6 steps",
+      "reason": "Speed optimization with causevid",
+      "from": "pom"
+    },
+    {
+      "setting": "Cloud training on Replicate",
+      "value": "20 minutes with 50 images",
+      "reason": "Quick LoRA training for character insertion",
+      "from": "user"
+    },
+    {
+      "setting": "Ovi model steps",
+      "value": "10 steps",
+      "reason": "Can bring images to life on 5b base model with minimal steps",
+      "from": "228118453062467585"
+    },
+    {
+      "setting": "VRAM requirement for low-end workflow",
+      "value": "Under 8GB",
+      "reason": "Enables VACE 2.1 usage on consumer hardware",
+      "from": "1006234707375173722"
+    },
+    {
+      "setting": "LoRA strength",
+      "value": "Low strength",
+      "reason": "Brings subtle Animatediff-y motion enhancement at just 6 steps",
+      "from": "pom"
+    },
+    {
+      "setting": "Training steps for water morphing LoRA",
+      "value": "1,000 steps",
+      "reason": "Sufficient for training on 6 videos",
+      "from": "pom"
+    }
+  ],
+  "concepts": [
+    {
+      "term": "Sliding context windows",
+      "explanation": "Allows for longer generations in ComfyUI AnimateDiff",
+      "from": "pom"
+    },
+    {
+      "term": "Prompt travel",
+      "explanation": "Technique for creating transitions between different prompts in video generation",
+      "from": "pom"
+    },
+    {
+      "term": "Motion Scale",
+      "explanation": "A control that allows tuning up and down the amount of motion in video output",
+      "from": "pom"
+    },
+    {
+      "term": "Attention Masking",
+      "explanation": "Feature that allows varying IPAdapter mask throughout video for better control",
+      "from": "matteo"
+    },
+    {
+      "term": "Timestep Scheduling",
+      "explanation": "Determines which part of sampling process a controlnet should influence",
+      "from": "Kosinkadink"
+    },
+    {
+      "term": "SparseCtrl",
+      "explanation": "Video controlnets that provide more grained control than image CNs, optimized for specific video tasks to avoid AD compatibility issues",
+      "from": "pom"
+    },
+    {
+      "term": "Creative interpolation",
+      "explanation": "Technique combining IPA with Sparse Ctrl to handle wider gaps and transformations while adhering to input images",
+      "from": "pom"
+    },
+    {
+      "term": "Video matting implementation",
+      "explanation": "Technique for separating background and foreground in video processing",
+      "from": "pom"
+    },
+    {
+      "term": "Motion LoRAs",
+      "explanation": "Allows training on single video to guide motion of AnimateDiff generation with varying precision levels",
+      "from": "pom"
+    },
+    {
+      "term": "LoRA travel",
+      "explanation": "Queuing multiple LoRAs throughout a generation using LoRA masking to achieve different effects throughout video",
+      "from": "pom"
+    },
+    {
+      "term": "View Options",
+      "explanation": "Sub-Context Options that act like context window for Contexts to improve stability of longer animations",
+      "from": "pom"
+    },
+    {
+      "term": "IPA Tiling",
+      "explanation": "Breaks up input image into multiple components and feeds them one-by-one so IPA has far higher resolution view on what's happening",
+      "from": "pom"
+    },
+    {
+      "term": "Context Smashing",
+      "explanation": "Advanced workflow technique for animation control shared by Purz",
+      "from": "pom"
+    },
+    {
+      "term": "Steerable Motion",
+      "explanation": "Technique for steering animations with precision using images alongside motion LoRAs",
+      "from": "pom"
+    },
+    {
+      "term": "AnimatableGaussians",
+      "explanation": "A paper released for creating animatable content, likely used in viral meme creation",
+      "from": "pom"
+    },
+    {
+      "term": "Prompt injection",
+      "explanation": "Injecting different prompts into specific blocks of the unet for more fine-grained motion control",
+      "from": "pom"
+    },
+    {
+      "term": "Context Aware SparseCtrl",
+      "explanation": "Implements additional frames that fill in gaps in the context window where there's no Sparse influence for smoother long-context animations",
+      "from": "pom"
+    },
+    {
+      "term": "Vid2Vid upsampling",
+      "explanation": "Technique for improving video consistency and reducing context issues",
+      "from": "Inner Reflections"
+    },
+    {
+      "term": "Audio-reactive passes",
+      "explanation": "Adding subtle audio-reactive effects to generated videos",
+      "from": "pom"
+    },
+    {
+      "term": "Veevee (Flatten2)",
+      "explanation": "Version 2 of Juxtapoz's Flatten vid2vid optical flow technique",
+      "from": "pom"
+    },
+    {
+      "term": "Multi-phase prompts",
+      "explanation": "Complex prompts that include scene transitions and camera movements for video generation",
+      "from": "pom"
+    },
+    {
+      "term": "Transformer morphs",
+      "explanation": "A type of transformation that current models can't yet do properly",
+      "from": "pom"
+    },
+    {
+      "term": "VPadapters",
+      "explanation": "Proposed way to guide videos using reference videos for different components",
+      "from": "pom"
+    },
+    {
+      "term": "Video Prompt adapter",
+      "explanation": "Could theoretically allow using reference videos to guide motion like IPAdapter uses reference images",
+      "from": "pom"
+    },
+    {
+      "term": "Vid2Vid",
+      "explanation": "Video-to-video transformation/editing technique",
+      "from": "pom"
+    },
+    {
+      "term": "RF Inversion",
+      "explanation": "Technique that works well with LTX model for improved vid2vid results",
+      "from": "pom"
+    },
+    {
+      "term": "Regional prompting",
+      "explanation": "Technique for applying different prompts to different regions of an image",
+      "from": "pom"
+    },
+    {
+      "term": "LoRA masking",
+      "explanation": "New capability enabling selective application of LoRAs to different parts of images",
+      "from": "pom"
+    },
+    {
+      "term": "Warped Noise",
+      "explanation": "Netflix technique for guiding video generation, works with various models",
+      "from": "pom"
+    },
+    {
+      "term": "FlowEdit",
+      "explanation": "Implementation used for video transformation workflows",
+      "from": "pom"
+    },
+    {
+      "term": "Context window shifting",
+      "explanation": "Technique for handling longer video sequences by shifting the processing window",
+      "from": "kijai"
+    },
+    {
+      "term": "Reward LoRA",
+      "explanation": "Type of LoRA that improves prompt adherence in video generation",
+      "from": "community member"
+    },
+    {
+      "term": "Control LoRAs",
+      "explanation": "LoRAs that can be trained on any condition where you provide input videos and output videos, enabling various types of control like deblurring, inpainting, interpolating, trajectory drawing",
+      "from": "pom"
+    },
+    {
+      "term": "VACE",
+      "explanation": "Video generation system that enables fast style transfer and face swapping",
+      "from": "pom"
+    },
+    {
+      "term": "ATI",
+      "explanation": "System for trajectory control in video generation",
+      "from": "pom"
+    },
+    {
+      "term": "Normalized Attention Guidance",
+      "explanation": "New negative prompting approach that works on distilled models",
+      "from": "pom"
+    },
+    {
+      "term": "Multitalk",
+      "explanation": "Technology for mouth movements in AI video generation, particularly good for single subjects",
+      "from": "pom"
+    },
+    {
+      "term": "LightX2V",
+      "explanation": "4-step distillation method for Wan video generation",
+      "from": "pom"
+    },
+    {
+      "term": "VACE masking",
+      "explanation": "Technique for precise masking and object manipulation in video generation",
+      "from": "pom"
+    },
+    {
+      "term": "Sliding context windows",
+      "explanation": "Technique for generating long videos by using overlapping context segments",
+      "from": "228118453062467585"
+    },
+    {
+      "term": "Banostasis",
+      "explanation": "LoRA that enables unconventional motion styles and reality-breaking effects with Wan",
+      "from": "1074404980737450065"
+    },
+    {
+      "term": "Animatediff-y movement",
+      "explanation": "Distinctive motion style characteristic of Animatediff outputs when combined with other models",
+      "from": "pom"
+    },
+    {
+      "term": "VACE masking degradation",
+      "explanation": "Quality degradation issue when using VACE that can be solved with latent noise techniques",
+      "from": "pom"
+    },
+    {
+      "term": "Context transitions",
+      "explanation": "Technique for doing scene transformations while maintaining subject consistency",
+      "from": "pom"
+    },
+    {
+      "term": "IC-LoRA",
+      "explanation": "Approach for training control mechanisms for LTX2, such as luminance map references for lighting control",
+      "from": "pom"
+    },
+    {
+      "term": "SVI-Pro",
+      "explanation": "Tool for Wan 2.2 that may potentially offer path to endless smooth continuations",
+      "from": "pom"
+    }
+  ],
+  "resources": [
+    {
+      "resource": "Banodoco roadmap",
+      "url": "https://banodoco.ai/Roadmap_&_collaboration",
+      "type": "website",
+      "from": "pom"
+    },
+    {
+      "resource": "AD-Evo-Tuner",
+      "url": "https://github.com/B34STW4RS/AD-Evo-Tuner",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-AnimateDiff",
+      "url": "https://github.com/Kosinkadink/ComfyUI-AnimateDiff",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "AnimateDiff Motion LoRAs",
+      "url": "https://github.com/guoyww/AnimateDiff",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI_FizzNodes",
+      "url": "https://github.com/FizzleDorf/ComfyUI_FizzNodes",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "animatediff-kaiber",
+      "url": "https://github.com/KaiberAI/animatediff-kaiber",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "viddle-pix2pix-animatediff",
+      "url": "https://huggingface.co/viddle/viddle-pix2pix-animatediff",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Inner Reflections Comfy guide",
+      "url": "https://civitai.com/articles/2379/guide-comfyui-animatediff-guideworkflows-including-prompt-scheduling-an-inner-reflections-guide",
+      "type": "guide",
+      "from": "pom"
+    },
+    {
+      "resource": "AnimateDiff LoRA training",
+      "url": "https://github.com/tumurzakov/AnimateDiff",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "HotshotXL",
+      "url": "https://github.com/hotshotco/Hotshot-XL",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Improved 3D Motion Module",
+      "url": "https://civitai.com/models/158389/improved-3d-motion-module",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Temporal-Image model",
+      "url": "https://huggingface.co/CiaraRowles/Temporal-Image",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "AnimateDiff Rotoscoping Workflow",
+      "url": "https://civitai.com/models/158720/animatediff-rotoscoping-workflow",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "SDXL Motion Module beta",
+      "url": "https://huggingface.co/guoyww/animatediff/blob/main/mm_sdxl_v10_beta.ckpt",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "SDXL AnimateDiff Guide",
+      "url": "https://civitai.com/articles/2950/guide-comfyui-animatediff-xl-guide-and-workflows-an-inner-reflections-guide",
+      "type": "guide",
+      "from": "88822364468412416"
+    },
+    {
+      "resource": "IPAdapter Plus",
+      "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus",
+      "type": "repo",
+      "from": "237937096717762560"
+    },
+    {
+      "resource": "AnimateDiff-Evolved repo",
+      "url": "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved",
+      "type": "repo",
+      "from": "Kosinkadink"
+    },
+    {
+      "resource": "Enfugue app",
+      "url": "https://github.com/painebenjamin/app.enfugue.ai",
+      "type": "tool",
+      "from": "422902797093306368"
+    },
+    {
+      "resource": "Crystallee AnimateDiff controlnet",
+      "url": "https://huggingface.co/crishhh/animatediff_controlnet/blob/main/controlnet_checkpoint.ckpt",
+      "type": "model",
+      "from": "crystallee-ai"
+    },
+    {
+      "resource": "IPAdapter attention masking tutorial",
+      "url": "https://www.youtube.com/watch?v=vqG1VXKteQg",
+      "type": "tutorial",
+      "from": "237937096717762560"
+    },
+    {
+      "resource": "Advanced ControlNet repo",
+      "url": "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet",
+      "type": "repo",
+      "from": "Kosinkadink"
+    },
+    {
+      "resource": "Pixar Luxo Jr. short",
+      "url": "https://www.youtube.com/watch?v=FI0T0Oj7WFE",
+      "type": "reference",
+      "from": "pom"
+    },
+    {
+      "resource": "AnimatedDiff V3",
+      "url": "https://huggingface.co/guoyww/animatediff/tree/cd71ae134a27ec6008b968d6419952b0c0494cf2",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "HarrlogosXL-v2",
+      "url": "https://discord.com/channels/1076117621407223829/1186080234131443752",
+      "type": "model",
+      "from": "HarrowLogo"
+    },
+    {
+      "resource": "Matteo's IPA & Comfy tutorials",
+      "url": "https://www.youtube.com/watch?v=6i417F-g37s",
+      "type": "tutorial",
+      "from": "matteo"
+    },
+    {
+      "resource": "SVD Temporal ControlNet",
+      "url": "https://github.com/CiaraStrawberry/svd-temporal-controlnet",
+      "type": "repo",
+      "from": "CiaraRowles"
+    },
+    {
+      "resource": "SVD Depth ControlNet",
+      "url": "https://huggingface.co/CiaraRowles/temporal-controlnet-depth-svd-v1",
+      "type": "model",
+      "from": "CiaraRowles"
+    },
+    {
+      "resource": "ComfyUI-SVD implementation",
+      "url": "https://github.com/kijai/ComfyUI-SVD",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Enfugue with DragNUWA",
+      "url": "https://discord.com/channels/1076117621407223829/1195599969869119578",
+      "type": "tool",
+      "from": "benejamin"
+    },
+    {
+      "resource": "ComfyUI-Llama node",
+      "url": "https://github.com/daniel-lewis-ab/ComfyUI-Llama",
+      "type": "tool",
+      "from": "Mr Pebbles"
+    },
+    {
+      "resource": "ComfyDeploy",
+      "url": "https://github.com/BennyKok/comfyui-deploy",
+      "type": "tool",
+      "from": "BennyKok"
+    },
+    {
+      "resource": "ControlGif ControlNets",
+      "url": "https://huggingface.co/crishhh/animatediff_controlnet/tree/main",
+      "type": "model",
+      "from": "Crriss"
+    },
+    {
+      "resource": "Temporal ControlNet Lineart SVD",
+      "url": "https://huggingface.co/CiaraRowles/temporal-controlnet-lineart-svd-v1",
+      "type": "model",
+      "from": "CiaraRowles"
+    },
+    {
+      "resource": "Matteo's Comfy guide",
+      "url": "https://www.youtube.com/watch?v=_C7kR2TFIX0",
+      "type": "tutorial",
+      "from": "matteo"
+    },
+    {
+      "resource": "AnimateDiff-MotionDirector",
+      "url": "https://github.com/ExponentialML/AnimateDiff-MotionDirector",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-DragNUWA",
+      "url": "https://github.com/chaojie/ComfyUI-DragNUWA",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-AnimateAnyone-Evolved",
+      "url": "https://github.com/MrForExample/ComfyUI-AnimateAnyone-Evolved",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Tiled IP Adapter",
+      "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus?tab=readme-ov-file#tiled-ipadapter",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Kijai's Comfy Motion LoRA Trainer",
+      "url": "https://github.com/kijai/ComfyUI-ADMotionDirector",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Kosinkadink GitHub Sponsors",
+      "url": "https://github.com/sponsors/Kosinkadink",
+      "type": "funding",
+      "from": "pom"
+    },
+    {
+      "resource": "Kosinkadink Patreon",
+      "url": "https://www.patreon.com/Kosinkadink/posts",
+      "type": "funding",
+      "from": "pom"
+    },
+    {
+      "resource": "Zeroscope in Comfy",
+      "url": "https://discord.com/channels/1076117621407223829/1212081072620441631",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Deforum Comfy nodes",
+      "url": "https://github.com/XmYx/deforum-comfy-nodes",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Deforum Studio",
+      "url": "https://deforum.studio/animate",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Dough",
+      "url": "https://github.com/banodoco/dough",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "DynamiCrafter Wrapper",
+      "url": "https://github.com/kijai/ComfyUI-DynamiCrafterWrapper",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Motion LoRAs by cseti",
+      "url": "https://huggingface.co/Cseti/AD_Motion_LORAs/tree/main",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Motion LoRAs collection",
+      "url": "https://huggingface.co/collections/PollyannaIn4D/animatediff-motion-modules-65d0eaa7ad23a67404f066bc",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Composition IP-Adapter",
+      "url": "https://huggingface.co/ostris/ip-composition-adapter",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "IP-Adapter node",
+      "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Dissolve motion LoRA",
+      "url": "https://huggingface.co/benjamin-paine/motion-lora/blob/main/mmv3/adapter/disintegrate_motion_mmv3_adapter_v1.safetensors",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "More camera angles LoRAs",
+      "url": "https://huggingface.co/Cseti/AD_Motion_LORAs",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "MotionThief node",
+      "url": "https://github.com/logtd/ComfyUI-MotionThiefExperiment",
+      "type": "node",
+      "from": "logtd"
+    },
+    {
+      "resource": "ELLA ComfyUI implementation",
+      "url": "https://github.com/ExponentialML/ComfyUI_ELLA",
+      "type": "repo",
+      "from": "ntialML"
+    },
+    {
+      "resource": "Line2NormalMap LoRA",
+      "url": "https://huggingface.co/toyxyz/Line2NormalMap_SD1.5",
+      "type": "model",
+      "from": "toyxyz"
+    },
+    {
+      "resource": "Depth map LoRA",
+      "url": "https://civitai.com/models/392921",
+      "type": "model",
+      "from": "fill"
+    },
+    {
+      "resource": "AnimatableGaussians paper",
+      "url": "https://github.com/lizhe00/AnimatableGaussians",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Hanna's first node - queue colours",
+      "url": "https://github.com/hannahunter88/anodes",
+      "type": "node",
+      "from": "hannahunter88"
+    },
+    {
+      "resource": "Art Appreciation Wednesday videos",
+      "url": "https://www.youtube.com/watch?v=_1oVYIk88CA",
+      "type": "video",
+      "from": "pom"
+    },
+    {
+      "resource": "Art Appreciation Wednesday videos",
+      "url": "https://youtu.be/CriBxdP85PU",
+      "type": "video",
+      "from": "pom"
+    },
+    {
+      "resource": "Banodoco Plan document",
+      "url": "https://banodoco.ai/Plan",
+      "type": "document",
+      "from": "pom"
+    },
+    {
+      "resource": "Banodoco Ownership details",
+      "url": "https://banodoco.ai/Ownership",
+      "type": "document",
+      "from": "pom"
+    },
+    {
+      "resource": "Comfy Python interpreter",
+      "url": "https://github.com/christian-byrne/python-interpreter-node",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Mobius SDXL fine-tune",
+      "url": "https://huggingface.co/Corcelio/mobius",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Matteo's prompt injection science video",
+      "url": "https://www.youtube.com/watch?v=0ChoeLHZ48M",
+      "type": "educational",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI TensorRT tutorial video",
+      "url": "https://www.youtube.com/watch?v=x0-1lAwXHrY",
+      "type": "educational",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI_LLMVISION exploit fix instructions",
+      "url": "https://www.reddit.com/r/comfyui/comments/1dbls5n/psa_if_youve_used_the_comfyui_llmvision_node_from/?rdt=55362",
+      "type": "security",
+      "from": "pom"
+    },
+    {
+      "resource": "Make your own Anime V1 action pack",
+      "url": "",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "SDXL Vid2Vid tutorial on Civit Stream",
+      "url": "https://www.youtube.com/watch?v=Wx9TLb95Nh4&t=1755s",
+      "type": "educational",
+      "from": "pom"
+    },
+    {
+      "resource": "Project Odyssey Competition",
+      "url": "https://www.projectodyssey.ai/",
+      "type": "competition",
+      "from": "pom"
+    },
+    {
+      "resource": "Matteo's style transfer technique video",
+      "url": "https://www.youtube.com/watch?v=ewKM7uCRPUg",
+      "type": "educational",
+      "from": "pom"
+    },
+    {
+      "resource": "FLATTEN nodes for vid2vid",
+      "url": "https://github.com/logtd/ComfyUI-FLATTEN/blob/464ebca0c164d6fa735aad5f4b633e704bef5ee3/nodes/flatten_ksampler_node.py#L19",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "reforum",
+      "url": "https://github.com/reallybigname/sd-webui-deforum/tree/reforum",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Kolor nodes",
+      "url": "https://github.com/kijai/ComfyUI-KwaiKolorsWrapper",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Florence2 nodes",
+      "url": "https://github.com/kijai/ComfyUI-Florence2",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "LivePortrait nodes",
+      "url": "https://github.com/kijai/ComfyUI-LivePortraitKJ",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "LivePortrait tutorial",
+      "url": "https://www.youtube.com/watch?v=zLSfnO0Ob-I&t=341s",
+      "type": "tutorial",
+      "from": "community member"
+    },
+    {
+      "resource": "Animated transitions on Github",
+      "url": "https://github.com/mgfxer/ComfyUI-FrameFX",
+      "type": "repo",
+      "from": "mgfxer"
+    },
+    {
+      "resource": "Flux workflow for 12GB VRAM",
+      "url": "https://civitai.com/posts/5006398",
+      "type": "workflow",
+      "from": "Inner Reflections"
+    },
+    {
+      "resource": "SAM2 implementation",
+      "url": "https://github.com/kijai/ComfyUI-segment-anything-2",
+      "type": "repo",
+      "from": "Kijai"
+    },
+    {
+      "resource": "IP-Adapter-Instruct",
+      "url": "https://unity-research.github.io/IP-Adapter-Instruct.github.io/",
+      "type": "model",
+      "from": "research team"
+    },
+    {
+      "resource": "Banodoco social channels",
+      "url": "https://twitter.com/banodoco",
+      "type": "social",
+      "from": "pom"
+    },
+    {
+      "resource": "Ostris Flux trainer",
+      "url": "https://github.com/ostris/ai-toolkit?tab=readme-ov-file#flux1-training",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Promptcrafted Flux training tutorial",
+      "url": "https://youtu.be/HzGW_Kyermg?si=m4UIyukh7QCOkzpa",
+      "type": "tutorial",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-RefUNet",
+      "url": "https://github.com/logtd/ComfyUI-RefUNet",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-Veevee",
+      "url": "https://github.com/logtd/ComfyUI-Veevee",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-FluxTrainer",
+      "url": "https://github.com/kijai/ComfyUI-FluxTrainer",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-Fluxtapoz",
+      "url": "https://github.com/logtd/ComfyUI-Fluxtapoz",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "CogVideoX Comfy nodes",
+      "url": "https://github.com/kijai/ComfyUI-CogVideoXWrapper?tab=readme-ov-file",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Kijai normal map LoRA",
+      "url": "https://huggingface.co/Kijai/kijai-flux-loras/tree/main",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "FlippingSigmas Unsampling Variant",
+      "url": "https://discord.com/channels/1076117621407223829/1256359746437517412/1275041848888397849",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "32 frame context LoRA",
+      "url": "https://discord.com/channels/1076117621407223829/1286396380172259338",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "Audio Particles with Depth Injection",
+      "url": "https://discord.com/channels/1076117621407223829/1285036655186546778",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Motion I2V",
+      "url": "https://discord.com/channels/1076117621407223829/1289230376602173471",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "SDXL Video2Video Morph workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1289175216953753643",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Any Interface by Ibis",
+      "url": "https://discord.com/channels/1076117621407223829/1289231773691019336",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "AudioReactive Playhead",
+      "url": "https://discord.com/channels/1076117621407223829/1289702471710544034/1289702471710544034",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "CosyVoice",
+      "url": "https://github.com/FunAudioLLM/CosyVoice",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "DepthFlow Custom Nodes",
+      "url": "https://discord.com/channels/1076117621407223829/1292406124867354625/1292406124867354625",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "Simple 2 Step Deflicker workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1290969553232330773",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Tora for CogVideoX workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1270190976237047848/1297676788192772270",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "FluxUnsampling",
+      "url": "https://github.com/logtd/ComfyUI-Fluxtapoz",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "CtrlLoRA",
+      "url": "https://github.com/xyfJASON/ctrlora",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "CogVideoX Interpolation",
+      "url": "https://github.com/feizc/CogvideX-Interpolation/tree/main?tab=readme-ov-file",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "AudioSlime nodes",
+      "url": "https://discord.com/channels/1076117621407223829/1296878412002099254",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-MochiWrapper",
+      "url": "https://github.com/kijai/ComfyUI-MochiWrapper",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Endless Zoom nodes",
+      "url": "https://discord.com/channels/1076117621407223829/1300300095639523389/1300300095639523389",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "Audiovisualisers in Comfy",
+      "url": "https://discord.com/channels/1076117621407223829/1299485707173101608",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "MochiEdit",
+      "url": "https://github.com/logtd/ComfyUI-MochiEdit",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Mochi Vid2Vid workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1298379698874749048/1301762676191399937",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Audio-reactive interpolation workflow tutorial",
+      "url": "https://discord.com/channels/1076117621407223829/1307293725352792114",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "In-Context Flux Flora approach",
+      "url": "https://discord.com/channels/1076117621407223829/1305560447755223130",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Feature Reactive Live Portrait node",
+      "url": "https://discord.com/channels/1076117621407223829/1310236372279492679/1310236372279492679",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "CogVideoX LoRA training best practices",
+      "url": "https://discord.com/channels/1076117621407223829/1307828124255391825/1310357753490964561",
+      "type": "guide",
+      "from": "pom"
+    },
+    {
+      "resource": "Flux Regional Prompting node by Juxtapox",
+      "url": "https://github.com/attashe/ComfyUI-FluxRegionAttention",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "LTX vid2vid with image reference workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1309520535012638740/1312204860648853506",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "LTX Image2Vid workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1311675870511108187",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "StyleMatch-Flux workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1311982636582830100",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Arcane LoRA by Cseti",
+      "url": "https://discord.com/channels/1076117621407223829/1310686485120421889",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "Flux LoRA by user",
+      "url": "https://civitai.com/models/930359",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "CogVideoX vid2vid workflow",
+      "url": "https://github.com/kijai/ComfyUI-CogVideoXWrapper/tree/main/examples",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI blog post on LoRA masking and scheduling",
+      "url": "https://blog.comfy.org/masking-and-scheduling-lora-and-model-weights/",
+      "type": "guide",
+      "from": "pom"
+    },
+    {
+      "resource": "Depth + Redux workflow",
+      "url": "https://gist.github.com/nathanshipley/7a9ac1901adde76feebe58d558026f68",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Flux style shaping HuggingFace space",
+      "url": "https://huggingface.co/spaces/multimodalart/flux-style-shaping",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "HunYuan LoRA trainer by TD Russell",
+      "url": "https://github.com/tdrussell/diffusion-pipe",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Jinx from Arcane LoRA by Cseti",
+      "url": "https://discord.com/channels/1076117621407223829/1317951471391608913",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "This is fine meme HunYuan Video LoRA",
+      "url": "https://civitai.com/models/1035870/this-is-fine-meme-hunyuan-video-lora?modelVersionId=1161881",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "Warped Noise technique by Netflix",
+      "url": "https://github.com/VGenAI-Netflix-Eyeline-Research/Go-with-the-Flow",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "AnimateDiff Warped Noise MotionLoRA",
+      "url": "https://huggingface.co/spacepxl/animatediffv3_warpednoise_motionlora",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "MotionVideoSearch by Ian",
+      "url": "https://github.com/IDGallagher/MotionVideoSearch",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI Christmas Theme",
+      "url": "https://github.com/AEmotionStudio/ComfyUI-ChristmasTheme",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI Environment Manager",
+      "url": "https://github.com/akatz-ai/ComfyUI-Environment-Manager",
+      "type": "node",
+      "from": "pom"
+    },
+    {
+      "resource": "BNDC Engine code",
+      "url": "https://github.com/peteromallet/bndc-engine",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Discord Summary Bot",
+      "url": "https://github.com/peteromallet/discord_summary_bot/tree/main",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "CogVideoX VidVid Tutorial",
+      "url": "https://www.youtube.com/watch?v=gHI6PjTkBF4",
+      "type": "tutorial",
+      "from": "pom"
+    },
+    {
+      "resource": "HunYuan unofficial Img2Vid LoRA",
+      "url": "https://huggingface.co/leapfusion-image2vid-test/image2vid-960x544/blob/main/img2vid544p.safetensors",
+      "type": "model",
+      "from": "leapfusion"
+    },
+    {
+      "resource": "ComfyUI-ColorshiftColor nodes",
+      "url": "https://github.com/852wa/ComfyUI-ColorshiftColor/",
+      "type": "tool",
+      "from": "community member"
+    },
+    {
+      "resource": "Video-Depth-Anything",
+      "url": "https://github.com/DepthAnything/Video-Depth-Anything",
+      "type": "repo",
+      "from": "community"
+    },
+    {
+      "resource": "ComfyUI Video-Depth-Anything nodes",
+      "url": "https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything",
+      "type": "tool",
+      "from": "community member"
+    },
+    {
+      "resource": "Sonic ComfyUI implementation",
+      "url": "https://github.com/smthemex/ComfyUI_Sonic",
+      "type": "tool",
+      "from": "community member"
+    },
+    {
+      "resource": "Zonos Longform Unleashed HuggingFace space",
+      "url": "https://huggingface.co/spaces/benjamin-paine/zonos-longform-unleashed",
+      "type": "tool",
+      "from": "community member"
+    },
+    {
+      "resource": "Boring Reality Hunyuan LoRA",
+      "url": "https://huggingface.co/kudzueye/boreal-hl-v1",
+      "type": "model",
+      "from": "community member"
+    },
+    {
+      "resource": "ADOS Paris event",
+      "url": "https://lu.ma/cd76ktg2",
+      "type": "event",
+      "from": "pom"
+    },
+    {
+      "resource": "WanTraining",
+      "url": "https://github.com/spacepxl/WanTraining",
+      "type": "repo",
+      "from": "spacepxl"
+    },
+    {
+      "resource": "Steamboat Willie LoRA",
+      "url": "https://huggingface.co/benjamin-paine/steamboat-willie-14b",
+      "type": "model",
+      "from": "benjamin-paine"
+    },
+    {
+      "resource": "Studio Ghibli Style LoRA",
+      "url": "https://civitai.com/models/1404755/studio-ghibli-style-wan21-t2v-14b",
+      "type": "model",
+      "from": "community member"
+    },
+    {
+      "resource": "OpenMuse platform",
+      "url": "https://openmuse.ai/",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Wallace & Gromit LoRA",
+      "url": "https://huggingface.co/Cseti/LTXV-13B-LoRA-Wallace_and_Gromit-v1",
+      "type": "model",
+      "from": "community member"
+    },
+    {
+      "resource": "MatAnyone Comfy implementation",
+      "url": "",
+      "type": "workflow",
+      "from": "community member"
+    },
+    {
+      "resource": "VACE Module 14B fp8",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan2_1-VACE_module_14B_fp8_e4m3fn.safetensors",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "Causvid Lora",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "type": "lora",
+      "from": "Kijai"
+    },
+    {
+      "resource": "ATI workflow",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/blob/main/example_workflows/wanvideo_ATI_testing_01.json",
+      "type": "workflow",
+      "from": "Adrien"
+    },
+    {
+      "resource": "OpenMuse platform",
+      "url": "https://openmuse.ai/",
+      "type": "platform",
+      "from": "pom"
+    },
+    {
+      "resource": "Sprout LoRA",
+      "url": "https://openmuse.ai/assets/loras/59cd019a-c227-41a5-bf6f-1258481e1826",
+      "type": "lora",
+      "from": "user"
+    },
+    {
+      "resource": "Red Line LoRA",
+      "url": "https://civitai.com/models/1517145/redline-wan21-t2v-14b",
+      "type": "lora",
+      "from": "user"
+    },
+    {
+      "resource": "NormalCrafter wrapper",
+      "url": "",
+      "type": "tool",
+      "from": "user"
+    },
+    {
+      "resource": "Replicate Wan LoRA trainer",
+      "url": "https://replicate.com/ostris/wan-lora-trainer/train",
+      "type": "tool",
+      "from": "user"
+    },
+    {
+      "resource": "NotebookLM Wan knowledge chat",
+      "url": "https://notebooklm.google.com/notebook/a08901b9-0511-4926-bbf8-3c86a12dc306",
+      "type": "tool",
+      "from": "Nathan"
+    },
+    {
+      "resource": "Adrien's tutorial series",
+      "url": "https://youtu.be/0cw2N3W7nKo?si=1z2PjaN3ri0chzlH&t=43",
+      "type": "tutorial",
+      "from": "Adrien"
+    },
+    {
+      "resource": "Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors",
+      "url": "https://huggingface.co/Kijai/WanVideo_comfy/blob/main/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyUI-WanVideoWrapper multitalk experimental branch",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/multitalk",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Nekodificador's VFX Tools for Vace",
+      "url": "https://discord.com/channels/1076117621407223829/1384931026740056084",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Adrien's in-depth VACE x ATI Tutorial",
+      "url": "https://www.youtube.com/watch?v=7YmiJxPEMk0",
+      "type": "tutorial",
+      "from": "pom"
+    },
+    {
+      "resource": "Wan Chatbot updated",
+      "url": "https://discord.com/channels/1076117621407223829/1385091877786878074",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Multitalk deep dive on Creative Explorations",
+      "url": "https://www.youtube.com/watch?v=YLFPxm4U4vg",
+      "type": "tutorial",
+      "from": "pom"
+    },
+    {
+      "resource": "Continuation workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1386453178240733235",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Official Multitalk workflow with context windows",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/blob/main/example_workflows/wanvideo_multitalk_test_context_windows_01.json",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Native Deforum in ComfyUI",
+      "url": "https://discord.com/channels/1011314943380959313/1012726643216887890/1389294949509365841",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "ComfyDock Discord",
+      "url": "https://discord.gg/RDkKxRhuc9",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "LTXV training script",
+      "url": "https://github.com/Lightricks/LTX-Video-Trainer",
+      "type": "repo",
+      "from": "pom"
+    },
+    {
+      "resource": "Pusa",
+      "url": "https://yaofang-liu.github.io/Pusa_Web/",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Kontext LoRA for in-scene images",
+      "url": "https://discord.com/channels/1076117621407223829/1395791303639564348/1395791303639564348",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "Pusa workflow for smooth continuations",
+      "url": "https://discord.com/channels/1076117621407223829/1386453178240733235/1398123737257083032",
+      "type": "workflow",
+      "from": "217815920981049355"
+    },
+    {
+      "resource": "Comfycast deep-dive into Wan morphing",
+      "url": "https://www.youtube.com/watch?v=lPMhXfNne0E",
+      "type": "tutorial",
+      "from": "Purz"
+    },
+    {
+      "resource": "Reigh tool",
+      "url": "https://reigh.art/",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Comfy livecast",
+      "url": "https://www.youtube.com/watch?v=V7oINf8wVjw",
+      "type": "livestream",
+      "from": "pom"
+    },
+    {
+      "resource": "Beautifully optimised image generator and upscaler for Wan 2.2",
+      "url": "https://discord.com/channels/1076117621407223829/1401393279790088213",
+      "type": "workflow",
+      "from": "867727155499499520"
+    },
+    {
+      "resource": "Fun-Control controlnets for Wan 2.2",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper/tree/main/fantasyportrait",
+      "type": "model",
+      "from": "Kijai"
+    },
+    {
+      "resource": "FakeVace2.2 merge",
+      "url": "https://discord.com/channels/1076117621407223829/1402796376932220998",
+      "type": "model",
+      "from": "771193439399444490"
+    },
+    {
+      "resource": "Crispy upscaler for Wan 2.2",
+      "url": "https://discord.com/channels/1076117621407223829/1402222216787132526",
+      "type": "workflow",
+      "from": "683646399761350695"
+    },
+    {
+      "resource": "Chattable Wan Knowledge base",
+      "url": "https://discord.com/channels/1076117621407223829/1385091877786878074",
+      "type": "knowledge base",
+      "from": "614602980943069214"
+    },
+    {
+      "resource": "Inner Reflections Phantom VACE merge",
+      "url": "https://discord.com/channels/1076117621407223829/1403263501421776977",
+      "type": "model",
+      "from": "88822364468412416"
+    },
+    {
+      "resource": "Aniwan workflow for beautiful transitions",
+      "url": "https://discord.com/channels/1076117621407223829/1404522024117862520",
+      "type": "workflow",
+      "from": "1081570872994824212"
+    },
+    {
+      "resource": "Refined Fun-Control workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1396263390296674324/1405608908147658855",
+      "type": "workflow",
+      "from": "224611423869730818"
+    },
+    {
+      "resource": "HunyuanFoley Comfy nodes",
+      "url": "https://discord.com/channels/1076117621407223829/1410762212024254545",
+      "type": "nodes",
+      "from": "983060020516249670"
+    },
+    {
+      "resource": "QwenEdit style-reference LoRA",
+      "url": "https://discord.com/channels/1076117621407223829/1411067244141744148",
+      "type": "lora",
+      "from": "pom"
+    },
+    {
+      "resource": "Pusa integration workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1342763350815277067/1412941121545568387",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "FakeVace 2.2 continuations workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1386453178240733235/1412948738439118898",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Wan 2.2 upscaling workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1342763350815277067/1413545261027950682",
+      "type": "workflow",
+      "from": "pom"
+    },
+    {
+      "resource": "Advanced VACE nodes",
+      "url": "https://github.com/drozbay/ComfyUI-WanVaceAdvanced",
+      "type": "repo",
+      "from": "256636116763934731"
+    },
+    {
+      "resource": "Huggingface AI Toolkit training",
+      "url": "https://huggingface.co/spaces/multimodalart/ai-toolkit",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "VACE sampling comparison tests",
+      "url": "https://drozbay.github.io/WanTests/VaceTests/vace_results1_distill_sampler_tests.html",
+      "type": "tool",
+      "from": "256636116763934731"
+    },
+    {
+      "resource": "Chattable Knowledge Base",
+      "url": "https://discord.com/channels/1076117621407223829/1385091877786878074",
+      "type": "tool",
+      "from": "614602980943069214"
+    },
+    {
+      "resource": "Arca Gidan Prize website",
+      "url": "https://arcagidan.com/",
+      "type": "competition",
+      "from": "pom"
+    },
+    {
+      "resource": "Competition Discord",
+      "url": "https://discord.com/invite/Yj7DRvckRu",
+      "type": "community",
+      "from": "pom"
+    },
+    {
+      "resource": "Real Time Video Summit",
+      "url": "https://realtime-video-ai-summit.com/",
+      "type": "event",
+      "from": "pom"
+    },
+    {
+      "resource": "ADOS LA event",
+      "url": "https://ados.events/",
+      "type": "event",
+      "from": "pom"
+    },
+    {
+      "resource": "Exploded effect LoRA",
+      "url": "https://huggingface.co/Ashmotv/exploded_effect_wan",
+      "type": "model",
+      "from": "pom"
+    },
+    {
+      "resource": "Alexander Morano obituary",
+      "url": "https://www.dignitymemorial.com/obituaries/richmond-va/alexander-morano-12537385",
+      "type": "memorial",
+      "from": "pom"
+    },
+    {
+      "resource": "Daydream hackathon",
+      "url": "https://daydream.live/interactive-ai-video-program",
+      "type": "event",
+      "from": "pom"
+    },
+    {
+      "resource": "SCAIL tool",
+      "url": "",
+      "type": "tool",
+      "from": "456226577798135808"
+    },
+    {
+      "resource": "Flux 2 trained model",
+      "url": "https://www.patreon.com/posts/145298480",
+      "type": "model",
+      "from": "755177709071630441"
+    },
+    {
+      "resource": "Black and white replication workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1344057524935983125/1453792629748666378",
+      "type": "workflow",
+      "from": "256636116763934731"
+    },
+    {
+      "resource": "Music video workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1417710283945672764/1452073502969561301",
+      "type": "workflow",
+      "from": "330829305477333022"
+    },
+    {
+      "resource": "Reigh tool",
+      "url": "https://reigh.art/home",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Audio-based video generation workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1309520535012638740/1458585393950752982",
+      "type": "workflow",
+      "from": "228118453062467585"
+    },
+    {
+      "resource": "NotebookLM Knowledge Base for LTX",
+      "url": "https://notebooklm.google.com/notebook/4f07f98c-75b6-4278-bde1-906f9899b60c",
+      "type": "resource",
+      "from": "614602980943069214"
+    },
+    {
+      "resource": "Awesome-ltx2 GitHub list",
+      "url": "https://github.com/wildminder/awesome-ltx2",
+      "type": "repo",
+      "from": "722168850786943138"
+    },
+    {
+      "resource": "ADOS Events website",
+      "url": "https://ados.events/",
+      "type": "resource",
+      "from": "1061984538332516392"
+    },
+    {
+      "resource": "Banodoco website",
+      "url": "https://www.banodoco.ai/",
+      "type": "resource",
+      "from": "pom"
+    },
+    {
+      "resource": "SharkSampler workflow for LTX-2",
+      "url": "https://discord.com/channels/1076117621407223829/1457981813120176138/1461011216578248907",
+      "type": "workflow",
+      "from": "256636116763934731"
+    },
+    {
+      "resource": "VibeComfy toolset",
+      "url": "https://discord.com/channels/1076117621407223829/1464312809624965245",
+      "type": "tool",
+      "from": "pom"
+    },
+    {
+      "resource": "Humo x Wan 2.2 SVI workflow",
+      "url": "https://discord.com/channels/1076117621407223829/1455601193660452995",
+      "type": "workflow",
+      "from": "256636116763934731"
+    },
+    {
+      "resource": "Automated image-to-video pipeline",
+      "url": "https://discord.com/channels/1076117621407223829/1463747305802043423",
+      "type": "workflow",
+      "from": "330829305477333022"
+    }
+  ],
+  "limitations": [
+    {
+      "limitation": "Background tends to be very chaotic in AD",
+      "details": "Jumps all over the place with main subjects",
+      "from": "pom"
+    },
+    {
+      "limitation": "A1111 extension is broken with loads of issues in various repos",
+      "details": "Reduces friction for experimentation",
+      "from": "pom"
+    },
+    {
+      "limitation": "SVD less modular approach",
+      "details": "Lacks 1.5-esque ecosystem, less certain it will experience improvements for fine-grained motion control like vid2vid and creative interpolation",
+      "from": "pom"
+    },
+    {
+      "limitation": "SVD chaining challenges",
+      "details": "Challenge is getting consistent movement and lowering degradation across generations",
+      "from": "499629400254447616"
+    },
+    {
+      "limitation": "AD face jittering",
+      "details": "AnimateDiff often produces jittery faces that need post-processing with tools like FaceDetailer",
+      "from": "750969956249632859"
+    },
+    {
+      "limitation": "DragNUWA object understanding",
+      "details": "Frequently doesn't understand object nature, resulting in weird transformations",
+      "from": "whobody"
+    },
+    {
+      "limitation": "DragNUWA can't reveal hidden content",
+      "details": "Cannot reveal hidden secrets in artworks as demonstrated",
+      "from": "Kijai"
+    },
+    {
+      "limitation": "Steerable Motion 1.1 issues",
+      "details": "Still difficult to control, motion can be jerky, color issues persist",
+      "from": "pom"
+    },
+    {
+      "limitation": "SVD 1.1 still suffers from inconsistency and degradation throughout frames",
+      "details": "Small improvement but core issues remain",
+      "from": "pom"
+    },
+    {
+      "limitation": "DynamiCrafter struggles outside anime and realistic styles",
+      "details": "Can be unpredictable generally and may not be very extensible, doesn't have ecosystem to build on",
+      "from": "pom"
+    },
+    {
+      "limitation": "DynamiCrafter based on SD 2.1",
+      "details": "Has limited ecosystem of supporting models and tools",
+      "from": "pom"
+    },
+    {
+      "limitation": "Video upscaling has speed problems",
+      "details": "Current upscaling workflows have performance issues that need addressing",
+      "from": "pom"
+    },
+    {
+      "limitation": "Tooncrafter can be inflexible and breaks easily, especially with characters in in-between movements",
+      "details": "Based on 2.1 so limited other models like IP-Adapters available to control it",
+      "from": "pom"
+    },
+    {
+      "limitation": "LivePortrait not perfect",
+      "details": "While impressive, still has imperfections in facial animation",
+      "from": "pom"
+    },
+    {
+      "limitation": "Context issues in video generation",
+      "details": "Various models struggle with context consistency, though upsampling helps",
+      "from": "Inner Reflections"
+    },
+    {
+      "limitation": "CogVideoX may not be great for extending",
+      "details": "Despite having good realistic motion, it has limitations for extension use cases",
+      "from": "pom"
+    },
+    {
+      "limitation": "CogVideoX can't yet do transformer morphs",
+      "details": "Has issues with lack of guidance and motion breaking up",
+      "from": "pom"
+    },
+    {
+      "limitation": "Driving motion with specificity is difficult",
+      "details": "While it does good prompting, precise motion control is challenging",
+      "from": "pom"
+    },
+    {
+      "limitation": "CogVideoX fragmented ecosystem",
+      "details": "LoRAs and CNs work with different versions and licenses on different models",
+      "from": "pom"
+    },
+    {
+      "limitation": "CogVideoX doesn't plug into existing ecosystem",
+      "details": "Unlike AnimateDiff which could leverage SD1.5 ecosystem",
+      "from": "pom"
+    },
+    {
+      "limitation": "CogVideoX deals with unconventional styles weirdly",
+      "details": "Though could likely be fixed with IPA",
+      "from": "pom"
+    },
+    {
+      "limitation": "CogVideoX Non-Commercial Licensing on 5B model",
+      "details": "Licensing restriction",
+      "from": "pom"
+    },
+    {
+      "limitation": "Motion I2V limited to 16 frames",
+      "details": "Still based on AnimateDiff",
+      "from": "pom"
+    },
+    {
+      "limitation": "LTXV breaks down frequently and is overly sensitive to prompting",
+      "details": "Despite speed advantages, the model has reliability issues",
+      "from": "pom"
+    },
+    {
+      "limitation": "Mochi lacks specific control despite impressive generation capabilities",
+      "details": "Can generate amazing content locally but control methods are limited",
+      "from": "pom"
+    },
+    {
+      "limitation": "Omnigen is very slow despite impressive results",
+      "details": "Promising for image editing and combining elements but speed is a major limitation",
+      "from": "pom"
+    },
+    {
+      "limitation": "Wan takes 5+ minutes to run",
+      "details": "Only best used for tasks requiring cohesive motion, other models better for specific tasks",
+      "from": "pom"
+    },
+    {
+      "limitation": "txt2vid and img2vid have very limited control",
+      "details": "Even with powerful prompting, control perspective is very limited",
+      "from": "pom"
+    },
+    {
+      "limitation": "Multitalk currently works for single subjects only",
+      "details": "On experimental branch, limited to single subject applications",
+      "from": "pom"
+    },
+    {
+      "limitation": "Kontext LoRA for in-scene images not perfect",
+      "details": "Described as 'not perfect but personally find it useful + significantly better than base Kontext'",
+      "from": "pom"
+    },
+    {
+      "limitation": "WanAnimate multicharacter support",
+      "details": "Out of the box doesn't handle multiple characters in same scene",
+      "from": "pom"
+    },
+    {
+      "limitation": "Huggingface training time limits",
+      "details": "Only supports runs up to 6 hours, longer projects need special permissions",
+      "from": "pom"
+    },
+    {
+      "limitation": "No mid-training sample support",
+      "details": "Current Huggingface integration doesn't show training progress samples",
+      "from": "pom"
+    },
+    {
+      "limitation": "Motion speed issues with distilled Wan",
+      "details": "One of the biggest problems with distilled Wan is motion speed",
+      "from": "pom"
+    },
+    {
+      "limitation": "InScene LoRAs inconsistency",
+      "details": "InScene and InScene Annotate LoRAs are a little inconsistent for complex tasks",
+      "from": "pom"
+    },
+    {
+      "limitation": "Stable Video Infinity breaks need ironing out",
+      "details": "Early experiments with Stable Video Infinity for Wan continuations have breaks that need to be fixed",
+      "from": "pom"
+    },
+    {
+      "limitation": "Anti-Flux 2 biases mentioned",
+      "details": "User expressed having anti-Flux 2 biases despite acknowledging unique results",
+      "from": "pom"
+    }
+  ],
+  "hardware": [
+    {
+      "requirement": "Compute resources",
+      "details": "$8k in compute credits offered for ambitious experiments",
+      "from": "pom"
+    },
+    {
+      "requirement": "LCM processing speed",
+      "details": "2,467 frames processed in 81 minutes using LCM LoRAs with AnimateDiff",
+      "from": "CoffeeVectors"
+    },
+    {
+      "requirement": "Competition prize",
+      "details": "2 NVIDIA 4090s offered as prizes for IP-Adapter competition",
+      "from": "Glif"
+    },
+    {
+      "requirement": "Motion LoRA training speed",
+      "details": "Can train MotionLora on single video in around 15 minutes",
+      "from": "pom"
+    },
+    {
+      "requirement": "AnimateLCM generation speed",
+      "details": "LoRA guided video generated in just 3 seconds",
+      "from": "pom"
+    },
+    {
+      "requirement": "Bounty posted for getting Superbadass upscalers working with less RAM on 4090",
+      "details": "Current upscalers require too much RAM for 4090 usage",
+      "from": "pom"
+    },
+    {
+      "requirement": "Flux VRAM",
+      "details": "Can run on 12GB VRAM with specific workflow",
+      "from": "Inner Reflections"
+    },
+    {
+      "requirement": "VRAM for HyperFlux workflow",
+      "details": "Works with less than 8gb VRAM for inpainting and upscaling",
+      "from": "Akumetsu971"
+    },
+    {
+      "requirement": "CogVideoX 5B VRAM",
+      "details": "Can run on as low as 12GB VRAM and do 51 frames of context",
+      "from": "pom"
+    },
+    {
+      "requirement": "Tora for CogVideoX VRAM",
+      "details": "Works in Comfy with just 16GB VRAM",
+      "from": "pom"
+    },
+    {
+      "requirement": "Moshi optimization",
+      "details": "Optimized from requiring 4x h100s to running on local GPUs",
+      "from": "pom"
+    },
+    {
+      "requirement": "4090 GPU can run Huanyuan video model",
+      "details": "Open source model capable of producing high-quality clips on consumer GPU",
+      "from": "pom"
+    },
+    {
+      "requirement": "HunYuan VRAM requirement",
+      "details": "Can run on just 12GB VRAM with specific workflow",
+      "from": "pom"
+    },
+    {
+      "requirement": "LTXV 0.9.5 performance",
+      "details": "3600 frames/min processing speed",
+      "from": "pom"
+    },
+    {
+      "requirement": "GPU for Control LoRA training",
+      "details": "3090 can train SOTA deblurring Control LoRA in under a day",
+      "from": "pom"
+    },
+    {
+      "requirement": "VRAM reduction with Clownshark's method",
+      "details": "4GB VRAM reduction while maintaining quality",
+      "from": "pom"
+    },
+    {
+      "requirement": "H100 access for training",
+      "details": "Beta testers have access to H100 GPUs for training",
+      "from": "pom"
+    },
+    {
+      "requirement": "VRAM for low-end VACE workflow",
+      "details": "Under 8GB VRAM sufficient for VACE 2.1 workflow",
+      "from": "1006234707375173722"
+    },
+    {
+      "requirement": "InfiniteTalk performance",
+      "details": "2000 frames rendered in 12 minutes using sliding context windows",
+      "from": "228118453062467585"
+    },
+    {
+      "requirement": "Wan 2.2 upscaling time",
+      "details": "20 minutes for upscaling using Ultimate SD",
+      "from": "153803064858378240"
+    },
+    {
+      "requirement": "RTX 4090 performance",
+      "details": "Humo X VACE can replicate expensive music video effects on a 4090",
+      "from": "256636116763934731"
+    },
+    {
+      "requirement": "RTX 3090 compatibility",
+      "details": "LTX-2 can run impressively on a 3090 GPU",
+      "from": "865676776058126386"
+    }
+  ],
+  "community_creations": [
+    {
+      "creation": "AD-Evo-Tuner",
+      "type": "tool",
+      "description": "Local AnimateDiff motion fine-tuning tool",
+      "from": "B34STW4RS"
+    },
+    {
+      "creation": "ComfyUI-AnimateDiff extension",
+      "type": "node",
+      "description": "ComfyUI extension for AnimateDiff with sliding context windows",
+      "from": "Kosinkadink"
+    },
+    {
+      "creation": "Motion LoRAs",
+      "type": "lora",
+      "description": "LoRAs for AnimateDiff camera movements and motion control",
+      "from": "Ceyuan Yang & Yuwei Guo"
+    },
+    {
+      "creation": "Improved 3D Motion Module",
+      "type": "model",
+      "description": "Fine-tuned AD-15-v2 for better 3D object movement understanding",
+      "from": "manshoety"
+    },
+    {
+      "creation": "HotshotXL",
+      "type": "model",
+      "description": "SDXL version of AnimateDiff trained on 8 frames",
+      "from": "hotshotco"
+    },
+    {
+      "creation": "Temporal-Image",
+      "type": "model",
+      "description": "AnimateDiff retrained on SD inpainting model for consistent starting images",
+      "from": "CiaraRowles"
+    },
+    {
+      "creation": "Creative Interpolation node",
+      "type": "node",
+      "description": "Allows providing batch of images and interpolating between them with varying strength, duration and position",
+      "from": "301463647895683072"
+    },
+    {
+      "creation": "Robust Video Matting implementation",
+      "type": "node",
+      "description": "Create video mattes segmenting input videos",
+      "from": "310003312936091650"
+    },
+    {
+      "creation": "VisionWeaver GPT",
+      "type": "tool",
+      "description": "GPT for creating prompt travel instructions based on input",
+      "from": "712453331959808002"
+    },
+    {
+      "creation": "ChatGPT Batch prompter",
+      "type": "tool",
+      "description": "Batch prompter for animatediff/Hotshot",
+      "from": "706657865229664266"
+    },
+    {
+      "creation": "SparseCtrl Comfy implementation",
+      "type": "node",
+      "description": "Implementation of video controlnets for AnimatedDiff in Comfy",
+      "from": "Kosinkadink"
+    },
+    {
+      "creation": "SVD Temporal ControlNet Depth",
+      "type": "model",
+      "description": "First controlnet for Stable Video Diffusion",
+      "from": "CiaraRowles"
+    },
+    {
+      "creation": "IP-Adapter-Plus nodes",
+      "type": "node",
+      "description": "Enhanced IP-Adapter implementation with FaceID support",
+      "from": "matteo"
+    },
+    {
+      "creation": "HarrlogosXL-v2",
+      "type": "lora",
+      "description": "Logo generation LoRA with video animation capabilities",
+      "from": "HarrowLogo"
+    },
+    {
+      "creation": "Magnifake workflows",
+      "type": "workflow",
+      "description": "Community alternative to expensive Magnific upscaling service",
+      "from": "Fictiverse"
+    },
+    {
+      "creation": "PoseDuplicator script",
+      "type": "tool",
+      "description": "Script for programmatically manipulating ControlNets with poses",
+      "from": "Polyanna"
+    },
+    {
+      "creation": "CSSR upscaler Comfy implementation",
+      "type": "node",
+      "description": "Realistic upscaling implementation for Comfy",
+      "from": "Kijai"
+    },
+    {
+      "creation": "Retro videogame upscaler",
+      "type": "tool",
+      "description": "Specialized upscaler for retro game graphics",
+      "from": "Impact Frames"
+    },
+    {
+      "creation": "Steerable Motion 1.1",
+      "type": "workflow",
+      "description": "Creative interpolation combining IPA with Sparse Ctrl",
+      "from": "pom"
+    },
+    {
+      "creation": "ControlGif video ControlNets",
+      "type": "model",
+      "description": "Series of video ControlNets for AnimatedDiff improving vid2vid consistency",
+      "from": "Crriss"
+    },
+    {
+      "creation": "Militant Hitchhiker's ControlNet Video Builder",
+      "type": "workflow",
+      "description": "Turns any video input into portable, transferable, and manageable ControlNet videos",
+      "from": "pom"
+    },
+    {
+      "creation": "DragNUWA Comfy integration",
+      "type": "node",
+      "description": "Comfy integration for DragNUWA by Chaojie",
+      "from": "pom"
+    },
+    {
+      "creation": "AnimateAnyone-Evolved",
+      "type": "implementation",
+      "description": "High-quality Comfy implementation of AnimateAnyone by Mr Example",
+      "from": "pom"
+    },
+    {
+      "creation": "Tiled IP Adapter",
+      "type": "node",
+      "description": "Experimental solution for IP adapter issues on non-square images by Matteo",
+      "from": "pom"
+    },
+    {
+      "creation": "Motion LoRA Army",
+      "type": "repository",
+      "description": "Open database of Motion LoRAs that anyone can contribute to and use",
+      "from": "pom"
+    },
+    {
+      "creation": "Proteus 0.4",
+      "type": "model",
+      "description": "Model by DataVoid aiming for Midjourney quality with SDXL base architecture and mixture of experts approach",
+      "from": "pom"
+    },
+    {
+      "creation": "3D rotation motion LoRA",
+      "type": "lora",
+      "description": "Motion LoRA for 3D rotation camera movements",
+      "from": "cseti"
+    },
+    {
+      "creation": "Bubbling liquids LoRA",
+      "type": "lora",
+      "description": "Motion LoRA for bubbling liquid effects",
+      "from": "nopeburger"
+    },
+    {
+      "creation": "Ants LoRA",
+      "type": "lora",
+      "description": "Motion LoRA featuring ant movements",
+      "from": "PollyannaIn4D"
+    },
+    {
+      "creation": "Explosive LoRA",
+      "type": "lora",
+      "description": "LoRA that makes everything explodey",
+      "from": "nopeburger"
+    },
+    {
+      "creation": "Bouncing motion LoRA",
+      "type": "lora",
+      "description": "LoRA for bouncing motion effects",
+      "from": "community member"
+    },
+    {
+      "creation": "Dissolve effect LoRA",
+      "type": "lora",
+      "description": "Beautiful dissolve effect motion LoRA",
+      "from": "benjamin"
+    },
+    {
+      "creation": "Composition IP-Adapter",
+      "type": "model",
+      "description": "Controls structure of image with guidance image with beautiful subtlety",
+      "from": "Ostirs"
+    },
+    {
+      "creation": "Auto-prompting nodes",
+      "type": "node",
+      "description": "ImpactFrames auto-prompting nodes for Comfy",
+      "from": "ImpactFrames"
+    },
+    {
+      "creation": "LLM nodes for Comfy",
+      "type": "node",
+      "description": "Nodes for prompt enhancement and local assistant functionality",
+      "from": "community members"
+    },
+    {
+      "creation": "Lightning SDXL Upscaler",
+      "type": "workflow",
+      "description": "High-quality upscaling using new models like Lightning and SDXL Tile",
+      "from": "Andro-Meta"
+    },
+    {
+      "creation": "img2parallax animation workflow",
+      "type": "workflow",
+      "description": "Creates parallax animations from still image input",
+      "from": "Jack G"
+    },
+    {
+      "creation": "Delusions LCM 1.5",
+      "type": "model",
+      "description": "SD1.5 model trained on Fill's generations",
+      "from": "Fill"
+    },
+    {
+      "creation": "WAS26 motion LoRA",
+      "type": "lora",
+      "description": "LoRA trained on weekly art sharing posts that smooths out motion generally",
+      "from": "pom"
+    },
+    {
+      "creation": "MotionThief node",
+      "type": "node",
+      "description": "Allows transplanting motion from one video onto AD generation",
+      "from": "logtd"
+    },
+    {
+      "creation": "Line2NormalMap LoRA",
+      "type": "lora",
+      "description": "Makes normal maps",
+      "from": "toyxyz"
+    },
+    {
+      "creation": "Depth map LoRA",
+      "type": "lora",
+      "description": "Makes depth maps",
+      "from": "fill"
+    },
+    {
+      "creation": "Queue colours node",
+      "type": "node",
+      "description": "Overlay colour effects into selected frames",
+      "from": "hannahunter88"
+    },
+    {
+      "creation": "ELLA ComfyUI implementation",
+      "type": "node",
+      "description": "ComfyUI implementation of ELLA",
+      "from": "ntialML"
+    },
+    {
+      "creation": "Motion LoRAs collection",
+      "type": "lora",
+      "description": "Various movement motion loras",
+      "from": "diffusemotion"
+    },
+    {
+      "creation": "Organic and morphology LoRAs",
+      "type": "lora",
+      "description": "Organic and morphology focused motion loras",
+      "from": "nitrosocke"
+    },
+    {
+      "creation": "Spline editor for ComfyUI",
+      "type": "tool",
+      "description": "Major UX update adding spline editing capabilities",
+      "from": "kijai"
+    },
+    {
+      "creation": "Comfy Python interpreter",
+      "type": "node",
+      "description": "Python interpreter for ComfyUI",
+      "from": "christian-byrne via pom"
+    },
+    {
+      "creation": "Prompt injection nodes",
+      "type": "node",
+      "description": "Allow injecting different prompts into specific blocks of the unet for fine-grained motion control",
+      "from": "Datavoid via pom"
+    },
+    {
+      "creation": "AnyNode",
+      "type": "node",
+      "description": "Uses LLMs to write code that's executed as a node - custom node functionality written by LLMs",
+      "from": "pom"
+    },
+    {
+      "creation": "Deforum's audio-synced masks tool",
+      "type": "tool",
+      "description": "Generates audio-synced masks for animations with flexible and interesting results",
+      "from": "deforum team via pom"
+    },
+    {
+      "creation": "Music Visualiser Megaflow",
+      "type": "workflow",
+      "description": "Audioreactive flow that doesn't require input video with flexible approach",
+      "from": "audioreactive user via pom"
+    },
+    {
+      "creation": "Comfy Helper nodes",
+      "type": "node",
+      "description": "Add capabilities like controlling parameters with text, viewing meta-data, and more",
+      "from": "TwoPikachus via pom"
+    },
+    {
+      "creation": "FLATTEN nodes",
+      "type": "node",
+      "description": "New optical flow technique for improved vid2vid performance, achieving near perfect lip-syncing",
+      "from": "Juxtabox via pom"
+    },
+    {
+      "creation": "Animatediff Weights 2.0",
+      "type": "workflow",
+      "description": "Automatically creates masks for animating through videos with BLIP captioning for auto-captioning",
+      "from": "mgfxer"
+    },
+    {
+      "creation": "Motion LoRAs",
+      "type": "lora",
+      "description": "Walking motion LoRA upgraded, generalizes across different camera positions. Working towards full set of basic motions",
+      "from": "Cseti"
+    },
+    {
+      "creation": "Basic Camera Motion Lora",
+      "type": "lora",
+      "description": "Motion loras for zooming, panning, and more camera movements",
+      "from": "Cseti"
+    },
+    {
+      "creation": "AudioReactive Nodes",
+      "type": "node",
+      "description": "Adds various types of effects and schedulers on top of existing audioreactive nodes",
+      "from": "Fai"
+    },
+    {
+      "creation": "Local Audio reactive mask generator",
+      "type": "tool",
+      "description": "3D shape generating audio-reactive mask creator",
+      "from": "community member"
+    },
+    {
+      "creation": "Image Upscaler",
+      "type": "tool",
+      "description": "Epic image upscaler with insane level of detail and near-perfect adherence to input image",
+      "from": "Relic"
+    },
+    {
+      "creation": "Flux fine tune",
+      "type": "model",
+      "description": "First fine tune using Flux",
+      "from": "community member"
+    },
+    {
+      "creation": "Flux prompt enhancer",
+      "type": "tool",
+      "description": "Tool for enhancing prompts for Flux",
+      "from": "community member"
+    },
+    {
+      "creation": "Flux prompt generator",
+      "type": "tool",
+      "description": "Tool for generating prompts for Flux",
+      "from": "community member"
+    },
+    {
+      "creation": "Flux prompt mixer",
+      "type": "tool",
+      "description": "Tool for mixing prompts for Flux",
+      "from": "community member"
+    },
+    {
+      "creation": "General Improved Motion LoRA",
+      "type": "lora",
+      "description": "Provides generally better motion to Animatediff v2",
+      "from": "Cseti"
+    },
+    {
+      "creation": "MEAT Flux LoRA",
+      "type": "lora",
+      "description": "Flux LoRA focusing on meat/food themes",
+      "from": "Jeru"
+    },
+    {
+      "creation": "HideThePain Harold LoRA",
+      "type": "lora",
+      "description": "LoRA trained on Hide the Pain Harold meme",
+      "from": "Jeru"
+    },
+    {
+      "creation": "Particle simulation nodes",
+      "type": "node",
+      "description": "Custom nodes for particle simulations inside ComfyUI",
+      "from": "ryanontheinside"
+    },
+    {
+      "creation": "Directory Browser Nodes",
+      "type": "node",
+      "description": "Visual image browsing/selection feature for ComfyUI",
+      "from": "Fill"
+    },
+    {
+      "creation": "Flux Block LoRA selector",
+      "type": "node",
+      "description": "Node for exploring different layers of LoRA training",
+      "from": "Klinter"
+    },
+    {
+      "creation": "Reactive IPA weights nodes",
+      "type": "node",
+      "description": "Nodes for controlling IPA with features extracted from audio",
+      "from": "ryanontheinside"
+    },
+    {
+      "creation": "Multi-Player Comfy",
+      "type": "node",
+      "description": "Custom node that allows live collaboration on top of ComfyUI",
+      "from": "Daxton Caylor"
+    },
+    {
+      "creation": "Proximity Driven Depth nodes",
+      "type": "node",
+      "description": "Nodes that allow using proximity of an object as driver for depth",
+      "from": "ryanontheinside"
+    },
+    {
+      "creation": "32 frame context LoRA",
+      "type": "lora",
+      "description": "LoRA trained on 32 frame context to defeat AnimatedDiff context switching",
+      "from": "pom"
+    },
+    {
+      "creation": "Audio Particles with Depth Injection",
+      "type": "tool",
+      "description": "Capability to inject particles based on audio based on depth",
+      "from": "pom"
+    },
+    {
+      "creation": "Any Interface",
+      "type": "tool",
+      "description": "Open source tool to build interface with natural language",
+      "from": "pom"
+    },
+    {
+      "creation": "AudioReactive Playhead",
+      "type": "node",
+      "description": "Node that uses audio and features to modulate video playback direction",
+      "from": "pom"
+    },
+    {
+      "creation": "DepthFlow Custom Nodes",
+      "type": "node",
+      "description": "Nodes to rapidly generate 3d videos from images",
+      "from": "pom"
+    },
+    {
+      "creation": "Simple 2 Step Deflicker",
+      "type": "workflow",
+      "description": "Deflickering workflow",
+      "from": "pom"
+    },
+    {
+      "creation": "FluxUnsampling",
+      "type": "tool",
+      "description": "Unsampling with Flux implementing RF inversion paper ideas",
+      "from": "pom"
+    },
+    {
+      "creation": "AudioSlime nodes",
+      "type": "node",
+      "description": "Audio-based nodes",
+      "from": "pom"
+    },
+    {
+      "creation": "Depthcrafter Nodes",
+      "type": "node",
+      "description": "Nodes for depth processing",
+      "from": "pom"
+    },
+    {
+      "creation": "Endless Zoom nodes",
+      "type": "node",
+      "description": "Nodes for zooming through batches of images with interesting effect",
+      "from": "pom"
+    },
+    {
+      "creation": "Audioreactive Vid2Vid nodes",
+      "type": "node",
+      "description": "Audio-reactive video-to-video processing",
+      "from": "pom"
+    },
+    {
+      "creation": "Audiovisualisers in Comfy",
+      "type": "node",
+      "description": "Windows Media Player style visualizations with diffusion",
+      "from": "pom"
+    },
+    {
+      "creation": "Glitch nodes",
+      "type": "node",
+      "description": "Upcoming glitch effect nodes",
+      "from": "pom"
+    },
+    {
+      "creation": "MochiEdit",
+      "type": "tool",
+      "description": "Video editing for Mochi using RF-Inversion method",
+      "from": "pom"
+    },
+    {
+      "creation": "Audio-reactive denoising masks",
+      "type": "node",
+      "description": "Enables audio-reactive visual effects through denoising masks",
+      "from": "pom"
+    },
+    {
+      "creation": "Depth Aware Audio Reactive Particle Systems",
+      "type": "node",
+      "description": "Advanced audio-reactive particle system with depth awareness",
+      "from": "pom"
+    },
+    {
+      "creation": "Audio-reactive interpolation nodes by Yvann & Liliens",
+      "type": "node",
+      "description": "Enables audio-reactive traveling between images",
+      "from": "pom"
+    },
+    {
+      "creation": "Feature Reactive Live Portrait node",
+      "type": "node",
+      "description": "Uses audio characteristics to control LivePortrait",
+      "from": "pom"
+    },
+    {
+      "creation": "Flux Regional Prompting node",
+      "type": "node",
+      "description": "Enables regional prompting capabilities for Flux model",
+      "from": "pom"
+    },
+    {
+      "creation": "Arcane LoRA",
+      "type": "lora",
+      "description": "Trained to reproduce Arcane animation style, demonstrates promise of new generation models for animation styles",
+      "from": "pom"
+    },
+    {
+      "creation": "CogVideoX extensions compatibility chart",
+      "type": "tool",
+      "description": "Useful chart showing compatibility between various CogVideoX extensions",
+      "from": "pom"
+    },
+    {
+      "creation": "Audioreactivity workflow built on Yvann's system",
+      "type": "workflow",
+      "description": "Extended workflow built on top of existing audioreactive interpolation tools",
+      "from": "pom"
+    },
+    {
+      "creation": "HelloMemeV2 & Meme Avatar nodes",
+      "type": "node",
+      "description": "Avatar generation nodes",
+      "from": "pom"
+    },
+    {
+      "creation": "Ryanontheinside nodes v2",
+      "type": "node",
+      "description": "Improved performance audioreactive nodes with wide range of improvements",
+      "from": "pom"
+    },
+    {
+      "creation": "ComfyUI Environment Manager",
+      "type": "node",
+      "description": "Manages Comfy environments to eliminate install anxiety",
+      "from": "pom"
+    },
+    {
+      "creation": "ComfyUI Christmas Theme",
+      "type": "theme",
+      "description": "Christmas theme for ComfyUI",
+      "from": "pom"
+    },
+    {
+      "creation": "BNDC summary bot",
+      "type": "bot",
+      "description": "Bot that summarizes Discord channels and aims to capture open source AI art knowledge",
+      "from": "pom"
+    },
+    {
+      "creation": "MotionVideoSearch",
+      "type": "tool",
+      "description": "Search 100k+ reference videos using embeddings to find similar videos",
+      "from": "pom"
+    },
+    {
+      "creation": "HunYuan walking LoRA",
+      "type": "lora",
+      "description": "LoRA for training specific walking motions",
+      "from": "pom"
+    },
+    {
+      "creation": "HunYuan Img2Vid LoRA",
+      "type": "lora",
+      "description": "Allows for img2vid functionality with HunYuan",
+      "from": "leapfusion"
+    },
+    {
+      "creation": "Reward LoRA for Hunyuan",
+      "type": "lora",
+      "description": "Improves prompt adherence significantly",
+      "from": "community member"
+    },
+    {
+      "creation": "GoWithTheFlow LoRA for Hunyuan",
+      "type": "lora",
+      "description": "Allows controlling Vid2Vid by shaping motion through noise control",
+      "from": "community member"
+    },
+    {
+      "creation": "Boring Reality Hunyuan LoRA",
+      "type": "lora",
+      "description": "Creates distinct motion characteristics different from standard img2vid",
+      "from": "community member"
+    },
+    {
+      "creation": "Arcane LoRA for Wan",
+      "type": "lora",
+      "description": "One of the first Wan LoRAs shared",
+      "from": "community member"
+    },
+    {
+      "creation": "ComfyUI ColorshiftColor nodes",
+      "type": "node",
+      "description": "Nodes for swapping color palettes in videos",
+      "from": "community member"
+    },
+    {
+      "creation": "Video-Depth-Anything ComfyUI nodes",
+      "type": "node",
+      "description": "ComfyUI implementation for video depth mapping",
+      "from": "community member"
+    },
+    {
+      "creation": "Glitchnodes",
+      "type": "node",
+      "description": "Nodes combining programmatic art with modern and older models",
+      "from": "jeru"
+    },
+    {
+      "creation": "Stable Diffusion attention visualization tool",
+      "type": "tool",
+      "description": "Tool for visualizing Stable Diffusion's attention layers",
+      "from": "community member"
+    },
+    {
+      "creation": "Control LoRA for deblurring",
+      "type": "lora",
+      "description": "SOTA deblurring trained on Wan 1.4b",
+      "from": "spacepxl"
+    },
+    {
+      "creation": "Room emptying LoRA",
+      "type": "lora",
+      "description": "Trained on four images for transformation effects",
+      "from": "community member"
+    },
+    {
+      "creation": "Timelapse LoRA",
+      "type": "lora",
+      "description": "Based on similar approach to room emptying",
+      "from": "community member"
+    },
+    {
+      "creation": "Depth Control LoRA",
+      "type": "lora",
+      "description": "For Wan, can be used to pandify videos",
+      "from": "spacepxl"
+    },
+    {
+      "creation": "Arcane LoRA",
+      "type": "lora",
+      "description": "Works with Depth Control LoRA",
+      "from": "community member"
+    },
+    {
+      "creation": "Steamboat Willy LoRA",
+      "type": "lora",
+      "description": "Gives strong personality effects, can mix with other LoRAs like squishy LoRA",
+      "from": "benjamin-paine"
+    },
+    {
+      "creation": "Cakify LoRA",
+      "type": "lora",
+      "description": "Made with LTXV",
+      "from": "community member"
+    },
+    {
+      "creation": "Parkour LoRA",
+      "type": "lora",
+      "description": "Motion LoRA for parkour movements",
+      "from": "community member"
+    },
+    {
+      "creation": "Studio Ghibli LoRA",
+      "type": "lora",
+      "description": "For Wan, produces visually interesting generations with good composition",
+      "from": "community member"
+    },
+    {
+      "creation": "Woodcut LoRA",
+      "type": "lora",
+      "description": "Creates aesthetics unlike typical AI output",
+      "from": "community member"
+    },
+    {
+      "creation": "Redline LoRA",
+      "type": "lora",
+      "description": "Creates content that looks completely unlike closed models",
+      "from": "community member"
+    },
+    {
+      "creation": "Pepe LoRA",
+      "type": "lora",
+      "description": "Character LoRA",
+      "from": "community member"
+    },
+    {
+      "creation": "Looney Toon effects LoRA",
+      "type": "lora",
+      "description": "For LTXV 13b, creates cartoon effects",
+      "from": "community member"
+    },
+    {
+      "creation": "Wallace & Gromit LoRA",
+      "type": "lora",
+      "description": "For LTXV 13b, converts content to Wallace & Gromit style",
+      "from": "community member"
+    },
+    {
+      "creation": "Water-flow LoRA",
+      "type": "lora",
+      "description": "For water effects",
+      "from": "community member"
+    },
+    {
+      "creation": "Lazy Susan LoRA",
+      "type": "lora",
+      "description": "High quality results comparable to professional work",
+      "from": "community member"
+    },
+    {
+      "creation": "Crash zoom LoRA",
+      "type": "lora",
+      "description": "For dramatic zoom effects",
+      "from": "community member"
+    },
+    {
+      "creation": "Audio-reactive nodes",
+      "type": "node",
+      "description": "For creating audio-reactive content",
+      "from": "community member"
+    },
+    {
+      "creation": "VRGameDevGirl's Wan Megamerge",
+      "type": "model",
+      "description": "Merges Wan with multiple detailer and speed LoRAs",
+      "from": "VRGameDevGirl"
+    },
+    {
+      "creation": "Cinematic LoRA for Flux",
+      "type": "lora",
+      "description": "Enhances cinematic qualities in Flux generations",
+      "from": "user"
+    },
+    {
+      "creation": "2D Effects LoRA",
+      "type": "lora",
+      "description": "Adds 2D visual effects to video generations",
+      "from": "user"
+    },
+    {
+      "creation": "Fire + morphskin LoRAs combination",
+      "type": "lora",
+      "description": "Combines action LoRAs for enhanced effects",
+      "from": "user"
+    },
+    {
+      "creation": "Lightning + action running LoRAs",
+      "type": "lora",
+      "description": "Combines multiple action LoRAs for dynamic scenes",
+      "from": "user"
+    },
+    {
+      "creation": "Faces pressed against glass LoRA",
+      "type": "lora",
+      "description": "Specialized LoRA for specific visual effect",
+      "from": "user"
+    },
+    {
+      "creation": "Audioreactive pose workflow",
+      "type": "workflow",
+      "description": "Creates videos with audio-reactive pose movements",
+      "from": "RyanontheInside"
+    },
+    {
+      "creation": "VRGamer Dev Girl's Wan upscaler",
+      "type": "tool",
+      "description": "Open source upscaler comparable to Topaz while being infinitely configurable and extendable",
+      "from": "pom"
+    },
+    {
+      "creation": "crinklyboy's Golden Boy style LoRA",
+      "type": "lora",
+      "description": "LoRA for Golden Boy animation style",
+      "from": "pom"
+    },
+    {
+      "creation": "Kontext Relight LoRA",
+      "type": "lora",
+      "description": "Fine-tuned Kontext for specific relighting tasks",
+      "from": "pom"
+    },
+    {
+      "creation": "Cseti's Wallace & Gromit LoRA",
+      "type": "lora",
+      "description": "LoRA that can generate Wallace & Gromit style content and do creative transformations",
+      "from": "pom"
+    },
+    {
+      "creation": "Disney Wan LoRA in training",
+      "type": "lora",
+      "description": "Disney-style LoRA being trained for Wan",
+      "from": "pom"
+    },
+    {
+      "creation": "Lovis drone Wan LoRA",
+      "type": "lora",
+      "description": "LoRA for drone-style footage generation",
+      "from": "pom"
+    },
+    {
+      "creation": "Disney LoRA on LOTR scenes",
+      "type": "lora",
+      "description": "Disney style applied to Lord of the Rings scenes",
+      "from": "988068827990458459"
+    },
+    {
+      "creation": "Jinx LoRA for Wan 2.2",
+      "type": "lora",
+      "description": "Character LoRA for Wan 2.2",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "Phantom + VACE merge",
+      "type": "model",
+      "description": "Model merge combining Phantom and VACE capabilities",
+      "from": "88822364468412416"
+    },
+    {
+      "creation": "FakeVace2.2",
+      "type": "model",
+      "description": "Attempt to merge VACE with Wan 2.2",
+      "from": "771193439399444490"
+    },
+    {
+      "creation": "Reigh tool",
+      "type": "tool",
+      "description": "Consumer-grade tool for traveling between images with Wan and other models, successor to Dough",
+      "from": "pom"
+    },
+    {
+      "creation": "HunyuanFoley Comfy nodes",
+      "type": "nodes",
+      "description": "ComfyUI nodes for HunyuanFoley audio generation",
+      "from": "983060020516249670"
+    },
+    {
+      "creation": "QwenEdit style-reference LoRA",
+      "type": "lora",
+      "description": "LoRA that significantly improves QwenEdit's ability to generate images based on style-reference",
+      "from": "pom"
+    },
+    {
+      "creation": "FakeVace 2.2 merge",
+      "type": "model",
+      "description": "Merged model for video continuations",
+      "from": "771193439399444490"
+    },
+    {
+      "creation": "Advanced VACE nodes",
+      "type": "node",
+      "description": "Enhanced VACE functionality with keyframe control",
+      "from": "256636116763934731"
+    },
+    {
+      "creation": "Detailer for Wan & VACE 2.1",
+      "type": "workflow",
+      "description": "Enhancement tool for improving video quality",
+      "from": "256636116763934731"
+    },
+    {
+      "creation": "Mega merge for convenience",
+      "type": "model",
+      "description": "Combined model merge for easier workflow usage",
+      "from": "348514313633267712"
+    },
+    {
+      "creation": "High-noise Kinestasis 2.2 LoRA",
+      "type": "lora",
+      "description": "LoRA that breaks reality in interesting ways with high noise",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "Subject LoRA for single reference training",
+      "type": "lora",
+      "description": "Generates images of subjects based on single reference image",
+      "from": "301463647895683072"
+    },
+    {
+      "creation": "Banostasis LoRA",
+      "type": "lora",
+      "description": "Enables unconventional motion styles far from standard Wan motion",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "Chattable Knowledge Base",
+      "type": "tool",
+      "description": "Knowledge base for keeping up to date on AI developments",
+      "from": "614602980943069214"
+    },
+    {
+      "creation": "Animatediff LoRA",
+      "type": "lora",
+      "description": "LoRA trained on Animatediff outputs for unique motion style",
+      "from": "FlippingSigma"
+    },
+    {
+      "creation": "InScene and InScene Annotate LoRAs",
+      "type": "lora",
+      "description": "LoRAs for generating images within a scene",
+      "from": "pom"
+    },
+    {
+      "creation": "Exploded effect LoRA",
+      "type": "lora",
+      "description": "LoRA for creating exploding/transition effects",
+      "from": "Ashmotv"
+    },
+    {
+      "creation": "Water morphing LoRA",
+      "type": "lora",
+      "description": "LoRA for water morphing effects, trained on 6 videos",
+      "from": "Ashmotv"
+    },
+    {
+      "creation": "Knitting-style animation LoRA",
+      "type": "lora",
+      "description": "LoRA for creating knitting-style animations",
+      "from": "Ashmotv"
+    },
+    {
+      "creation": "Scooby Doo LoRA",
+      "type": "lora",
+      "description": "LoRA for Scooby Doo style content",
+      "from": "user"
+    },
+    {
+      "creation": "Jovimetrix nodepack",
+      "type": "node",
+      "description": "Node pack maintained by Alexander Morano with thoughtful design and color coding",
+      "from": "Alexander Morano"
+    },
+    {
+      "creation": "Wan Move Comfy implementation",
+      "type": "tool",
+      "description": "Implementation of Wan Move in ComfyUI",
+      "from": "kijai"
+    },
+    {
+      "creation": "Scope local tool with Krea integration",
+      "type": "tool",
+      "description": "Local tool with realtime Krea integration",
+      "from": "user"
+    },
+    {
+      "creation": "2D to 360 VR panorama conversion",
+      "type": "tool",
+      "description": "Tool for turning any 2D video into a 360 VR panorama",
+      "from": "user"
+    },
+    {
+      "creation": "LLM exploration repo for models",
+      "type": "tool",
+      "description": "Repository for exploring models with LLMs",
+      "from": "user"
+    },
+    {
+      "creation": "Flux 2 trained model on personal photos",
+      "type": "model",
+      "description": "Model trained on user's photos using Flux 2",
+      "from": "755177709071630441"
+    },
+    {
+      "creation": "Wan Move standalone LoRA",
+      "type": "lora",
+      "description": "Extracting Wan Move to work as standalone LoRA for combination with Humo and more",
+      "from": "256636116763934731"
+    },
+    {
+      "creation": "Wallace & Gromit LoRA",
+      "type": "lora",
+      "description": "LoRA for Wallace & Gromit style generation",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "INFL8 LoRA for Qwen Image Edit",
+      "type": "lora",
+      "description": "LoRA for inflation effects in Qwen Image Edit",
+      "from": "825444296689451039"
+    },
+    {
+      "creation": "Timelapse LoRA for LTX2",
+      "type": "lora",
+      "description": "LoRA for creating timelapse effects in LTX2",
+      "from": "464322697418244096"
+    },
+    {
+      "creation": "Paper cutout style LTX2 LoRA",
+      "type": "lora",
+      "description": "LoRA for paper cutout visual style with deep style understanding",
+      "from": "257217392298426380"
+    },
+    {
+      "creation": "Beauty and The Beast Style LoRA",
+      "type": "lora",
+      "description": "LoRA that creates distinctly early Disney animation style",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "AnimateDiff for LTX2",
+      "type": "lora",
+      "description": "Brings Animatediff functionality to LTX2",
+      "from": "464322697418244096"
+    },
+    {
+      "creation": "Deforum LoRA for LTX2",
+      "type": "lora",
+      "description": "Brings Deforum functionality to LTX2",
+      "from": "985830005315633193"
+    },
+    {
+      "creation": "Burst/explosion LoRA",
+      "type": "lora",
+      "description": "LoRA for creating burst and explosion effects",
+      "from": "825444296689451039"
+    },
+    {
+      "creation": "Impasto LoRA",
+      "type": "lora",
+      "description": "LoRA for impasto painting style effects",
+      "from": "1138907661602136245"
+    },
+    {
+      "creation": "Luminance map control IC-LoRA",
+      "type": "lora",
+      "description": "Control mechanism that maps lighting inputs onto video",
+      "from": "oumoumad"
+    },
+    {
+      "creation": "Jinx character LoRA",
+      "type": "lora",
+      "description": "Character adherence LoRA for Jinx character",
+      "from": "1074404980737450065"
+    },
+    {
+      "creation": "VHS tapes LoRA",
+      "type": "lora",
+      "description": "LoRA trained on old VHS tapes for retro video effects",
+      "from": "305792526629994496"
+    },
+    {
+      "creation": "Eye zoom LoRA",
+      "type": "lora",
+      "description": "LoRA that zooms into person's eye to reveal what they see",
+      "from": "627140525916422145"
+    },
+    {
+      "creation": "Animatediff LoRA for both Wan and LTXV",
+      "type": "lora",
+      "description": "LoRA that works with both Wan and LTXV models",
+      "from": "743301749086879808"
+    },
+    {
+      "creation": "Knitting effect LoRA",
+      "type": "lora",
+      "description": "LoRA for creating knitting visual effects, combined with TTM",
+      "from": "1138907661602136245"
+    },
+    {
+      "creation": "Balloon inflation LoRA",
+      "type": "lora",
+      "description": "LoRA for balloon and inflation effects",
+      "from": "825444296689451039"
+    },
+    {
+      "creation": "New Deforum LoRA for LTX2",
+      "type": "lora",
+      "description": "Updated Deforum LoRA specifically for LTX2",
+      "from": "985830005315633193"
+    }
+  ]
+}
