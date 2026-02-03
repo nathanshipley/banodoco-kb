@@ -17,6 +17,7 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 - LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
 - **Wan ecosystem extraction (316K messages, ~$65-70)** ✅
 - **Wan external sources gathered** - 60+ URLs, technical content fetched ✅
+- **#updates channel extracted** - @pom's curated highlights (1,987 msgs → 946 items, $1.44) ✅
 - NotebookLM upload tested - **works well!**
 - Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
 
@@ -89,6 +90,7 @@ banodoco-kb/
 ├── data/                                   # Extracted knowledge (JSON + MD)
 │   ├── ltx_*_knowledge.*                   # LTX extractions (8 files)
 │   ├── wan_*_knowledge.*                   # Wan extractions (17 files)
+│   ├── updates_*_knowledge.*               # #updates channel (curated highlights)
 │   └── wan_external_sources_content.md     # Fetched content from external URLs
 │
 ├── docs/
@@ -130,6 +132,7 @@ wan_gens:       1344057524935983125
 wan_training:   1344309523187368046
 wan_comfyui:    1420053619541283000
 wan_resources:  1373291419434877078
+updates:        1138790534987661363
 ```
 
 ---
