@@ -11,27 +11,37 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ## Current Status (Feb 3, 2026)
 
-**Phase: Wan Enrichment COMPLETE - Ready for Static KB**
+**Phase: TWO KNOWLEDGE BASES LIVE**
+
+### Live Knowledge Bases
+- **LTX Video 2:** https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
+- **Wan Ecosystem:** https://nathanshipley.github.io/banodoco-kb/kb/wan/
 
 ### Completed
-- LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
-- **Wan ecosystem extraction (316K messages, ~$65-70)** ✅
-- **Wan external sources gathered** - 60+ URLs, technical content fetched ✅
-- **#updates channel extracted** - @pom's curated highlights (1,987 msgs → 946 items, $1.44) ✅
-- NotebookLM upload tested - **works well!**
-- Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
+- LTX Video 2 extraction (44K messages → 4,345 items, $7.65) ✅
+- LTX Video 2 static KB built ✅
+- Wan ecosystem extraction (316K messages, ~$65-70) ✅
+- Wan external sources gathered - 60+ URLs, technical content fetched ✅
+- #updates channel extracted - @pom's curated highlights (1,987 msgs → 946 items, $1.44) ✅
+- **Wan static KB built** (~1,200 lines, 10 sections) ✅
+- NotebookLM upload tested - works well!
 
-### Wan Source Materials Ready
-| Source | Content | Output |
-|--------|---------|--------|
-| wan_chatter | 244K msgs, 13 months | 13 files, ~4.3MB |
-| wan_gens/training/comfyui/resources | 72K msgs | 4 files, ~1.3MB |
-| #updates channel | 1,987 curated posts | 124KB |
-| External sources | 60+ URLs fetched | ~500 lines technical specs |
-| **Total** | **~318K msgs + external** | **~6MB extracted knowledge** |
+### Wan KB Structure
+| Section | Content |
+|---------|---------|
+| Overview | Wan family (2.1, 2.2, VACE, Fun) |
+| Choosing a Model | Decision tree, 2.1 vs 2.2 comparison |
+| Hardware | VRAM requirements for 10+ models |
+| Generation Modes | T2V, I2V, FLF, S2V with settings |
+| Control Methods | VACE, Fun, Camera, Motion |
+| Character & Likeness | Phantom, MAGREF, EchoShot, Lynx |
+| Lip-Sync & Audio | HuMo, MultiTalk, InfiniteTalk, FantasyTalking |
+| Optimization | LightX2V, CausVid, Wan2GP |
+| Training | LoRA tips, frameworks |
+| Troubleshooting | 15+ common errors with solutions |
 
 ### Next Step
-**Build static Wan KB** - Synthesize all sources into HTML pages
+Consider expanding to HunyuanVideo, FLUX, or CogVideoX.
 
 ### Pipeline Insight: Extraction → Enrichment → Synthesis → KB
 Raw extraction produces fragmented knowledge items. For static KB, we need:
@@ -68,8 +78,10 @@ banodoco-kb/
 │
 ├── kb/                                     # Static HTML Knowledge Base
 │   ├── index.html                          # Model selector
-│   └── ltx2/
-│       └── index.html                      # LTX Video 2 guide
+│   ├── ltx2/
+│   │   └── index.html                      # LTX Video 2 guide
+│   └── wan/
+│       └── index.html                      # Wan Ecosystem guide
 │
 ├── for_notebooklm/                         # NotebookLM upload files
 │   ├── README.md

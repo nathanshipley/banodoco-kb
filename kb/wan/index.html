@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wan Video Ecosystem - Knowledge Base - Banodoco</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066ff;
+            --accent-subtle: rgba(0, 102, 255, 0.08);
+            --warning: #f59e0b;
+            --warning-subtle: rgba(245, 158, 11, 0.1);
+            --success: #10b981;
+            --success-subtle: rgba(16, 185, 129, 0.1);
+            --purple: #8b5cf6;
+            --purple-subtle: rgba(139, 92, 246, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0d0d0d;
+                --bg-secondary: #161616;
+                --bg-tertiary: #1f1f1f;
+                --text: #f0f0f0;
+                --text-muted: #888888;
+                --border: #2a2a2a;
+                --accent: #3b82f6;
+                --accent-subtle: rgba(59, 130, 246, 0.12);
+                --warning-subtle: rgba(245, 158, 11, 0.15);
+                --success-subtle: rgba(16, 185, 129, 0.15);
+                --purple-subtle: rgba(139, 92, 246, 0.15);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0d0d0d;
+            --bg-secondary: #161616;
+            --bg-tertiary: #1f1f1f;
+            --text: #f0f0f0;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+            --accent: #3b82f6;
+            --accent-subtle: rgba(59, 130, 246, 0.12);
+            --warning-subtle: rgba(245, 158, 11, 0.15);
+            --success-subtle: rgba(16, 185, 129, 0.15);
+            --purple-subtle: rgba(139, 92, 246, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Layout with sticky TOC */
+        .page-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 3rem;
+        }
+
+        .toc-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+
+        .toc-sidebar h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc-sidebar ul {
+            list-style: none;
+        }
+
+        .toc-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-sidebar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: block;
+            padding: 0.25rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .toc-sidebar a:hover,
+        .toc-sidebar a.active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            max-width: 900px;
+        }
+
+        /* Header */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2 .section-icon {
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text);
+        }
+
+        p {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Callout boxes */
+        .callout {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.925rem;
+        }
+
+        .callout-warning {
+            background: var(--warning-subtle);
+            border-left: 3px solid var(--warning);
+        }
+
+        .callout-tip {
+            background: var(--success-subtle);
+            border-left: 3px solid var(--success);
+        }
+
+        .callout-info {
+            background: var(--accent-subtle);
+            border-left: 3px solid var(--accent);
+        }
+
+        .callout-purple {
+            background: var(--purple-subtle);
+            border-left: 3px solid var(--purple);
+        }
+
+        .callout strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Decision tree */
+        .decision-tree {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .decision-tree h4 {
+            margin-top: 0;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        .decision-item {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .decision-item strong {
+            color: var(--text);
+        }
+
+        /* Knowledge items */
+        .knowledge-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .knowledge-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0 0 0.35rem 0;
+        }
+
+        .knowledge-item p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .knowledge-item .attribution {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Model cards */
+        .model-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .model-card h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.05rem;
+        }
+
+        .model-card .model-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .model-card .model-meta span {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Code */
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Collapsible sections */
+        details {
+            margin-bottom: 0.75rem;
+        }
+
+        details summary {
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 500;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details summary::before {
+            content: '▶';
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        details[open] summary {
+            border-radius: 8px 8px 0 0;
+            border-bottom: none;
+        }
+
+        details .details-content {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--bg);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Links */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: background 0.2s, border-color 0.2s;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+        }
+
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+        :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+            .page-layout {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="page-layout">
+        <nav class="toc-sidebar">
+            <h3>On This Page</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#choosing">Choosing a Model</a></li>
+                <li><a href="#hardware">Hardware Requirements</a></li>
+                <li><a href="#generation-modes">Generation Modes</a></li>
+                <li><a href="#control">Control Methods</a></li>
+                <li><a href="#character">Character & Likeness</a></li>
+                <li><a href="#lipsync">Lip-Sync & Audio</a></li>
+                <li><a href="#optimization">Speed & Optimization</a></li>
+                <li><a href="#training">Training</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <nav class="breadcrumb">
+                <a href="../../index.html">Home</a> / <a href="../index.html">Knowledge Base</a> / Wan Video
+            </nav>
+
+            <header>
+                <h1>Wan Video Ecosystem</h1>
+                <p class="subtitle">Alibaba's open source video generation models: Wan 2.1, Wan 2.2, and the ecosystem of control, character, and optimization tools built around them</p>
+                <div class="meta">
+                    <span class="meta-item">Last updated: February 3, 2026</span>
+                    <span class="meta-item">Source: ~316K Discord messages + external docs</span>
+                    <span class="meta-item">First release: February 2025</span>
+                </div>
+            </header>
+
+            <div class="callout callout-info">
+                <strong>Chat with this knowledge base</strong>
+                This content is also available in <a href="https://notebooklm.google.com">NotebookLM</a> for interactive Q&A about specific problems.
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview">
+                <h2><span class="section-icon">📖</span> Overview</h2>
+
+                <p>Wan is an ecosystem of video generation models released by Alibaba starting in February 2025. Unlike single models like LTX Video, Wan comprises multiple model versions (2.1, 2.2), sizes (1.3B, 5B, 14B), and specialized variants (VACE, Fun, character models) that work together.</p>
+
+                <h3>The Wan Family</h3>
+
+                <table>
+                    <tr>
+                        <th>Version</th>
+                        <th>Key Models</th>
+                        <th>Strengths</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Wan 2.1</strong></td>
+                        <td>T2V 1.3B/14B, I2V 14B</td>
+                        <td>Most stable, best ecosystem support, VACE control</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wan 2.2</strong></td>
+                        <td>T2V/I2V A14B (MoE), TI2V-5B, S2V-14B</td>
+                        <td>Better aesthetics, MoE architecture, speech-to-video</td>
+                    </tr>
+                    <tr>
+                        <td><strong>VACE</strong></td>
+                        <td>1.3B, 14B</td>
+                        <td>Controlnet-like capabilities built in (inpaint, reference, depth)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fun</strong></td>
+                        <td>Control, InP, Camera</td>
+                        <td>Canny, depth, pose, trajectory, camera control</td>
+                    </tr>
+                </table>
+
+                <h3>Key Characteristics</h3>
+                <ul>
+                    <li><strong>16 FPS native output</strong> (some variants support 24 FPS)</li>
+                    <li><strong>Strong prompt adherence</strong> - follows complex scene descriptions on first try</li>
+                    <li><strong>Good camera movement</strong> - responds well to camera motion prompts</li>
+                    <li><strong>Defaults to Asian people</strong> - specify ethnicity in prompts if needed</li>
+                    <li><strong>CFG support</strong> - allows negative prompting and guidance</li>
+                    <li><strong>81 frame minimum for I2V</strong> - hardcoded requirement</li>
+                </ul>
+            </section>
+
+            <!-- Choosing a Model Section -->
+            <section id="choosing">
+                <h2><span class="section-icon">🎯</span> Choosing a Model</h2>
+
+                <div class="decision-tree">
+                    <h4>What do you want to do?</h4>
+
+                    <div class="decision-item">
+                        <strong>Quick experimentation / Limited VRAM</strong><br>
+                        → <strong>Wan 2.1 T2V 1.3B</strong> (8GB VRAM, ~4 min for 5s @ 480p on 4090)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Best quality text-to-video</strong><br>
+                        → <strong>Wan 2.2 T2V A14B</strong> (MoE architecture, cinematic aesthetics)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Image-to-video with control</strong><br>
+                        → <strong>VACE 14B</strong> (reference images, masking, inpainting built-in)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Pose/depth/edge control</strong><br>
+                        → <strong>Fun Control</strong> (canny, depth, MLSD, pose, trajectory)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Character consistency across shots</strong><br>
+                        → <strong>Phantom</strong> (up to 4 reference images) or <strong>MAGREF</strong> (multi-subject)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Lip-sync / talking heads</strong><br>
+                        → <strong>HuMo</strong> (single person, good sync) or <strong>MultiTalk</strong> (multiple people)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Unlimited length videos</strong><br>
+                        → <strong>InfiniteTalk</strong> (streaming mode) or <strong>SVI Pro LoRA</strong> (chained generations)
+                    </div>
+
+                    <div class="decision-item">
+                        <strong>Fast generation (4-8 steps)</strong><br>
+                        → <strong>LightX2V</strong> or <strong>CausVid LoRA</strong> (distillation)
+                    </div>
+                </div>
+
+                <h3>Wan 2.1 vs 2.2</h3>
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Wan 2.1</th>
+                        <th>Wan 2.2</th>
+                    </tr>
+                    <tr>
+                        <td>Architecture</td>
+                        <td>Standard transformer</td>
+                        <td>MoE (separate high/low noise experts)</td>
+                    </tr>
+                    <tr>
+                        <td>Aesthetics</td>
+                        <td>Good</td>
+                        <td>Cinematic, more detailed</td>
+                    </tr>
+                    <tr>
+                        <td>Ecosystem support</td>
+                        <td>Excellent (VACE, Fun, most tools)</td>
+                        <td>Growing (Fun 2.2 available)</td>
+                    </tr>
+                    <tr>
+                        <td>Stability</td>
+                        <td>More stable, well-tested</td>
+                        <td>Newer, some edge cases</td>
+                    </tr>
+                    <tr>
+                        <td>VRAM</td>
+                        <td>14B: ~16GB fp8</td>
+                        <td>5B hybrid fits 8GB with offloading</td>
+                    </tr>
+                    <tr>
+                        <td>Frame count</td>
+                        <td>81 frames typical</td>
+                        <td>5B supports 121 frames</td>
+                    </tr>
+                </table>
+
+                <div class="callout callout-tip">
+                    <strong>Community recommendation</strong>
+                    Start with Wan 2.1 for the best ecosystem support and stability. Move to 2.2 once you need the improved aesthetics or specific features like S2V.
+                </div>
+            </section>
+
+            <!-- Hardware Section -->
+            <section id="hardware">
+                <h2><span class="section-icon">🖥️</span> Hardware Requirements</h2>
+
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>VRAM (fp8)</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Wan 2.1 T2V 1.3B</td>
+                        <td>~8GB</td>
+                        <td>Works on most consumer GPUs</td>
+                    </tr>
+                    <tr>
+                        <td>Wan 2.1 T2V 14B</td>
+                        <td>~16-20GB</td>
+                        <td>DiffSynth can run under 24GB</td>
+                    </tr>
+                    <tr>
+                        <td>Wan 2.1 I2V 14B</td>
+                        <td>~16.5GB fp8</td>
+                        <td>66GB in fp32</td>
+                    </tr>
+                    <tr>
+                        <td>Wan 2.2 TI2V-5B</td>
+                        <td>~8GB</td>
+                        <td>Hybrid T2V/I2V, consumer GPU compatible</td>
+                    </tr>
+                    <tr>
+                        <td>VACE 14B</td>
+                        <td>~20GB</td>
+                        <td>720p: ~40 min on 4090</td>
+                    </tr>
+                    <tr>
+                        <td>HuMo 1.7B</td>
+                        <td>32GB</td>
+                        <td>480p in ~8 min</td>
+                    </tr>
+                    <tr>
+                        <td>HuMo 17B</td>
+                        <td>24GB+</td>
+                        <td>Runs on 3090 via ComfyUI wrapper</td>
+                    </tr>
+                    <tr>
+                        <td>MultiTalk</td>
+                        <td>24GB (4090)</td>
+                        <td>8GB possible with persistence=0</td>
+                    </tr>
+                    <tr>
+                        <td>MAGREF</td>
+                        <td>~70GB recommended</td>
+                        <td>Multi-GPU (8x) supported via FSDP</td>
+                    </tr>
+                </table>
+
+                <h3>Low VRAM Options</h3>
+                <ul>
+                    <li><strong>Wan2GP</strong> - Runs Wan on as low as 6GB VRAM with offloading</li>
+                    <li><strong>GGUF quantization</strong> - Reduces model size with some quality trade-off</li>
+                    <li><strong>Block swapping</strong> - Kijai's wrapper supports VRAM optimization</li>
+                    <li><strong>LightX2V</strong> - 8GB VRAM + 16GB RAM minimum with offloading</li>
+                </ul>
+
+                <div class="knowledge-item">
+                    <h4>Text encoder is heavier than 1.3B model</h4>
+                    <p>Wan uses umt5-xxl text encoder which is 10-11GB. The text encoder can be quantized to fp8 without issues.</p>
+                    <span class="attribution">— Fannovel16, Kijai</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>VAE is very efficient</h4>
+                    <p>Wan's VAE is only 250MB in bf16, much smaller than other models. It's fast and doesn't need a config file.</p>
+                    <span class="attribution">— Kijai</span>
+                </div>
+            </section>
+
+            <!-- Generation Modes Section -->
+            <section id="generation-modes">
+                <h2><span class="section-icon">🎬</span> Generation Modes</h2>
+
+                <h3>Text-to-Video (T2V)</h3>
+                <p>Generate video from text prompts alone.</p>
+                <ul>
+                    <li><strong>1.3B</strong>: 480p, fast, good for iteration</li>
+                    <li><strong>14B</strong>: Higher quality, 480p and 720p</li>
+                    <li><strong>2.2 A14B</strong>: MoE architecture, best aesthetics</li>
+                </ul>
+
+                <div class="knowledge-item">
+                    <h4>T2V is much faster than I2V</h4>
+                    <p>T2V generation takes ~130 seconds vs much longer I2V times for similar settings.</p>
+                    <span class="attribution">— TK_999</span>
+                </div>
+
+                <h3>Image-to-Video (I2V)</h3>
+                <p>Animate a starting image into video.</p>
+                <ul>
+                    <li><strong>81 frame minimum</strong> - hardcoded in encode_image function</li>
+                    <li><strong>Works better at 720p+</strong> - lower resolutions perform poorly</li>
+                    <li><strong>Can chain for extensions</strong> - take last frame, feed to I2V for seamless extensions</li>
+                </ul>
+
+                <div class="callout callout-warning">
+                    <strong>I2V frame requirement</strong>
+                    Wan I2V requires exactly 81 frames minimum. Using 49 frames causes max_seq_len errors. This is hardcoded in the model.
+                </div>
+
+                <h3>First-Last-Frame (FLF2V)</h3>
+                <p>Generate video between two keyframes - a starting and ending image.</p>
+                <ul>
+                    <li><strong>Wan2.1-FLF2V-14B-720P</strong></li>
+                    <li>Frame count must be (length-1) divisible by 4</li>
+                    <li>Useful for controlled transitions</li>
+                </ul>
+
+                <h3>Speech-to-Video (S2V)</h3>
+                <p>Generate video driven by audio/speech input. <strong>Wan 2.2 only.</strong></p>
+                <ul>
+                    <li><strong>Wan2.2-S2V-14B</strong></li>
+                    <li>CosyVoice text-to-speech integration</li>
+                    <li>Audio-driven generation</li>
+                </ul>
+
+                <h3>Recommended Settings</h3>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Recommendation</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Steps</td>
+                        <td>30-50</td>
+                        <td>50 significantly better than 30; 70 no improvement over 50</td>
+                    </tr>
+                    <tr>
+                        <td>Flow shift</td>
+                        <td>3-5</td>
+                        <td>Lower = better details; too low = coherence issues</td>
+                    </tr>
+                    <tr>
+                        <td>CFG</td>
+                        <td>5-7</td>
+                        <td>CFG 1.0 skips uncond for speed (~20 sec with 1.3B)</td>
+                    </tr>
+                    <tr>
+                        <td>Resolution</td>
+                        <td>480p or 720p</td>
+                        <td>Must be divisible by 16. Video models perform best at native res.</td>
+                    </tr>
+                    <tr>
+                        <td>Frame rate</td>
+                        <td>16 fps</td>
+                        <td>All Wan samples are 16 fps by default</td>
+                    </tr>
+                </table>
+
+                <div class="knowledge-item">
+                    <h4>CFG scheduling improves I2V</h4>
+                    <p>Using variable CFG through generation (e.g., 6 CFG for 18 steps, then 1 CFG for 18 steps) produces better motion and quality.</p>
+                    <span class="attribution">— JmySff</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>FP32 text encoder produces sharper results</h4>
+                    <p>FP32 UMT5-XXL encoder shows noticeable quality improvement over BF16, similar to improvements seen across T5 family models.</p>
+                    <span class="attribution">— Pedro (@LatentSpacer)</span>
+                </div>
+            </section>
+
+            <!-- Control Methods Section -->
+            <section id="control">
+                <h2><span class="section-icon">🎛️</span> Control Methods</h2>
+
+                <h3>VACE (Video Creation & Editing)</h3>
+                <p>Built-in controlnet-like capabilities for Wan. Tasks include Reference-to-Video, Video-to-Video, and Masked Video-to-Video.</p>
+
+                <div class="model-card">
+                    <h4>VACE</h4>
+                    <div class="model-meta">
+                        <span>1.3B (480p only)</span>
+                        <span>14B (480p + 720p)</span>
+                        <span>~40 min @ 720p on 4090</span>
+                    </div>
+                    <p>Features: Move-Anything, Swap-Anything, Reference-Anything, Expand-Anything, Animate-Anything</p>
+                    <p><a href="https://github.com/ali-vilab/VACE">GitHub</a> | <a href="https://huggingface.co/Wan-AI/Wan2.1-VACE-14B">HuggingFace</a></p>
+                </div>
+
+                <div class="callout callout-tip">
+                    <strong>VACE masking tip</strong>
+                    Latent noise techniques can eliminate VACE masking degradation, allowing seamless object insertion into videos.
+                    <span class="attribution">— pom</span>
+                </div>
+
+                <h3>Fun Control Models</h3>
+                <p>VideoX-Fun provides multiple control methods for Wan.</p>
+
+                <table>
+                    <tr>
+                        <th>Control Type</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Canny</td>
+                        <td>Edge-guided generation</td>
+                    </tr>
+                    <tr>
+                        <td>Depth</td>
+                        <td>3D structure preservation</td>
+                    </tr>
+                    <tr>
+                        <td>Pose (DWPose/VitPose)</td>
+                        <td>Character animation from skeleton</td>
+                    </tr>
+                    <tr>
+                        <td>MLSD</td>
+                        <td>Line segment detection</td>
+                    </tr>
+                    <tr>
+                        <td>Trajectory</td>
+                        <td>Path-based motion control</td>
+                    </tr>
+                    <tr>
+                        <td>Camera</td>
+                        <td>Pan, tilt, zoom, arc movements</td>
+                    </tr>
+                </table>
+
+                <div class="knowledge-item">
+                    <h4>Fun VACE 2.2 is better than VACE 2.1</h4>
+                    <p>Better in every way from testing, even ignoring the extra High Noise part.</p>
+                    <span class="attribution">— Ablejones</span>
+                </div>
+
+                <h3>Camera Control</h3>
+
+                <div class="model-card">
+                    <h4>ReCamMaster</h4>
+                    <div class="model-meta">
+                        <span>10 preset trajectories</span>
+                        <span>Requires 81+ frames</span>
+                    </div>
+                    <p>Camera-controlled generative rendering from single video. Supports pan, tilt, zoom, translation, arc movements with variable speed.</p>
+                    <p><a href="https://github.com/KwaiVGI/ReCamMaster">GitHub</a></p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Camera prompting technique for I2V</h4>
+                    <p>For pan right, mention 'camera reveals something' or 'camera pans down revealing a white tiled floor' - works for controlling camera movement.</p>
+                    <span class="attribution">— hicho</span>
+                </div>
+
+                <h3>Motion Control</h3>
+
+                <div class="model-card">
+                    <h4>ATI (Any-Thing-Is-Trajectory)</h4>
+                    <div class="model-meta">
+                        <span>Trajectory control</span>
+                    </div>
+                    <p>Finally good motion trajectory control that feels natural and responsive for video generation.</p>
+                </div>
+
+                <div class="model-card">
+                    <h4>WanAnimate</h4>
+                    <div class="model-meta">
+                        <span>1 frame overlap</span>
+                        <span>Sliding window extension</span>
+                    </div>
+                    <p>Extends automatically with sliding window. Uses inverted canny (white background, black edges). Can track facial features very well, even pupils.</p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>WanAnimate strength tips</h4>
+                    <p>At strength 2.0 on Wan 2.2 it's too much. Blocks 0-15 yield nice results. WanAnimate is generally too strong and ruins prompt following. Use start percentage 0.5 for better motion while still getting likeness.</p>
+                    <span class="attribution">— Kijai, Hashu</span>
+                </div>
+            </section>
+
+            <!-- Character & Likeness Section -->
+            <section id="character">
+                <h2><span class="section-icon">👤</span> Character & Likeness</h2>
+
+                <h3>Phantom (Subject Consistency)</h3>
+                <div class="model-card">
+                    <h4>Phantom</h4>
+                    <div class="model-meta">
+                        <span>1.3B: 480p/720p</span>
+                        <span>14B: 480p/720p</span>
+                        <span>Up to 4 reference images</span>
+                    </div>
+                    <p>Single and multi-subject reference for consistent identity across generations. 14B trained on 480p, less stable at higher res.</p>
+                    <ul>
+                        <li>Describe reference images accurately in prompts</li>
+                        <li>Use horizontal orientations for stability</li>
+                        <li>Modify seed iteratively for quality</li>
+                    </ul>
+                    <p><a href="https://github.com/Phantom-video/Phantom">GitHub</a> | <a href="https://arxiv.org/abs/2502.11079">Paper</a></p>
+                </div>
+
+                <h3>MAGREF (Multi-Reference)</h3>
+                <div class="model-card">
+                    <h4>MAGREF</h4>
+                    <div class="model-meta">
+                        <span>~70GB VRAM recommended</span>
+                        <span>Multi-GPU via FSDP</span>
+                        <span>FP8 variant available</span>
+                    </div>
+                    <p>Generate videos from multiple reference images with subject disentanglement. Any-reference video generation.</p>
+                    <p><a href="https://github.com/MAGREF-Video/MAGREF">GitHub</a></p>
+                </div>
+
+                <h3>EchoShot (Multi-Shot Consistency)</h3>
+                <div class="model-card">
+                    <h4>EchoShot</h4>
+                    <div class="model-meta">
+                        <span>Built on Wan 2.1 T2V 1.3B</span>
+                        <span>LLM prompt extension</span>
+                    </div>
+                    <p>Generate multiple video shots of the same person with consistent identity across different scenes.</p>
+                    <p><a href="https://github.com/JoHnneyWang/EchoShot">GitHub</a></p>
+                </div>
+
+                <h3>Lynx (Face ID)</h3>
+                <div class="knowledge-item">
+                    <h4>Lynx reference strength tuning</h4>
+                    <p>At 0.6 strength works well. 1.0+ is too strong and creates 'face glued on video' effect. 1.5+ creates nightmare fuel. Lynx works with VACE.</p>
+                    <span class="attribution">— Kijai</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Lynx changes frame rate</h4>
+                    <p>Lynx makes Wan models run at 24fps instead of 16fps. This was originally intended only for the lite version.</p>
+                    <span class="attribution">— Kijai</span>
+                </div>
+            </section>
+
+            <!-- Lip-Sync Section -->
+            <section id="lipsync">
+                <h2><span class="section-icon">🎤</span> Lip-Sync & Audio-Driven</h2>
+
+                <h3>HuMo (Human-Centric Multimodal)</h3>
+                <div class="model-card">
+                    <h4>HuMo</h4>
+                    <div class="model-meta">
+                        <span>1.7B: 32GB GPU, ~8 min @ 480p</span>
+                        <span>17B: 3090 via ComfyUI</span>
+                        <span>Whisper audio encoder</span>
+                    </div>
+                    <p>Text + Audio (TA) or Text + Image + Audio (TIA) modes. Strong text prompt following, consistent subject preservation, synchronized audio-driven motion.</p>
+                    <ul>
+                        <li><code>scale_a</code>: Audio guidance strength</li>
+                        <li><code>scale_t</code>: Text guidance strength</li>
+                        <li>Default 50 steps, can use 30-40 for faster</li>
+                        <li>720p resolution significantly improves quality</li>
+                    </ul>
+                    <p><a href="https://github.com/Phantom-video/HuMo">GitHub</a> | <a href="https://huggingface.co/bytedance-research/HuMo">HuggingFace</a></p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>HuMo stops talking during silence</h4>
+                    <p>Unlike constant mouth movement issues in other models, HuMo respects silent clips in audio.</p>
+                    <span class="attribution">— Juan Gea</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>SageAttention hurts HuMo lip sync</h4>
+                    <p>Visible degradation in lip sync quality when SageAttention is enabled.</p>
+                    <span class="attribution">— Ablejones</span>
+                </div>
+
+                <h3>MultiTalk (Multi-Person)</h3>
+                <div class="model-card">
+                    <h4>MultiTalk</h4>
+                    <div class="model-meta">
+                        <span>Base: Wan 2.1 I2V 14B 480p</span>
+                        <span>RTX 4090 level (8GB possible)</span>
+                        <span>Up to 15 sec (201 frames)</span>
+                    </div>
+                    <p>Single and multi-person video, cartoon characters, singing. 480p and 720p at arbitrary aspect ratios. TTS audio integration.</p>
+                    <ul>
+                        <li><code>--mode streaming</code>: Long video</li>
+                        <li><code>--use_teacache</code>: 2-3x speedup</li>
+                        <li><code>--sample_steps</code>: 40 recommended (10 for faster)</li>
+                        <li>480p single-GPU only in current code; 720p needs multi-GPU</li>
+                    </ul>
+                    <p><a href="https://github.com/MeiGen-AI/MultiTalk">GitHub</a></p>
+                </div>
+
+                <h3>InfiniteTalk (Unlimited Length)</h3>
+                <div class="model-card">
+                    <h4>InfiniteTalk</h4>
+                    <div class="model-meta">
+                        <span>Base: Wan 2.1 I2V 14B + LoRA</span>
+                        <span>Streaming mode</span>
+                    </div>
+                    <p>Improvements over MultiTalk: reduces hand/body distortions, superior lip sync, sparse-frame dubbing.</p>
+                    <ul>
+                        <li>I2V beyond 1 minute: color shifts become pronounced</li>
+                        <li>V2V camera: not identical to original</li>
+                        <li>Keep steps at 4 or below, or use with lightx2v LoRA</li>
+                    </ul>
+                    <p><a href="https://github.com/MeiGen-AI/InfiniteTalk">GitHub</a></p>
+                </div>
+
+                <h3>FantasyTalking (Portrait Animation)</h3>
+                <div class="model-card">
+                    <h4>FantasyTalking</h4>
+                    <div class="model-meta">
+                        <span>Base: Wan 2.1 I2V 14B 720p</span>
+                        <span>Wav2Vec2 audio encoder</span>
+                    </div>
+                    <p>Audio-driven motion synthesis with text prompts for behavior control. Various body ranges and poses, characters and animals.</p>
+                    <table>
+                        <tr>
+                            <th>Config</th>
+                            <th>Speed</th>
+                            <th>VRAM</th>
+                        </tr>
+                        <tr>
+                            <td>Full precision (bf16)</td>
+                            <td>15.5s/iter</td>
+                            <td>40GB</td>
+                        </tr>
+                        <tr>
+                            <td>7B persistent params</td>
+                            <td>32.8s/iter</td>
+                            <td>20GB</td>
+                        </tr>
+                        <tr>
+                            <td>Minimal (0 params)</td>
+                            <td>42.6s/iter</td>
+                            <td>5GB</td>
+                        </tr>
+                    </table>
+                    <p><a href="https://github.com/Fantasy-AMAP/fantasy-talking">GitHub</a></p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>HUMO + InfiniteTalk embed mixing</h4>
+                    <p>Mixing embeds from both models provides better acting, better prompt adherence, and respects starting frame details more faithfully than either model alone.</p>
+                    <span class="attribution">— Juan Gea</span>
+                </div>
+            </section>
+
+            <!-- Optimization Section -->
+            <section id="optimization">
+                <h2><span class="section-icon">⚡</span> Speed & Optimization</h2>
+
+                <h3>LightX2V (Distillation)</h3>
+                <div class="model-card">
+                    <h4>LightX2V</h4>
+                    <div class="model-meta">
+                        <span>4-step distilled models</span>
+                        <span>8GB VRAM + 16GB RAM min</span>
+                        <span>Up to 42x acceleration</span>
+                    </div>
+                    <p>Distillation framework supporting Wan 2.1, 2.2, and other models. 4-step generation without CFG.</p>
+                    <ul>
+                        <li>Single GPU: 1.9x (H100), 1.5x (4090D)</li>
+                        <li>Multi-GPU (8x H100): 3.9x</li>
+                        <li>Quantization: w8a8-int8, w8a8-fp8, w4a4-nvfp4</li>
+                        <li>Supports Sage Attention, Flash Attention, TeaCache</li>
+                    </ul>
+                    <p><a href="https://github.com/ModelTC/LightX2V">GitHub</a> | <a href="https://huggingface.co/lightx2v/Wan2.1-Distill-Models">HuggingFace</a></p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>LightX2V + FastWan LoRA speed</h4>
+                    <p>LightX2V + FastWan at 2 steps: 31.49 seconds vs 70.63 seconds for LightX2V alone at 4 steps.</p>
+                    <span class="attribution">— VRGameDevGirl84 (RTX 5090)</span>
+                </div>
+
+                <h3>CausVid (Temporal Consistency)</h3>
+                <div class="model-card">
+                    <h4>CausVid</h4>
+                    <div class="model-meta">
+                        <span>50 → 4 steps via DMD</span>
+                        <span>9.4 FPS streaming</span>
+                        <span>V2 quality ≈ base Wan 2.1</span>
+                    </div>
+                    <p>Converts bidirectional diffusion to autoregressive for streaming generation. Block-wise causal attention with KV caching.</p>
+                    <ul>
+                        <li>3-step inference achieves 84.27 on VBench-Long</li>
+                        <li>1.3 second initial latency, then streaming</li>
+                        <li>LoRA versions V1, V1.5, V2 available</li>
+                    </ul>
+                    <p><a href="https://github.com/tianweiy/CausVid">GitHub</a></p>
+                </div>
+
+                <h3>Wan2GP (Low VRAM)</h3>
+                <div class="model-card">
+                    <h4>Wan2GP</h4>
+                    <div class="model-meta">
+                        <span>As low as 6GB VRAM</span>
+                        <span>Old NVIDIA (10XX, 20XX) support</span>
+                        <span>AMD Radeon support</span>
+                    </div>
+                    <p>GPU-poor friendly implementation with aggressive offloading.</p>
+                    <ul>
+                        <li>Memory profiles (1-5) trade speed for VRAM</li>
+                        <li>Sliding window for long videos</li>
+                        <li>Text encoder caching</li>
+                    </ul>
+                    <p><a href="https://github.com/deepbeepmeep/Wan2GP">GitHub</a></p>
+                </div>
+
+                <h3>Other Optimization Tips</h3>
+
+                <div class="knowledge-item">
+                    <h4>TeaCache acceleration</h4>
+                    <p>TeaCache achieves ~2x speedup on Wan models. Threshold of 0.2-0.5 is optimal for MultiTalk.</p>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>PyTorch nightly with --fast flag</h4>
+                    <p>Uses fp16 + fp16 accumulation instead of fp16/bf16 + fp32 accumulation, 2x faster on NVIDIA GPUs.</p>
+                    <span class="attribution">— comfy</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>CFG 1.0 for speed</h4>
+                    <p>Using CFG 1.0 skips uncond and can make generation faster - ~20 seconds with the 1.3B model.</p>
+                    <span class="attribution">— Kijai</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>VAE tiling has no quality impact</h4>
+                    <p>VAE tiling at default settings vs no VAE tiling showed zero difference in quality.</p>
+                    <span class="attribution">— TK_999</span>
+                </div>
+            </section>
+
+            <!-- Training Section -->
+            <section id="training">
+                <h2><span class="section-icon">🎓</span> Training</h2>
+
+                <h3>LoRA Training</h3>
+
+                <div class="knowledge-item">
+                    <h4>Wan training is easier than Hunyuan</h4>
+                    <p>Better LoRA results in 2 epochs compared to hundreds with Hunyuan.</p>
+                    <span class="attribution">— samurzl</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Training resolution limitations</h4>
+                    <p>Training on 256 resolution doesn't translate as well to higher resolutions compared to Hunyuan. Lower resolution training results don't scale up as effectively.</p>
+                    <span class="attribution">— samurzl</span>
+                </div>
+
+                <div class="knowledge-item">
+                    <h4>Control LoRAs can be trained on any condition</h4>
+                    <p>Can be used for deblurring, inpainting by training on videos with segments removed, interpolating, drawing trajectories based on optical flow, interpreting hand signals and body movements as motion.</p>
+                    <span class="attribution">— pom</span>
+                </div>
+
+                <h3>Training Tips</h3>
+                <ul>
+                    <li>LoRAs work with Wan video models using both wrapper and native nodes</li>
+                    <li>Can train water morphing LoRA on just 6 videos for 1,000 steps</li>
+                    <li>LoRA trained on AnimateDiff outputs allows Wan-level motion with AnimateDiff-style movement</li>
+                    <li>Using the AnimateDiff LoRA at low strengths brings subtle motion enhancement, works at just 6 steps</li>
+                </ul>
+
+                <h3>Frameworks</h3>
+                <ul>
+                    <li><strong>DiffSynth-Studio</strong>: Enhanced support with quantization and LoRA training</li>
+                    <li><strong>Kijai's wrapper</strong>: LoRA weight support in ComfyUI</li>
+                </ul>
+            </section>
+
+            <!-- Troubleshooting Section -->
+            <section id="troubleshooting">
+                <h2><span class="section-icon">🔧</span> Troubleshooting</h2>
+
+                <details open>
+                    <summary>Common Errors</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>mat1 and mat2 error for CLIP loader</h4>
+                            <p><strong>Problem:</strong> CLIP loader only passing clip-l data, shape mismatch errors</p>
+                            <p><strong>Solution:</strong> Reinstall transformers and tokenizers:</p>
+                            <pre><code>pip uninstall -y transformers tokenizers
+pip install transformers==4.48.0 tokenizers==0.21.0</code></pre>
+                            <span class="attribution">— Faust-SiN</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>WanSelfAttention normalized_attention_guidance error</h4>
+                            <p><strong>Problem:</strong> 'takes from 3 to 4 positional arguments but 8 were given'</p>
+                            <p><strong>Solution:</strong> Disable the WanVideo Apply NAG node. Ensure KJNodes and WanVideoWrapper are up to date.</p>
+                            <span class="attribution">— Nao48, JohnDopamine</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Block swap prefetch causing black output</h4>
+                            <p><strong>Problem:</strong> Setting prefetch higher than 1 causes black output with 'invalid value encountered in cast'</p>
+                            <p><strong>Solution:</strong> Keep prefetch count at 1 when using block swap.</p>
+                            <span class="attribution">— patientx, Kijai</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>49 frames error / max_seq_len error</h4>
+                            <p><strong>Problem:</strong> I2V fails with sequence length errors</p>
+                            <p><strong>Solution:</strong> Use 81 frames minimum for I2V. This is hardcoded in the model.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Quality Issues</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>FP8_fast quantization causes artifacts</h4>
+                            <p><strong>Problem:</strong> Color/noise issues with fp8</p>
+                            <p><strong>Solution:</strong> Keep img_embed weights at fp32. Native implementation has yellowish hue with fp8.</p>
+                            <span class="attribution">— Kijai</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Tiled VAE decode fixes washed out frames</h4>
+                            <p><strong>Problem:</strong> Regular VAE decode causes extremely washed out frames (except first)</p>
+                            <p><strong>Solution:</strong> Use tiled VAE decode.</p>
+                            <span class="attribution">— Screeb</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Video colorspace/color shift</h4>
+                            <p><strong>Problem:</strong> Colors look different after save/load cycle</p>
+                            <p><strong>Solution:</strong> Use Load Video (FFmpeg) instead of VHS Load Video for correct colorspace handling.</p>
+                            <span class="attribution">— Austin Mroz</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Long video color drift</h4>
+                            <p><strong>Problem:</strong> Color shifts become pronounced in I2V beyond 1 minute</p>
+                            <p><strong>Solution:</strong> Use SVI Pro LoRA for chained generations, or accept the limitation for streaming modes.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Performance Issues</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>Sampler V2 preview not showing</h4>
+                            <p><strong>Problem:</strong> Live preview not working on new sampler</p>
+                            <p><strong>Solution:</strong> Change 'Live Preview Method' in ComfyUI settings to latent2rgb.</p>
+                            <span class="attribution">— lostintranslation</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>SAM3 masking VRAM leak</h4>
+                            <p><strong>Problem:</strong> VRAM leak when using SAM3 masking</p>
+                            <p><strong>Solution:</strong> Run SAM3, disable it, then load the video for the mask.</p>
+                            <span class="attribution">— mdkb</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>FP8 model loading slow in native</h4>
+                            <p><strong>Problem:</strong> FP8 model takes 10 seconds to load in native</p>
+                            <p><strong>Solution:</strong> Use Kijai's wrapper - FP8 loads in 1 second.</p>
+                            <span class="attribution">— hicho</span>
+                        </div>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Shift Values & Settings</summary>
+                    <div class="details-content">
+                        <div class="knowledge-item">
+                            <h4>Shift values for distilled LoRAs</h4>
+                            <p><strong>Problem:</strong> Unclear what shift value to use with distilled LoRAs</p>
+                            <p><strong>Solution:</strong> Use shift=5 for Wan distilled LoRAs. Higher resolution needs higher shift because more resolution increases signal at a given noise level.</p>
+                            <span class="attribution">— spacepxl</span>
+                        </div>
+
+                        <div class="knowledge-item">
+                            <h4>Flow shift affects motion</h4>
+                            <p>Lower flow shift (3-5) = better details. Too low = coherence issues. Flow shift also affects motion speed.</p>
+                            <span class="attribution">— Juampab12, ezMan</span>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources">
+                <h2><span class="section-icon">🔗</span> Resources</h2>
+
+                <h3>Official Repositories</h3>
+                <ul>
+                    <li><a href="https://github.com/Wan-Video/Wan2.1">Wan 2.1 GitHub</a></li>
+                    <li><a href="https://github.com/Wan-Video/Wan2.2">Wan 2.2 GitHub</a></li>
+                    <li><a href="https://github.com/ali-vilab/VACE">VACE GitHub</a></li>
+                    <li><a href="https://huggingface.co/Wan-AI">Wan-AI HuggingFace</a></li>
+                </ul>
+
+                <h3>ComfyUI Integration</h3>
+                <ul>
+                    <li><a href="https://github.com/kijai/ComfyUI-WanVideoWrapper">Kijai's WanVideoWrapper</a> - Supports 20+ models</li>
+                    <li><a href="https://docs.comfy.org/tutorials/video/wan/wan-video">Official ComfyUI Wan Tutorial</a></li>
+                    <li><a href="https://docs.comfy.org/tutorials/video/wan/vace">ComfyUI VACE Tutorial</a></li>
+                    <li><a href="https://docs.comfy.org/tutorials/video/wan/wan2_2">ComfyUI Wan 2.2 Tutorial</a></li>
+                </ul>
+
+                <h3>Control & Fun Variants</h3>
+                <ul>
+                    <li><a href="https://github.com/aigc-apps/VideoX-Fun">VideoX-Fun</a> - Canny, depth, pose, trajectory, camera</li>
+                    <li><a href="https://github.com/KwaiVGI/ReCamMaster">ReCamMaster</a> - Camera control</li>
+                </ul>
+
+                <h3>Character & Audio Models</h3>
+                <ul>
+                    <li><a href="https://github.com/Phantom-video/Phantom">Phantom</a> - Subject consistency</li>
+                    <li><a href="https://github.com/MAGREF-Video/MAGREF">MAGREF</a> - Multi-reference</li>
+                    <li><a href="https://github.com/JoHnneyWang/EchoShot">EchoShot</a> - Multi-shot consistency</li>
+                    <li><a href="https://github.com/Phantom-video/HuMo">HuMo</a> - Human-centric multimodal</li>
+                    <li><a href="https://github.com/MeiGen-AI/MultiTalk">MultiTalk</a> - Multi-person conversations</li>
+                    <li><a href="https://github.com/MeiGen-AI/InfiniteTalk">InfiniteTalk</a> - Unlimited length</li>
+                    <li><a href="https://github.com/Fantasy-AMAP/fantasy-talking">FantasyTalking</a> - Portrait animation</li>
+                </ul>
+
+                <h3>Optimization</h3>
+                <ul>
+                    <li><a href="https://github.com/ModelTC/LightX2V">LightX2V</a> - Distillation framework</li>
+                    <li><a href="https://github.com/tianweiy/CausVid">CausVid</a> - Temporal consistency LoRA</li>
+                    <li><a href="https://github.com/deepbeepmeep/Wan2GP">Wan2GP</a> - Low VRAM / GPU-poor</li>
+                </ul>
+
+                <h3>Community</h3>
+                <ul>
+                    <li><a href="https://discord.gg/banodoco">Banodoco Discord</a> - #wan_chatter, #wan_training, #wan_comfyui, #wan_resources</li>
+                    <li><a href="https://civitai.com">Civitai</a> - Community LoRAs and workflows</li>
+                </ul>
+
+                <h3>Tips from the Community</h3>
+                <ul>
+                    <li><strong>2x VAE upscaler</strong>: <a href="https://huggingface.co/spacepxl/Wan2.1-VAE-upscale2x">spacepxl's decoder</a> acts as free 2x upscaler, kills noise grid patterns</li>
+                    <li><strong>VitPose for animals</strong>: Use thickness=20 for animal motion in SCAIL</li>
+                    <li><strong>Model mixing</strong>: Using 2.1 as high model + 2.2 low gives content of 2.1 with look of 2.2</li>
+                </ul>
+            </section>
+
+            <footer>
+                <p>Knowledge extracted from <a href="https://discord.gg/banodoco">Banodoco Discord</a> discussions (February 2025 - February 2026)</p>
+                <p style="margin-top: 0.5rem;">Built by <a href="https://nathanshipley.github.io">Nathan Shipley</a> with Claude Code</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                    This content was generated using AI. Accuracy is not guaranteed, information may contain errors or omissions.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getCurrentTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored) return stored;
+            return getSystemTheme();
+        }
+
+        function applyTheme(theme) {
+            if (theme === getSystemTheme()) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = getCurrentTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        // Highlight current section in TOC
+        function updateTocHighlight() {
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-sidebar a');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSection = section.id;
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateTocHighlight);
+        updateTocHighlight();
+
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
+</body>
+</html>

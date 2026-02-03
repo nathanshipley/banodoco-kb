@@ -310,18 +310,41 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Wan enrichment COMPLETE - Ready for static KB</p>
-            <p><strong>Wan Source Materials Ready:</strong></p>
+            <p><strong>Phase:</strong> Wan KB COMPLETE - Two models live</p>
+            <p><strong>Knowledge Bases Live:</strong></p>
             <ul>
-                <li>Discord extraction: 316K messages across 5 channels ✅</li>
-                <li>External sources: 60+ URLs, technical content fetched ✅</li>
-                <li>#updates channel: 1,987 curated posts → 946 items ✅</li>
+                <li><a href="kb/ltx2/index.html">LTX Video 2</a> - Released Jan 5, 2026 ✅</li>
+                <li><a href="kb/wan/index.html">Wan Ecosystem</a> - Released Feb 22, 2025 ✅</li>
             </ul>
-            <p><strong>Total:</strong> ~6MB of extracted knowledge ready for synthesis</p>
-            <p><strong>Next:</strong> Build static Wan KB with synthesis step.</p>
+            <p><strong>Next:</strong> Consider HunyuanVideo, FLUX, or CogVideoX extraction.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 3, 2026 - Night</div>
+                <h3>Wan Knowledge Base COMPLETE</h3>
+
+                <p>Built comprehensive static HTML knowledge base for the Wan ecosystem at <a href="kb/wan/index.html">kb/wan/</a>.</p>
+
+                <p><strong>KB Structure (10 sections, ~1,200 lines):</strong></p>
+                <ul>
+                    <li><strong>Overview:</strong> Wan family explanation (2.1, 2.2, VACE, Fun)</li>
+                    <li><strong>Choosing a Model:</strong> Decision tree + 2.1 vs 2.2 comparison table</li>
+                    <li><strong>Hardware:</strong> VRAM requirements for all 10+ models</li>
+                    <li><strong>Generation Modes:</strong> T2V, I2V, FLF, S2V with recommended settings</li>
+                    <li><strong>Control Methods:</strong> VACE, Fun Control, Camera (ReCamMaster), Motion (ATI, WanAnimate)</li>
+                    <li><strong>Character & Likeness:</strong> Phantom, MAGREF, EchoShot, Lynx</li>
+                    <li><strong>Lip-Sync & Audio:</strong> HuMo, MultiTalk, InfiniteTalk, FantasyTalking</li>
+                    <li><strong>Speed & Optimization:</strong> LightX2V, CausVid, Wan2GP, TeaCache</li>
+                    <li><strong>Training:</strong> LoRA tips, frameworks</li>
+                    <li><strong>Troubleshooting:</strong> 15+ common errors with solutions</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Content synthesis approach:</strong> Rather than dumping all 316K messages of extracted knowledge, we curated the most useful items from Discord extractions, combined with technical specs from external docs (GitHub READMEs, tutorials). Result is a readable reference guide vs. a data dump.
+                </div>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 3, 2026 - Late</div>
                 <h3>Wan enrichment COMPLETE - Ready for static KB</h3>
