@@ -11,11 +11,12 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ## Current Status (Feb 3, 2026)
 
-**Phase: Wan Extraction COMPLETE - Ready for Enrichment & Synthesis**
+**Phase: Wan Enrichment In Progress**
 
 ### Completed
 - LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
 - **Wan ecosystem extraction (316K messages, ~$65-70)** ✅
+- **Wan external sources gathered** - 60+ URLs, technical content fetched ✅
 - NotebookLM upload tested - **works well!**
 - Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
 
@@ -74,6 +75,7 @@ banodoco-kb/
 │
 ├── for_notebooklm/                         # NotebookLM upload files
 │   ├── README.md
+│   ├── wan_external_sources.md             # URLs for external sources
 │   └── ltx2/
 │       └── 2026-02-01/
 │           ├── ltx2_january_combined.md    # 695KB
@@ -86,7 +88,8 @@ banodoco-kb/
 │
 ├── data/                                   # Extracted knowledge (JSON + MD)
 │   ├── ltx_*_knowledge.*                   # LTX extractions (8 files)
-│   └── wan_*_knowledge.*                   # Wan extractions (17 files)
+│   ├── wan_*_knowledge.*                   # Wan extractions (17 files)
+│   └── wan_external_sources_content.md     # Fetched content from external URLs
 │
 ├── docs/
 │   ├── project-plan.md                     # Full project plan & scope
@@ -231,3 +234,4 @@ Curate best content into HTML pages with:
 6. **Wan is an ecosystem** - Not one model, but generations + branches + tools
 7. **NotebookLM has 500K word/source limit** - Don't combine all files; upload as separate sources (50 max free, 300 Plus)
 8. **Batch API calls** - Fetch author names in batches of 100, not individually
+9. **Always save fetched content to files** - Context will be lost; save URLs to `for_notebooklm/` and content to `data/`
