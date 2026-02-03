@@ -165,9 +165,13 @@ for_notebooklm/
 
 ### Step 3: Enrich with External Sources
 
-**Goal:** Discord extractions capture community knowledge, but official docs and blog posts provide authoritative context.
+**Goal:** Discord extractions capture community knowledge, but official docs and curated content provide authoritative context.
 
-**Sources to add:**
+**High-value Discord sources (curated, not raw chat):**
+- **#updates channel** (~2K messages) - @pom's curated announcements and discoveries
+- **#dev_updates** - Developer announcements
+
+**External sources to add:**
 - Official model documentation (GitHub READMEs)
 - ComfyUI blog posts and guides
 - Model release announcements
@@ -265,26 +269,25 @@ kb/
 
 ## Execution Plan
 
-### Week 1: Wan Ecosystem Extraction ✅ MOSTLY COMPLETE
+### Week 1: Wan Ecosystem Extraction ✅ COMPLETE
 
 **LTX2 Validation:** ✅ Tested in NotebookLM - works well!
 
-**Wan Extraction Status (Feb 3, 2026):**
+**Wan Extraction Status (Feb 3, 2026): COMPLETE**
 - [x] wan_chatter Feb-Jun 2025: Complete
-- [ ] wan_chatter Jul-Nov 2025: 5 months failed (network errors), need to retry
+- [x] wan_chatter Jul-Nov 2025: Complete (5 months re-extracted)
 - [x] wan_chatter Dec 2025 - Feb 2026: Complete
 - [x] wan_gens: Complete (487KB)
 - [x] wan_training: Complete (457KB)
 - [x] wan_comfyui: Complete (233KB)
 - [x] wan_resources: Complete (206KB)
 
-**Total extracted so far:** ~3.5MB of knowledge markdown
-**Actual cost:** ~$45 (vs $35 estimate - more messages than expected)
+**Total extracted:** ~316K messages, ~$65-70 cost
+**Output:** 24 extraction files (JSON + MD for each time period/channel)
 
-**Remaining:**
-- [ ] Retry 5 failed wan_chatter months (Jul-Nov 2025)
+**Remaining for Wan:**
 - [ ] Combine all Wan extractions into NotebookLM file
-- [ ] Add external sources (docs, blog posts)
+- [ ] Add external sources (docs, blog posts, #updates channel)
 - [ ] Build static Wan KB with synthesis step
 
 ### Week 2: Expand Coverage

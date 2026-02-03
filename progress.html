@@ -310,22 +310,50 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Wan extraction 90% complete - 5 months need retry</p>
-            <p><strong>Wan Extraction Progress (~3.5MB extracted, ~$45):</strong></p>
+            <p><strong>Phase:</strong> Wan extraction COMPLETE - Ready for synthesis</p>
+            <p><strong>Wan Extraction Results (~316K messages, ~$65-70):</strong></p>
             <ul>
-                <li>wan_chatter: Feb-Jun 2025 ✅, Jul-Nov 2025 ❌ (need retry), Dec 2025-Feb 2026 ✅</li>
+                <li>wan_chatter: All 11 months complete ✅ (Feb 2025 - Feb 2026)</li>
                 <li>wan_gens: Complete (487KB)</li>
                 <li>wan_training: Complete (457KB)</li>
                 <li>wan_comfyui: Complete (233KB)</li>
                 <li>wan_resources: Complete (206KB)</li>
             </ul>
             <p><strong>Pipeline insight:</strong> Raw extraction produces fragmented knowledge items. For static KB, we need: (1) add external sources, (2) synthesize/deduplicate, (3) better attribution ("Discord, Jan 2026" not just usernames).</p>
-            <p><strong>Next:</strong> Retry 5 failed months, then build Wan NotebookLM + static KB.</p>
+            <p><strong>Next:</strong> Combine extractions for NotebookLM, enrich with external sources, synthesize for static KB.</p>
         </section>
 
         <div class="timeline">
             <article class="timeline-entry">
-                <div class="timestamp">February 3, 2026</div>
+                <div class="timestamp">February 3, 2026 - Evening</div>
+                <h3>Wan extraction 100% COMPLETE</h3>
+
+                <p>Completed the 5 previously failed months (Jul-Nov 2025). Full Wan ecosystem now extracted.</p>
+
+                <p><strong>Final 5 months extracted:</strong></p>
+                <ul>
+                    <li>July 2025: 32,584 msgs → $6.42</li>
+                    <li>August 2025: 41,050 msgs → $7.68</li>
+                    <li>September 2025: 25,790 msgs → $4.95</li>
+                    <li>October 2025: 18,574 msgs → $3.45</li>
+                    <li>November 2025: 10,533 msgs → $2.10</li>
+                </ul>
+
+                <p><strong>Total Wan extraction:</strong></p>
+                <ul>
+                    <li>~316,000 messages across 5 channels</li>
+                    <li>11 months of wan_chatter (Feb 2025 - Feb 2026)</li>
+                    <li>Full runs of wan_gens, wan_training, wan_comfyui, wan_resources</li>
+                    <li>Estimated cost: ~$65-70 total</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Next steps:</strong> (1) Combine all extractions into NotebookLM-ready file, (2) Add external sources (official docs, blog posts, #updates channel), (3) Synthesize into cohesive static KB with better attribution.
+                </div>
+            </article>
+
+            <article class="timeline-entry">
+                <div class="timestamp">February 3, 2026 - Earlier</div>
                 <h3>Wan extraction 90% complete - Pipeline insights</h3>
 
                 <p>Ran full Wan ecosystem extraction over ~5.5 hours. Most channels complete, 5 monthly chunks failed due to network errors.</p>
