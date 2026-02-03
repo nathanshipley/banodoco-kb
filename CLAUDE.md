@@ -11,33 +11,36 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ## Current Status (Feb 3, 2026)
 
-**Phase: Wan Extraction 90% Complete**
+**Phase: Wan Extraction COMPLETE - Ready for Enrichment & Synthesis**
 
 ### Completed
 - LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
+- **Wan ecosystem extraction (316K messages, ~$65-70)** ✅
 - NotebookLM upload tested - **works well!**
 - Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
 
-### Wan Ecosystem Extraction Status
-**Completed (~3.5MB total):**
-- wan_chatter: Feb-Jun 2025, Dec 2025 - Feb 2026
-- wan_gens: Full extraction (487KB)
-- wan_training: Full extraction (457KB)
-- wan_comfyui: Full extraction (233KB)
-- wan_resources: Full extraction (206KB)
+### Wan Ecosystem Extraction Results
+| Channel | Messages | Output |
+|---------|----------|--------|
+| wan_chatter | ~244K (13 months) | 13 files, ~4.3MB |
+| wan_gens | ~28K | 476KB |
+| wan_training | ~26K | 446KB |
+| wan_comfyui | ~12K | 227KB |
+| wan_resources | ~6K | 201KB |
+| **Total** | **~316K** | **17 files, ~5.6MB** |
 
-**Missing (need retry):**
-- wan_chatter: Jul, Aug, Sep, Oct, Nov 2025 (5 months failed due to network errors)
+### Next Steps
+1. **Enrich:** Add external sources (official docs, blog posts, #updates channel)
+2. **Upload to NotebookLM:** Keep as separate sources (each file < 500K word limit)
+3. **Synthesize for static KB:** Deduplicate, consolidate, better attribution
 
-**Cost so far:** ~$45
-
-### Pipeline Insight: Extraction → Synthesis → KB
+### Pipeline Insight: Extraction → Enrichment → Synthesis → KB
 Raw extraction produces fragmented knowledge items. For static KB, we need:
-1. **Add external sources:** Official docs, blog posts, GitHub READMEs
+1. **Add external sources:** Official docs, blog posts, GitHub READMEs, #updates channel
 2. **Synthesize:** Deduplicate, consolidate, add editorial structure
-3. **Better attribution:** "Discord, Jan 2026" not just "— Username"
+3. **Better attribution:** "— Discord #channel, Month Year" not just "— Username"
 
-See `docs/project-plan.md` for updated 6-step pipeline.
+See `docs/project-plan.md` for full 6-step pipeline.
 
 ---
 
@@ -82,7 +85,8 @@ banodoco-kb/
 │   └── ...
 │
 ├── data/                                   # Extracted knowledge (JSON + MD)
-│   └── ltx_*_knowledge.*                   # LTX extractions
+│   ├── ltx_*_knowledge.*                   # LTX extractions (8 files)
+│   └── wan_*_knowledge.*                   # Wan extractions (17 files)
 │
 ├── docs/
 │   ├── project-plan.md                     # Full project plan & scope
@@ -119,6 +123,10 @@ ltx_training:   1457981700817817620
 ltx_resources:  1457981813120176138
 ltx_gens:       1458032975982755861
 wan_chatter:    1342763350815277067
+wan_gens:       1344057524935983125
+wan_training:   1344309523187368046
+wan_comfyui:    1420053619541283000
+wan_resources:  1373291419434877078
 ```
 
 ---
@@ -161,6 +169,33 @@ Curate best content into HTML pages with:
 2. NotebookLM file: `for_notebooklm/ltx2/2026-02-01/ltx2_january_combined.md`
 3. Static KB: `kb/ltx2/index.html`
 
+### Wan Ecosystem (Feb 2025 - Feb 2026)
+
+| Channel | Period | Messages | Cost |
+|---------|--------|----------|------|
+| wan_chatter | Feb 2025 | ~8K | $1.20 |
+| wan_chatter | Mar 2025 | ~28K | $4.80 |
+| wan_chatter | Apr 2025 | ~20K | $3.40 |
+| wan_chatter | May 2025 | ~22K | $3.60 |
+| wan_chatter | Jun 2025 | ~25K | $4.10 |
+| wan_chatter | Jul 2025 | ~33K | $6.42 |
+| wan_chatter | Aug 2025 | ~41K | $7.68 |
+| wan_chatter | Sep 2025 | ~26K | $4.95 |
+| wan_chatter | Oct 2025 | ~19K | $3.45 |
+| wan_chatter | Nov 2025 | ~11K | $2.10 |
+| wan_chatter | Dec 2025 | ~15K | $2.50 |
+| wan_chatter | Jan-Feb 2026 | ~6K | $1.00 |
+| wan_gens | Full | ~28K | $4.80 |
+| wan_training | Full | ~26K | $4.50 |
+| wan_comfyui | Full | ~12K | $2.30 |
+| wan_resources | Full | ~6K | $2.00 |
+| **Total** | | **~316K** | **~$65-70** |
+
+**Deliverables:**
+1. Raw extractions in `data/` (17 MD + 17 JSON files, ~843K words total)
+2. NotebookLM: Upload each file as separate source (stays under 500K word limit)
+3. Static KB: TBD - needs synthesis step
+
 ---
 
 ## Decisions Made
@@ -175,14 +210,14 @@ Curate best content into HTML pages with:
 
 ## Cost Estimates
 
-| Model | Est. Messages | Est. Cost |
-|-------|---------------|-----------|
+| Model | Messages | Cost |
+|-------|----------|------|
 | LTX Video 2 | 45K | $7.65 ✅ |
-| Wan Ecosystem | 200K+ | ~$35 |
+| Wan Ecosystem | 316K | ~$65-70 ✅ |
 | FLUX | 80K | ~$14 |
 | HunyuanVideo | 50K | ~$9 |
 | All others | 400K | ~$70 |
-| **Total** | **~800K** | **~$140** |
+| **Total** | **~900K** | **~$165** |
 
 ---
 
@@ -194,3 +229,5 @@ Curate best content into HTML pages with:
 4. **Use Sonnet, not Opus** - Quality sufficient, 10x cheaper
 5. **400-message chunks preserve context** - Good balance of cost vs coherence
 6. **Wan is an ecosystem** - Not one model, but generations + branches + tools
+7. **NotebookLM has 500K word/source limit** - Don't combine all files; upload as separate sources (50 max free, 300 Plus)
+8. **Batch API calls** - Fetch author names in batches of 100, not individually
