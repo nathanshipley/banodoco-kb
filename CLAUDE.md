@@ -11,7 +11,7 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ## Current Status (Feb 3, 2026)
 
-**Phase: Wan Enrichment In Progress**
+**Phase: Wan Enrichment COMPLETE - Ready for Static KB**
 
 ### Completed
 - LTX Video 2 extraction (44K messages → 4,345 items, $7.65)
@@ -21,20 +21,17 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 - NotebookLM upload tested - **works well!**
 - Static HTML KB built: https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
 
-### Wan Ecosystem Extraction Results
-| Channel | Messages | Output |
-|---------|----------|--------|
-| wan_chatter | ~244K (13 months) | 13 files, ~4.3MB |
-| wan_gens | ~28K | 476KB |
-| wan_training | ~26K | 446KB |
-| wan_comfyui | ~12K | 227KB |
-| wan_resources | ~6K | 201KB |
-| **Total** | **~316K** | **17 files, ~5.6MB** |
+### Wan Source Materials Ready
+| Source | Content | Output |
+|--------|---------|--------|
+| wan_chatter | 244K msgs, 13 months | 13 files, ~4.3MB |
+| wan_gens/training/comfyui/resources | 72K msgs | 4 files, ~1.3MB |
+| #updates channel | 1,987 curated posts | 124KB |
+| External sources | 60+ URLs fetched | ~500 lines technical specs |
+| **Total** | **~318K msgs + external** | **~6MB extracted knowledge** |
 
-### Next Steps
-1. **Enrich:** Add external sources (official docs, blog posts, #updates channel)
-2. **Upload to NotebookLM:** Keep as separate sources (each file < 500K word limit)
-3. **Synthesize for static KB:** Deduplicate, consolidate, better attribution
+### Next Step
+**Build static Wan KB** - Synthesize all sources into HTML pages
 
 ### Pipeline Insight: Extraction → Enrichment → Synthesis → KB
 Raw extraction produces fragmented knowledge items. For static KB, we need:

@@ -310,20 +310,44 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Wan extraction COMPLETE - Ready for synthesis</p>
-            <p><strong>Wan Extraction Results (~316K messages, ~$65-70):</strong></p>
+            <p><strong>Phase:</strong> Wan enrichment COMPLETE - Ready for static KB</p>
+            <p><strong>Wan Source Materials Ready:</strong></p>
             <ul>
-                <li>wan_chatter: All 11 months complete ✅ (Feb 2025 - Feb 2026)</li>
-                <li>wan_gens: Complete (487KB)</li>
-                <li>wan_training: Complete (457KB)</li>
-                <li>wan_comfyui: Complete (233KB)</li>
-                <li>wan_resources: Complete (206KB)</li>
+                <li>Discord extraction: 316K messages across 5 channels ✅</li>
+                <li>External sources: 60+ URLs, technical content fetched ✅</li>
+                <li>#updates channel: 1,987 curated posts → 946 items ✅</li>
             </ul>
-            <p><strong>Pipeline insight:</strong> Raw extraction produces fragmented knowledge items. For static KB, we need: (1) add external sources, (2) synthesize/deduplicate, (3) better attribution ("Discord, Jan 2026" not just usernames).</p>
-            <p><strong>Next:</strong> Combine extractions for NotebookLM, enrich with external sources, synthesize for static KB.</p>
+            <p><strong>Total:</strong> ~6MB of extracted knowledge ready for synthesis</p>
+            <p><strong>Next:</strong> Build static Wan KB with synthesis step.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">February 3, 2026 - Late</div>
+                <h3>Wan enrichment COMPLETE - Ready for static KB</h3>
+
+                <p>Gathered all source materials for the Wan knowledge base. Now ready to synthesize into static HTML pages.</p>
+
+                <p><strong>External sources gathered:</strong></p>
+                <ul>
+                    <li>60+ URLs from official repos, community projects, ComfyUI docs</li>
+                    <li>Technical content fetched: VRAM requirements, features, installation steps</li>
+                    <li>Covers: Phantom, MAGREF, HuMo, MultiTalk, LightX2V, CausVid, ReCamMaster, VideoX-Fun, and more</li>
+                </ul>
+
+                <p><strong>#updates channel extracted:</strong></p>
+                <ul>
+                    <li>1,987 curated posts from @pom (Aug 2023 - Jan 2026)</li>
+                    <li>946 knowledge items extracted ($1.44)</li>
+                    <li>High-value editorial content: 214 resources, 187 community creations, 142 workflows</li>
+                    <li>Covers full history: AnimateDiff → SVD → SDXL → Wan → LTX → FLUX</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Key insight:</strong> The #updates channel has a very different profile than raw chat - it's curated highlights with 83% having 10+ reactions. High on resources and community creations, low on troubleshooting.
+                </div>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 3, 2026 - Evening</div>
                 <h3>Wan extraction 100% COMPLETE</h3>
