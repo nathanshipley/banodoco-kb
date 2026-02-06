@@ -41,7 +41,28 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 | Troubleshooting | 15+ common errors with solutions |
 
 ### Next Step
-Consider expanding to HunyuanVideo, FLUX, or CogVideoX.
+**Enrich Wan KB with VACE & WanAnimate detail** - Research complete, ready to add.
+
+### VACE/WanAnimate Research (Feb 6, 2026)
+Searched extracted data, found rich content ready to add to KB:
+
+**VACE (4,444 mentions across files):**
+- Critical: white background for refs, gray (127) for inpaint, inverted lineart
+- Strength >1.0 works (1.5 boosts likeness), encode 0.4 for creativity
+- 14B better at 720p+, 1.3B better at lower res
+- Works with 1.3B LoRAs (unlike Fun models)
+- CausVid LoRA at 0.2-0.4 strength works well
+- Techniques: outpainting, infinite extension (last 4f → next 77f), multi-control via prev_embeds
+
+**WanAnimate (601 mentions):**
+- No CFG by default (cfg 1.0, Chinese prompt)
+- 12fps > 24fps for consistency
+- Inverted canny required, dimensions ÷16 for long videos
+- Strength 2.0 too much, blocks 0-15 good, start% 0.5 balances likeness/motion
+- Tracks pupils (unique), VitPose works for animals
+- Masking breaks without face images (pass empty as workaround)
+
+**To add to KB:** Detailed VACE section (setup, 1.3B vs 14B, techniques), detailed WanAnimate section (settings, blocks, troubleshooting). Compare to Notion doc structure.
 
 ### Pipeline Insight: Extraction → Enrichment → Synthesis → KB
 Raw extraction produces fragmented knowledge items. For static KB, we need:
