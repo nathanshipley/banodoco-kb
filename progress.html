@@ -310,16 +310,46 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Wan KB COMPLETE - Two models live</p>
+            <p><strong>Phase:</strong> Adopting incremental wiki compilation (Karpathy's llm-wiki pattern)</p>
             <p><strong>Knowledge Bases Live:</strong></p>
             <ul>
                 <li><a href="kb/ltx2/index.html">LTX Video 2</a> - Released Jan 5, 2026 ✅</li>
                 <li><a href="kb/wan/index.html">Wan Ecosystem</a> - Released Feb 22, 2025 ✅</li>
             </ul>
-            <p><strong>Next:</strong> Add detailed VACE & WanAnimate sections to Wan KB (research complete).</p>
+            <p><strong>Next:</strong> Bootstrap markdown wiki structure, run VACE calibration test to validate approach.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">April 4, 2026</div>
+                <h3>Adopting Karpathy's LLM-Wiki pattern for incremental compilation</h3>
+
+                <p>After a pause, revisited the project with fresh eyes. Read Andrej Karpathy's <a href="https://github.com/karpathy/llm-wiki/blob/main/llm-wiki.md">llm-wiki</a> concept and his advice about working knowledge in chunks: "for good results you have to work it in chunks... when I do it in stages and slower I can get very good results."</p>
+
+                <p><strong>Problem identified:</strong> Our pipeline has a huge gap between raw extraction (17 files, ~316K messages worth of bullet-point items) and the final HTML KB. We jumped from fragmented data to a monolithic page in one shot. The result only scratches the surface of the extracted data.</p>
+
+                <p><strong>New approach &mdash; incremental wiki compilation:</strong></p>
+                <ul>
+                    <li>Add a <strong>markdown wiki layer</strong> (<code>wiki/wan/</code>) between raw extractions and HTML output</li>
+                    <li>One page per entity/topic (VACE, Phantom, hardware, troubleshooting, etc.)</li>
+                    <li>Process extraction files <strong>one at a time</strong>, updating relevant wiki pages with each source</li>
+                    <li>Knowledge compounds across pages &mdash; deduplication, contradiction flagging, cross-references happen naturally</li>
+                    <li>HTML KB is generated from the wiki as a rendering step</li>
+                </ul>
+
+                <p><strong>Plan:</strong></p>
+                <ul>
+                    <li>Bootstrap wiki structure + calibration test (compile VACE page from all extractions)</li>
+                    <li>Supervised ingestion of first 2-3 extraction files to validate quality</li>
+                    <li>Semi-autonomous ingestion of remaining files once approach is dialed in</li>
+                    <li>Lint, polish, then generate improved HTML KB</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Key insight:</strong> The wiki compilation process itself handles deduplication, prioritization, and contradiction resolution &mdash; problems we thought required re-extraction. Testing on existing data first before deciding whether to re-extract.
+                </div>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">February 6, 2026</div>
                 <h3>VACE & WanAnimate research for KB enrichment</h3>

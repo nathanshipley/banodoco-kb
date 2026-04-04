@@ -9,9 +9,9 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 
 ---
 
-## Current Status (Feb 3, 2026)
+## Current Status (April 4, 2026)
 
-**Phase: TWO KNOWLEDGE BASES LIVE**
+**Phase: ADOPTING INCREMENTAL WIKI COMPILATION**
 
 ### Live Knowledge Bases
 - **LTX Video 2:** https://nathanshipley.github.io/banodoco-kb/kb/ltx2/
@@ -40,8 +40,8 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 | Training | LoRA tips, frameworks |
 | Troubleshooting | 15+ common errors with solutions |
 
-### Next Step
-**Enrich Wan KB with VACE & WanAnimate detail** - Research complete, ready to add.
+### Current Step
+**Incremental wiki compilation** - Adopting Karpathy's llm-wiki pattern. Building a markdown wiki layer (`wiki/wan/`) between raw extractions and HTML output. Processing extraction files one at a time, compiling knowledge into topic-specific wiki pages. See Wiki Operations section below.
 
 ### VACE/WanAnimate Research (Feb 6, 2026)
 Searched extracted data, found rich content ready to add to KB:
@@ -97,7 +97,15 @@ banodoco-kb/
 ├── database.html                           # Database overview
 ├── stats.html                              # Community stats
 │
-├── kb/                                     # Static HTML Knowledge Base
+├── wiki/                                   # Markdown wiki (compilation layer)
+│   ├── _meta/                              # Index, log, ingest state
+│   └── wan/                                # Wan ecosystem wiki pages
+│       ├── models/                         # One page per model/tool
+│       ├── techniques/                     # Usage techniques
+│       ├── optimization/                   # Speed, VRAM, ComfyUI
+│       └── training/                       # LoRA, embeddings
+│
+├── kb/                                     # Static HTML Knowledge Base (generated from wiki)
 │   ├── index.html                          # Model selector
 │   ├── ltx2/
 │   │   └── index.html                      # LTX Video 2 guide
@@ -254,6 +262,87 @@ Curate best content into HTML pages with:
 | HunyuanVideo | 50K | ~$9 |
 | All others | 400K | ~$70 |
 | **Total** | **~900K** | **~$165** |
+
+---
+
+## Wiki Operations
+
+The project uses an incremental wiki compilation pattern (inspired by Karpathy's llm-wiki). A markdown wiki (`wiki/`) sits between raw extractions (`data/`) and the HTML KB (`kb/`).
+
+### Pipeline
+```
+Discord msgs → 400-msg chunk extraction → incremental wiki compilation → HTML generation
+                    (data/)                      (wiki/)                    (kb/)
+```
+
+### Structure
+```
+wiki/
+├── _meta/
+│   ├── index.md           # Catalog of all pages
+│   ├── log.md             # Append-only ingestion record
+│   └── ingest-state.json  # Tracks processed sources
+└── wan/
+    ├── overview.md, choosing-a-model.md, hardware.md, troubleshooting.md, resources.md
+    ├── models/    (vace.md, phantom.md, humo.md, svi.md, etc.)
+    ├── techniques/ (t2v.md, i2v.md, inpainting.md, video-extension.md, etc.)
+    ├── optimization/ (speed.md, quantization.md, comfyui.md)
+    └── training/  (lora-training.md, embedding.md)
+```
+
+### Ingest Operation
+Process ONE extraction file at a time:
+1. Read the extraction file
+2. For each item, merge into the relevant wiki page(s):
+   - New info → add with attribution
+   - Confirms existing → strengthen claim, note source
+   - Contradicts existing → flag with both sources
+   - Duplicate → skip
+3. Note media references with placeholders (see below)
+4. Update cross-references (wikilinks)
+5. Update `_meta/index.md`, `_meta/log.md`, `_meta/ingest-state.json`
+
+### Lint Operation
+Periodic health check:
+- Contradictions between pages
+- Orphan pages with no inbound links
+- Topics mentioned but lacking their own page
+- Stale info superseded by later discoveries
+
+### Page Format
+```markdown
+---
+title: Page Title
+aliases: [alias1, alias2]
+sources_ingested: 0
+last_updated: YYYY-MM-DD
+---
+
+# Title
+
+Overview paragraph.
+
+## Sections...
+
+## See Also
+- [[related-page]] - Why it's related
+```
+
+- YAML frontmatter for metadata
+- Wikilinks (`[[page-name]]`) for cross-references
+- Attribution: `— Discord #channel, Month Year` (named for authoritative sources like Kijai)
+- Tables for settings/comparisons
+
+### Media Placeholders
+During ingestion, mark where rich media belongs. Don't download media yet — just capture the reference:
+
+```markdown
+{{media|message_id=1465702490467995718|type=video|desc=VACE inpainting demo}}
+{{media|message_id=1234567890|type=image|desc=VRAM comparison chart}}
+{{media|url=https://example.com/workflow.json|type=workflow|desc=VACE basic workflow}}
+```
+
+These placeholders will be resolved later when the media pipeline is built (Discord CDN refresh API → download → host).
 
 ---
 

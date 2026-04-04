@@ -1,0 +1,28 @@
+{
+  "sources": {
+    "calibration_vace": {
+      "type": "topic_compilation",
+      "files_scanned": [
+        "wan_chatter_20250301_knowledge.md",
+        "wan_chatter_20250401_knowledge.md",
+        "wan_chatter_20250501_knowledge.md",
+        "wan_chatter_20250601_knowledge.md",
+        "wan_chatter_20250701_knowledge.md",
+        "wan_chatter_20250801_knowledge.md",
+        "wan_chatter_20250901_knowledge.md",
+        "wan_chatter_20251001_knowledge.md",
+        "wan_chatter_20251101_knowledge.md",
+        "wan_chatter_20251201_knowledge.md",
+        "wan_chatter_20260101_knowledge.md",
+        "wan_gens_20250225_knowledge.md",
+        "wan_training_20250226_knowledge.md",
+        "wan_comfyui_20250923_knowledge.md",
+        "wan_resources_20250517_knowledge.md"
+      ],
+      "topic": "VACE",
+      "pages_created": ["wan/models/vace.md"],
+      "date": "2026-04-04"
+    }
+  },
+  "last_updated": "2026-04-04"
+}
