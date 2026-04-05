@@ -27,3 +27,16 @@ Append-only record of what was processed and when.
 - `wiki/wan/models/wan-2.1.md` (614 lines)
 
 **Method:** Extracted Wan 2.1 foundation content across all files. Early months (Feb-June 2025) treated as implicitly-2.1 since 2.2 didn't exist yet. Later months filtered for "still use 2.1" insights and 2.1 vs 2.2 comparisons. Covers architecture, variants, settings, precision, optimization, quirks, derived models, and timeline.
+
+---
+
+## [2026-04-05] topic | Wan 2.2 wiki page compiled from 14 wan extraction files
+
+**Type:** Topic-focused compilation
+
+**Sources scanned:** 14 wan_*_knowledge.md files with 2.2 content (~5,000+ mentions, heaviest in Jul-Sep 2025 post-launch months)
+
+**Pages created:**
+- `wiki/wan/models/wan-2.2.md` (456 lines)
+
+**Method:** Extracted Wan 2.2 content from launch (Jul 2025) through Feb 2026. Covers MoE architecture (high-noise/low-noise experts), A14B and TI2V-5B variants, settings tables, 2.1 vs 2.2 comparison, speed LoRAs (LightX2V versions, Lightning, Dyno, rCM), LoRA compatibility matrix, quirks (VAE mismatch, CLIP vision removed), hardware, and derivative ecosystem. Resolved contradictions: 16fps native for 14B (not 24), LN works reliably with 2.1 LoRAs, HN is "soul" of 2.2.
