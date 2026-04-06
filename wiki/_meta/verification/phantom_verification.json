@@ -1,0 +1,990 @@
+{
+  "page": "wiki/wan/models/phantom.md",
+  "verified_at": "2026-04-06T16:04:09.062202",
+  "model": "gpt-5.4",
+  "weeks_checked": [
+    "2",
+    "2",
+    "2"
+  ],
+  "issues": [
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Phantom was developed by the Phantom-video team (possibly acquired by ByteDance based on developer GitHub profiles).",
+      "evidence": "In the provided W23 messages, there is no discussion or evidence about ByteDance acquisition, developer GitHub profiles, or ownership changes. The only related mention is later timeline-style chatter outside this week in the wiki, but nothing in these raw messages supports it.",
+      "correction": "Remove the ByteDance acquisition speculation from claims sourced to this week, or clearly mark it as unverified speculation from outside these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Phantom was developed by the Phantom-video team ... The team also released HuMo (audio-driven character generation) and OmniInsert (subject insertion for videos).",
+      "evidence": "No W23 raw messages mention HuMo, OmniInsert, or Phantom-video team releases. These details are not supported by the provided source set.",
+      "correction": "Do not attribute HuMo and OmniInsert to the Phantom team based on this week's Discord evidence alone.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "Phantom 14B fp8_e5m2 | ~15 GB | Better compatibility with older GPUs (e.g., RTX 3060)",
+      "evidence": "The raw messages only support that e5m2 was needed on a 3060 for one user's setup, not a general compatibility claim for 'older GPUs': \"RTX 3060 (12 GB) ... Use e5m2 format (e4m3fn incompatible).\" No broader statement about older GPUs appears in the messages.",
+      "correction": "Narrow this to the supported claim: e5m2 was reported to work on RTX 3060 where e4m3fn did not, rather than claiming broader older-GPU compatibility.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Windows users should increase paging file to 80-96 GB to avoid OOM crashes.",
+      "evidence": "The messages mention RAM/OOM concerns generally, but no 80-96 GB paging-file recommendation appears in W23. Example: \"Second attempt to run it worked, but output wasn't very good... then I realized I ran the Phantom wf using your non-Phantom model.\" and general OOM discussion, but no numeric paging-file guidance.",
+      "correction": "Either remove the specific paging-file numbers or cite a source outside this week's messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "**Critical:** Phantom only works with T2V models. It is incompatible with I2V models...",
+      "evidence": "The raw messages repeatedly discuss using Phantom in I2V workflows: \"The Dude: anybody know of a way to stop i2v phantom vids...\"; \"The Dude: currently trying to get a workflow for i2v working in phantom...\"; \"VRGameDevGirl84: for the phantom model what do i pick? i2v or t2v cause its kinda both\". Kijai specifically says: \"uni3c is only for I2V models and Phantom is technically T2V model\" — this supports the architectural point, but not the blanket claim that Phantom 'only works with T2V models' in practical workflow terms.",
+      "correction": "Say that Phantom is architecturally a T2V model, which causes incompatibilities with some I2V-specific tooling like Uni3C, rather than claiming Phantom only works with T2V and is simply incompatible with I2V workflows.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "The VACE+Phantom merged model works with fp8 scaled I2V models but not with GGUF loaders.",
+      "evidence": "No such loader-compatibility statement appears in the W23 messages. The messages discuss merges and native/wrapper usage, but not this specific fp8-I2V-vs-GGUF compatibility rule.",
+      "correction": "Remove this specific compatibility claim unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "**Frames** | **121** | Phantom trained on 121 frames. Consistency degrades at 81 or 49 frames (produces \"midgets,\" wrong clothing). 97 frames is a viable middle ground for VACE merge",
+      "evidence": "The W23 messages do support that Phantom samples extra frames because of reference latents: \"Dream Making: i see / 33 frames yet Phantom samples 41 frames\" and Kijai: \"Yeah phantom reference adds a latent, so the frame count is not matching.\" But there is no mention here of 121-frame training, 49-frame 'midgets', wrong clothing, or 97 as a recommended compromise.",
+      "correction": "Keep only the supported point that Phantom adds latent frames and can sample more frames than requested; remove the unsourced numeric recommendations and failure descriptions from this week's sourcing.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**FPS** | **24** | Training framerate. VACE trained at 16fps with 81 frames",
+      "evidence": "No W23 message mentions Phantom training at 24 fps or VACE at 16 fps.",
+      "correction": "Remove the training-framerate claim unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "**CFG** | **5** | Phantom needs CFG > 1. CFG 1.0 produces poor likeness and ignores references",
+      "evidence": "Multiple W23 examples use Phantom successfully at CFG 1. Example: \"VRGameDevGirl84: Phantom, CausVid V2 strength 1, MPS rewards lora strength 1 ... Oh, 10 sampler steps\" and later \"my example videos for phantom: steps 8 cfg 1 shift 5 Schedular UniPC\". Also users discuss Phantom CFG scale not visibly changing things in some setups: \"No noticeable changes at 1, 5, or 9\". The blanket statement that CFG 1.0 produces poor likeness is contradicted by these reports.",
+      "correction": "State that CFG behavior with Phantom is workflow- and LoRA-dependent; some users reported good results at CFG 1 with CausVid-based setups.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Steps** | **20** | Minimum for quality.",
+      "evidence": "W23 messages repeatedly report decent Phantom results at lower step counts: \"v2 ... 8-12 seemed good for me\" (Kijai quote relayed by MilesCorban), \"10 looks even better. ... some of these were only 8\", \"12 steps with Phantom and Causvid looks pretty decent\", and \"Causvid lora works fine with Phantom 4 >8 steps for those that want a speed up.\"",
+      "correction": "Do not present 20 as a minimum. A safer summary is that many users reported workable results around 8-12 steps, especially with CausVid.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Sampler** | **DPM++ SDE / UniPC** | DPM++ SDE Beta reportedly best. LCM generally does not work well",
+      "evidence": "The W23 messages support scheduler/sampler sensitivity and UniPC usage, e.g. \"steps 8 cfg 1 shift 5 Schedular UniPC\" and \"wow the scheduler's really make a big difference in phantom,\" but there is no support here for DPM++ SDE Beta being best or LCM generally not working.",
+      "correction": "Limit this to: users reported scheduler choice matters, and UniPC was used successfully.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "This makes Phantom 14B approximately 3x slower than base Wan 14B due to the triple noise predictions. Setting main CFG to 1.0 disables phantom CFG and restores normal speed...",
+      "evidence": "The W23 messages contain only indirect user chatter: \"changed phantom cfg to 3 - but I think ... said that doesn't do anything when main CFG is set to 1\" and \"No noticeable changes at 1, 5, or 9\". There is no quoted Kijai explanation of triple noise predictions or 3x slowdown in these messages.",
+      "correction": "Remove the internal CFG formula and 3x-speed explanation unless sourced elsewhere; from this week you can only safely say users observed Phantom CFG interactions were confusing and sometimes ineffective when main CFG was 1.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "When you set 81 frames with Phantom, it actually samples more frames (e.g., 89) because the reference latents are included in the sampled tensor. The reference frames are trimmed at the end of sampling, not the beginning. -- Kijai, Discord #wan_chatter, July 2025",
+      "evidence": "W23 supports only the general phenomenon, not the exact example or trimming behavior: \"Dream Making: i see / 33 frames yet Phantom samples 41 frames\" and Kijai: \"Yeah phantom reference adds a latent, so the frame count is not matching.\" No 81→89 example or 'trimmed at the end' explanation appears.",
+      "correction": "Keep the general statement that Phantom reference latents increase sampled frame count; remove the specific 81→89 and trimming-direction details unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Phantom uses prompts internally to determine which aspects of reference images to focus on. This is why detailed prompting about reference contents is critical -- it will ignore anything in the reference not explicitly mentioned in the prompt.",
+      "evidence": "There is support for this as user experience, but not as a settled architectural fact. Example: ingierlingsson#0 says, \"The cool thing I’ve found with Phantom is that it’s super specific when it comes to promoting and it’ll ignore anything in your refs that you don’t mention.\" This is one user's finding, not a confirmed internal mechanism.",
+      "correction": "Phrase this as community experience: several users found Phantom often ignores reference details not mentioned in the prompt.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Send as batch, not concatenated** -- Better results when feeding images separately rather than making one combined image",
+      "evidence": "The W23 messages do not support this cleanly. In fact, wrapper behavior is reported as problematic: \"batching multiple images for phantom in the wan wrapper does not really work the way one might think\"; piblarg: \"The code will just use the first\"; later Kijai: \"Phantom doesn't technically have limit ...in the original code they used max 4 tho.\" This is too mixed to support the wiki's confident recommendation.",
+      "correction": "Replace with a cautious note: multi-image handling varies by implementation; wrapper/native behavior may differ, and some users reported batch inputs only partially working.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Duplicate for emphasis** -- Sending the same image multiple times can improve resemblance",
+      "evidence": "No W23 message supports duplicating the same image to improve resemblance.",
+      "correction": "Remove this tip unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Use real photos over AI images** -- Real face images produce much better results than AI-generated faces",
+      "evidence": "No W23 message makes this comparison.",
+      "correction": "Remove unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Match resolution** -- Don't crop reference images smaller than the output resolution. Mirror edges and blur if needed",
+      "evidence": "No W23 message mentions this specific resolution-prep advice.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- **Simple, minimal prompts work best** -- \"A woman drinking coffee\" works better than detailed paragraphs.",
+      "evidence": "The raw messages show disagreement. Supporting examples: Johnjohn7855: \"With phantom, I basically tried simple prompts... Descriptive prompts tend to take way the model's focus\"; blake37 similarly says detailed prompts backfire. But VRGameDevGirl84 later says: \"Phantom prompting is very different from t2v... but i try to describe as much as I can and provide camera movements.\"",
+      "correction": "Present this as a split community finding: many users prefer simpler prompts for likeness, while others report success with more descriptive prompting.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Chinese prompts work better** -- Model was trained mostly with Chinese text, adheres better to Chinese prompts",
+      "evidence": "No W23 message mentions Chinese prompting or training-language bias.",
+      "correction": "Remove unless supported elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Add actions to negative** -- \"Talking\" or \"conversation\" in negative prompt prevents unwanted mouth movement",
+      "evidence": "W23 contains repeated complaints about random talking, but no successful fix using negative prompts. Example: \"anybody know of a way to stop i2v phantom vids from making the subject give a speech during the whole vid?\" and \"the character is always talking regardless of the prompted scene.\" No message here confirms the negative-prompt solution.",
+      "correction": "At most say users reported unwanted talking as a common issue; this week's messages do not confirm a reliable negative-prompt fix.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Use closed-mouth reference** -- If characters keep talking, use reference images with closed mouths",
+      "evidence": "Again, the issue is discussed, but no W23 message gives this as a confirmed remedy.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- **WanAnimate** -- Can use VACE+Phantom for multi-subject videos, then WanAnimate for motion refinement with cropped inpainting",
+      "evidence": "No W23 message discusses WanAnimate at all. The developer warning specifically highlights this kind of cross-model workflow conflation. In this source set, there is no evidence tying WanAnimate to this Phantom workflow.",
+      "correction": "Remove this WanAnimate workflow claim from a Phantom page unless supported by direct messages about WanAnimate.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Face detailing** -- Standard FaceDetailer doesn't work with video. Use modified Impact Pack fork (Ablejones) that bypasses image batch warnings",
+      "evidence": "W23 mentions a \"Detailer Lora\" and general face/detailing experimentation, but nothing about a modified Impact Pack fork or batch-warning bypass.",
+      "correction": "Remove the specific tooling recommendation unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **81 frames per section with 9-frame overlap** -- Using WanPhantomSubjectToVideo node for steerable motion continuation",
+      "evidence": "No W23 message mentions WanPhantomSubjectToVideo or a 9-frame overlap recipe.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **FFLF (First-Frame-Last-Frame)** -- Morphing technique that avoids usual Phantom problems at less than 121 frames. Works better at 81 frames than standard Phantom at 81",
+      "evidence": "No W23 message mentions FFLF in relation to Phantom.",
+      "correction": "Remove unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **Context windows** -- Phantom with context windows produces confusing results; use with caution. Phantom+VACE merge fixed for context windows as of August 2025",
+      "evidence": "The only W23 context-window mention is positive/neutral: tttADs says, \"with Phantom, I use the context window. After refining, the seams mostly disappear.\" There is no support here for the blanket warning or later fix claim.",
+      "correction": "Do not claim context windows are generally confusing based on this source set; at minimum note mixed/limited evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| **Likeness** | ~80% (excellent) | ... MAGREF ~95% (best) ... VACE ref ~60% |",
+      "evidence": "No W23 message provides these percentages. Users compare models qualitatively, but no numeric consensus appears.",
+      "correction": "Replace percentages with qualitative comparisons only, if kept at all.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **MAGREF** gets higher accuracy (~95% vs ~80%) ... Works better for character swapping (5 people in video) than Phantom",
+      "evidence": "MAGREF is not discussed in the W23 messages.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- **WanAnimate** surpassed massive VACE+Phantom+PUSA workflows with far less tweaking (DawnII), though Phantom still edges it on pure likeness (Piblarg). Community split on which is better",
+      "evidence": "WanAnimate is not discussed in W23 at all. This is exactly the kind of cross-model comparison that can be misattributed from other conversations.",
+      "correction": "Remove this comparison from claims sourced to these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Stand-In** is similar to Phantom but just a 300 MB LoRA...",
+      "evidence": "Stand-In is not mentioned in W23.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- **Style LoRAs destroy performance** -- Any style LoRA negatively impacts Phantom results.",
+      "evidence": "This is contradicted by at least some positive style/stylization reports. JohnDopamine: \"the model can def do a good Simpsons style\"; VRGameDevGirl84: \"yes i tried cgi toon and it works great.\" Other users do report LoRAs often hurting Phantom, but not universally.",
+      "correction": "Say many users found LoRAs can reduce Phantom likeness/consistency, especially in complex stacks; avoid claiming all style LoRAs destroy performance.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Struggles with animated/2D content** -- Does realism well, struggles with anime/cartoon styles. Likely trained only on realistic images",
+      "evidence": "The messages are mixed. One user struggled with non-realistic illustration styles, but others reported stylized success: JohnDopamine got good Simpsons-style behavior; VRGameDevGirl84 said \"cgi toon ... works great.\" The training-data speculation is unsupported.",
+      "correction": "At most say results on stylized content were mixed in user reports; remove the training-data speculation.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **First frames look bad** -- First few frames typically look poor, then quality clears up. This is normal behavior",
+      "evidence": "No W23 message states this about Phantom.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **WebP format issues** -- Convert WebP images to PNG/JPG for better results",
+      "evidence": "No W23 message mentions WebP issues.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Moviigen LoRA causes issues** -- Even at 0.25 strength, not worth the weird motion artifacts or likeness loss",
+      "evidence": "The only relevant W23 message is tentative and limited to one setup: \"its looking like moviigen may be a mistake in I2V Phantom as well.\" That's not enough to support the strong general statement.",
+      "correction": "If included, attribute it as an early user suspicion in I2V Phantom, not a settled general rule.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **fp16 vs bf16 matters** -- fp16 quality improvement over bf16 is massive on Phantom specifically. -- Dream Making, Discord #wan_chatter, June 2025",
+      "evidence": "No W23 message from Dream Making or anyone else says this.",
+      "correction": "Remove this claim unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Tensor size mismatch with VACE | Use patcher node. Put Phantom images only in last node. Add 4 VACE images for every Phantom image to match sizes |",
+      "evidence": "W23 supports that mixing VACE and Phantom can cause tensor/size issues and that placement matters, but not the specific 'add 4 VACE images for every Phantom image' rule. Relevant messages: \"you can connect the Vace node into the phantom node. Just make sure you only put the control frames through Vace and not a reference image\" and Kijai: \"phantom reference adds a latent, so the frame count is not matching.\"",
+      "correction": "Keep only the supported guidance that VACE control can be connected carefully and that Phantom adds latent/frame-count complications; remove the unsourced 4:1 image rule.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Mask showing as frame | Try empty or very short prompts. Long prompts can cause flash issues |",
+      "evidence": "W23 does mention masks appearing as white/gray frames in VACE+Phantom experiments: \"kept getting inpainting mask appeared in the outputs as a white frame or a fainted gray cavas.\" But no message gives the prompt-length fix.",
+      "correction": "State only that some users saw inpainting masks appear in outputs when combining VACE/Phantom/CausVid; omit the unsupported prompt fix.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| CausVid causes noise/artifacts with GGUF | Use fp8 instead of GGUF Q8 for better CausVid compatibility |",
+      "evidence": "No W23 message makes this GGUF-vs-fp8 compatibility claim.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| bf16 VACE module issues | Don't mix bf16 VACE module with Phantom fp8_e5m2. Match precision between models |",
+      "evidence": "No W23 message mentions bf16/fp8 precision-matching advice.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Reference image flickering in wrapper | Latent isn't trimmed properly when combined with Phantom. Known wrapper issue |",
+      "evidence": "No W23 message states this specific wrapper bug.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Self-forcing breaks at 6 steps | Use 4-5 steps maximum with Phantom when using self-forcing |",
+      "evidence": "No W23 message mentions self-forcing.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| WanVacePhantomSimpleV2 error | Need images in phantom image input. VACE references can be empty. Don't plug videos into phantom input (causes OOM) |",
+      "evidence": "W23 supports that Phantom deals in images and VACE can handle video refs: zelgo_: \"You can use Vace for the reference frames (video) as Phantom only deals in images.\" But the specific node error behavior and OOM rule are not present.",
+      "correction": "Keep only the supported distinction that Phantom uses image refs while VACE can take video/reference frames.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- **T2V LoRAs partially work** (~30% effectiveness).",
+      "evidence": "W23 shows mixed anecdotal experience, not a quantified consensus. Kijai: \"anything added to Phantom model makes it itself work worse\"; Thom293: \"normal t2v lora seems to work with phantom\" and later \"they do work.\" No 30% figure appears.",
+      "correction": "Say LoRA compatibility is mixed: some users got them working, while many reported reduced likeness or instability.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **CausVid V2** is the most-used speed LoRA. Use at 0.3-0.5 strength with block 0 disabled. V2 preferred over V1",
+      "evidence": "W23 directly shows disagreement. Kijai's quoted explanation says some prefer 1.5 for Phantom: \"some prefer 1.5 for Phantom still.\" Johnjohn7855: \"V2 just did not work for me.\" VRGameDevGirl84 used V2 at strength 1.0, not 0.3-0.5. So the wiki overstates a consensus and invents a narrow recommended range.",
+      "correction": "State that CausVid V2 was widely tested, often around 8-12 steps, but some users preferred v1.5 for Phantom and strengths varied substantially.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **LightX2V** works at 0.5 strength with CFG 2.0. R16 version still better for VACE/Phantom at various strengths",
+      "evidence": "No W23 message mentions LightX2V.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **FusionX** -- Merging FusionX with Phantom produces stellar results. UniPC sampler works well with FusionX Phantom",
+      "evidence": "No W23 message mentions FusionX.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **PUSA** -- Phantom FusionX + PUSA + LightX2V LoRA stack provides good I2V results",
+      "evidence": "No W23 message mentions PUSA in relation to Phantom.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Merging speed LoRAs into Phantom** (CausVid/AccVid baked in) works well for eliminating per-generation LoRA loading",
+      "evidence": "W23 discusses people making Phantom merges, but does not establish this as a reliable recommendation. There are also multiple reports of merges/LoRAs behaving unpredictably.",
+      "correction": "If kept, phrase as experimental community work rather than a settled best practice.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Wan 2.2 LN LoRA** can be extracted and applied to Phantom to get 2.2 improvements",
+      "evidence": "No W23 message supports this. The closest is Kijai saying extraction is possible in principle but he \"didn't have any luck trying that with Phantom etc.\"",
+      "correction": "Do not claim this works; if mentioned at all, note that attempts were unsuccessful in these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Disable TeaCache** when using Phantom + CausVid with 10 steps. Quality much better without",
+      "evidence": "No W23 message mentions TeaCache.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| RTX 4090 (24 GB) | Full Phantom 14B fp8 | Comfortable. ~253 seconds for standard generation |",
+      "evidence": "The W23 messages mention a 4090 user getting OOM on first attempt in one workflow: \"I got OOM, and I'm running a 4090 (24gb VRAM) with 64gb RAM.. Second attempt to run it worked\". No 253-second benchmark for 4090 appears.",
+      "correction": "Remove the 253-second 4090 benchmark unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "Phantom alone: 253 seconds vs VACE alone: 738 seconds (same generation) -- VRGameDevGirl84",
+      "evidence": "No such timing comparison appears in W23. The only explicit timing-like comment is \"down to 387 seconds\" from ajo6268#0 for a specific test, not the wiki's benchmark table.",
+      "correction": "Remove these benchmark numbers unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- FP8 Phantom: roughly half the generation time of FP16 with similar quality",
+      "evidence": "No W23 message states this.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- SageAttention approximately doubles Phantom speed",
+      "evidence": "No W23 message mentions SageAttention.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Timeline entries for April/May 2025 release dates, June v2 merge release, August/September/October/November/December events",
+      "evidence": "The W23 messages only cover a single week in early June 2025. They do show active experimentation with Phantom, merges, and workflows, but they do not support the detailed release timeline across the rest of 2025.",
+      "correction": "Do not present the detailed timeline as sourced from these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Phantom was developed by the Phantom-video team (possibly acquired by ByteDance based on developer GitHub profiles).",
+      "evidence": "The W33 messages contain no evidence about a ByteDance acquisition. The only remotely related line is community speculation much later in the wiki timeline: \"December 2025 | Community reports Phantom possibly acquired by ByteDance,\" but no raw message here supports the acquisition/profile claim.",
+      "correction": "Remove the ByteDance acquisition/profile claim unless supported by separate primary evidence. If kept at all, label it clearly as unverified community speculation.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "A \"Phantom Pro\" model trained on higher resolutions was announced but details remain limited. The team also released HuMo (audio-driven character generation) and OmniInsert (subject insertion for videos).",
+      "evidence": "No W33 messages mention Phantom Pro, HuMo, or OmniInsert.",
+      "correction": "Do not present these as supported by the cited W33 Discord evidence. Keep only if sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- Multi-subject scenes -- Up to 4 reference images, each can be a different subject (person, object, background)",
+      "evidence": "W33 messages do show multi-subject use, e.g. mdkb: \"I have 3 characters, remove background, feeed into Phantom t2v and it works\" and Ablejones discusses Phantom images plural, but no message in this set states a hard limit of 4 reference images or that each can specifically be a different subject/background.",
+      "correction": "Soften to: \"Supports multiple reference images / multi-subject workflows\" unless another source explicitly confirms the 4-image limit and per-slot semantics.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- 3D character perspectives -- Can generate full rotation/pan views of a character from a single image, useful for extracting training data",
+      "evidence": "No W33 message supports this specific capability.",
+      "correction": "Remove or qualify unless supported by other primary-source messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| Phantom 1.3B | ~2.6 GB (fp16) | Simpler, works well with VACE at this scale |",
+      "evidence": "W33 only shows Kijai posting: \"1.3B VACE + Phantom (style from prompt) 😅\" which demonstrates some 1.3B experimentation, but nothing about file size or that it \"works well with VACE at this scale.\"",
+      "correction": "Keep only what is evidenced: that 1.3B VACE + Phantom was tested/shown. Remove the size/performance characterization unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| Phantom 14B fp8_e5m2 | ~15 GB | Better compatibility with older GPUs (e.g., RTX 3060) |",
+      "evidence": "W33 supports the compatibility point but not the exact size. Relevant messages: Kijai posted an e5m2 Phantom file link; mdkb: \"that sorts that problem with the 3060 incompatibility with the other model.\" No message gives \"~15 GB.\"",
+      "correction": "If keeping this row based on W33 evidence, remove the exact size and keep the compatibility note only.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| VACE+Phantom v2 GGUF Q8 | ~16 GB | orabazes conversion for low-VRAM setups |\n| VACE+Phantom v2 GGUF Q5_K_M | ~10 GB | Smallest merged option |",
+      "evidence": "W33 confirms the GGUF repo exists: orabazes: \"https://huggingface.co/orabazes/wan-14B_vace_phantom_v2_GGUF\" and xwsswww reports one file size: \"wan21VACEPhantom_v20Lowsteps-f16.gguf: n_tensors = 1331, total_size = 34.7G\". No W33 message supports the Q8/Q5_K_M sizes listed.",
+      "correction": "Remove the exact GGUF size rows unless supported by actual file listings or other primary evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "**Critical:** Phantom only works with T2V models. It is incompatible with I2V models, Uni3C (which requires I2V), and GGUF VACE modules (cannot plug non-GGUF VACE into Phantom GGUF). The VACE+Phantom merged model works with fp8 scaled I2V models but not with GGUF loaders.",
+      "evidence": "W33 supports only part of this. Supported: mdkb says \"you cant plug a non-guff VACE module into Phantom GGUF model\" and multiple messages discuss Phantom as T2V. But the broader incompatibility claims are not supported here, and one message directly muddies the absolute wording: mdkb says \"using i2v with Phantom was taking more like 40,\" indicating users were at least attempting/using Phantom in I2V-style workflows. Also no W33 evidence mentions Uni3C or the claim about merged model compatibility with fp8 scaled I2V models.",
+      "correction": "Narrow this to the supported claim: Phantom is generally discussed as a T2V reference model, and users reported that non-GGUF VACE modules could not be plugged into Phantom GGUF models. Remove the Uni3C and fp8-scaled-I2V compatibility assertions unless separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| Frames | 121 | Phantom trained on 121 frames. Consistency degrades at 81 or 49 frames (produces \"midgets,\" wrong clothing). 97 frames is a viable middle ground for VACE merge |",
+      "evidence": "W33 supports only part of this. Supported: Ablejones says \"Also Phantom was trained at 121 frames at 24 fps\". mdkb reports a specific failure mode in one workflow: \"its making them hobbit sized as the camera animation ... pulls back.\" But no W33 message supports the generalized 49-frame claim, wrong-clothing claim, or 97-frame recommendation.",
+      "correction": "Keep the 121-frame training note. Remove the 49-frame and 97-frame specifics unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| FPS | 24 | Training framerate. VACE trained at 16fps with 81 frames |",
+      "evidence": "W33 supports Phantom's 24 fps training: Ablejones: \"Phantom was trained at 121 frames at 24 fps\". But no W33 message supports the VACE 16fps/81-frames training statement.",
+      "correction": "Keep only the Phantom 24 fps note unless VACE's training spec is sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| CFG | 5 | Phantom needs CFG > 1. CFG 1.0 produces poor likeness and ignores references |",
+      "evidence": "No W33 message discusses Phantom CFG behavior.",
+      "correction": "Do not attribute this to W33 evidence; keep only if supported by other weeks/sources.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Sampler | DPM++ SDE / UniPC | DPM++ SDE Beta reportedly best. LCM generally does not work well |",
+      "evidence": "No W33 message supports these sampler recommendations for Phantom.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Shift | Low (2.2 or lower) | Phantom prefers low shift values. Higher shift hurts likeness/consistency |",
+      "evidence": "No W33 message supports this.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "When you set 81 frames with Phantom, it actually samples more frames (e.g., 89) because the reference latents are included in the sampled tensor. The reference frames are trimmed at the end of sampling, not the beginning. -- Kijai, Discord #wan_chatter, July 2025",
+      "evidence": "No W33 message contains this explanation.",
+      "correction": "Do not present this as verified by the provided raw messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Phantom uses prompts internally to determine which aspects of reference images to focus on. This is why detailed prompting about reference contents is critical -- it will ignore anything in the reference not explicitly mentioned in the prompt.",
+      "evidence": "W33 does support that prompting matters in Phantom workflows, e.g. Ablejones: \"prompting and Phantom\" and \"Only LN stage uses Phantom, HN output purely from prompting\". But no message states the stronger mechanism claim that Phantom ignores any unmentioned reference content.",
+      "correction": "Soften to: \"Prompting appears important in Phantom workflows\" unless another source explicitly explains the internal behavior.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- White background preferred -- Especially when removing backgrounds from subjects. Cut objects over white in ComfyUI\n- Real backgrounds also work -- Phantom prefers simple but real backgrounds; VACE reference prefers white",
+      "evidence": "No W33 message supports these preparation rules.",
+      "correction": "Remove or attribute as individual advice only if sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Chinese prompts work better -- Model was trained mostly with Chinese text, adheres better to Chinese prompts",
+      "evidence": "No W33 message supports this.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- WanAnimate -- Can use VACE+Phantom for multi-subject videos, then WanAnimate for motion refinement with cropped inpainting",
+      "evidence": "No W33 message mentions WanAnimate at all. The week discusses MultiTalk, FantasyPortrait, MAGREF, VACE, Phantom, and Wan 2.2 HN/LN workflows. Adding a specific WanAnimate pipeline here is unsupported and risks cross-model conflation.",
+      "correction": "Remove this WanAnimate workflow claim unless supported by direct messages about WanAnimate.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- Face detailing -- Standard FaceDetailer doesn't work with video. Use modified Impact Pack fork (Ablejones) that bypasses image batch warnings",
+      "evidence": "No W33 message mentions FaceDetailer or Impact Pack.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- 81 frames per section with 9-frame overlap -- Using WanPhantomSubjectToVideo node for steerable motion continuation\n- FFLF (First-Frame-Last-Frame) -- Morphing technique that avoids usual Phantom problems at less than 121 frames. Works better at 81 frames than standard Phantom at 81",
+      "evidence": "No W33 message supports these specific continuation/FFLF settings.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "| Likeness | ~80% (excellent) | ~95% (best) | ~60% | Good, not 1:1 | ... |",
+      "evidence": "W33 contains subjective comparisons, often conflicting: piblarg says \"phantom can do more or less pixel perfect character replacment\"; gokuvonlange says MAGREF is \"like Phantom but imo better\"; mdkb says \"recent tests I am finding phantom better for likeness\" and elsewhere says MAGREF nailed some tasks better. No numeric consensus is present.",
+      "correction": "Replace numeric percentages with qualitative, attributed comparisons only.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- WanAnimate surpassed massive VACE+Phantom+PUSA workflows with far less tweaking (DawnII), though Phantom still edges it on pure likeness (Piblarg). Community split on which is better",
+      "evidence": "No W33 message mentions WanAnimate or DawnII. This is not supported by the provided raw messages.",
+      "correction": "Remove from this page unless supported by direct WanAnimate discussion.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Style LoRAs destroy performance -- Any style LoRA negatively impacts Phantom results. Character LoRAs trained on T2V only work ~30% with Phantom",
+      "evidence": "W33 does support fragility in general: piblarg says \"any major change to phantom affects character consistency.\" But no W33 message supports the absolute \"destroy performance\" wording or the \"~30%\" figure.",
+      "correction": "Soften to a supported statement such as: \"Users reported Phantom can be sensitive to major changes/additions.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- First frames look bad -- First few frames typically look poor, then quality clears up. This is normal behavior",
+      "evidence": "W33 has one related but narrower report: Hashu says \"The phantom+Vace does have a bit of flicker at the beginning\". That does not support a general Phantom rule.",
+      "correction": "If kept, narrow to: \"Some users reported early flicker in Phantom+VACE workflows.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- WebP format issues -- Convert WebP images to PNG/JPG for better results",
+      "evidence": "No W33 message supports this.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Moviigen LoRA causes issues -- Even at 0.25 strength, not worth the weird motion artifacts or likeness loss",
+      "evidence": "No W33 message mentions Moviigen.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- fp16 vs bf16 matters -- fp16 quality improvement over bf16 is massive on Phantom specifically. -- Dream Making, Discord #wan_chatter, June 2025",
+      "evidence": "No W33 message supports this. The only precision-related W33 evidence is about e4m3fn/e5m2 compatibility and GGUF/module issues, not bf16 quality.",
+      "correction": "Remove from W33-backed claims unless separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Tensor size mismatch with VACE | Use patcher node. Put Phantom images only in last node. Add 4 VACE images for every Phantom image to match sizes |",
+      "evidence": "W33 supports tensor mismatch problems and careful embed handling, e.g. mdkb reports tensor size errors and Ablejones/Kijai discuss Phantom+VACE embed handling. But no W33 message supports the specific fix \"Add 4 VACE images for every Phantom image.\"",
+      "correction": "Keep only the general point that Phantom+VACE can produce tensor mismatch / embed-size issues and may require careful node ordering or patching.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| LCM scheduler poor results | Use UniPC or DPM++ SDE instead. LCM doesn't work well with Phantom |",
+      "evidence": "No W33 message supports this.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| CausVid causes noise/artifacts with GGUF | Use fp8 instead of GGUF Q8 for better CausVid compatibility |",
+      "evidence": "W33 mentions a LowSteps[Causvid] VACE+Phantom merge file and general GGUF conversion discussion, but no message states this compatibility rule.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Phantom ignoring references | Add specific details about reference contents to the prompt. Phantom only preserves what's mentioned |",
+      "evidence": "W33 supports that prompting matters, but not the stronger rule that Phantom only preserves mentioned details.",
+      "correction": "Soften to: \"Prompting may help steer which reference attributes are emphasized.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| ControlNet tensor mismatch | Need to pad control frames since Phantom adds latent(s) to the temporal dimension |",
+      "evidence": "W33 shows tensor mismatch errors and discussion of extra tensors/embeds, but no explicit statement about padding control frames because Phantom adds temporal latents.",
+      "correction": "Keep only the general warning about tensor mismatch / extra tensors unless sourced elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| bf16 VACE module issues | Don't mix bf16 VACE module with Phantom fp8_e5m2. Match precision between models |",
+      "evidence": "W33 discusses e4m3fn vs e5m2 and non-GGUF VACE module vs Phantom GGUF, but not bf16 VACE modules.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Reference image flickering in wrapper | Latent isn't trimmed properly when combined with Phantom. Known wrapper issue |",
+      "evidence": "W33 has reports of beginning flicker and wrapper/native differences, but no message gives this specific cause.",
+      "correction": "If kept, say only that some users reported wrapper/native differences and early flicker in Phantom+VACE workflows.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Self-forcing breaks at 6 steps | Use 4-5 steps maximum with Phantom when using self-forcing |",
+      "evidence": "No W33 message mentions self-forcing.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- T2V LoRAs partially work (~30% effectiveness). LoRAs need retraining with Phantom as base for best results",
+      "evidence": "W33 supports only a weaker version: piblarg says \"any major change to phantom affects character consistency\" and Ablejones says applying 2.2 LN as LoRA may be useful specifically for Phantom. No ~30% figure appears.",
+      "correction": "Replace with a softer, attributed statement: \"Users reported Phantom can be sensitive to LoRAs and other modifications.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- CausVid V2 is the most-used speed LoRA. Use at 0.3-0.5 strength with block 0 disabled. V2 preferred over V1",
+      "evidence": "No W33 message supports these settings.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- LightX2V works at 0.5 strength with CFG 2.0. R16 version still better for VACE/Phantom at various strengths",
+      "evidence": "W33 only has Kijai speculating about incompatibility: \"or maybe phantom doesn't like the lightx2v?\" That does not support the positive settings claim.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- FusionX -- Merging FusionX with Phantom produces stellar results. UniPC sampler works well with FusionX Phantom",
+      "evidence": "W33 mentions Fusion X VACE merge in one user's test, but no message supports \"stellar results\" or UniPC specifically.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- PUSA -- Phantom FusionX + PUSA + LightX2V LoRA stack provides good I2V results",
+      "evidence": "No W33 message mentions PUSA.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Merging Phantom with T2V at 0.15-0.25 strength dramatically improves LoRA compatibility. Pure Phantom often produces poor results (\"monstrosity\") with LoRAs",
+      "evidence": "No W33 message supports these exact merge strengths or the quoted characterization.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Merging speed LoRAs into Phantom (CausVid/AccVid baked in) works well for eliminating per-generation LoRA loading",
+      "evidence": "No W33 message supports this.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Disable TeaCache when using Phantom + CausVid with 10 steps. Quality much better without",
+      "evidence": "No W33 message mentions TeaCache.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "| RTX 3060 (12 GB) | 832x480x121 with merge | 15-18 min with VACE+Phantom FFLF. Use e5m2 format (e4m3fn incompatible). VACE module on top is too heavy |",
+      "evidence": "W33 supports only parts: mdkb repeatedly discusses 3060 constraints and says the new e5m2 Phantom solved \"the 3060 incompatibility with the other model.\" But the exact 15-18 min timing and FFLF claim are not in W33. One timing in W33 is different and for a different workflow: \"6 mins for 1 person on a 3060 with 832 x 480 x 121 fr @ 24fps\" for MultiTalk v2v, not VACE+Phantom FFLF.",
+      "correction": "Keep only the supported compatibility note: 3060 users reported e5m2 was needed because e4m3fn was incompatible on that card, and full VACE+Phantom workflows were challenging/heavy.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| RTX 4090 (24 GB) | Full Phantom 14B fp8 | Comfortable. ~253 seconds for standard generation |\n| RTX 5090 (32 GB) | Full Phantom + VACE + LoRAs | Handles complex multi-model workflows |\n| RTX 6000 Pro (48 GB) | Everything | About 2x speed of 4090 |\n| L4 (cloud) | Full workflow | ~100s with LightX2V + 3 LoRAs |",
+      "evidence": "No W33 message supports these hardware timings/capability rows.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- Phantom alone: 253 seconds vs VACE alone: 738 seconds (same generation) -- VRGameDevGirl84\n- Phantom + VACE: 261 seconds -- VRGameDevGirl84\n- FP8 Phantom: roughly half the generation time of FP16 with similar quality\n- SageAttention approximately doubles Phantom speed",
+      "evidence": "No W33 message supports these speed comparisons.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| October 2025 | Phantom custom 14B model released by community (Thom293). Lynx released (ByteDance competitor) |\n| November 2025 | OmniInsert announced by Phantom team. Phantom Pro (higher res training) announced |\n| December 2025 | Community reports Phantom possibly acquired by ByteDance |",
+      "evidence": "No W33 message supports these later timeline entries.",
+      "correction": "Remove from a W33-verified timeline unless backed by separate primary sources.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Phantom uses prompts internally to determine which aspects of reference images to focus on. This is why detailed prompting about reference contents is critical -- it will ignore anything in the reference not explicitly mentioned in the prompt.",
+      "evidence": "The messages show mixed anecdotal experiences, not a confirmed rule. For example: piblarg says, \"Phantom can be inconsitent at times.\" ▲ says, \"and prompting do like half of the rest, activating phantom properly\" and also cautions, \"pls dont take my words as law.\" But chrisd0073 says, \"I didnt do any prompting.. to keep the motion from the video.. unless you want to change ect,\" and Yan reports, \"There is no need to process the first frame. The video is directly output according to the instruction.\" This does not support a hard claim that Phantom ignores unmentioned reference details.",
+      "correction": "Soften this to something like: \"Several users reported that prompting can strongly affect which reference attributes Phantom preserves, but results are inconsistent and some users got good results with minimal prompting.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Style LoRAs destroy performance -- Any style LoRA negatively impacts Phantom results. Character LoRAs trained on T2V only work ~30% with Phantom",
+      "evidence": "The raw messages support that LoRAs can be weaker or problematic with Phantom, but not the absolute wording \"any\" or a firm community consensus. Thom293: \"Loras seem to just be weaker with phantom in general.\" piblarg: \"loras dont work as well\". ▲: \"most loras i tested, loaded on phantom, gave me pure montruosity. a little merge calm the monsters a but.\" These are individual reports, and the same week also includes positive reports of FusionX/Phantom combinations and community LoRA use: the_darkwatarus_museum mentions \"whatever combination of community loras you want applied to help,\" and multiple users discuss FusionX Phantom favorably.",
+      "correction": "Change to: \"Several users reported that many LoRAs work worse on pure Phantom than on base T2V, though some merged/FusionX workflows were reported to work well.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "medium",
+      "wiki_claim": "T2V LoRAs partially work (~30% effectiveness).",
+      "evidence": "No message in this week gives a quantified \"~30% effectiveness\" figure. The closest evidence is qualitative: Thom293 says LoRAs are weaker; piblarg says they don't work as well; ▲ says most tested LoRAs worked way better when Phantom was merged with T2V.",
+      "correction": "Remove the percentage and keep it qualitative unless another source explicitly gives that number.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Use a dual CFG guider for proper handling of Phantom's 2 negative embeds. -- Kijai, Discord #wan_chatter, July 2025",
+      "evidence": "In the provided W24 messages, there is no Kijai statement about Phantom's internal 3-pass CFG formula, 2 negative embeds, or using a dual CFG guider. The only directly relevant CFG-related messages are: Dream Making, \"on phantom the improvement compared to BF16 is massive\" and MysteryShack discussing NAG/negative prompts in wrapper. No raw message here supports this specific technical guidance.",
+      "correction": "Do not attribute this claim to these W24 messages. If kept, it should be sourced elsewhere; otherwise remove from this page's evidence-backed claims.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "When you set 81 frames with Phantom, it actually samples more frames (e.g., 89) because the reference latents are included in the sampled tensor. The reference frames are trimmed at the end of sampling, not the beginning. -- Kijai, Discord #wan_chatter, July 2025",
+      "evidence": "The W24 messages only support that extra frames appear and that Phantom adds latent(s), not the exact mechanism or the claim about trimming at the end. Evidence: ingierlingsson says, \"with the combination of Vace and the phantom refs it's sampling 4-6 extra frames\"; Kijai replies, \"need to pad the control frames I think, since Phantom adds latent(s)\"; David Snow says, \"It said sampling 101 but gave me 97 at the end.\" There is no message here confirming \"trimmed at the end\" or giving the 81->89 example as fact.",
+      "correction": "Reduce to: \"Users observed that Phantom/VACE workflows may sample extra latent frames, so control inputs may need padding.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Struggles with animated/2D content -- Does realism well, struggles with anime/cartoon styles. Likely trained only on realistic images",
+      "evidence": "This is contradicted or at least not supported as a consensus in the raw messages. piblarg speculates, \"I think it may be that phantom is trained on realistic images only,\" but this is explicitly tentative. Meanwhile there are positive anime-style reports: chrisd0073 says, \"For anime characters you can get away with a lot.. for real people the closer to input the better,\" and ZRNR says, \"It seems to work well with anime style.\"",
+      "correction": "Change to something like: \"Some users speculated Phantom may be biased toward realistic imagery, but others reported good anime-style results.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "First frames look bad -- First few frames typically look poor, then quality clears up. This is normal behavior",
+      "evidence": "The messages discuss glitches/flashing at the start, especially in VACE+Phantom combinations, but do not support this as a normal general Phantom behavior. ingierlingsson asks about \"the glitch at the start of Phantom gens\"; David Snow says the flash is \"pretty much guaranteed if you pair up vace and phantom\"; Kijai says, \"I have seen such happen with phantom before since start tho.\" This is about a glitch/flash issue, not a supported rule that the first few frames are normally poor and then clear up.",
+      "correction": "Rephrase to: \"Some users reported start-of-video glitches or flashing, especially when combining VACE and Phantom.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "WebP format issues -- Convert WebP images to PNG/JPG for better results",
+      "evidence": "No W24 message mentions WebP at all.",
+      "correction": "Remove this claim unless sourced from another verified discussion.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Moviigen LoRA causes issues -- Even at 0.25 strength, not worth the weird motion artifacts or likeness loss",
+      "evidence": "No W24 message mentions Moviigen.",
+      "correction": "Remove unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Use modified Impact Pack fork (Ablejones) that bypasses image batch warnings",
+      "evidence": "No W24 message mentions Impact Pack, FaceDetailer, or Ablejones in this context.",
+      "correction": "Remove or source elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "The VACE+Phantom merged model works with fp8 scaled I2V models but not with GGUF loaders.",
+      "evidence": "The raw messages do not support this specific compatibility statement. The only directly relevant compatibility message is Kijai: \"FantasyTalking = I2V, Phantom = T2V,\" which supports T2V/I2V incompatibility in that context, but nothing here supports the specific claim about merged model compatibility with fp8 scaled I2V models or incompatibility with GGUF loaders.",
+      "correction": "Keep only the supported part: Phantom is T2V-based and cannot directly combine with I2V-only embed workflows like FantasyTalking.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "low",
+      "wiki_claim": "Windows users should increase paging file to 80-96 GB to avoid OOM crashes.",
+      "evidence": "The W24 messages mention OOM/resource intensity, but no one gives the 80-96 GB paging-file recommendation. Example: ajo6268 reports OOMs with Latent Sync; users discuss heavy workflows, but no paging-file numbers appear.",
+      "correction": "If retained, source elsewhere; not supported by these messages.",
+      "confidence": "high"
+    }
+  ],
+  "verified_ok": [
+    "Phantom is used for subject consistency / identity preservation from reference images.",
+    "Phantom is architecturally treated as a T2V model, which is why Uni3C (I2V-only) does not work with it: Kijai said, \"uni3c is only for I2V models and Phantom is technically T2V model.\"",
+    "Phantom can be combined with VACE if done carefully.",
+    "A supported best practice is to use VACE for control frames and Phantom for reference images, not VACE reference images at the same time: ingierlingsson#0 said, \"Just make sure you only put the control frames through Vace and not a reference image.\" David Snow added, \"Reference images combined with phantom embeds tend to produce strong flashes though.\"",
+    "Phantom only deals in images, while VACE can be used for video/reference frames: zelgo_ said, \"You can use Vace for the reference frames (video) as Phantom only deals in images.\"",
+    "Phantom adds latent/reference frames, which can cause frame-count mismatches: Kijai said, \"phantom reference adds a latent, so the frame count is not matching.\" Dream Making also observed, \"33 frames yet Phantom samples 41 frames.\"",
+    "Prompting for Phantom is different from normal T2V; multiple users explicitly said so.",
+    "Many users reported that overly detailed prompts can hurt identity retention in Phantom.",
+    "There is also evidence that prompting strategy is not fully settled; some users still use more descriptive prompts successfully.",
+    "Users reported Phantom can work well with simple reference-driven workflows and often gets worse when too many add-ons/LoRAs are stacked on top.",
+    "LoRA compatibility with Phantom is mixed: some users said normal T2V LoRAs work, while others said most add-ons worsen results.",
+    "CausVid is commonly used with Phantom, and users reported workable results around 8-12 steps.",
+    "There is clear evidence that scheduler/shift choices affect Phantom results, with several users reporting lower shift improved likeness.",
+    "Seed sensitivity / hit-or-miss behavior is supported: users explicitly said the same setup can produce bad runs and good runs.",
+    "Phantom can do stylized outputs at least in some cases; Simpsons-style and CGI-toon examples were reported.",
+    "Combining VACE reference images with Phantom latents can cause bad output or flashes; this is supported by several user reports.",
+    "Wrapper/native handling of multiple Phantom images is inconsistent and implementation-dependent; the messages support caution here rather than a single fixed rule.",
+    "Phantom is treated in W33 as a T2V-style reference/identity model rather than a VACE-style control model. Example: mdkb: \"Phantom is t2v ref image consistent and pretty good. Magref is the i2v equivalent\".",
+    "Phantom is used for likeness / subject consistency from reference images. Example: mdkb: \"yes it is about the best I found for retaining likeness from an image and maintinaing it in the video\"; piblarg: \"phantom can do more or less pixel perfect character replacment\".",
+    "Phantom can reference non-people / objects, at least according to user reports. Example: Obsolete: \"Phantom can reference things that arent people I think\".",
+    "Phantom can be combined with VACE, but the combination is tricky and can require careful embed handling. Supported by many messages from Ablejones, Kijai, piblarg, and mdkb discussing Phantom+VACE merges, tensor mismatches, extra tensors, and careful handling of Phantom embeds.",
+    "There is/was a VACE+Phantom merged model by Inner Reflections, and a GGUF conversion repo by orabazes. Supported by piblarg's fp16 link and orabazes' GGUF repo link.",
+    "A Kijai fp8 e5m2 Phantom model was posted and specifically helped RTX 3060 users who could not use the e4m3fn variant. Supported by Kijai's HF link and mdkb's response about solving 3060 incompatibility.",
+    "Phantom was trained at 121 frames and 24 fps. Supported by Ablejones: \"Also Phantom was trained at 121 frames at 24 fps\".",
+    "Users reported Phantom can be sensitive to modifications / additions. Supported by piblarg: \"my general assessment was that any major change to phantom affects character consistency\".",
+    "Prompting matters in Phantom+Wan 2.2 HN/LN workflows. Supported by Ablejones: \"prompting and Phantom\" and \"Only LN stage uses Phantom, HN output purely from prompting\".",
+    "Applying a Wan 2.2 LN LoRA/extraction to Phantom was actively explored, especially as a special case for Phantom. Supported by Ablejones' multiple messages about extracting/applying 2.2 LN LoRA to Phantom 14B.",
+    "Phantom+MultiTalk compatibility/fixes were being actively worked on in W33. Supported by Kijai: \"I think I fixed up Phantom + MultiTalk\" and related follow-ups.",
+    "Non-GGUF VACE modules could not be plugged into Phantom GGUF models in users' reported setups. Supported by mdkb: \"you cant plug a non-guff VACE module into Phantom GGUF model\".",
+    "Phantom has native ComfyUI support via the WanPhantomSubjectToVideo node. Supported by lym0: \"As for native Phantom, it's been implemented via the `WanPhantomSubjectToVideo` node\".",
+    "Phantom is a T2V model and is incompatible with I2V-only workflows like FantasyTalking. Supported by Kijai: \"FantasyTalking = I2V, Phantom = T2V\".",
+    "Phantom was trained on 480p data. Supported by chrisd0073: \"The Phantom-Wan-14B model was trained on 480p data\".",
+    "Phantom was trained on 24fps data. Supported by JohnDopamine: \"The Phantom model was trained on 24fps data (vs. 16 for base Wan)\".",
+    "Users reported Phantom can take up to 4 reference images. Supported by the_darkwatarus_museum: \"batch up to 4 images as your reference\" and discussion of native handling of 4 image inputs.",
+    "Phantom is often used for subject consistency / identity preservation and can handle products, outfits, and multiple people. Supported by VRGameDevGirl84: \"It usues multi images to create the video or just one. You can bring over multi people, or a person outfit and scene or pretty much anything. like a product...\"",
+    "Phantom and VACE are commonly combined, with Phantom used for character/reference consistency and VACE for control. Supported by piblarg: \"I am using phantom for the characters and vace for the control\".",
+    "Combining VACE and Phantom can require tensor/frame padding because Phantom adds latent(s). Supported by Kijai: \"need to pad the control frames I think, since Phantom adds latent(s)\" and piblarg's note about adding VACE images to match tensor sizes.",
+    "LoRAs often behave weaker or worse on pure Phantom than on base T2V. Supported qualitatively by Thom293, piblarg, and ▲.",
+    "Phantom can be good for style adherence/style mixing. Supported by David Snow: \"I find phantom great for style adherence. great for style mixing too.\"",
+    "Users reported Phantom can infer unseen views from limited references, e.g. rear of a car from a front image. Supported by David Snow: \"Phantom was able to infer the shape of the rear of the Porsche from a single front-facing image.\"",
+    "Users reported VACE+Phantom can improve consistency while preserving control. Supported by Yan: \"The consistency of phantom+vace is indeed much improved, and the control is also very good.\""
+  ],
+  "summary": {
+    "total_issues": 116,
+    "high": 33,
+    "medium": 82,
+    "low": 1,
+    "verified_claims": 41
+  }
+}

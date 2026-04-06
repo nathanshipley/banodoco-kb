@@ -1,0 +1,763 @@
+{
+  "page": "wiki/wan/models/vace.md",
+  "verified_at": "2026-04-06T16:04:06.962744",
+  "model": "gpt-5.4",
+  "weeks_checked": [
+    "2",
+    "2",
+    "2"
+  ],
+  "issues": [
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "VACE was first released in March 2025 as a 1.3B preview, followed by the official 1.3B and 14B versions in May 2025, and the Wan 2.2 \"Fun VACE\" variant in September 2025.",
+      "evidence": "The W20 messages only support the May 2025 14B/official 1.3B release timing, e.g. \"Wan2.1 dev branch updated that VACE 14b is out (today) May 14\" and links to Wan2.1-VACE-14B / Wan2.1-VACE-1.3B on 2025-05-14. There is no support in these messages for a March 2025 first release date or any September 2025 Fun VACE release.",
+      "correction": "Limit the timeline claim to what is supported here: by May 14, 2025, official Wan2.1 VACE 1.3B and 14B were released, and a 1.3B preview had already been available earlier.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Always use at least 1 VACE block swap for memory offloading -- this enables moving VACE intermediate results to system RAM with minimal speed loss. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "The quote is misdated and partially stronger than the source. In W20 Kijai says on 2025-05-14: \"in the wrapper if you swap even one block it also offloads the VACE results, which saves a lot of VRAM\" and on 2025-05-14 22:59: \"at least 1 VACE block already cuts the memory use a lot\". The 'minimal speed loss' part is not stated here, and the citation says April 2025 though the supporting messages are from May.",
+      "correction": "Say that in the wrapper, swapping even one VACE block/offloading VACE results saves a lot of VRAM; cite May 2025 unless another source supports the April date and speed-loss wording.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE only works with both the Kijai WanVideoWrapper and native ComfyUI nodes. Native nodes are generally recommended for better memory usage and performance.",
+      "evidence": "W20 shows native support existed or was emerging, but not that native was generally recommended for better memory/performance. In fact several users reported native OOM/offloading issues: \"anyone using native vace? I'm having serious OOM issues with it\"; \"Would love to be able to load Vace as a module in native...\"; \"wrapper support for vace > native\"; and native initially required full models rather than modules.",
+      "correction": "State more cautiously that VACE was being used in both Kijai's wrapper and native ComfyUI workflows, but native support was still evolving and users reported mixed memory/offloading behavior.",
+      "confidence": "medium"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "VACE encode strength 0.4-0.8 | 0.4 for creativity, 0.8 for fidelity.",
+      "evidence": "The W20 messages do mention specific strengths in examples, e.g. \"with VACE 0.4 with 4 steps seems to work well\", \"Depth w/ vace yes at 80% VACE strength\", and \"increased VACE strength to 1.5\". But there is no supported general rule here that 0.4 means creativity and 0.8 means fidelity.",
+      "correction": "If kept, phrase as anecdotal examples from user tests rather than a general recommendation with creativity/fidelity semantics.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "Shift | 16 (default) / 20-30 (ref adherence) / 120 (extensions) | Higher shift = more reference adherence. Default is 16 for VACE",
+      "evidence": "In W20, only isolated user settings appear, e.g. \"shift8\" in one posted config. There is no evidence here for a VACE default of 16, no supported 20-30 reference-adherence rule, and no 120 extension recommendation.",
+      "correction": "Remove these specific shift recommendations unless supported by another source; W20 does not substantiate them.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "high",
+      "wiki_claim": "Sampler | dpmpp_sde_gpu / uni_pc ... dpmpp_sde_gpu beta57 reportedly major quality improvement",
+      "evidence": "W20 contains only a brief question \"unipc or flowmatch_causevid vor causevid + VACE?\" and no evidence for the listed sampler recommendations or a beta57 quality claim.",
+      "correction": "Do not present these sampler recommendations as sourced from the W20 Discord evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual frames) to the beginning of the batch. These are trimmed automatically after sampling.",
+      "evidence": "The messages support the first part but not the automatic trimming claim. Kijai: \"VACE can use image reference, but it's placed in the latents\"; piblarg: \"Thats how the vace reference works - its tacked in the first latent on the beginning of the video - there are things to trim it off before decoding.\" That implies trimming may require explicit handling, not necessarily automatic.",
+      "correction": "Say that the reference is prepended in the latent sequence and may need trimming before decode depending on workflow.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**White background is mandatory.** Remove the background from your subject and place it on a pure white canvas. VACE was trained this way and treats white as alpha/transparency.",
+      "evidence": "W20 has weaker support: melmass says \"And white background it respects whatever you prompt\" and later references \"the orginal vace guide reccomendations if you want multiple things to reference you are supposed to put white space\". There is no W20 evidence for 'mandatory', no training-data claim, and no 'white as alpha/transparency' explanation.",
+      "correction": "Soften to: users reported white background/whitespace helps reference behavior; avoid claiming it is mandatory or that white is treated as alpha unless another source explicitly states that.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Always use a control signal (depth, pose) alongside references**, or the reference overtakes the generation and adds random motion.",
+      "evidence": "W20 includes a user explicitly testing reference-only behavior: TheSwoosh asks whether a gray control video plus subject ref would act like T2V with subject ref; dawniii replies \"just don't use any control?\" and TheSwoosh later says disconnecting input_frames still ran. This contradicts an absolute 'always use a control signal' rule.",
+      "correction": "Say that many users pair references with control signals for more stable motion, but reference-only use is also possible.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "VACE supports combining multiple control types (depth, pose, canny, lineart, normals) through chaining or scheduling.",
+      "evidence": "W20 strongly supports chaining separate VACE embeds, but not a broad claim that VACE itself cleanly supports all these controls in combination. Multiple users warn the opposite: \"VACE don't like combined controls\"; \"that's fundementally difficult with VACE due to way it works\"; \"only working way is using multiple VACEs\"; \"VACE tends to 'snap' to the condition it 'detects'\"; \"lineart alone doesn't work in VACE\". The broad wording overstates native multi-control support.",
+      "correction": "Say that users can layer controls by chaining multiple VACE encode/embed nodes, but direct blended/combined controls are often unreliable and may reveal the control input.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Combined strengths should not exceed 1.0, or schedule them step-wise (e.g., depth for first half, pose for second half). -- Kijai, April 2025",
+      "evidence": "No such rule appears in W20. The actual discussion is about using multiple VACE embeds because combined controls are unreliable; no numeric 'sum <= 1.0' guidance is present.",
+      "correction": "Remove this numeric rule unless supported elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "When chaining two VACE nodes, the first node also needs the reference image to function. -- TK_999",
+      "evidence": "W20 evidence points the other way or at least makes this non-absolute. David Snow asks whether the reference should go into each VACE encode; later Kijai says: \"I seem to recall at one point fixing that so that when applying multiple VACEs at different timesteps, it's fine to leave the reference empty. But if you apply on same timesteps it's probably better to have a neutral image on the 'empty' one\".",
+      "correction": "State conditionally: depending on timestep usage/workflow, later/other chained VACE encodes may not need the reference image; same-timestep chains may benefit from a neutral image.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| **Lineart/Canny** | Must be **inverted** (black lines on white background for VACE 2.1; black background with white lines for VACE 2.2). Use AnyLine instead of canny for better results |",
+      "evidence": "W20 only supports inversion for lineart/openpose in VACE 2.1-era discussion: \"lineart for vace needs to be inverted btw\" and \"Inverted openpose is way better\". There is no W20 support for the specific polarity split between VACE 2.1 and VACE 2.2, nor for the AnyLine recommendation.",
+      "correction": "Keep the simpler supported claim: inverted lineart/openpose helped users with VACE. Remove the 2.1-vs-2.2 polarity distinction and AnyLine recommendation unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| **OpenPose** | Weak on VACE, needs higher strength. Use not-quite-black background. Disable face detection to avoid dots problem. Fun VACE 2.2 much better at following OpenPose |",
+      "evidence": "W20 supports that openpose/pose can bleed through and that inverted openpose helps, but not the specific 'not-quite-black background' or 'disable face detection to avoid dots' guidance. Relevant messages: \"how to deal with that issue that openpose is visible on output?\" and \"Inverted openpose is way better, haven't seen the sticks appear since I tried it\".",
+      "correction": "Restrict to the supported advice: pose/openpose can bleed through; inverted openpose helped some users.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE works with **all existing 1.3B T2V LoRAs** because the base model weights are unmodified.",
+      "evidence": "W20 only supports that some LoRAs can work with VACE, not 'all existing'. Examples: JohnDopamine says some quick 1.3B LoRAs \"seemed to work for style at least\"; Kijai extracted CausVid as a LoRA to work better with VACE; other users report LoRAs can interfere with VACE control. No blanket all-LoRAs claim is supported here.",
+      "correction": "Say that many T2V LoRAs appear compatible with VACE because VACE is added alongside the base model, but compatibility and quality vary by LoRA.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Control LoRAs are incompatible with VACE because they modify input channels. VACE only handles 16 channels.",
+      "evidence": "W20 supports that VACE is T2V-only and tied to T2V architecture, but does not specifically discuss 'Control LoRAs' or this incompatibility rationale.",
+      "correction": "Do not present this specific incompatibility explanation as supported by W20.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "**When to use 14B:** Final quality renders, 720p+ output, reference consistency critical, complex multi-subject scenes. 14B VACE achieves more quality in 10 minutes than some alternatives achieve in hours.",
+      "evidence": "W20 does support that many users found 14B better for reference consistency, e.g. \"VACE 14B is much better with keeping the reference\" and \"for reference specifically VACE 14B is vastly superior\". But the dramatic 'more quality in 10 minutes than some alternatives achieve in hours' is not supported in these messages and reads like hype rather than consensus.",
+      "correction": "Keep the supported comparative point about stronger reference consistency; remove the exaggerated time/quality claim unless directly sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE can extend videos by using the last N frames of a previous generation as the first frames of the next... Use 5-20 frame overlap for smooth transitions. Minimum 5 frames or VACE does not handle pacing well. -- ingi // SYSTMS",
+      "evidence": "W20 supports extension experiments and one concrete overlap example, not the full rule set. Ablejones posted \"first test of Vace for video extension with 13 frame overlap\". There is no W20 support for the 5-20 range or the 'minimum 5 frames' pacing rule.",
+      "correction": "State that users experimented with overlap-based extension, including a 13-frame overlap example; avoid presenting unsupported overlap rules as established guidance.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Color drift is intrinsic to VACE extensions and depends heavily on the specific video.",
+      "evidence": "W20 has examples of color changes during outpainting/extension and users trying color-match nodes, but no clear consensus that color drift is intrinsic. Example: Ablejones posted \"Second Vace 14b video extension test with color match nodes between samplers\" and Stad reported outpainting changed original colors.",
+      "correction": "Soften to: users reported color drift/color changes in some extension and outpainting workflows.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Character degradation after 3-5 iterations. Faces become progressively less defined (\"baked potatoes\"). Practical limit is approximately 200 frames / 3-4 generations.",
+      "evidence": "No such quantified degradation limit appears in W20.",
+      "correction": "Remove the specific 3-5 iteration / ~200 frame limit unless supported elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE 2.2 (Fun VACE) ... introduced support for both high-noise and low-noise sampling...",
+      "evidence": "There are no W20 messages about Fun VACE 2.2 at all. This entire section is outside the evidence provided for this week.",
+      "correction": "Do not treat the W20 Discord messages as support for the Fun VACE 2.2 section.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE + HuMo ... Cannot use VACE + HuMo simultaneously in the same sampling pass.",
+      "evidence": "No W20 messages mention HuMo.",
+      "correction": "Not supported by this evidence set.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE + Lynx - Lynx lite works with VACE for face ID control. -- Kijai",
+      "evidence": "No W20 messages mention Lynx.",
+      "correction": "Not supported by this evidence set.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE + PUSA ... PUSA 2.2 works with VACE...",
+      "evidence": "No W20 messages mention PUSA.",
+      "correction": "Not supported by this evidence set.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE can serve as an alternative upscaler, producing detail-rich results up to 2K resolution",
+      "evidence": "W20 has one message: \"finally latent upsclae works with vace\" and another about a latent 1.25x upscaling pass. There is no support here for a general 2K upscaling capability claim.",
+      "correction": "If included, phrase narrowly: users experimented with latent upscaling passes alongside VACE.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE is 10x more useful than WanAnimate for real VFX work.",
+      "evidence": "No W20 message contains this quote or a comparable community-backed comparison to WanAnimate.",
+      "correction": "Remove unless directly sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE is far ahead of anything else for controlling video output.",
+      "evidence": "W20 contains enthusiasm for VACE, but not this exact quote or a validated consensus statement. There is also pushback/opinion diversity, e.g. \"fun control is way better.. a little slower\" from one user.",
+      "correction": "Avoid presenting this as consensus based on W20 alone.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Always use at least 1 VACE block swap for memory offloading -- this enables moving VACE intermediate results to system RAM with minimal speed loss. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "In the provided W21 raw messages, users discuss specific swap counts (e.g. \"40 blocks swapped and 5 vace blocks swapped\", \"use 40 blocks to swap\", \"vace blocks to swap to 15\"), but there is no message from Kijai stating that at least 1 VACE block swap should always be used or explaining minimal speed loss.",
+      "correction": "Remove the attributed quote unless sourced elsewhere. In this week's messages, users discuss VACE block swapping pragmatically, but no Kijai statement establishing an 'always use at least 1' rule appears.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "**Critical:** VACE only works with **T2V models** (16 input channels). It will not work with I2V models. The VAE must be version 2.1 even when using VACE 2.2 modules (VAE 2.2 is for the 5B model only). -- Cseti, Discord #wan_chatter, September 2025",
+      "evidence": "The T2V-only part is strongly supported in W21: \"yea just vace itself does not work with an I2v model\" (dawniii#0, 2025-05-19 16:37), \"Vace doesnt work with i2v\" (2025-05-20 04:27), \"VACE should only be applied to a T2V version of WAN\" (MilesCorban, 2025-05-20 04:44). But the VAE 2.1/2.2 claim does not appear anywhere in the provided raw messages.",
+      "correction": "Keep the T2V-only statement, but remove the VAE-version assertion unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Important:** Match precision between VACE modules and the base model. Using bf16 VACE modules with fp8 base models (or vice versa) produces degraded results. -- mdkb, Discord #wan_chatter, September 2025",
+      "evidence": "In W21, users do discuss mixed formats and loading issues, but no message states this specific quality rule. Relevant messages are about incompatibility/loading, e.g. \"Black generations | Use matching quantization types...\" is not present in raw messages, and no mdkb quote appears.",
+      "correction": "Do not present this as a sourced Discord claim from the provided evidence unless another week/source confirms it.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **White background is mandatory.** Remove the background from your subject and place it on a pure white canvas. VACE was trained this way and treats white as alpha/transparency. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "The W21 messages do not contain this claim. The closest relevant statement is different: \"one thing to note with VACE and reference is that it does take the actual composition of the reference image into account\" (Kijai, 2025-05-20 21:25). That supports composition sensitivity, not a mandatory white background or white-as-alpha behavior.",
+      "correction": "Soften this to something like: \"Reference composition matters a lot; some users isolate subjects for cleaner results.\" Do not state white background is mandatory based on the provided messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **Always use a control signal (depth, pose) alongside references**, or the reference overtakes the generation and adds random motion. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "This absolute rule is contradicted by multiple W21 examples of VACE being used successfully without a control video: \"VACE 14B with Causvid (9steps) without controls\" (melmass#0, 2025-05-21 01:41); users also discuss start/end frame and ref-only style workflows. No provided Kijai message states 'always use a control signal.'",
+      "correction": "Change to a softer statement: \"Control signals often improve motion and structure when using references, but users also report workable ref-only/start-end workflows.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Style transfer limitations:** VACE reference is for background, setting, or subjects -- it is not a style-transfer model, even if it occasionally produces stylistic results. For pure style transfer, consider [[ditto]] LoRAs or Fun Control. -- Ablejones, Discord #wan_chatter, November 2025",
+      "evidence": "The W21 messages point the other way: users explicitly discuss style use with VACE. \"So cool you can mix style embeds via make image batch with vace\" (yo9o, 2025-05-19 11:41). \"Got any examples of style transfer with vace only?\" / \"style transfer is interesting but I think vace does well\" (Clownshark Batwing / piblarg#0, 2025-05-19 22:21-22:23). Also users recommend VACE for applying style from a stylized first frame to a whole video: \"I want to use a video input + ref image(stylized first frame of the video input). and apply the style to the whole vid.\" / \"ah, sorry- then VACE is your tool\" (Valle, 2025-05-24 11:31).",
+      "correction": "Do not frame this as a settled limitation. A safer wording is: \"Users do use VACE for style/reference transfer, though results vary and it may not behave like a dedicated style-transfer model.\"",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Use full denoise (1.0) for inpainting. Lower denoise works for v2v but inpainting requires full strength. -- Ablejones, hicho, Discord #wan_chatter, December 2025",
+      "evidence": "No such denoise guidance appears in the provided W21 messages. The inpainting discussion in W21 centers on gray fill + mask, e.g. \"For the inpain you need to both fill the masked area with gray (127) and provide a mask to the mask input\" (melmass#0, 2025-05-21 02:02).",
+      "correction": "Remove or re-source this denoise rule.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- VACE 2.1 is significantly better at spatial inpainting than Fun VACE 2.2. -- Ablejones, hablaba",
+      "evidence": "No Fun VACE 2.2 discussion appears in the provided W21 messages, and no comparison of 2.1 vs 2.2 inpainting is present.",
+      "correction": "Do not include this comparison unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- VACE remembers object details intelligently when outpainting (e.g., a partially visible scooter will be completed correctly).",
+      "evidence": "The W21 messages do mention outpaint/inpaint as capabilities in general (e.g. official teaser/tasks references), but no concrete scooter-style example or claim about intelligent object completion appears.",
+      "correction": "Keep outpainting as a capability, but remove the specific example unless sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Combined strengths should not exceed 1.0, or schedule them step-wise (e.g., depth for first half, pose for second half). -- Kijai, April 2025",
+      "evidence": "W21 strongly supports chaining multiple VACE encodes, but not this numeric rule. Relevant messages: \"pose is higher strength, and depth is the lower strength one\" (MilesCorban, 2025-05-19 04:18); \"Pose at strength 1 and depth at strength .5\" (VRGameDevGirl84, 2025-05-19 13:31). Those examples already sum above 1.0, contradicting the wiki's hard rule.",
+      "correction": "Replace with: \"Users often tune relative strengths across chained encodes (e.g. stronger pose, weaker depth); no clear consensus rule from these messages says combined strengths must stay under 1.0.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| **Lineart/Canny** | Must be **inverted** (black lines on white background for VACE 2.1; black background with white lines for VACE 2.2). Use AnyLine instead of canny for better results |",
+      "evidence": "Only the first half is supported in W21, and only for VACE generally/2.1 context: \"Canny should be inverted for VACE\" (Kijai, 2025-05-24 11:13). There is no W21 evidence for the 2.1 vs 2.2 polarity split, nor for \"Use AnyLine instead of canny for better results.\"",
+      "correction": "Change to: \"Canny should be inverted for VACE.\" Remove the 2.1/2.2 polarity distinction and AnyLine recommendation unless separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| **Normal maps** | Not officially trained for VACE but can be tricked into working. Desaturate and blur them. Normal Craft works better than Sapients |",
+      "evidence": "W21 supports that normals can be used experimentally, but not the specific processing advice or tool ranking. Relevant messages: \"did you try normal map?\" (VRGameDevGirl84, 2025-05-20 03:22); \"knock out the background before processing the normal map, vace things the background belongs in the final output\" (traxxas25, 2025-05-20 00:10). No message says desaturate/blur or that Normal Craft beats Sapiens.",
+      "correction": "Limit this to: \"Users experimented with normal maps; isolating the subject/background may help.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- VACE 2.1 beats 2.2 Fun VACE for multi-frame interpolation. -- Kijai, January 2026",
+      "evidence": "No such comparison appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Control LoRAs are incompatible with VACE** because they modify input channels. VACE only handles 16 channels.",
+      "evidence": "W21 strongly supports that VACE itself is T2V-only / 16-channel and incompatible with I2V conditioning, but there is no message in the provided set specifically about 'Control LoRAs' being incompatible for this reason.",
+      "correction": "Keep the T2V/16-channel limitation, but do not extend it to a specific Control-LoRA incompatibility claim without direct evidence.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Wan 2.2 Fun VACE does not support Wan 2.2 LoRAs (it is built on 2.2 Fun architecture). -- Danial",
+      "evidence": "No Fun VACE / Wan 2.2 LoRA compatibility discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| FusionX | 1.0 | 8 total (2 without ref, 6 with ref) | Distilled merge, works with native VACE |",
+      "evidence": "No FusionX settings or this 2+6 split appear in W21. The only similar split in the provided messages is generic experimentation with references and multi-stage workflows, not this specific recipe.",
+      "correction": "Remove the exact FusionX settings unless directly sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| LightX2V | 0.5 | 4-8 | Can cause VACE issues; use OG 2.1 'v2' LoRA rank64/128 instead |",
+      "evidence": "No LightX2V discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| DiffSynth | 1.0 | 8 | Used for watermark removal workflows |",
+      "evidence": "No DiffSynth discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "| `vace_blocks.8.modulation` error with fp8 | The base model is 1.3B -- use bf16 versions instead |",
+      "evidence": "The W21 raw messages include debug logs mentioning ignored modulation keys in a custom GGUF patching attempt, but no general troubleshooting rule that this error means 'the base model is 1.3B -- use bf16 versions instead.'",
+      "correction": "Remove this specific diagnosis unless directly sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Model mismatch error with VACE 2.2 | Use VAE 2.1, not VAE 2.2 (which is for 5B model) |",
+      "evidence": "No such VAE mismatch guidance appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| `Wan22` import error | ComfyUI too old, does not have Wan 2.2 VAE code. Update ComfyUI |",
+      "evidence": "No such error appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| VACE module won't load after update | Update PyTorch to 2.10 nightly or switch rms_norm back to default |",
+      "evidence": "No such PyTorch/rms_norm advice appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Can't use GGUF with VACE module in native | Need merged model or wrapper workflow instead |",
+      "evidence": "W21 actually shows active experimentation and some success with native + GGUF/VACE combinations, though with caveats. Examples: \"If gguf in native works perfectly for me\" (Nokai, 2025-05-21 09:34); \"Vace is already supported in native for like a week now\" (Kosinkadink, 2025-05-21 22:58); The Punisher discusses VACE GGUFs and MoviiGen VACE GGUFs. This does not support a blanket 'can't use GGUF with VACE module in native' statement.",
+      "correction": "Soften to: \"Native support was evolving; some users used merged/native VACE and GGUF variants, while modular/chained workflows were often easier in wrapper.\"",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Flashy/bad results | Disable batched CFG on sampler. Or: remove block swap node |",
+      "evidence": "No W21 message mentions batched CFG causing flashy/bad VACE results or removing block swap as a fix.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Orange tinted outputs | Use vace_blocks_to_swap=15 and normal block_swap=30, or reduce frame count |",
+      "evidence": "No W21 message gives this orange-tint fix.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Black generations | Use matching quantization types (both bf16 or both fp8). Don't mix e5m2 normal and scaled |",
+      "evidence": "No W21 message states this.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| First frame flash in VACE 2.2 | Lower CFG scale start to 1.5. Use LoRA Block Edit to switch off first block. -- Rainsmellsnice |",
+      "evidence": "No Fun VACE 2.2 first-frame-flash discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| TeaCache not working with VACE | Use threshold 0.1 (not default 0.015). TeaCache memory bug fixed in latest commits |",
+      "evidence": "W21 mentions TeaCache mostly in the context of CausVid speed workflows: \"Someone said remove SLG and TeaCache with CausVid\" and \"for vace/cause should i have sage and teacache off ?\" No threshold guidance appears.",
+      "correction": "Remove the threshold claim unless separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| OOM at 1280x704 | Even with blockswap 40. This is a VACE resolution limit. Reduce resolution or frame count |",
+      "evidence": "W21 includes many OOM/memory anecdotes, but no evidence of a hard VACE resolution limit at 1280x704 specifically.",
+      "correction": "If kept, present as anecdotal and not a fixed limit.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| torch.compile artifacts in Fun VACE | Upgrade PyTorch from 2.9.0 to 2.9.1 |",
+      "evidence": "No such message appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Context options tensor mismatch | Context options don't work with VACE/I2V currently. Needs edits for different conditioning dimensions. -- Kosinkadink |",
+      "evidence": "W21 does show context-options problems with multi-VACE setups, e.g. 100a reports errors when using Context options with double VACE Encode, but no Kosinkadink explanation about conditioning dimensions appears. Also some users do use context with VACE in other setups.",
+      "correction": "If included, phrase as an observed issue in some workflows rather than a sourced architectural explanation.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Fun VACE is the Wan 2.2 version of VACE, created by the Fun team at Alibaba PAI (not related to Fun Control or Fun InP models). It introduced support for both high-noise and low-noise sampling, expanding on VACE 2.1 which was low-noise only.",
+      "evidence": "No Fun VACE 2.2 release or high/low-noise discussion appears in the provided W21 messages.",
+      "correction": "Do not verify this from W21; keep only if sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "### Community Consensus (as of early 2026)\n\nThe community is split. Many users report reverting to VACE 2.1 for most workflows:\n\n- **Use VACE 2.1 for:** Inpainting, reference preservation, face consistency, wide shots, multi-frame interpolation, spatial masking, character LoRA workflows\n- **Use Fun VACE 2.2 for:** Fast motion, OpenPose following, video continuation/extension, high noise work, dual-model 2.2 workflows, depth control",
+      "evidence": "There is no W21 evidence for this 2.1 vs 2.2 consensus framing. W21 is overwhelmingly about VACE 2.1/14B and wrapper/native workflows; Fun VACE 2.2 is not substantively discussed.",
+      "correction": "Do not present this as consensus based on the provided messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- VACE strength of Phantom frames should be set to 0.0 (automatically handled in background). -- Ablejones",
+      "evidence": "W21 supports Phantom+VACE as a combo: \"I am using phantom + vace\" (Johnjohn7855, 2025-05-20 03:27), \"There is a vace embed input in the phantom embed nodes\" (2025-05-22 14:07). But no message gives this specific 0.0 setting.",
+      "correction": "Keep Phantom+VACE compatibility, remove the exact Phantom-frame VACE strength claim unless sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- End VACE at 0.5 for improved Phantom+VACE combination.",
+      "evidence": "No such setting appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### VACE + HuMo\n\n- Cannot use VACE + HuMo simultaneously in the same sampling pass.\n- Can split: VACE/Phantom for HN sampling, switch to HuMo for LN sampling for lip sync refinement. -- Ablejones",
+      "evidence": "No HuMo discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### VACE + Lynx\n\n- Lynx lite works with VACE for face ID control. -- Kijai",
+      "evidence": "No Lynx discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### VACE + PUSA\n\n- PUSA 2.2 works with VACE when using reference image or control signal.\n- PUSA LoRA at strength 1.0 maintains better reference likeness and reduces degradation compared to VACE alone. -- Ablejones",
+      "evidence": "No PUSA discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| SVI 2.0 Pro | Only works with I2V models |",
+      "evidence": "No SVI 2.0 Pro discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| PainterI2V | Only works with I2V, not T2V/VACE |",
+      "evidence": "No PainterI2V discussion appears in W21.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### Upscaling with VACE\n\nVACE can serve as an alternative upscaler, producing detail-rich results up to 2K resolution:\n- Use the original video as control input at the target resolution.\n- Set VACE strength to 0.5 with denoise ~0.5.\n- 81 frames at higher resolution took 4-5 minutes on a 5090. -- FL13",
+      "evidence": "W21 has some high-resolution VACE anecdotes, but no sourced upscaling recipe with these exact settings or timing.",
+      "correction": "Remove the exact recipe/timing unless separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### Long Video Generation\n\n- **Fun VACE 2.2** can create very long videos (theoretically hours) using 5-20 frame overlap with gray padding. -- seitanism",
+      "evidence": "W21 does discuss long VACE continuations/extensions with overlap and gray padding, but not Fun VACE 2.2 specifically. Example: \"feed the first 20 frames and then N gray frames at that same resolution into the wan vace embed\" (Rishi Pandey, 2025-05-22 20:52); notid reports arbitrary-length continuation with overlap. This is a model attribution problem.",
+      "correction": "Attribute long-video overlap/gray-padding continuation to VACE workflows generally in W21, not specifically Fun VACE 2.2.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "> \"VACE is 10x more useful than WanAnimate for real VFX work.\" -- spacepxl, Discord #wan_chatter, December 2025",
+      "evidence": "No such quote appears in W21, and the provided messages do not compare VACE to WanAnimate in a way that would justify this as anything but one person's opinion.",
+      "correction": "If retained, clearly mark as an individual opinion from another source; it is not supported by the provided messages.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "> \"VACE is far ahead of anything else for controlling video output.\" -- Discord #wan_chatter, May 2025",
+      "evidence": "W21 contains enthusiasm for VACE, but not this quote or a broad community consensus. There is also pushback in adjacent comparisons, e.g. \"I2V still the best for me.\" (ezMan, 11🔥, 2025-05-19 06:52), and \"Wan14b has better video quality... if you are only using a single reference image... I'd choose Wan14b\" (zelgo_, 2025-05-19 08:31).",
+      "correction": "Do not present this as consensus from the provided messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Lipsync stripping.** Using VACE on already lip-synced content removes the sync.",
+      "evidence": "W21 includes speculation that VACE might reduce the need for separate lip-sync workflows (e.g. CaptHook, 2025-05-19 04:08), but no message states that VACE strips existing lip sync.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE was first released in March 2025 as a 1.3B preview, followed by the official 1.3B and 14B versions in May 2025, and the Wan 2.2 \"Fun VACE\" variant in September 2025.",
+      "evidence": "In the raw messages for this week, only the 1.3B preview is discussed as released. Kijai links `ali-vilab/VACE-Wan2.1-1.3B-Preview` on 2025-04-01. Later messages explicitly say 14B is not out yet: [2025-04-05T13:08] Kijai: \"there is no 14B VACE yet\"; [2025-04-05T17:36] Draken: \"VACE current is 1.3b only, they havnt released the bigger ones\".",
+      "correction": "For this time period, the evidence supports that only the Wan 2.1 1.3B preview had been released. Do not state that 14B was already officially released based on these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Standalone VACE module -- Only the VACE blocks (~6 GB for 14B bf16), loaded alongside a separate Wan T2V base model. This is the recommended approach as it allows swapping base models freely.",
+      "evidence": "This week's messages only show Kijai extracting a standalone module for the 1.3B preview, not a 14B standalone module. [2025-04-03T23:08] Kijai: \"standalone VACE that you can load with any 1.3B model\" and links `Wan2_1_VACE_1_3B_preview_bf16.safetensors`. [2025-04-05T13:08] Kijai: \"there is no 14B VACE yet\".",
+      "correction": "Limit the standalone-module claim here to the extracted 1.3B preview module unless separate evidence exists for 14B.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Always use at least 1 VACE block swap for memory offloading -- this enables moving VACE intermediate results to system RAM with minimal speed loss. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "The raw messages support the mechanism but not the 'always use' prescription or 'minimal speed loss' wording. [2025-04-06T19:00] Kijai: \"moves the VACE intermediate results after each VACE block to RAM when it's calculated, lowering the VRAM use to about nothing extra.. with very slight speed loss, this is automatically enabled if even 1 VACE block is swapped\". [2025-04-04T07:09] Kijai: \"For now just set vace blocks to something more than 0 when using block swap\". This is advice for enabling offload, not a universal rule.",
+      "correction": "Say that setting at least 1 VACE block to swap enables RAM offloading of VACE intermediates; avoid presenting it as an absolute rule unless broader evidence supports that.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "**Critical:** VACE only works with **T2V models** (16 input channels). It will not work with I2V models. The VAE must be version 2.1 even when using VACE 2.2 modules (VAE 2.2 is for the 5B model only). -- Cseti, Discord #wan_chatter, September 2025",
+      "evidence": "The T2V-only part is supported this week: [2025-04-03T22:12] Kijai: \"VACE is separate module from the main model, main model still is just 16 channels\" and multiple users discuss using it with 1.3B T2V. But there is no evidence in these raw messages for the VAE 2.1/2.2 requirement, and no VACE 2.2 discussion at all in W14.",
+      "correction": "Keep the T2V-only claim if desired, but remove the VAE 2.1 vs 2.2 requirement from this citation unless supported elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "**Important:** Match precision between VACE modules and the base model. Using bf16 VACE modules with fp8 base models (or vice versa) produces degraded results. -- mdkb, Discord #wan_chatter, September 2025",
+      "evidence": "This week's messages mention the preview model precision, but do not support the degradation claim. [2025-04-02T23:03] Kijai: \"The 1.3B model is in fp32, but the VACE blocks are in bf16\". No one in W14 states that mixed precision between standalone VACE and base model causes degraded results.",
+      "correction": "Do not attribute this precision-matching warning to W14 evidence.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **White background is mandatory.** Remove the background from your subject and place it on a pure white canvas. VACE was trained this way and treats white as alpha/transparency. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "The raw messages support white padding/background as advice, but not 'mandatory' or the alpha/transparency explanation. [2025-04-02T08:24] Kijai: \"if this is VACE, you should remove the background of your reference, or pad it with white\". [2025-04-03T18:13] Kijai: \"white for reference\". There is also pushback: [2025-04-03T18:20] Zuko: \"This example on the VACE site has a gray bg tho\".",
+      "correction": "Soften this to: white background or white padding is commonly recommended for VACE references.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Always use a control signal (depth, pose) alongside references**, or the reference overtakes the generation and adds random motion. -- Kijai, Discord #wan_chatter, April 2025",
+      "evidence": "W14 messages do not support this as a rule. Users successfully discuss ref-only VACE: [2025-04-03T23:05] melmass#0: \"running my first context gen, VACE reference seems to work\"; [2025-04-03T20:59] ameasure: \"I do not get good facial identity preservation with just reference image, but the WanVideo Vace Start to End Frame fixes that\"; [2025-04-02T22:24] melmass#0: \"Using VACE ref image (in KJ Wrapper)\". The evidence suggests ref-only is possible, though sometimes weaker.",
+      "correction": "Change to a softer recommendation: using control alongside a reference often improves motion/control, rather than saying it must always be used.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- VACE only accepts a single reference image. If you feed a batch, it concatenates them into one image internally.",
+      "evidence": "The concatenation behavior is supported, but the 'only accepts a single reference image' wording overstates it. Users explicitly experimented with multiple refs in wrapper workflows: [2025-04-01T22:56] melmass#0: \"(Using 2 ref images in Wan VACE with KJ Wrapper)\" and [2025-04-05T16:31] melmass#0: \"Subjects are batched? I realised that batch ref seems to just be concat into a single image (side by side)\". So operationally, users can feed multiple images; they are just concatenated.",
+      "correction": "Say: VACE workflows may accept a batch of reference images, but they appear to be concatenated into a single composite reference rather than treated as separate refs.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- 50px white padding around the subject improves results.",
+      "evidence": "W14 supports white padding in general, not a specific 50px number. [2025-04-02T08:24] Kijai: \"remove the background of your reference, or pad it with white\".",
+      "correction": "Remove the specific 50px figure unless sourced elsewhere; keep the general advice to pad with white.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE supports combining multiple control types (depth, pose, canny, lineart, normals) through chaining or scheduling.",
+      "evidence": "W14 supports combining multiple controls via multiple VACE encodes, especially depth+pose, but not the full list. [2025-04-03T18:41] ameasure: \"you can stack multiple controls, with VACE anyways\". [2025-04-06T14:37] Kijai: \"you can also use two VACE encode nodes, one with the pure depth and one with the pure pose\". But canny support is directly disputed: [2025-04-04T20:58] Zuko: \"VACE doesn't support canny though, just depth and pose.\" No W14 evidence mentions lineart or normals working with VACE.",
+      "correction": "Restrict this section to supported W14 evidence: multiple VACE encodes can be used to combine controls such as depth and pose. Do not claim canny/lineart/normals support from this evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "| **Lineart/Canny** | Must be **inverted** (black lines on white background for VACE 2.1; black background with white lines for VACE 2.2). Use AnyLine instead of canny for better results |",
+      "evidence": "This week's VACE discussion does not support canny/lineart as a VACE capability. The only direct statement is contrary: [2025-04-04T20:58] Zuko: \"VACE doesn't support canny though, just depth and pose.\" Earlier, a user trying canny says it just copied the canny input: [2025-04-02T13:18] 3Dmindscaper2000: \"i tried with canny and it just made the output look like the canny input but slightly colored like the reference\". This looks like failed experimentation, not established VACE support.",
+      "correction": "Remove or heavily qualify the canny/lineart guidance for VACE unless supported by direct VACE evidence from another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| **OpenPose** | Weak on VACE, needs higher strength. Use not-quite-black background. Disable face detection to avoid dots problem. Fun VACE 2.2 much better at following OpenPose |",
+      "evidence": "W14 supports that pose/openpose-like controls are used with VACE, and some users mention face dots / mouth-eye weakness, but not the specific operational advice here. Relevant messages: [2025-04-03T08:52] Kytra: \"the hands don't always match up and it pretty much ignores the mouth/eyes and just follows the chin\"; [2025-04-05T06:50] traxxas25: \"it seems vace doesnt play well with overlayed controlnets\"; [2025-04-04T18:56] zelgo_: \"I've not had any issues with openpose on the Vace base model\". No W14 evidence for 'not-quite-black background' or 'disable face detection'.",
+      "correction": "Keep only the broadly supported point that pose control can work but may have facial/hand quirks; remove the specific preprocessing advice unless sourced elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual frames) to the beginning of the batch. These are trimmed automatically after sampling.",
+      "evidence": "W14 contains user speculation about latent/frame behavior, not confirmation. [2025-04-04T19:48] BondoMan asks whether to repeat start image in batch of 4 or change 81 to 77; no authoritative answer appears in the provided messages. [2025-04-03T19:55] melmass#0: \"I think that's how VACE works, same with using the reference as first latent\" is speculative.",
+      "correction": "Do not state this as fact based on W14 evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE works with both the **Kijai WanVideoWrapper** and **native ComfyUI nodes**. Native nodes are generally recommended for better memory usage and performance.",
+      "evidence": "In W14, users are still asking whether native support exists. [2025-04-01T23:35] piblarg#0: \"are we going to get VACE support in native?\" and [2025-04-05T15:45] TheSwoosh: \"Does vacework with native ?\". The conversation centers on Kijai's wrapper and extracted module, not established native-node support.",
+      "correction": "For this period, say VACE was being used primarily through Kijai's WanVideoWrapper; do not claim native ComfyUI support from these messages.",
+      "confidence": "high"
+    }
+  ],
+  "verified_ok": [
+    "May 14 2025 release timing for official Wan2.1 VACE 14B and official 1.3B is well supported by multiple messages and model links.",
+    "VACE 14B exists both as a full/merged model and as separate extracted modules; users discussed loading full models in model loaders vs modules in vace_model inputs.",
+    "VACE requires a T2V base model rather than I2V nodes/models. This is strongly supported by repeated messages from Kijai and others: \"always T2V model with VACE\", \"you do NOT use I2V nodes with VACE\".",
+    "Reference image and start image are separate concepts in VACE. Kijai explicitly says they are \"fully separate concepts\".",
+    "The reference image is inserted at the front of the latent sequence rather than used like Wan I2V cross-attention image embeds.",
+    "At least one swapped VACE block can significantly reduce VRAM usage in the wrapper; multiple users discuss swapping base blocks plus VACE blocks.",
+    "14B VACE applies every 5th block while 1.3B VACE applies every 2nd block. This is explicitly stated by Kijai and dawniii.",
+    "VACE can be used for start/end frame workflows and for control-driven 'I2V-like' tasks using T2V + VACE.",
+    "Multiple VACE encode/embed nodes can be chained via prev_embeds/prev_vace_embeds to layer controls.",
+    "Directly blending multiple controls into one image is unreliable; separate VACE embeds are the commonly recommended workaround.",
+    "Lineart for VACE needs inversion, and inverted openpose helped reduce visible stick artifacts.",
+    "VACE supports only a single reference image natively; feeding a batch causes horizontal concatenation in the node.",
+    "Gray 127,127,127 / 0.5 is supported as the neutral fill value for masked/inpaint regions.",
+    "Users reported VACE can outpaint and inpaint, including object completion behavior such as 'remember what the scooter looks like'.",
+    "CausVid extracted as a LoRA can work with VACE at reduced strength and low CFG/low step counts, though several users note it can weaken VACE control.",
+    "Matching model sizes/variants matters: 14B VACE module should be paired with 14B T2V base, and wrong model/module combos produce errors.",
+    "Common setup errors in the wiki around loading a VACE module into the main model loader instead of the vace_model input are supported by explicit error messages in W20.",
+    "The error family around vace_blocks.8.modulation is supported by multiple users and tied to incorrect settings/model combinations.",
+    "Native ComfyUI support for VACE existed by the end of W20, but module-style addon behavior was still more mature in the wrapper.",
+    "VACE is used as a module alongside a Wan T2V base model rather than replacing it outright. Supported by multiple messages: \"Vace Module > Wan\" (zelgo_, 2025-05-19 09:03), \"You can't load the vace model in the main model loader. That has to be a t2v model\" (VRGameDevGirl84, 2025-05-22 02:38), and Kijai: \"Mine is simply just the vace blocks saved separately\" (2025-05-19 13:07).",
+    "VACE only works with T2V models, not I2V models. Strongly supported by dawniii#0 and others: \"yea just vace itself does not work with an I2v model\" (2025-05-19 16:37), \"Vace doesnt work with i2v\" (2025-05-20 04:27), \"VACE should only be applied to a T2V version of WAN\" (MilesCorban, 2025-05-20 04:44).",
+    "Multiple VACE encodes/chaining via prev_vace_embeds is a real workflow. Supported by many messages including MilesCorban's multi-encode setup (2025-05-19 04:18), yo9o asking \"so multi vace rujnnin into each prev embeds?\" (2025-05-19 13:32), and MilesCorban explaining \"prev_vace_embeds is for chaining multiple VACE nodes together\" (2025-05-21 03:30).",
+    "Using separate VACE encodes for different controls like pose and depth is supported. Example: MilesCorban uses pose higher strength and depth lower strength (2025-05-19 04:18); VRGameDevGirl84 recommends pose first at 1 and depth second at .5 (2025-05-19 13:31).",
+    "For inpainting, you need both gray-filled masked regions in the input video and a separate mask. Strongly supported by melmass#0: \"For the inpain you need to both fill the masked area with gray (127) and provide a mask to the mask input\" (2025-05-21 02:02).",
+    "Mask polarity for VACE inpainting is white = change, black = preserve. Supported by Draken: \"whatever is white in the mask can change, anything black will not (VACE inpaint)\" (2025-05-21 07:29).",
+    "VACE adds 4 frames when using reference/input batching behavior. Supported by user observations: \"with vace setup it always adds 4 frames\" (N0NSens, 2025-05-19 19:38), \"sampling 81 frame with vace but sampler actually generates 85 frames\" (2025-05-19 22:33), and an execution log showing \"Sampling 85 frames\" after a nominal 81-frame setup (2025-05-21 09:16:43).",
+    "CausVid works with VACE. Strongly supported throughout W21: many users discuss VACE+CausVid workflows, e.g. seitanism#0: \"with wan2.1 T2V 14B + VACE 14B module + causvid 14B lora\" (2025-05-21 02:34), and deleted_user_2ca1923442ba: \"causvid and vace yeah\" (2025-05-23 23:15).",
+    "On 14B, VACE applies every 5th block, which is why users discuss disabling every 5th block with CausVid. Supported directly by dawniii#0: \"vace applies to every 5th block on 14b\" (2025-05-19 16:07).",
+    "Native ComfyUI support for VACE existed by late W21, but wrapper remained important for modular workflows. Supported by Kosinkadink: \"Vace is already supported in native for like a week now\" (2025-05-21 22:58), while melmass#0 clarifies \"Native only support full VACE model\" (2025-05-21 09:36).",
+    "Kijai's native/wrapper distinction for modules is supported: native only supports full VACE model, while the VACE module can be used with other Wan variants in wrapper. Supported by melmass#0: \"Native only support full VACE model\" and \"the VACE module can be used with any of the Wan variants (Skyreel, Moviigen etc)\" (2025-05-21 09:36).",
+    "VACE can be used for video extension/continuation by feeding prior frames plus gray padding. Supported by Kijai: \"VACE itself can extend a video\" (2025-05-20 21:43), Rishi Pandey: \"feed the first 20 frames and then N gray frames at that same resolution into the wan vace embed\" (2025-05-22 20:52), and notid's overlap batching workflow (2025-05-24 22:00).",
+    "Color drift/discoloration in VACE extensions is a real issue. Supported by ArtOfficial: \"Skyreels doesn’t have the noticeable color shift that vace does\" (2025-05-23 13:23), and notid: colors \"drift over time, becoming crispier and crispier\" in long VACE continuation (2025-05-24 22:00).",
+    "Reference image composition strongly affects VACE output. Supported by Kijai: \"one thing to note with VACE and reference is that it does take the actual composition of the reference image into account\" (2025-05-20 21:25).",
+    "VACE can be used with only a reference image / without a control video in some workflows. Supported by melmass#0: \"VACE 14B with Causvid (9steps) without controls\" (2025-05-21 01:41), contradicting any claim that control is always mandatory.",
+    "Canny should be inverted for VACE. Supported directly by Kijai: \"Canny should be inverted for VACE\" (2025-05-24 11:13).",
+    "Blending multiple control images together before VACE can cause problems; separate encodes are often preferred. Supported by AyyLmao asking if skeleton overlay is due to blending depth and DWPose wrong (2025-05-19 14:32), VRGameDevGirl84 saying \"vace does not like that\" about image-blending CN outputs (2025-05-24 02:55), and many users preferring double VACE encode.",
+    "More than two VACE encodes initially had a bug in wrapper support. Supported by Kijai: \"fixed the case of more than 2 VACEs now, very silly mistake, it indeed never took into account more than 2\" (2025-05-21 16:15).",
+    "VACE strength can be scheduled over timesteps. Supported by Kijai: \"added list support for the VACE strength values, can control the strength over timesteps with it\" (2025-05-21 16:06) and \"to be clear both cfg and VACE strength can be scheduled like that\" (2025-05-22 14:54).",
+    "VACE is often used with Phantom for better identity preservation. Supported by Johnjohn7855: \"I am using phantom + vace\" (2025-05-20 03:27), and \"There is a vace embed input in the phantom embed nodes\" (2025-05-22 14:07).",
+    "VACE can be used with alternative Wan-family bases like SkyReels and MoviiGen via the module approach. Supported by melmass#0: \"the VACE module can be used with any of the Wan variants (Skyreel, Moviigen etc)\" (2025-05-21 09:36), plus multiple SkyReels-VACE and MoviiGen-VACE examples later in W21.",
+    "VACE preview for Wan 2.1 1.3B was released and discussed heavily in early April 2025.",
+    "A standalone extracted VACE module for the 1.3B preview was created by Kijai and could be loaded with any 1.3B base model.",
+    "Base 1.3B T2V LoRAs were reported to work with VACE. Supported by Kijai ('yes') and multiple users reporting style/hires/face LoRAs working.",
+    "VACE is a separate module added alongside the main model rather than changing the base model weights. Supported by Kijai: 'main model still is just 16 channels' and 'turns out the main model was not even trained'.",
+    "VACE is slower/heavier than base 1.3B because every step runs through extra VACE blocks. Supported by Kijai: 'every step runs through 15 VACE blocks'.",
+    "VACE block swap/offloading reduces VRAM use substantially, and setting at least one VACE block to swap enables RAM offloading of VACE intermediates.",
+    "The 1.3B preview model is fp32 while the VACE blocks are bf16.",
+    "Lower VACE encode strength around 0.4 can preserve control while restoring some creativity. Directly supported by Cseti.",
+    "The overall VACE strength affects both control and reference strength. Directly supported by Kijai on 2025-04-06.",
+    "White background or white padding for reference images was commonly recommended in early VACE usage.",
+    "Multiple VACE encode nodes / prev_vace_embeds were discussed for combining controls, especially depth and pose.",
+    "VACE inpainting was praised by multiple users in W14 as very strong/useful.",
+    "VACE can be used for start/end frame workflows and frame extension/continuation by feeding prior frames back in.",
+    "VACE was being compared favorably against Fun/Control models by several users, but these are opinions rather than hard capabilities."
+  ],
+  "summary": {
+    "total_issues": 86,
+    "high": 26,
+    "medium": 60,
+    "low": 0,
+    "verified_claims": 54
+  }
+}

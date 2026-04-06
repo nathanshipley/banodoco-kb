@@ -1,0 +1,239 @@
+{
+  "page": "wiki/wan/models/wan-2.2.md",
+  "verified_at": "2026-04-06T16:02:33.659445",
+  "model": "gpt-5.4",
+  "weeks_checked": [
+    "2",
+    "2",
+    "2"
+  ],
+  "issues": [
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Fun VACE 2.2 was released in September 2025 by Alibaba PAI, with HN and LN variants. Works out of the box with the wrapper.",
+      "evidence": "In W31, people repeatedly say Wan 2.2 VACE is not out yet and are using hacks/merges instead: \"Wan 2.2 Vace isn't out yet but some people have already yoinked some of the released models together with Vace module to make it work.\" (2025-07-29 20:08); \"Wan vace 2.2 is not out yet, so you can play with the demo test but its not wokring good yet\" (2025-07-31 21:20). The only concrete VACE-on-2.2 examples are experimental merges: \"it's vace scopes from extracted from wan2.1, then injected into wan2.2 14b, just for testing if it will work\" (2025-07-28 15:26).",
+      "correction": "For this period, say that native Wan 2.2 VACE was not yet released; users were experimenting with unofficial merges/injections of Wan 2.1 VACE into Wan 2.2.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "VACE 2.2 uses black background + white lines for lineart/canny (inverted from 2.1's white bg + black lines).",
+      "evidence": "No W31 messages mention canny/lineart polarity for Wan 2.2 or VACE 2.2. The VACE discussion in these logs is about hacked merges, OpenPose/Depth, and whether VACE works with Wan 2.2 at all. Because VACE and Wan 2.2 are discussed together in mixed workflows, this kind of control-mode detail is especially prone to being imported from VACE context without direct support here.",
+      "correction": "Remove this from the Wan 2.2 page unless sourced elsewhere; if kept, attribute it specifically to a VACE model/version with direct evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "SageAttention 2.2.0+ is required for 2.2 workflows and fixes the I2V first-frame flash issue.",
+      "evidence": "The raw messages show SageAttention being used for speed/compatibility, but not that it is required, nor any mention of a first-frame flash fix. Examples: \"Patch sage att and model patch torch settings nodes were added to both passes\" (2025-07-28 17:36); \"still 28minutes (5090)\" despite sage/compile (2025-07-28 17:40); users also run without it. No message in W31 states that SageAttention is required or that it fixes first-frame flash.",
+      "correction": "Soften to: SageAttention was commonly used to speed up Wan 2.2 workflows; this week's messages do not support 'required' or the first-frame-flash fix claim.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "5B does not quantize well: \"Don't use fp8 with 5B, stick to fp16.\"",
+      "evidence": "W31 contains active experimentation with 5B GGUF and no clear consensus against quantization in general. Examples: \"https://huggingface.co/lym00/Wan2.2_TI2V_5B-gguf-test\" (2025-07-28 13:53); \"there are already gguf models for Wan 2.2?\" (2025-07-30 01:18); \"Wan 2.2 5b GGUF model took me 13mins for 2sec\" (2025-07-31 13:11). The logs do show some users unhappy with 5B quality, but not a supported blanket rule that fp8 should never be used and fp16 only is required.",
+      "correction": "If kept, narrow it to a tentative user preference rather than a hard rule, and distinguish fp8 from GGUF quantization.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Community consensus through early 2026 is nuanced: 2.2 is the clear quality and motion winner for base T2V/I2V work, but 2.1 still wins for face consistency, VACE inpainting, long-form lip-sync, and many distilled/speed workflows.",
+      "evidence": "The W31 messages strongly support better motion/prompt adherence for 2.2, but do not support the broader 'community consensus' claims about 2.1 still winning VACE inpainting and long-form lip-sync. In fact, VACE 2.2 is not yet out in these logs, and lip-sync/long-form are barely discussed. Supported examples include: \"Motion is deffo better with wan2.2\" (2025-07-28 15:33), \"prompt adherence of wan2.2 compared to wan2.1 is just crazy\" (2025-07-30 18:03). But the rest of the sentence goes beyond what these messages establish.",
+      "correction": "Limit the claim to what the messages support here: Wan 2.2 was widely praised for motion and prompt adherence; comparisons on VACE inpainting and long-form lip-sync were not established in this week's discussion.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "The split is controlled by a boundary parameter: T2V: boundary = 0.875 (switches to low noise after step 12 of 40 total, roughly the first ~30% of sampling); I2V: boundary = 0.900 (switches after step 22 of 40 total).",
+      "evidence": "W31 directly supports the sigma boundaries themselves for training/config use, especially 0.875 for T2V and discussion around 0.900 for I2V, e.g. training configs with `min_t = 0.875 max_t = 1` (2025-08-01 11:18, 2025-08-02 13:40). But the exact step conversions \"after step 12 of 40\" and \"after step 22 of 40\" are not stated in these messages.",
+      "correction": "Keep the boundary values if sourced elsewhere, but remove the exact step-number conversions unless directly sourced.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "low",
+      "wiki_claim": "Most implementations unload the first model before loading the second, so only one ~14B model needs to be in VRAM at a time.",
+      "evidence": "This is partly supported, but only conditionally. Kijai says: \"as long as you have offload_device selected as load device and not running --high-vram they never occupy VRAM at the same time\" (2025-07-29 10:37). The wiki wording sounds unconditional.",
+      "correction": "Qualify it: with offloading / non-high-vram setups, HN and LN need not occupy VRAM simultaneously.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Merging HN and LN weights. Produces pure noise. They are not compatible as averages.",
+      "evidence": "W31 contains users experimenting with merges, and at least some report partial functionality rather than 'pure noise': \"I merged the two model fp16 wan 2.2 with Vace, which I then quantized in GGUF Q8. It seems to be working as Depth and Openpose are used in this one\" (2025-07-29 04:44); \"It's apparently a merge of the two WAN 2.2 High and Low models with Vace... the image control feature works just fine\" (2025-08-03 22:33). These are not clean endorsements, but they contradict an absolute 'produces pure noise' statement.",
+      "correction": "Avoid the absolute claim. Say that naive all-in-one merges were viewed skeptically and often degraded quality; this week's messages do not support 'always pure noise.'",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Original VACE 2.1 module works fine on 2.2 LN (sometimes even on T2V). VACE applied to the 2.2 HN is 'mediocre' or ignored entirely -- it was never trained for HN.",
+      "evidence": "The logs show confusion and contradictory experimentation, not a settled conclusion. Examples: \"Vace + Wan2.2 Low noise model only\" / \"Vace + Wan 2.2 High noise model only\" (2025-07-28 18:33) are test labels, not conclusions. Later: \"you only need to input vace result latent in low noise denoising !\" (reported second-hand, 2025-07-31 23:47), but the same message then claims \"vace 1.1 was really wan 2.2 hight noise ! so I have tried it, and vace wokrs perfectly !!\"—showing the topic was unsettled and confused.",
+      "correction": "State that in this period users were still testing whether VACE should be applied to LN only or in merged/hacked setups; no clear consensus is supported here.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "low",
+      "wiki_claim": "Control signals (Uni3C, Fun Control) need strength 3-5 on HN, 1.0 or off on LN.",
+      "evidence": "No W31 messages provide these numeric control strengths for Uni3C/Fun Control on Wan 2.2. Control discussion is mostly about VACE/OpenPose/Depth hacks.",
+      "correction": "Remove the numeric recommendation unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Fun VACE 2.2 was released in September 2025 by Alibaba PAI, with HN and LN variants.",
+      "evidence": "In the provided W32 messages, the Alibaba PAI Fun releases appear on 2025-08-08, not September: \"[2025-08-08T00:11] dawniii#0: Oh man here we go https://huggingface.co/alibaba-pai/Wan2.2-Fun-A14B-Control\"; \"[2025-08-08T09:17] Kijai: https://huggingface.co/alibaba-pai/Wan2.2-Fun-A14B-InP\"; \"[2025-08-08T09:18] Kijai: https://huggingface.co/alibaba-pai/Wan2.2-Fun-A14B-Control\".",
+      "correction": "Change the timeline/release month for Fun VACE/Fun Control/Fun Inpaint 2.2 from September 2025 to August 2025, or avoid specifying the month unless supported by broader sources.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "VACE 2.2 uses black background + white lines for lineart/canny (inverted from 2.1's white bg + black lines).",
+      "evidence": "No message in the supplied W32 raw logs states this about Wan 2.2/VACE 2.2. The only explicit control-model capability message is the HF description reposted by zelgo_: \"supporting various control conditions such as Canny, Depth, Pose, MLSD, etc., and trajectory control.\" There is no evidence here for the specific black/white inversion detail.",
+      "correction": "Remove this specific inversion claim unless it is supported by another source week. In this evidence set, only the existence of Canny/Depth/Pose/MLSD/trajectory support is supported.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "medium",
+      "wiki_claim": "Masks in 2.2 are inverted from VACE in some workflows -- worth checking.",
+      "evidence": "The W32 messages about masks are specifically confused and often about non-VACE WanVideo Encode behavior, not a confirmed Wan 2.2 base-model rule. Examples: \"[2025-08-05T21:54] xwsswww: For v2v, seems the masks for WanVideo Encode, makes the results more similar to the original video...\" and \"[2025-08-05T22:04] xwsswww: ...it acts as a sort of attention/control net.\" Also: \"[2025-08-09T23:35] xwsswww: I noticed masks doesn't work for Wan 2.2 i2v or t2v using mask slot of WanVideo Encode. The masks acts as a sort of control net or attention masks.\" This is not evidence of a confirmed inversion rule for Wan 2.2 itself.",
+      "correction": "Rephrase to something like: \"Mask behavior in Wan 2.2 workflows can be confusing and may differ between WanVideo Encode, VACE, and wrapper/native workflows; users reported mask slots sometimes behaving more like control/attention guidance than strict inpainting masks.\"",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Original VACE 2.1 module works fine on 2.2 LN (sometimes even on T2V). VACE applied to the 2.2 HN is \"mediocre\" or ignored entirely -- it was never trained for HN.",
+      "evidence": "The raw messages show mixed results rather than a clean consensus that HN is ignored entirely. Supporting LN-only tendency exists: \"[2025-08-06T22:28] Kijai: no it's 2.1 VACE with 2.2 models\" and \"[2025-08-07T11:46] mdkb: works fine with old VACE module with t2v low noise Wan 2.2.\" But there is direct counter-evidence against 'ignored entirely': \"[2025-08-07T18:24] Ablejones: Vace 2.1 does work with Wan2.2, even the High Noise model. But you need specific settings and strengths.\" Also a hacky workaround was shared: \"[2025-08-09T09:18] ingierlingsson#0: ...the issue with the high noise model not picking up on Vace is to inject the reference video as latents and start the denoising at step 2...\"",
+      "correction": "Soften this to: \"Community reports suggest VACE 2.1 works most reliably on the 2.2 low-noise stage; high-noise support is weaker/inconsistent and may require special settings or hacks rather than working out of the box.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "5B does not quantize well: \"Don't use fp8 with 5B, stick to fp16.\"",
+      "evidence": "The W32 messages do show skepticism about 5B and fp8, but not a strong community consensus in this dataset. What is present: \"[2025-08-04T17:20] seitanism#0: i think the 5b model is completely different from the A14B models\" and several 5B workflow/debug messages. But there is no clear quoted message in W32 saying \"Don't use fp8 with 5B, stick to fp16.\"",
+      "correction": "If kept, attribute it as a tentative user recommendation rather than settled consensus, unless supported by another week. For this evidence set, avoid the strong blanket statement.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "SageAttention 2.2.0+ is required for 2.2 workflows and fixes the I2V first-frame flash issue.",
+      "evidence": "The W32 logs support that SageAttention is commonly used and can help speed, but not that it is 'required' or that it fixes the first-frame flash issue. Relevant messages: \"[2025-08-06T13:11] Josiah: i can confirm 3090, sage attention, wan2.2 Q8 gguf is working.\" and \"[2025-08-05T22:28] None: ...I see its 'patching comfy attention to use sageattn' on every generation.\" The flash issue itself appears in a speculative message: \"[2025-08-04T11:32] nekodificador#0: this weird flash at the end... im not sure if is because phantom + VACE, sageattn, shift + sampler issues...\" which does not establish SageAttention as the fix.",
+      "correction": "Rephrase to: \"SageAttention was widely used with Wan 2.2 for speed/memory benefits; some users discussed flash artifacts, but this evidence set does not confirm SageAttention as the definitive fix.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "A widely shared trick: use three ksamplers -- 1. First: 2 steps HN without any distill LoRA, at full CFG (3.5+). 2. Second: HN with distill LoRA at CFG 1 for remaining HN steps. 3. Third: LN with distill LoRA at CFG 1.",
+      "evidence": "The raw messages show experimentation in this direction, but not a clearly established 'widely shared trick' with this exact recipe. Closest evidence: \"[2025-08-04T22:08] flo1331: Currently trying out a 3-3-3 split with 2 different high models. 3 steps at 3 cfg with no lora and then 3 steps with lora into low moel\" and \"[2025-08-07T18:20] pagan: btw to avoid the overbrighness if you add a ksampler for first step cfg 3.5 without any lora it kind of render the brightness likw vanilla wan22\". That's suggestive, but not enough for the exact codified method.",
+      "correction": "Present this as an experimental community technique rather than a widely shared best practice, unless corroborated elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Use both by mixing: Wan 2.1 as LN refiner with Wan 2.2 HN as the motion/prompt driver is a widely used hybrid. \"You can use Wan 2.1 as the low noise model -- the low model doesn't do anything new really.\"",
+      "evidence": "The logs do show people discussing hybrid use, but not enough to call it 'widely used' from this week alone. Evidence: \"[2025-08-04T08:23] Draken: Wan2.1 & High-Noise Expert reuses the Wan2.1 model as the low-noise expert and uses the Wan2.2's high-noise expert...\" and some users mixing 2.1 LightX/LoRAs with 2.2. But there is no strong reaction-backed consensus here that the full 2.1-as-LN hybrid is widely used.",
+      "correction": "Soften to: \"Some users experimented with hybrid workflows using Wan 2.2 high noise and Wan 2.1-compatible low-noise components/LoRAs.\"",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Fun VACE 2.2 was released in September 2025 by Alibaba PAI, with HN and LN variants. Works out of the box with the wrapper.",
+      "evidence": "Week W33 messages show the opposite state of affairs in mid-August: \"got to wait for official VACE for Wan 2.2, I guess...\" (AmirKerr, 2025-08-11 20:44); \"Wan2.2 vace has some experimental workflows that include merged models, using low noise model with Wan2.1 vace, and some hacked stuff. Nothing official and nothing easy i would say.\" (Josiah, 2025-08-12 18:44); \"VACE not out offically for 2.2 yet\" (The Shadow, 2025-08-15 20:57).",
+      "correction": "For mid-August 2025, the page should say official Wan 2.2 VACE was not yet released; people were using experimental merges or Wan 2.2 low-noise with Wan 2.1 VACE workflows.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Fun VACE 2.2 released (Alibaba PAI).",
+      "evidence": "The timeline places this in August 2025, but raw messages from Aug 11-15 repeatedly say official VACE 2.2 is not out yet: \"got to wait for official VACE for Wan 2.2\" (2025-08-11 20:44), \"Nothing official\" (2025-08-12 18:44), and \"VACE not out offically for 2.2 yet\" (2025-08-15 20:57).",
+      "correction": "Do not state Fun VACE 2.2 as already released in August 2025. At least for this week, the supported claim is that users were waiting for an official release and relying on unofficial/experimental workflows.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "5B does not quantize well: \"Don't use fp8 with 5B, stick to fp16.\"",
+      "evidence": "The raw messages include complaints about 5B quality/artifacts (e.g. \"Wan2.2 5B is not good, Artifacts appear in the video.Any idea\" on 2025-08-13 09:40, and \"the day 1 results were pretty bad\" on 2025-08-13 21:04), but no message in this week says fp8 is the cause or gives the quoted advice. The only concrete 5B-specific technical claim in this week is that it uses the 2.2 VAE: \"Wan2.2 5b is both I2V and T2V in one, it's also the only one that uses the wan2.2 VAE.\" (phazei, 2025-08-17 02:39).",
+      "correction": "Soften this to a general note that some users reported poor 5B quality/artifacts; do not attribute a specific 'don't use fp8' rule to this week's evidence.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "Community consensus through early 2026 is nuanced: 2.2 is the clear quality and motion winner for base T2V/I2V work, but 2.1 still wins for face consistency, VACE inpainting, long-form lip-sync, and many distilled/speed workflows.",
+      "evidence": "This week supports parts of that, but not as a settled consensus. There are mixed views: \"Wan 2.1 + Vace can handle V2V exceedingly well. I have not seen a Wan2.2 wf that can handle V2V quite as well in terms of control.\" (Josiah, 2025-08-12 13:17) supports 2.1/VACE strength; but users also praise 2.2 face/identity in some cases: \"I usually get good facial expressions using base wan 2.2\" (2025-08-12 21:02), \"wan 2.2 already does that quite well\" re likeness (hablaba, 2025-08-13 15:20). For speed workflows, opinions are mixed: some still prefer LightX2V, others report success with Lightning on Fun or 2.2.",
+      "correction": "Present this as a common view or recurring theme, not firm community consensus. Example: 'Many users preferred 2.1 for VACE-heavy control and lip-sync workflows, while 2.2 was often praised for motion and prompt adherence.'",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "SageAttention 2.2.0+ is required for 2.2 workflows and fixes the I2V first-frame flash issue.",
+      "evidence": "This week contains only a generic suggestion list including SageAttention from a user asking for advice (2025-08-14 14:22), but no message saying it is required or that it fixes first-frame flash. No supporting quote for the flash fix appears in the provided raw messages.",
+      "correction": "Downgrade to an optional optimization note unless supported elsewhere: 'SageAttention was commonly recommended for speed.' Remove the 'required' wording and the first-frame-flash fix claim from this evidence set.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "low",
+      "wiki_claim": "Linux uses ~4 GB less VRAM than Windows with torch compile.",
+      "evidence": "No message in W33 mentions a quantified Linux-vs-Windows VRAM difference. The closest related comments are about wrapper/native memory behavior and Windows compile instability, e.g. \"torch.compile seems inconsistent in torch 2.8 currently, in windows\" (Kijai, 2025-08-17 13:59) and wrapper saving ~3GB VRAM (Jonathan, 2025-08-13 01:29).",
+      "correction": "Remove the specific 4 GB cross-OS claim unless sourced elsewhere.",
+      "confidence": "medium"
+    }
+  ],
+  "verified_ok": [
+    "Wan 2.2 A14B is a two-stage setup with separate high-noise and low-noise models. Supported by many messages such as \"Wan 2.2 has high and low noise models\" (2025-07-28 13:04) and users discussing two samplers/models throughout the week.",
+    "The 5B model is a unified TI2V model. Supported by early speculation and naming discussion: \"maybe they unified it so it's both text and image 2 vid all in one\" (2025-07-28 01:54), plus repeated community use of 5B for both T2V/I2V.",
+    "A14B uses Wan 2.1 VAE while 5B uses the new Wan 2.2 VAE. Strongly supported: \"Wan2.2 introduces Wan2.2_VAE.safetensors (for the TI2V-5B model)\" (2025-07-28 06:22), \"The A14B model doesn't use the new VAE\" (2025-07-28 06:23), and multiple user errors from using the wrong VAE.",
+    "Wan 2.2 14B/A14B is 16 fps, while 5B is the one officially documented at 24 fps. Supported by: \"official code is generating at 16 fps, except for 5b, which manually overrides to 24 fps\" (2025-07-28 16:56) and \"haven't seen a single source that says the A14B would be 24fps, official code has it at 16 too\" (2025-07-29 13:04).",
+    "Prompt adherence and camera/motion are widely perceived as better in Wan 2.2 than 2.1. Supported by many messages with reactions, e.g. \"prompt adherence of wan2.2 compared to wan2.1 is just crazy, especially the camera\" (2025-07-30 18:03), \"camera motion much better with A14B\" (2025-07-28 19:25), and \"Wan 2.2 has a pretty good undestanding on camera moves\" (2025-07-29 03:08).",
+    "Applying old speed/distill LoRAs tends to reduce what makes 2.2 special. Supported by multiple comments: \"Most of the interesting motion that Wan 2.2 adds is a bit gone. With lightxv2 lora attached to I2V it kinda feels like wan 2.1\" (2025-07-30 15:53); \"it can run okay with the lightx2v loras, but that's also still destroying some of what 2.2 can do\" (2025-07-31 08:31).",
+    "Low-noise is more compatible with Wan 2.1-era LoRAs/workflows than high-noise. Supported by comments like \"Wan 2.2 Low noise model works with fastwan btw\" (2025-07-28 15:51), and repeated training discussions about separate high/low LoRAs.",
+    "HN/LN are trained and handled separately for LoRA training. Strongly supported by multiple training config posts and comments: \"separate adapters will need to be trained for high-noise and low-noise experts\" (2025-07-28 10:51), \"You have to generate both a high noise and low noise LoRA\" (2025-08-01 03:15).",
+    "CLIP vision is not needed for Wan 2.2. While only lightly evidenced here, the direct question \"WAN 2.2 doesnt need Clip Vision with Clip H?\" (2025-07-29 14:09) aligns with the workflow changes and no contrary evidence appears in these logs.",
+    "Wan 2.2 A14B is a two-stage high-noise/low-noise setup rather than a single monolithic model; many messages discuss separate high and low models explicitly.",
+    "Wan 2.2 14B is native 16 fps, while users distinguish the 5B as the 24 fps model. Supported by Kijai: \"14B is 16fps\" and CaptHook quoting 14B as 81/16 vs 5B as 121/24.",
+    "CLIP vision is not needed for Wan 2.2. Supported by N0NSens: \"wan 2.2 dont needs clip vision.\"",
+    "Wan 2.2 low noise is broadly treated as closer to Wan 2.1, and many users discuss reusing 2.1 LoRAs on the low stage.",
+    "Applying speed/distill LoRAs can reduce Wan 2.2's motion/quality advantages; multiple users complain that Lightning/LightX makes outputs feel worse or more like 2.1.",
+    "Wan 2.2 is widely praised for motion and prompt adherence in this week’s messages.",
+    "The 5B model is structurally different from A14B and not interchangeable with it.",
+    "Fun Control / Fun Inpaint / Fun control-condition support for Wan 2.2 is real; the Alibaba PAI links and reposted HF description support canny/depth/pose/MLSD/trajectory control for the Fun Control release.",
+    "WanAnimate is not evidenced here as a true 2.2 architecture; the broader page’s caution that branding can differ from structure is consistent with the ecosystem context and not contradicted by these messages.",
+    "Wan 2.2 A14B uses separate high-noise and low-noise models with a boundary around 0.875 for T2V; this is directly supported by multiple messages discussing timestep ranges and training configs.",
+    "Wan 2.2 14B uses the Wan 2.1 VAE, while 5B uses the Wan 2.2 VAE; supported by messages warning about 'wrong VAE' and explicitly stating 5B is the only one that uses the 2.2 VAE.",
+    "Wan 2.2 low-noise is widely treated as very similar to Wan 2.1 / usable as a swap-in replacement in older workflows; supported by repeated comments from mdkb, CJ, and flo1331.",
+    "Wan 2.2 low-noise can be used by itself in V2V-style or cleanup workflows, but this does not mean full Wan 2.2 has native VACE/control capabilities; the raw messages clearly distinguish these.",
+    "Wan 2.2 5B is a combined TI2V model handling both T2V and I2V; supported by Gill Bastar and phazei.",
+    "Wan 2.2 prompt adherence is commonly praised, especially compared with 2.1; supported by multiple user comments.",
+    "Lightning vs LightX2V quality is mixed, with many users in this week still preferring LightX2V for quality; supported by several comments.",
+    "WanAnimate is not evidenced here as a true 2.2 base model; nothing in this week contradicts the wiki's warning that branding can be misleading."
+  ],
+  "summary": {
+    "total_issues": 24,
+    "high": 6,
+    "medium": 15,
+    "low": 3,
+    "verified_claims": 26
+  }
+}

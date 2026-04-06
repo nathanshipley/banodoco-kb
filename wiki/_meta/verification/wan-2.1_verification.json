@@ -1,0 +1,169 @@
+{
+  "page": "wiki/wan/models/wan-2.1.md",
+  "verified_at": "2026-04-06T16:02:00.071065",
+  "model": "gpt-5.4",
+  "weeks_checked": [
+    "2",
+    "2",
+    "2"
+  ],
+  "issues": [
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "The community consensus through early 2026 is that Wan 2.1 is not obsolete: for inpainting, face consistency, VACE work, reference adherence, and most distilled/speed workflows, 2.1 is still either competitive with or superior to 2.2.",
+      "evidence": "The W31 messages show active disagreement rather than consensus. Examples: \"I tested more than 10 loras Wan 2.1 for Wan 2.2 , for me its not wokring good at all, and even bring loose of quality to the global video.\" (lovis.io, 2025-07-31 21:20); \"Training the exact same dataset on Wan2.2 yields better results than using Wan2.1 loras on Wan2.2\" (chancelor, 2025-08-01 22:24); \"Yeah, the High-noise model is the innovation here, I'm convinced. Better prompt following, better motion.\" (Ablejones, 2025-07-28 21:42); \"it's way better than wan 2.1 yes\" (aikitoria, 2025-07-29 21:33).",
+      "correction": "Soften this to say some users continued preferring Wan 2.1/VACE 2.1 for certain workflows, while many in W31 considered Wan 2.2 clearly better for motion and prompt adherence. Do not present superiority of 2.1 as broad consensus based on this evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Wan 2.1 LoRAs work on the 2.2 Low stage.",
+      "evidence": "The raw messages support this only as mixed/conditional, not universally. Supporting examples exist: \"Low noise is infact retrained wan2.1\" (🦙rishappi, 2025-07-28 16:15), \"I used my wan 2.1 loras only on the low models and they worked (had to increase the str obvoiusly)\" (Cseti, 2025-08-01 21:52). But there is also direct pushback: \"my first test looks like it does NOT work with wan 2.1 lora\" (jasblack#0, 2025-07-28 13:09); \"I tested more than 10 loras Wan 2.1 for Wan 2.2 , for me its not wokring good at all\" (lovis.io, 2025-07-31 21:20); \"Training the exact same dataset on Wan2.2 yields better results than using Wan2.1 loras on Wan2.2\" (chancelor, 2025-08-01 22:24).",
+      "correction": "Change to: \"Many Wan 2.1 LoRAs can be used on the 2.2 low-noise stage, often with higher strength, but results are mixed and native 2.2 training generally works better.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "Wan 2.1 T2V/I2V | Wan 2.2 Low Noise | Yes, reliably -- 2.2 LN is effectively a 2.1 finetune",
+      "evidence": "W31 supports the 'effectively a 2.1 finetune' part, but not the 'Yes, reliably' part. Multiple users describe low noise as Wan 2.1-based: \"The Low-noise model is Wan2.1 fine-tune basically\" (Ablejones, 2025-07-28 21:42), \"low noise is basically tuned up wan2.1\" (Ablejones, 2025-07-29 18:02), \"Low-noise model... is based on the older WAN 2.1 14B model\" (thaakeno, 2025-07-30 03:49). But reliability is disputed by users reporting poor results with old LoRAs: lovis.io and chancelor messages above.",
+      "correction": "Replace \"Yes, reliably\" with \"Often works on the low-noise stage, but reliability varies by LoRA and native 2.2 LoRAs usually perform better.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "LightX2V 2.1 LoRAs are still undefeated ... the 2.1 version still wins for lighting quality, motion coherence, and low-noise stability.",
+      "evidence": "W31 contains some support for continued use of 2.1 LightX2V, but not a clear consensus that it is 'undefeated'. There is mixed sentiment: users ask for and share 2.1 LightX2V LoRAs for 2.2 workflows, but others argue speed/distill LoRAs make 2.2 feel more like 2.1 and reduce what makes 2.2 special: \"The distill lora on the highnoise kills it.\" (gokuvonlange, 2025-07-30 19:06); \"All these speedup loras feel more like wan 2.1.5 rather than 2.2\" (gokuvonlange, 2025-07-31 15:02); \"Training the exact same dataset on Wan2.2 yields better results than using Wan2.1 loras on Wan2.2\" (chancelor, 2025-08-01 22:24).",
+      "correction": "Attribute this as a preference held by some users for low-noise/speed workflows, not as settled community consensus.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "low",
+      "wiki_claim": "The 2.1 LightX2V LoRA is still the best low-noise speed LoRA even for 2.2 workflows.",
+      "evidence": "In W31, users do use 2.1 LightX2V with 2.2, but the messages do not establish 'best'. Some users instead argue that using distill/speed LoRAs on 2.2 high-noise harms the new model's strengths: \"The distill lora added saves time and motion looks good, but it feels like wan 2.1 in a way\" (gokuvonlange, 2025-07-30 15:56); \"The distill lora on the highnoise kills it\" (2025-07-30 19:06).",
+      "correction": "Say that 2.1 LightX2V remained commonly used in hybrid 2.2 workflows, especially on the low-noise stage, but 'best' is not established by these messages.",
+      "confidence": "medium"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "WanAnimate | Pose-driven character animation with controlnet | Wan 2.1",
+      "evidence": "This week's messages repeatedly separate control capabilities from base Wan 2.1 and attach them to other systems. Example: \"Wan 2.1 + Vace can handle V2V exceedingly well\" and \"In WAN 2.1, you can work with WAN Vace to Video. However, I haven’t found anything equivalent when it comes to 2.2.\" Also Kijai says: \"Fun 2.2 control camera, stand-in reference Lora for 2.1 14B, and work in progress but working FantasyPortrait which is face motion transfer adapter for Wan 2.1 14B\". In this context, control/adapter features are discussed as separate add-ons to Wan 2.1, not native Wan 2.1 capabilities. The wiki wording \"with controlnet\" risks attributing controlnet capability to Wan 2.1 itself rather than to WanAnimate/the surrounding pipeline.",
+      "correction": "Clarify that WanAnimate is a separate Wan-2.1-based derivative or adapter pipeline for pose-driven animation, rather than implying Wan 2.1 itself has native controlnet pose control.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "The community consensus through early 2026 is that Wan 2.1 is not obsolete: for inpainting, face consistency, VACE work, reference adherence, and most distilled/speed workflows, 2.1 is still either competitive with or superior to 2.2.",
+      "evidence": "The raw messages support parts of this for VACE/V2V, but not the full bundled claim as consensus. Supported examples: \"Wan 2.1 + Vace can handle V2V exceedingly well. I have not seen a Wan2.2 wf that can handle V2V quite as well in terms of control.\" and \"same for me, stil use my Wan2.1 V2V workflow because 2.2 does not compare, as of yet.\" But there is also pushback/opinion in the other direction: \"Wan 2.1 gave me bad results lol\", \"wan2.2 fixes that and they rotate normally\", and \"I'm not goin back to wan2.1 because when it works, the prompt adherence of wan2.2 is amazing.\" This week does not show broad consensus for face consistency, reference adherence, and most distilled/speed workflows all together.",
+      "correction": "Narrow this to what the messages actually support, e.g. that several users still preferred Wan 2.1 + VACE for V2V/control workflows, while opinions remained mixed overall versus 2.2.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "\"FusionX quality is still unmatched for Wan 2.1 -- considered the perfect finale to Wan 2.1.\" FusionX on 2.1 produces better results than FusionX-equivalent stacks on 2.2.",
+      "evidence": "This week includes explicit counter-opinion rather than consensus: Wembleycandy asks whether FusionX \"invents\" details and is worse at \"LORA_Character/i2V/inpaint tasks than classic WAN,\" and Juampab replies: \"Those 'inventing features' is a product of distillation\". That supports a tradeoff, not an unqualified community consensus that FusionX is unmatched. No corroborating consensus-level support appears in these messages.",
+      "correction": "Present FusionX as a popular distilled Wan 2.1 variant with speed/quality tradeoffs, not as an uncontested community consensus winner.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "### 4. Face consistency and inpainting\n- VACE 2.1 beats Fun VACE 2.2 for inpainting, reference preservation, face consistency, and wide shots.\n- Character LoRA workflows are more stable on 2.1.\n- Multi-frame interpolation is better on VACE 2.1 than 2.2.",
+      "evidence": "The messages support that users still prefer Wan 2.1 + VACE for V2V/control in some cases, but not this full stronger list. Relevant quotes: \"Wan 2.1 + Vace can handle V2V exceedingly well. I have not seen a Wan2.2 wf that can handle V2V quite as well in terms of control.\" and \"Wan2.2 vace has some experimental workflows ... Nothing official and nothing easy i would say.\" However, there is no direct support here for \"reference preservation,\" \"wide shots,\" or especially \"Multi-frame interpolation is better on VACE 2.1 than 2.2.\"",
+      "correction": "Limit the claim to supported points such as Wan 2.1 + VACE still being preferred by some users for V2V/control because 2.2 VACE workflows were experimental or less mature.",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "low",
+      "wiki_claim": "\"Lightning preferred for I2V generally, but 2.1 LightX2V still undefeated for low noise due to better lighting.\" -- Discord #wan_chatter, October 2025",
+      "evidence": "This week's closest support is explicitly hedged and singular: Juan Gea says, \"for me lightx2v is the lora for wan 2.1 I use in 2.2, lightining is from the same team, made for 2.2, however they say it's worse than using the old lightx2v, but I'm not sure\". That is not strong enough to establish a general consensus statement.",
+      "correction": "Attribute this as a reported preference from some users rather than a general consensus, unless stronger evidence exists elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "Wan 2.1 is the foundation on which virtually every open-source video workflow of 2025 was built -- including [[vace|VACE]], [[phantom|Phantom]], [[humo|HuMo]], [[wananimate|WanAnimate]], InfiniteTalk, MultiTalk, SkyReels V3, Krea Realtime, and dozens of other derivative models.",
+      "evidence": "The raw messages clearly show some of these are separate models/workflows used with Wan 2.1 rather than evidence that they are all themselves 'built on' Wan 2.1. For example, InfiniteTalk is explicitly discussed as an I2V model/workflow: \"Wan2.1 but it's i2v\" (JohnDopamine, 2025-08-19 02:14). MAGREF is discussed as a distinct Wan 2.1 I2V model: \"Wan2_1-I2V-14B-MAGREF...\" (Kijai, 2025-08-18 10:02). And users discuss pipelines combining models: \"not a generate this pass, then feed it into vace for wan 2.1, generate sonic lipsync as a face driving animationg, feed into fantasy portrait.....\" (MysteryShack, 2025-08-19 22:06). This week’s messages support that Wan 2.1 is widely used in pipelines, but not the blanket attribution that all listed systems are derivative models built on it.",
+      "correction": "Soften to: \"Wan 2.1 became a major base model and interoperability target for many 2025 open-source video workflows, including pipelines involving VACE, Phantom, InfiniteTalk, MAGREF, and related systems.\" Only call a system 'built on Wan 2.1' where that is directly established.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "The community consensus through early 2026 is that Wan 2.1 is not obsolete: for inpainting, face consistency, VACE work, reference adherence, and most distilled/speed workflows, 2.1 is still either competitive with or superior to 2.2.",
+      "evidence": "This week's messages show mixed opinions rather than consensus. Examples: \"I got very bad results with Wan 2.1, I went back to Animatediff. Wan 2.2 has been perfect from my own experience.\" (xwsswww, 2025-08-19 04:02); \"I just dont like wan2.1's lack of coherent prompt adhering motion\" (MysteryShack, 2025-08-19 22:03); \"Wan2.1 work perfectly together\" for VACE+Phantom (Ablejones, 2025-08-22 13:38); and \"i'm still blown about by the the i2v wrapper WF for Wan 2.1\" (VRGameDevGirl84, 2025-08-23 02:15). The evidence supports active use and some strengths, but not a clear community-wide consensus across all listed areas.",
+      "correction": "Rephrase as a qualified observation, e.g. \"Many users continued to prefer Wan 2.1 for some workflows such as VACE-based control, certain reference-heavy setups, and some speed/distilled pipelines, while others preferred 2.2.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "\"Quality at 720p\" for 1.3B: \"~10% of 14B\" (community consensus)",
+      "evidence": "No such quantified consensus appears in the raw messages. The week contains general comparative opinions about Wan 2.1 vs 2.2 and some model usage notes, but no community-backed '10%' figure for 1.3B vs 14B quality at 720p. This is an exact numeric characterization presented as consensus without support in the provided messages.",
+      "correction": "Remove the numeric claim unless sourced elsewhere. A safer phrasing would be: \"1.3B is much weaker than 14B at 720p, though still usable for prototyping and some multi-pass workflows.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "VACE 2.1 beats Fun VACE 2.2 for inpainting, reference preservation, face consistency, and wide shots.",
+      "evidence": "The raw messages do support positive reports for Wan 2.1 + VACE + Phantom, e.g. \"Vace + Phantom using Wan2.1 work perfectly together\" (Ablejones, 2025-08-22 13:38), but they do not establish a broad comparative claim that VACE 2.1 'beats' Fun VACE 2.2 across multiple categories. There is no direct side-by-side evidence in the provided messages for inpainting, reference preservation, face consistency, and wide shots as a package.",
+      "correction": "Narrow this to what is supported, e.g. \"Users reported strong results from Wan 2.1 + VACE + Phantom workflows; some continued to prefer 2.1-based control setups over newer alternatives.\"",
+      "confidence": "medium"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "| **[[wananimate|WanAnimate]]** | Pose-driven character animation with controlnet | Wan 2.1 |",
+      "evidence": "This week’s messages do not support the specific 'with controlnet' attribution for WanAnimate. The only relevant mention is a LoRA file: \"UniAnimate-Wan2.1-14B-Lora-12000-fp16.safetensors\" (melmass#0, 2025-08-22 13:36). Elsewhere in the week, users discuss multi-model pipelines where VACE provides control-like conditioning to Wan 2.1 workflows: \"feed it into vace for wan 2.1 ... feed into fantasy portrait\" (MysteryShack, 2025-08-19 22:06). Given the known ecosystem overlap, attributing 'controlnet' directly to WanAnimate from this evidence is not justified and risks conflating external control modules/workflows with the model itself.",
+      "correction": "Use a safer description such as: \"Pose-driven character animation derivative on Wan 2.1\" unless direct source evidence specifically confirms ControlNet-style conditioning as an intrinsic WanAnimate capability.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "low",
+      "wiki_claim": "\"Old 2.1 LightX2V still undefeated as baseline.\" -- Discord #wan_chatter, October 2025",
+      "evidence": "The provided messages contain a related but different statement: in reply to \"the ones from Wan 2.1 do work on Wan 2.2 and are better then Lighting loras?\", nebsh#0 says \"better than 1 but not better than light2xv\" (2025-08-20 14:47), and other users discuss LightX2V favorably. But the exact quote shown in the wiki does not appear in the raw messages provided.",
+      "correction": "Either replace with an actual quote from source messages or paraphrase without quotation marks.",
+      "confidence": "medium"
+    }
+  ],
+  "verified_ok": [
+    "The page's core framing that Wan 2.2 low-noise is very similar to / based on Wan 2.1 is strongly supported by multiple W31 messages.",
+    "The claim that Wan 2.1 VAE is used with Wan 2.2 14B workflows, while Wan 2.2 has a different VAE for the 5B model, is supported by messages from JohnDopamine, GalaxyTimeMachine, Gateway, and mamad8.",
+    "The statement that 16 fps is the official generation rate for the 14B line, with 5B overriding to 24 fps, is supported by aikitoria's reference to the official shared_config.py.",
+    "The page's distinction that Wan 2.2 high-noise is the main source of improved motion/prompt following, while low-noise behaves more like Wan 2.1 refinement, is well supported by Ablejones, thaakeno, gokuvonlange, and others.",
+    "The idea that old Wan 2.1 workflows can often be adapted to Wan 2.2 by replacing single model/sampler components with dual low/high model and sampler components is supported by JohnDopamine's repeated comments about upgrading old Wan2.1 workflows.",
+    "The page's note that Wan 2.1 I2V had first-frame damage/flash issues is supported by MysteryShack and mamad8.",
+    "The multilingual prompting angle for Wan 2.1 is at least directionally supported by Daflon's Portuguese-vs-English comment comparing behavior to Wan 2.1.",
+    "Messages support that Wan 2.1 remained easier/more reliable than 2.2 for some LoRA training workflows: e.g. \"2.1 was so much easier and reliable all the time\" and \"my wan 2.1 works better on 2.2 than whatever I've been training for 2.2\".",
+    "Messages support that Wan 2.1 + VACE was still preferred by several users for V2V/control workflows over available 2.2 options.",
+    "Messages support that Wan 2.1 and 2.2 14B are naturally 16 fps: \"Wan 2.1 and 2.2 14B are 'naturally' at 16fps so it's expected\".",
+    "Messages support that LightX2V is associated with Wan 2.1 while Lightning is for Wan 2.2: \"intended use is lightning is for Wan 2.2, the lightx2v are for Wan 2.1\".",
+    "Messages support that Wan 2.2 low-noise was often treated by users as a swap-in replacement for Wan 2.1 workflows: \"the Wan2.2 low noise t2v model method is simply swap the Wan2.1 model out for the low noise, it works\" and \"by itself it's basically a further trained version of Wan2.1\".",
+    "Messages support that Stand-In is a Wan 2.1 identity/reference adapter rather than a base-model feature: \"An adapter for identity preservation in Wan2.1, kind of like phantom\".",
+    "Messages support that FantasyPortrait was being discussed as a Wan 2.1 adapter/workflow: \"working FantasyPortrait which is face motion transfer adapter for Wan 2.1 14B\".",
+    "InfiniteTalk is associated with Wan 2.1 I2V in these messages: \"Wan2.1 but it's i2v\" and repeated references to using Wan2_1-I2V-14B-480P/720P with InfiniteTalk.",
+    "MAGREF is clearly a Wan 2.1 I2V derivative/model in the raw messages, with multiple links such as \"Wan2_1-I2V-14B-MAGREF...\".",
+    "Wan 2.1 remains actively used in August 2025 despite Wan 2.2 existing; many users explicitly say they are still using Wan 2.1.",
+    "Wan 2.1 + VACE + Phantom interoperability is supported by the message: \"Vace + Phantom using Wan2.1 work perfectly together\".",
+    "Fun Control / Fun variants are discussed as separate model lines/workflows, not generic built-in Wan 2.1 capabilities; the page generally keeps them separated in the 'Models Built on Wan 2.1' section.",
+    "The page’s general framing that Wan 2.1 is still important in the ecosystem is supported by the volume of ongoing discussion and active workflows around Wan 2.1 in this week’s messages."
+  ],
+  "summary": {
+    "total_issues": 16,
+    "high": 4,
+    "medium": 9,
+    "low": 3,
+    "verified_claims": 20
+  }
+}
