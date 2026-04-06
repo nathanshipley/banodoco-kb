@@ -40,3 +40,16 @@ Append-only record of what was processed and when.
 - `wiki/wan/models/wan-2.2.md` (456 lines)
 
 **Method:** Extracted Wan 2.2 content from launch (Jul 2025) through Feb 2026. Covers MoE architecture (high-noise/low-noise experts), A14B and TI2V-5B variants, settings tables, 2.1 vs 2.2 comparison, speed LoRAs (LightX2V versions, Lightning, Dyno, rCM), LoRA compatibility matrix, quirks (VAE mismatch, CLIP vision removed), hardware, and derivative ecosystem. Resolved contradictions: 16fps native for 14B (not 24), LN works reliably with 2.1 LoRAs, HN is "soul" of 2.2.
+
+---
+
+## [2026-04-05] topic | WanAnimate wiki page compiled from wan extraction files
+
+**Type:** Topic-focused compilation
+
+**Sources scanned:** 14 wan_*_knowledge.md files, 683 mentions (heaviest in Sep 2025 launch month, 216 mentions)
+
+**Pages created:**
+- `wiki/wan/models/wananimate.md` (401 lines)
+
+**Method:** Extracted WanAnimate content from Sep 2025 launch through Feb 2026. Covers animation + replacement modes, pose/canny/face/mask inputs, block scaling (0-15), CFG/Chinese prompt quirk, 12 vs 16 vs 24fps debate, VitPose for animals, pupil tracking, long video dimensions (÷16), LoRA compat, and comparisons to VACE/Phantom/SCAIL/commercial tools. Validated all CLAUDE.md research notes against raw extractions. Flagged unresolved contradictions: 12 vs 24fps (Kijai vs NC17z), Phantom vs WanAnimate likeness quality.
