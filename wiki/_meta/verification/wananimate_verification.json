@@ -1,0 +1,395 @@
+{
+  "page": "wiki/wan/models/wananimate.md",
+  "verified_at": "2026-04-06T15:56:09.098774",
+  "model": "gpt-5.4",
+  "weeks_checked": [
+    "2",
+    "2",
+    "2"
+  ],
+  "issues": [
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "Despite being branded \"Wan 2.2 Animate,\" WanAnimate is architecturally closer to [[wan-2.1]] I2V: \"Wan Animate is closer to 2.1 architecture. LoRA 2.2 are not compatible with wan animate.\" -- Kijai, Discord #wan_chatter, September 2025. In practice this means 2.1 LoRAs and 2.2 *low-noise* LoRAs both work; 2.2 MoE LoRAs do not.",
+      "evidence": "The W39 messages do support uncertainty/similarity to 2.1, e.g. \"WanAnimate is called 2.2 but its just one model, no hi/low. It is suspected to be similar to wan 2.1\" (42hub, 2025-09-25 00:02) and \"I've been using old lightx2v with WanAnimate and it's more than fine\" (Kijai, 2025-09-28 16:13). But they do not support the stronger claim that 2.2 low-noise LoRAs work generally. In fact Kijai says: \"only new lora is for the high noise model, so nothing for WanAnimate\" (2025-09-28 16:11).",
+      "correction": "Keep the weaker claim that WanAnimate appears closer to 2.1 / works with old 2.1 LightX2V, but do not state as verified from these messages that general 2.2 low-noise LoRAs work with WanAnimate.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- **Inverted canny required** -- unlike regular canny, WanAnimate expects white background with black edges. Using non-inverted canny causes static backgrounds and bad results. -- Ablejones",
+      "evidence": "The only canny-related exchange in these logs points the other way: Ablejones says \"Ah okay... didn't know WanAnimate did canny\" (2025-09-26 23:48), showing surprise rather than established guidance. Immediately after, another user clarifies: \"this is kind of interesting - those dark gray things in background of control video - but it's VACE not WanAnimate\" (42hub, 2025-09-27 00:21). This is exactly the kind of VACE/WanAnimate pipeline conflation warned about.",
+      "correction": "Remove the claim that inverted canny is a WanAnimate requirement. At most say some users experimented with canny-like control, but the cited conversation does not establish canny as a native WanAnimate input and likely referred to VACE.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Pose input accepts depth maps mixed in**, useful for backward-facing scenes where pose estimation fails. -- Clément",
+      "evidence": "The raw messages show only tentative/negative evidence about depth: citizenplain asks whether there is \"a way to use depth with WanAnimate\" and says using Depth Anything \"seems to do... something? and also turns my resulting video green\" (2025-09-25 20:22). dawniii replies: \"Circumstantial. I did several tests after that were not as good as pose alone... needs strict depth training to be reliable\" (2025-09-25 20:44).",
+      "correction": "Change this to a cautionary note: some users experimented with mixing depth, but results were unreliable/green and not as good as pose alone.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Single reference only** -- multiple references cause extra arms / errors. -- Kijai",
+      "evidence": "These messages do not support a firm 'single reference only' rule. Instead, Kijai explicitly distinguishes WanAnimate from other models in a reply chain about multiple refs: \"wasn't talking about WanAnimate specifically, VACE can use multiple refs for example, as does Phantom etc.\" (2025-09-24 12:23). That does not confirm WanAnimate supports or forbids multiple refs; it only says the prior comment was about other models.",
+      "correction": "Soften this to: WanAnimate workflows discussed here generally use a single reference; the cited messages do not establish multi-reference support for WanAnimate.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **T-pose characters work best** because Flux Kontext preprocessing is biased toward T-pose. -- Kijai",
+      "evidence": "The W39 messages only say: \"interesting in wan animate codebase they preprocess the ref with flux kontext to get into pose apparently when using the 'pose' only mode (vs replace)\" (melmass, 2025-09-22 22:19). There is no support here for the stronger claim that T-pose works best or that Flux Kontext is biased toward T-pose.",
+      "correction": "Reduce this to: the codebase appears to preprocess the reference with Flux Kontext in pose-only mode.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Disconnect `clip_vision` from the encode node for better likeness as the video progresses and after the first context window.\n- \"With clip embeds: better identity but worse lighting. Without: better lighting but worse identity.\" -- Kijai",
+      "evidence": "No such clip_vision tradeoff appears in the provided W39 messages. The only clip-vision mention is a user asking where to get the model: \"does anyone know where to get the clip vision h model for kijais wan animate workflow?\" (TheSwoosh, 2025-09-25 23:03).",
+      "correction": "Remove these specific clip_vision behavior claims unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **The model is trained to handle blocky masks only** -- also works with square masks but not smooth masks. A custom node converts normal masks into the blocky style. -- Kijai",
+      "evidence": "The W39 messages only support a weaker statement about mask shape influence: \"the mask shape forces the character shape a lot, but it can be lot larger and the blocky aspect of it gives more freedom\" (Kijai, 2025-09-24 20:31). That is not the same as 'trained to handle blocky masks only' or 'not smooth masks.'",
+      "correction": "Soften to: blockier/larger masks may give the model more freedom; avoid claiming exclusive training on blocky masks from this evidence.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **All image inputs must be divisible by 16** for long videos. If dimensions aren't divisible by 16, you can only generate exactly 77 frames. -- BestWind",
+      "evidence": "The raw messages show users reporting some resolutions error and asking about valid resolutions, but no message here states the specific rule about divisibility by 16 or the exact 77-frame limitation tied to it. Example: Gill Bastar reports 720x720 and 720x1280 work while 540x960 or 540x540 error (2025-09-22 13:45).",
+      "correction": "Do not present the divisibility-by-16/77-frame rule as sourced from these messages.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **LoKr format not supported** for WanAnimate LoRAs. -- boorayjenkins",
+      "evidence": "No LoKr-format discussion appears in the provided W39 messages.",
+      "correction": "Remove this claim unless supported by another source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Flickering black blocks | Enable `fl2v` switch on the node for 2.2 models |",
+      "evidence": "No `fl2v` switch discussion appears in the provided W39 messages.",
+      "correction": "Remove this troubleshooting row unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "misinterpretation",
+      "severity": "low",
+      "wiki_claim": "- **Multi-person scenes with face tracking (VitPose is single-person)**",
+      "evidence": "The messages do suggest uncertainty/limitations for multi-person use, e.g. \"Is WanAnimate meant for just one person?\" and discussion of doing separate passes per person (2025-09-26 13:11 onward), plus \"does Wan Animate only work with 1 subject?\" (2025-09-23 20:37). But there is no direct support here for the specific technical explanation 'VitPose is single-person.'",
+      "correction": "Keep the practical caution that multi-person use is problematic, but avoid attributing it specifically to VitPose single-person limits unless sourced directly.",
+      "confidence": "medium"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- **Inverted canny required** -- unlike regular canny, WanAnimate expects white background with black edges. Using non-inverted canny causes static backgrounds and bad results. -- Ablejones",
+      "evidence": "No raw message from Ablejones in W38 mentions canny at all. The only Ablejones message here is: \"Hey this wan animate business is quite good\". Also, the week contains repeated separation between WanAnimate and VACE/Fun/VACE-style masking/control discussions, e.g. Izaan asks about masking \"like we do in Vace?\" and references \"with wan animate instead of vace,\" showing these capabilities were being compared across models rather than established as native WanAnimate canny support.",
+      "correction": "Remove the claim that WanAnimate requires inverted canny unless supported by direct WanAnimate-specific evidence. If retained elsewhere, attribute canny/inverted-canny behavior to VACE or to a multi-model pipeline, not WanAnimate itself.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- Pose input accepts **depth maps mixed in**, useful for backward-facing scenes where pose estimation fails. -- Clément",
+      "evidence": "In the provided W38 raw messages, Clément only says: \"wan animate\". There is no message from Clément about depth maps, mixed pose+depth input, or backward-facing scenes. Depth control is specifically called out in the developer guidance as a common VACE capability that can be wrongly attributed to WanAnimate.",
+      "correction": "Do not state that WanAnimate accepts mixed depth maps based on this evidence. If depth mixing is documented elsewhere, it should be clearly attributed to VACE or to a combined pipeline unless a WanAnimate-specific source says otherwise.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Animal poses** -- VitPose in the WanAnimatePreprocess nodes can detect animal skeletons, enabling quadruped animation. -- Nathan Shipley, Hashu",
+      "evidence": "No W38 raw messages from Nathan Shipley or Hashu mention animal skeletons, quadrupeds, or animal pose support. The only relevant VitPose mention is xiver2114 asking: \"how much better is ViTPose than dw/open pose and is there a comfyui node for it? since wan animate used that in their paper.\"",
+      "correction": "This claim is not supported by the provided W38 messages. Remove it from W38-backed material or cite a direct message where WanAnimate/VitPose animal support is actually discussed.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **Trajectory/ATI-style control** -- can follow point trajectories for object movement, not just dance poses. Accepts first-frame, last-frame, one ref slot, controlnet, and trajectories simultaneously. -- Gleb Tretyak, Discord #wan_chatter, November 2025",
+      "evidence": "The provided evidence set is only 2025-W38. There are no messages from Gleb Tretyak here, and no W38 message mentions trajectory control, ATI-style control, first+last frame, controlnet, or simultaneous trajectory inputs for WanAnimate.",
+      "correction": "This may be true from another week, but it is not verifiable from the supplied W38 raw messages. It should not be treated as supported by this source set.",
+      "confidence": "high"
+    },
+    {
+      "type": "invented",
+      "severity": "medium",
+      "wiki_claim": "In practice this means 2.1 LoRAs and 2.2 *low-noise* LoRAs both work; 2.2 MoE LoRAs do not.",
+      "evidence": "The W38 raw messages only establish uncertainty/incompatibility at a broad level: nebsh asks, \"hmmm so lora 2.2 are not compatible with wan animate :<\" and multiple users ask which 2.1/2.2 LoRAs work. There is no W38 message specifying the low-noise/high-noise split or saying that 2.2 low-noise LoRAs work while MoE/high-noise do not.",
+      "correction": "Limit the claim to what is actually evidenced here: WanAnimate is considered 2.1-based, and users were questioning 2.2 LoRA compatibility. Do not specify low-noise/MoE compatibility without a direct source.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "WanAnimate uses the **Wan 2.1 VAE** (it is based on the 2.1 I2V architecture, not 2.2). Wan 2.1 T2V will also load because base layers are the same. -- xiver2114",
+      "evidence": "In W38, xiver2114 says only: \"Its in comfy templates, seach vace\" and later asks about ViTPose. There is no xiver2114 message about Wan 2.1 VAE or Wan 2.1 T2V loading. The only architecture evidence in W38 is piblarg asking if WanAnimate is built on 2.1/I2V and Ashtar saying they thought it was 2.1-based; these are questions/opinions, not confirmation.",
+      "correction": "Do not attribute the VAE/base-layer claim to xiver2114 from this evidence. If kept, cite a direct confirming message from a knowledgeable source such as Kijai.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| **Kijai WanVideoWrapper** | \"Animate quality in wrapper is 5x better than native\" -- asd. Better prompt adherence, looping, handles empty face images automatically. |",
+      "evidence": "No W38 message from asd says this. The only asd message is: \"kijai how to styletranfer in wan animate like they show in their demos\". W38 does support one narrow part of the row: Kijai's workaround implies native needs face images while wrapper may handle them better, but the \"5x better\" quality quote is not present.",
+      "correction": "Remove the unsupported quote and keep only the parts directly evidenced in W38, such as wrapper/native differences around face-image handling if separately sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Single reference only** -- multiple references cause extra arms / errors. -- Kijai",
+      "evidence": "W38 shows users wishing for multiple references and stating the current limitation, e.g. xwsswww: \"there is no way to add more reference images for Wan Animate to stay on model\" and \"I wish we could plug in more reference images\". But there is no Kijai message here saying multiple references cause extra arms/errors.",
+      "correction": "A safer wording from W38 would be: \"Current workflows appear to support only one reference image; users asked for multi-view/multi-reference support.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **T-pose characters work best** because Flux Kontext preprocessing is biased toward T-pose. -- Kijai",
+      "evidence": "Kijai's actual W38 message is: \"the WanAnimate preprocessing is much work in progress, the original code does quite a bit more than what my workflow does, there's even option to use Flux Kontext to repose the reference, then there's pose retargeting/scaling etc.\" This mentions Flux Kontext reposing, but nothing about T-pose bias or T-pose working best.",
+      "correction": "Keep only the supported part: Flux Kontext can be used to repose the reference in preprocessing. Remove the T-pose-specific claim unless directly sourced.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Masking is rigid** -- use grow/blur, or switch to VACE for precise masks.",
+      "evidence": "W38 supports the first half but not the recommendation as stated. dawniii says: \"the one thing I will say is a strike against wan-animate is how rigid the masking is, not sure why that is. you can grow and blur, or have very precise masks with vace\". This is one user's opinion/comparison, not a validated instruction or consensus.",
+      "correction": "Rephrase as an attributed user observation: \"One user reported WanAnimate masking feels rigid; they suggested grow/blur, and noted VACE allows more precise masks.\"",
+      "confidence": "high"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- **Generate at 720p or higher** for better pose following and likeness; WanAnimate, like VACE and Phantom, benefits strongly from higher resolution.",
+      "evidence": "The W38 messages include users discussing 720p runs and low-VRAM limitations, but no message states this general rule. Relevant examples: scf says they are \"more resolution limited than with fun vace\"; Kijai posts a successful 720x720 benchmark; users ask whether 12 GB can run it. None of this establishes a community-validated recommendation that 720p+ is generally better for pose following/likeness.",
+      "correction": "Either remove this recommendation or attribute it to a direct source if one exists. W38 only supports that 720p is commonly attempted and resource-intensive.",
+      "confidence": "medium"
+    },
+    {
+      "type": "misinterpretation",
+      "severity": "medium",
+      "wiki_claim": "| **[[phantom]]** | Phantom has better 1:1 likeness for fine details. Phantom+VACE combined is still considered best overall likeness. Disagreement: Quality_Control says WanAnimate is more accurate. |",
+      "evidence": "W38 shows disagreement, not a settled consensus. xwsswww says: \"Phantom still does it better.\" dawniii replies: \"I disagree. In my short time using wan animate is has already far surpassed the massive vace/phantom body/faceswap workflow I made\". Quality_Control says: \"the only thing about wan animate is that I find likeness to be great but I'm getting blurry soft skintone details.\" and later \"whomeever suggested phantom > wanAnimate . I've come here to tell you you're wrong\". This is a live disagreement among individuals, not evidence that Phantom+VACE is 'still considered best overall likeness.'",
+      "correction": "Present this as mixed user opinion: some users said Phantom still gives better fine-detail likeness, while others preferred WanAnimate for their results.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **Trajectory/ATI-style control** -- can follow point trajectories for object movement, not just dance poses. Accepts first-frame, last-frame, one ref slot, controlnet, and trajectories simultaneously. -- Gleb Tretyak, Discord #wan_chatter, November 2025",
+      "evidence": "The raw messages show exploration/questions, not a confirmed capability statement. Gleb says: \"Interesting for me is to compare ATI vs WanAnimate using the node <@380911583074975744> gave us. Doing that now.\" Later: \"I think I might have heavily underestimated wan animate. I might be wrong, but rn I possibly got first-to-last frame from it(?)\" and Fill asks \"wan animate works with the points as well?\" There is no message here confirming simultaneous support for first-frame + last-frame + ref + controlnet + trajectories.",
+      "correction": "Soften this to an experimental/community exploration claim, e.g. that users were testing ATI-like point/trajectory guidance with WanAnimate in November 2025, but the exact supported combination of controls is not established by these messages.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "high",
+      "wiki_claim": "- **Inverted canny required** -- unlike regular canny, WanAnimate expects white background with black edges. Using non-inverted canny causes static backgrounds and bad results. -- Ablejones",
+      "evidence": "No canny discussion appears in the provided raw messages. The only nearby control discussion is ATI/points/white lines, e.g. Juan Gea asking: \"YOu say it's wan animate, but what's the input? A black image with the white lines + a first frame?\" and Mads/Gleb discussing ATI-like guidance. That is not evidence that WanAnimate itself requires inverted canny.",
+      "correction": "Remove this claim from the WanAnimate page unless supported elsewhere, or explicitly attribute canny requirements to another model/workflow if that was the original context.",
+      "confidence": "high"
+    },
+    {
+      "type": "capability_conflation",
+      "severity": "high",
+      "wiki_claim": "- Pose input accepts **depth maps mixed in**, useful for backward-facing scenes where pose estimation fails. -- Clément",
+      "evidence": "The raw messages do not mention WanAnimate accepting depth maps. In the same ecosystem, depth is typically associated with VACE/Fun Control rather than WanAnimate. The only control-input discussion here is about points/ATI-like guidance and pose-like line inputs, not depth.",
+      "correction": "Do not attribute mixed depth-map control to WanAnimate based on these messages. If retained, it should be clearly sourced elsewhere or moved to a VACE/Fun Control page if that was the actual model being discussed.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **RGB driving input** -- you can feed RGB video directly as control without a preprocessor; it will follow structure and motion, losing a bit of likeness but handling foreground-occluded scenes better than pose.",
+      "evidence": "No raw message in this set states that WanAnimate can take raw RGB video directly as control. The closest relevant comments are about treating the input image like a start frame and about pose/points-style guidance, e.g. HeadOfOliver: \"the input image is important for wananimate, treat it like you would a start frame for a VACE v2v.\" That does not establish direct RGB driving-video control.",
+      "correction": "Remove or qualify this as unverified in this source set. If this came from another week, it needs a direct source; otherwise it risks conflating WanAnimate with VACE-style vid2vid control.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Animal poses** -- VitPose in the WanAnimatePreprocess nodes can detect animal skeletons, enabling quadruped animation. -- Nathan Shipley, Hashu",
+      "evidence": "No animal/quadruped discussion appears in the provided raw messages.",
+      "correction": "Not contradicted here, but this claim is not supported by the provided W45 messages and should not be treated as verified from this evidence set.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **T-pose characters work best** because Flux Kontext preprocessing is biased toward T-pose. -- Kijai",
+      "evidence": "The raw messages mention a built-in/reference-image retargeter, not Flux Kontext or T-pose preference. Neex says: \"WanAnimate kinda has this built in with the reference image retargeter that re-proportions the skeleton based on the reference image.\" No T-pose recommendation appears here.",
+      "correction": "Do not present T-pose preference as supported by these messages. If kept, it needs a direct source from another conversation.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Masking is rigid** -- use grow/blur, or switch to VACE for precise masks.",
+      "evidence": "The raw messages discuss mask sizing and alternative maskers, but not that WanAnimate masking is inherently rigid. Relevant messages: HeadOfOliver: \"Make the mask large enough to incorporate the new character.\" LookingGlass asks: \"has anyone tested Wan Animate using SeC-4B masking instead of Sam2?\" This supports mask workflow discussion, not the stronger claim about rigid masking or recommending VACE for precision.",
+      "correction": "Limit this section to what is actually evidenced here: mask size matters, and users were testing SeC-4B vs SAM2 for WanAnimate masking.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- SAM 2.1 is better than earlier SAM versions for this task. SEC masking is solid and works better than SAM2 alone. Qwen2.5VL tagging outperforms Florence2 for mask generation (155 frames in 30s).",
+      "evidence": "The provided messages only show a question about SeC-4B masking: \"has anyone tested Wan Animate using SeC-4B masking instead of Sam2?\" There is no comparative result, no SAM 2.1 claim, and no Qwen2.5VL vs Florence2 benchmark.",
+      "correction": "Remove these comparative and benchmark details unless sourced elsewhere. In this evidence set, only interest in SeC-4B vs SAM2 is shown.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Removing bg_images and mask also turns WanAnimate into a \"stronger VACE/Fun controlnet\". -- slmonker",
+      "evidence": "The raw messages do support unmasked/basic use, e.g. Fill: \"all of my wan animates are 0 masking what so ever,\" but there is no message here making the stronger comparison that this turns WanAnimate into a stronger VACE/Fun controlnet.",
+      "correction": "Keep the simpler supported point that WanAnimate can be used without masking; remove the comparative 'stronger VACE/Fun controlnet' phrasing unless directly sourced.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **All image inputs must be divisible by 16** for long videos. If dimensions aren't divisible by 16, you can only generate exactly 77 frames. -- BestWind",
+      "evidence": "No divisibility-by-16 discussion appears in the provided raw messages.",
+      "correction": "Not contradicted, but not verified by this evidence set. Do not treat it as supported by W45 messages.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Set blockswap to 40 for 389 frames at 720x1280 on 64 GB RAM. -- Kijai",
+      "evidence": "No such blockswap/389-frame recommendation appears in the provided messages.",
+      "correction": "Remove this specific tuning number unless sourced elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- Concat latent image trick reduces flash during long generations. -- Gleb Tretyak",
+      "evidence": "No 'concat latent image' discussion appears in the raw messages.",
+      "correction": "Remove unless directly sourced elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **WanAnimate + V2V InfiniteTalk at 50% denoise** is claimed as a current SOTA stack. -- ArtOfficial",
+      "evidence": "No such claim appears in the provided messages.",
+      "correction": "Remove unless supported by another source.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **SCAIL -> WanAnimate** -- use SCAIL for pose retargeting to different body proportions, then WanAnimate for facial performance stability. -- Juan Gea",
+      "evidence": "The raw messages do support a broad division of labor in the community, but not this exact recommendation from Juan Gea. Relevant messages: mamad8 lists options including \"WanAnimate 2.2 if conditioned on human poses\" and Gleb/others discuss SVI/ATI/SCAIL-like alternatives. No direct Juan Gea quote establishing this pipeline appears here.",
+      "correction": "If kept, phrase more cautiously as a community workflow idea rather than a sourced Juan Gea recommendation from these messages.",
+      "confidence": "medium"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **Alternate single steps** between WanAnimate and SCAIL samplers for combined benefits. -- mallardgazellegoosewildcat2",
+      "evidence": "No such message appears in the provided raw logs.",
+      "correction": "Remove unless sourced elsewhere.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "- **LoKr format not supported** for WanAnimate LoRAs. -- boorayjenkins",
+      "evidence": "The raw messages discuss LoRA merge limitations with low-mem/bf16: Gleb says \"you cannot merge loras + low mem load it seems, at all with wan animate.\" There is no mention of LoKr format support.",
+      "correction": "Replace with the actually supported troubleshooting note: low-mem loading appears incompatible with LoRA merging in WanAnimate bf16 workflows.",
+      "confidence": "high"
+    },
+    {
+      "type": "unsupported",
+      "severity": "medium",
+      "wiki_claim": "| Character LoRAs | Yes, often still needed for strong likeness -- \"Wan Animate still needs character LoRA in testing\" -- Dream Making |",
+      "evidence": "The raw messages show users asking about character LoRAs and lighting conflicts, e.g. humangirltotally: \"When using a character lora with a reference image for WAN animate...\" and van asking what LoRAs are best. But there is no message here from Dream Making or any validated conclusion that character LoRAs are broadly effective/needed.",
+      "correction": "Soften to: users experimented with character LoRAs in WanAnimate, but effectiveness and best practices were still being worked out.",
+      "confidence": "medium"
+    },
+    {
+      "type": "opinion_as_consensus",
+      "severity": "medium",
+      "wiki_claim": "- Dialogue / facial performance (best-in-class for face + lips + gaze)",
+      "evidence": "The raw messages do show positive sentiment about facial performance and usefulness beyond dance, but not consensus that it is 'best-in-class.' There is also explicit competition from other models in the messages, e.g. blake37: \"MoCha will give measurably better integration into a scene than Wan Animate\" and mamad8 listing multiple alternatives for long video generation.",
+      "correction": "Change to a softer claim such as 'strong for facial performance / dialogue' rather than 'best-in-class.'",
+      "confidence": "medium"
+    }
+  ],
+  "verified_ok": [
+    "WanAnimate is a character animation / motion transfer model using a driving video plus reference image; this is consistent with multiple user discussions about driving video, pose-only mode, face/body from same video, and replacing subjects.",
+    "WanAnimate is versioned/branded as 2.2. Supported by Kijai: \"A14B, 5B, S2V and WanAnimate are all versioned as 2.2\" (2025-09-23 10:10).",
+    "It appears closer to 2.1 than typical 2.2 models / old 2.1 LightX2V works with it. Supported indirectly by 42hub's \"suspected to be similar to wan 2.1\" and Kijai's \"I've been using old lightx2v with WanAnimate and it's more than fine.\"",
+    "WanAnimate benefits from higher resolution for pose following. Supported by xwsswww: \"Wan Animate works better with higher resolution in order to follow pose correctly\" and follow-up agreement.",
+    "Disconnecting bg_images and mask is associated with a pose-only / reference-background style mode. Supported by jasblack/Kijai discussion and Hashu: \"if you disconnect the mask and bg image ... it's pretty much 1-1 with your ref.\"",
+    "The code/workflow uses Flux Kontext preprocessing in pose-only mode. Supported by melmass: \"they preprocess the ref with flux kontext to get into pose apparently when using the 'pose' only mode.\"",
+    "WanAnimatePreprocess exists and is Kijai's node pack for preprocessing. Strongly supported by repeated GitHub links and discussion.",
+    "The preprocessor uses VitPose and YOLO. Supported by GOD_IS_A_LIE: \"wan animate is using vitpose and yolo\" and multiple references to vitpose models.",
+    "The face crop/input being resized to 512x512 is supported by the OpenCV traceback showing `cv2.resize(face_image, (512, 512))`.",
+    "The relight LoRA exists and was resized by Kijai; users discuss it affecting likeness/pose. Supported by Kijai's relight LoRA upload and xwsswww's comment that it affects likeness and pose.",
+    "Wrapper/native differences are real, with users often preferring Kijai's wrapper workflow. Supported by multiple comments such as Gill Bastar calling Kijai's implementation \"the best way to use Wan Animate\" and reports of native black-image issues.",
+    "WanAnimate can run around 16 fps and users discuss 16 fps as the normal operating rate. Supported by melmass and multiple InfiniteTalk/WanAnimate fps-sync discussions.",
+    "77-frame behavior is central to WanAnimate. Supported by many messages about 77/81 frames and dawniii: \"Wan animate is technically 77.\"",
+    "Longer generations degrade / work worse farther from the default length. Supported by Kijai: \"Controlled generations like with VACE and WanAnimate can go longer ... it still indeed works worse the further you go from the default.\"",
+    "A.I.Warper's 1:1 frame-count observation is supported: \"I am sending 121 frames through WanAnimate at 77 frame windows ... it is 121, so 1:1 on frame count\".",
+    "WanAnimate + InfiniteTalk at low denoise is presented as one user's SOTA stack, not consensus. Supported by ArtOfficial: \"SOTA would probably still be wan animate and then V2V infinite talk at 50% denoise\" with positive reactions.",
+    "WanAnimate is praised for face/lips/gaze compared with older tools; T2's quote about AnimateDiff is directly supported.",
+    "WanAnimate works with glasses better than LivePortrait in one user's experience. Supported by VRGameDevGirl84's message with reactions.",
+    "Power/compute instability on 5090s is plausibly associated with WanAnimate's heavier compute. Supported by Draken's comment about larger blocks/heavier compute in reply to 5090 freezes.",
+    "WanAnimate was newly released/discovered in mid-September 2025; users link the official page on Sept 19 and discuss the new model extensively.",
+    "WanAnimate is trained around 78-frame chunks / 77+1 reference. Supported by dawniii: \"wan-animate is trained to do 78 frames (77+1 for reference). It can go longer but in 78 frame chunks\".",
+    "Kijai pushed wrapper support and Comfy had an initial native implementation. Supported by Kijai: \"comfy pushed initial native WanAnimate implementation now, and I pushed same for the wrapper\".",
+    "A relight LoRA exists for WanAnimate. Supported by Kijai linking `WanAnimate_relight_lora_fp16.safetensors`.",
+    "WanAnimate can work without a face image only if handled properly; lack of face image was a known issue. Supported by Kijai: \"it was the lack of face image\" and nebsh replying \"so that how to use wan animate without face\".",
+    "Prompting can break references and empty prompting can work well. Supported by piblarg: \"prompting can break the references pretty badly if not aligned- it seems empy propting works fine for wan animate\".",
+    "Users reported WanAnimate likeness is not perfectly 1:1 for fine details. Supported by piblarg asking whether others notice likeness is similar but not exactly 1:1.",
+    "WanAnimate masking was described by users as rigid compared with VACE. Supported by dawniii: \"the one thing I will say is a strike against wan-animate is how rigid the masking is...\"",
+    "Current workflows appear to use a single reference image; users asked for multi-view/multi-reference support. Supported by xwsswww messages wishing for more reference images and saying there is no way to add more.",
+    "Flux Kontext is involved in preprocessing/reposing references in the original code path. Supported by Kijai: \"there's even option to use Flux Kontext to repose the reference\".",
+    "WanAnimate is regarded by Kijai as especially strong for vid2vid. Supported by Kijai: \"this new WanAnimate is clearly best for vid2vid\".",
+    "Face adapter blocks were moved into the main blocks for block-swap VRAM reduction. Supported by Kijai's Sept 21 message.",
+    "12 GB VRAM operation is plausible but constrained; users were actively optimizing for 12 GB / 32 GB and discussing GGUF/blockswap workarounds.",
+    "Kijai demonstrated wrapper fp8_scaled performance at 81 frames 720x720 with 40 blocks swapped and low peak VRAM in his posted benchmark.",
+    "WanAnimate is being used for character animation and character replacement workflows.",
+    "WanAnimate can be run without masking in some workflows: Fill says, \"all of my wan animates are 0 masking what so ever.\"",
+    "1920x1080 use is supported by the messages: Fill says, \"its literally just the basic wan animate wf from the wanwrapper node pack, but i ran it at 1920x1080\".",
+    "WanAnimate is commonly understood as based on Wan 2.1 I2V rather than true 2.2 architecture: Gleb says, \"afaik, Wan Animate is based on Wan2.1 I2V.\"",
+    "The relight LoRA exists and is used as a normal LoRA in WanAnimate workflows: Kijai says, \"It's just a Lora you use in any WanAnimate workflow\".",
+    "Clip vision / clip embeds can be problematic or optional in WanAnimate workflows: HeadOfOliver says, \"try to not use the clip_vision input on the Wan Animate encode node\" and Kijai says, \"if you use clip embeds and sageattn with WanAnimate that goes black on some GPUs in native\".",
+    "There is a known bf16/LoRA merge issue with low-mem loading: Gleb reports the FloatTensor vs CUDABFloat16Type error and follows with \"you cannot merge loras + low mem load it seems, at all with wan animate.\"",
+    "Users report visible shift/transition artifacts between windows/context options in WanAnimate: humangirltotally says, \"it's like a transition between the context options\" and AIGambino reports a \"huge shift/transition\" around 6 seconds.",
+    "WanAnimate is not just for dances; users explicitly discuss broader control/use cases. Gleb says, \"Always assumed Wan Animate is almost only for dances. oof on my part\" and later \"I think I might have heavily underestimated wan animate.\"",
+    "WanAnimate appears limited to one character/person control in practice: Valle asks, \"Wan Animate can only control one character, correct?\" and no contradiction appears in the thread.",
+    "The input image/reference image is important in WanAnimate: HeadOfOliver says, \"the input image is important for wananimate, treat it like you would a start frame for a VACE v2v.\"",
+    "A built-in/reference-image retargeter exists: Neex says, \"WanAnimate kinda has this built in with the reference image retargeter that re-proportions the skeleton based on the reference image.\"",
+    "Users were actively testing SeC-4B masking with WanAnimate as an alternative to SAM2."
+  ],
+  "summary": {
+    "total_issues": 41,
+    "high": 8,
+    "medium": 32,
+    "low": 1,
+    "verified_claims": 46
+  }
+}
