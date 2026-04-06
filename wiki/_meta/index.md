@@ -9,3 +9,4 @@ Catalog of all wiki pages. Updated on every ingest pass.
 - [Wan 2.2](../wan/models/wan-2.2.md) — MoE successor (Jul 2025). High-noise/low-noise dual-expert A14B + standalone TI2V-5B. Quality/motion winner; 2.1 still wins some niches.
 - [VACE](../wan/models/vace.md) — Unified video control system (style transfer, inpainting, outpainting, pose/depth). 2.1 and 2.2 variants.
 - [WanAnimate](../wan/models/wananimate.md) — Motion/pose-driven character animation (Sep 2025). Animation + replacement modes, pupil tracking, VitPose for animals.
+- [Phantom](../wan/models/phantom.md) — Subject consistency / identity preservation (Apr 2025). Temporal latent encoding, 1-4 reference images, combinable with VACE/HuMo.

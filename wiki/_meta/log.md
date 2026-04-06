@@ -53,3 +53,16 @@ Append-only record of what was processed and when.
 - `wiki/wan/models/wananimate.md` (401 lines)
 
 **Method:** Extracted WanAnimate content from Sep 2025 launch through Feb 2026. Covers animation + replacement modes, pose/canny/face/mask inputs, block scaling (0-15), CFG/Chinese prompt quirk, 12 vs 16 vs 24fps debate, VitPose for animals, pupil tracking, long video dimensions (÷16), LoRA compat, and comparisons to VACE/Phantom/SCAIL/commercial tools. Validated all CLAUDE.md research notes against raw extractions. Flagged unresolved contradictions: 12 vs 24fps (Kijai vs NC17z), Phantom vs WanAnimate likeness quality.
+
+---
+
+## [2026-04-06] topic | Phantom wiki page compiled from wan extraction files
+
+**Type:** Topic-focused compilation
+
+**Sources scanned:** 16 of 17 wan_*_knowledge.md files, 967 mentions (heaviest May-Aug 2025)
+
+**Pages created:**
+- `wiki/wan/models/phantom.md` (325 lines)
+
+**Method:** Extracted Phantom content across full timeline. Covers temporal latent encoding architecture, 1-4 reference images, key settings (CFG 5, 20 steps, 121 frames), VACE merge technique, comparison to MAGREF/WanAnimate/VACE ref/IP-Adapter/LoRA approaches, 15 quirks, 17 troubleshooting entries, LoRA compat (CausVid/LightX2V/FusionX), hardware benchmarks, timeline Apr-Dec 2025.
