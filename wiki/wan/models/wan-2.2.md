@@ -2,14 +2,15 @@
 title: Wan 2.2
 aliases: [wan-2.2, wan2.2, wan 2.2, moe, A14B, wan22, wan 2.2 14b, wan 2.2 5b]
 sources_ingested: 14
-last_updated: 2026-04-05
+last_updated: 2026-04-06
+verification: partial (GPT-5.4, checked against top 3 weeks of raw messages)
 ---
 
 # Wan 2.2
 
 Wan 2.2 is Alibaba's mid-2025 successor to [[wan-2.1|Wan 2.1]], released late July 2025. Its defining innovation is a dual-model **Mixture-of-Experts (MoE)** architecture: a *High Noise* expert handles early diffusion steps (composition, layout, motion, prompt following) and a *Low Noise* expert handles later steps (detail, texture, resolution). The two models run sequentially on the same latent and together form a single video generation pipeline. Wan 2.2 shipped in two sizes simultaneously -- a **14B + 14B "A14B"** dual-expert flagship and a standalone **5B "TI2V"** model -- alongside a larger 1.3 GB VAE used only by the 5B variant.
 
-Community consensus through early 2026 is nuanced: 2.2 is the clear quality and motion winner for base T2V/I2V work, but 2.1 still wins for face consistency, VACE inpainting, long-form lip-sync, and many distilled/speed workflows. The Wan 2.2 Low Noise model is widely understood to be "essentially a Wan 2.1 finetune" -- which is why most 2.1 LoRAs continue to work on the 2.2 low stage and why 2.1 LightX2V remains a top choice for the low-noise pass even in 2.2 workflows.
+The prevailing community view through early 2026: Wan 2.2 is widely praised as the motion and prompt-adherence winner for base T2V/I2V work, while many users still prefer 2.1 for VACE-heavy control workflows, long-form lip-sync, and mature speed-LoRA pipelines. Opinions on face consistency are mixed -- some find 2.1 still better, others report good results with base 2.2. The Wan 2.2 Low Noise model is widely understood to be "essentially a Wan 2.1 finetune" -- which is why most 2.1 LoRAs continue to work on the 2.2 low stage and why 2.1 LightX2V remains a top choice for the low-noise pass even in 2.2 workflows.
 
 > "High noise model is the 'soul' of 2.2 -- all visual quality comes from the high noise part, low noise just does refinement." -- Discord #wan_chatter, July 2025
 
@@ -31,8 +32,8 @@ The 14B A14B uses the **same Wan 2.1 VAE** for encoding and decoding. Only the 5
 Ecosystem position:
 
 - **July 2025** -- Release. Immediate community pivot; Kijai and City96 ship fp8/bf16 and GGUF conversions within days. Early discovery: high/low boundary is at sigma ~0.875 (T2V) or ~0.900 (I2V), and you must use both experts to get the promised quality.
-- **August 2025** -- Fun VACE 2.2 released (Alibaba PAI). First community Lightning LoRAs for 2.2 appear and are promptly criticized for style bias and motion degradation compared to the 2.1 LightX2V LoRA.
-- **September 2025** -- WanAnimate released (structurally Wan 2.1 I2V despite the 2.2 branding). VACE 2.2 matures. InfiniteTalk / MultiTalk stay on 2.1.
+- **August 2025** -- Alibaba PAI releases Fun Control 2.2 and Fun Inpaint 2.2 (August 8); official native VACE 2.2 was not yet available -- users experimented with unofficial merges of Wan 2.1 VACE into Wan 2.2. First community Lightning LoRAs for 2.2 appear and are promptly criticized for style bias and motion degradation compared to the 2.1 LightX2V LoRA.
+- **September 2025** -- WanAnimate released (structurally Wan 2.1 I2V despite the 2.2 branding). Fun VACE 2.2 workflows mature. InfiniteTalk / MultiTalk stay on 2.1.
 - **October 2025** -- New LightX2V distill LoRAs specific to 2.2 ship (versions 1022 and 1030). Dyno model released. rCM distill from Nvidia as alternative.
 - **November 2025** -- LightX2V v1030 declared very close to base motion quality. MAGREF, FFGO, and other ref/character systems ported. Kandinsky 5 2B enters as a rival.
 - **December 2025** -- LightX2V 1217 released. New T2V distill LoRAs. rCM merged 2.2 I2V version.
@@ -53,10 +54,10 @@ Wan 2.2 14B is not a single model with expert routing inside it. It is **two sep
 | **Low Noise (LN)** | Finetune of Wan 2.1 14B | Detail, texture, refinement, lip-sync cleanup | Low sigma / late steps |
 
 The split is controlled by a **boundary** parameter:
-- **T2V:** boundary = **0.875** (switches to low noise after step 12 of 40 total, roughly the first ~30% of sampling)
-- **I2V:** boundary = **0.900** (switches after step 22 of 40 total)
+- **T2V:** boundary = **0.875** (roughly the first ~30% of sampling is high noise)
+- **I2V:** boundary = **0.900** (more steps are allocated to the high noise expert)
 
-The models are not merged at inference -- attempts to average/merge the HN and LN weights produce pure noise. Instead, one expert runs for its sigma range, hands its partially denoised latent to the second expert, and the second expert finishes. Most implementations unload the first model before loading the second, so **only one ~14B model needs to be in VRAM at a time**.
+The models are not merged at inference -- naive attempts to average/merge the HN and LN weights generally degrade quality significantly, though some users reported partial success with experimental merges (especially when combined with VACE modules). Instead, one expert runs for its sigma range, hands its partially denoised latent to the second expert, and the second expert finishes. With offloading enabled (not running `--high-vram`), most implementations unload the first model before loading the second, so **only one ~14B model needs to be in VRAM at a time**.
 
 ### What each expert contributes
 
@@ -115,7 +116,7 @@ Notes:
 
 > "2.2 even works with fp8_fast while 2.1 quality dies with it." -- Discord #wan_chatter, July 2025
 
-5B does **not** quantize well: "Don't use fp8 with 5B, stick to fp16."
+5B quantization is problematic: some users reported artifacts with fp8, and fp16 is generally recommended. GGUF quantizations of 5B exist but quality reports are mixed.
 
 ---
 
@@ -155,7 +156,7 @@ Notes:
 | **Frames** | 121 at 24 fps | Native |
 | **Sampler (T2V)** | dpm++_sde | `flowmatch_distill` produces confetti/distortion |
 | **Sampler (I2V)** | `flowmatch_pusa` | Only compatible sampler for 5B I2V in wrapper |
-| **Precision** | fp16 only | fp8 destroys 5B |
+| **Precision** | fp16 recommended | Some users reported fp8 artifacts; GGUF options exist but quality is mixed |
 | **Negative prompt** | Use the default Chinese negatives | Required for decent output |
 | **VAE** | 2.2 VAE (the big one) | Must match |
 
@@ -183,7 +184,7 @@ Notes:
 | **Motion** | Limited, sometimes "wanny motion" artifacts | More realistic, better micro-motion, 30fps-like feel downsampled to 16fps |
 | **Hands** | Weak | Significantly better even at lower resolution |
 | **Physics** | Okay | Much better |
-| **Faces** | **Still better** for close-ups and face consistency | Good but 2.1 rules for faces |
+| **Faces** | Many users found 2.1 better for close-ups and face consistency | Good; opinions mixed on whether 2.1 or 2.2 is better |
 | **Anime / 2D** | Okay | Better, more inclined to 2D illustration style |
 | **Brand / world knowledge** | Limited | Better (larger dataset, more logos, more time knowledge) |
 | **Dynamic range / lighting** | Standard | Lightning 2.2 LoRA has reduced dynamic range; base 2.2 HN has better light/shadow |
@@ -194,15 +195,15 @@ Notes:
 | **VRAM** | Single model in VRAM | Two models sequential, about the same peak |
 | **Speed** | Faster (single model) | Slower overall due to two passes |
 | **LoRA ecosystem** | Massive, mature | Growing, most 2.1 LoRAs work on LN |
-| **Inpainting / VACE** | **2.1 VACE still better** for most inpainting | Fun VACE 2.2 better at fast motion |
-| **Face swap / likeness** | **Better** via Phantom, MAGREF on 2.1 | 2.2 works but 2.1 stack is more mature |
+| **Inpainting / VACE** | Many users preferred 2.1 VACE for control-heavy work | Fun VACE 2.2 better at fast motion |
+| **Face swap / likeness** | Phantom, MAGREF more mature on 2.1 | 2.2 works but 2.1 stack is more mature |
 | **Long-form talking** | **InfiniteTalk / MultiTalk = king** | Poor MultiTalk compatibility |
 
 ### When to use which
 
 - **Use 2.2** for: new T2V/I2V work, cinematic motion, prompt-heavy scenes, first-last frame morphing, vertical video, better physics, anime.
-- **Use 2.1** for: face consistency work, inpainting, VACE-heavy workflows, speed-LoRA workflows (FusionX), InfiniteTalk/MultiTalk, WanAnimate (structurally 2.1), HuMo.
-- **Use both** by mixing: Wan 2.1 as LN refiner with Wan 2.2 HN as the motion/prompt driver is a widely used hybrid. "You can use Wan 2.1 as the low noise model -- the low model doesn't do anything new really."
+- **Use 2.1** for: VACE-heavy control workflows, speed-LoRA workflows (FusionX), InfiniteTalk/MultiTalk, WanAnimate (structurally 2.1), HuMo.
+- **Use both** by mixing: Some users experimented with hybrid workflows using Wan 2.2 high noise and Wan 2.1-compatible low-noise components/LoRAs, since the low noise model "doesn't do anything new really."
 
 ---
 
@@ -240,8 +241,9 @@ Common strengths (community consensus):
 
 ### SageAttention
 
-- **SageAttention 2.2.0+** is required for 2.2 workflows and fixes the I2V first-frame flash issue.
+- **SageAttention** is widely used with Wan 2.2 for speed and memory benefits, though it is not strictly required.
 - "Generation speed way faster after installing sage attn 2.2 with torch 2.10.0."
+- Some users discussed first-frame flash artifacts, but this evidence set does not confirm SageAttention as the definitive fix.
 - Prebuilt Windows wheels at `woct0rdho/SageAttention` releases.
 
 ### Torch compile
@@ -251,12 +253,12 @@ Common strengths (community consensus):
 
 ### Three-sampler setup
 
-A widely shared trick: use three ksamplers --
-1. First: 2 steps HN without any distill LoRA, at full CFG (3.5+).
+An experimental community technique, reported by several users: use three ksamplers --
+1. First: a few steps HN without any distill LoRA, at full CFG (3.5+).
 2. Second: HN with distill LoRA at CFG 1 for remaining HN steps.
 3. Third: LN with distill LoRA at CFG 1.
 
-This preserves native 2.2 motion and brightness while still benefiting from distill speed. "3 sampler method is best you can get compared to full 20 steps."
+The idea is to preserve native 2.2 motion and brightness during early HN steps while still benefiting from distill speed. Some users reported this approach gave results closer to full-step quality.
 
 ---
 
@@ -268,24 +270,23 @@ This preserves native 2.2 motion and brightness while still benefiting from dist
 - **Loading CLIP vision.** 2.2 doesn't use it. Leaving it in your workflow wastes VRAM.
 - **Applying distill LoRA to HN.** Kills 2.2's defining feature (motion and prompt adherence) and makes outputs look like 2.1.
 - **Using only LN.** "Not much different from Wan 2.1" -- you paid for two models, use both.
-- **Merging HN and LN weights.** Produces pure noise. They are not compatible as averages.
+- **Merging HN and LN weights.** Naive averaging generally degrades quality significantly; some users reported partial success with experimental merges (especially combined with VACE modules), but straightforward weight averaging is not recommended.
 - **Too few HN steps.** Below 4-5 is an "epic fail," especially with speed LoRAs.
 - **CFG 1 on HN.** Reduces motion and prompt adherence. 2.2 HN wants proper CFG.
 - **Mismatched shift between HN and LN samplers.** Produces snow/particles at the handoff.
 - **Setting frame count above 81 on 14B.** Loops or ping-pongs around frame 109 unless you use SVI-Shot / context windows.
 - **Using 5B at low resolution.** Requires 1280x720+ or "nightmare results."
-- **fp8 on 5B.** Fails with artifacts; use fp16 only.
+- **fp8 on 5B.** Some users reported artifacts; fp16 is generally recommended.
 - **Connecting context options to the second (LN) sampler.** Can break with negative dimensions; put context on HN, less overlap on LN (16 vs 48).
 - **Stride > 10** crashes high noise context windows.
 
 ### Inpainting / VACE / control
 
-- **Original VACE 2.1 module works fine on 2.2 LN** (sometimes even on T2V). VACE applied to the 2.2 HN is "mediocre" or ignored entirely -- it was never trained for HN.
-- **Fun VACE 2.2** was released in September 2025 by Alibaba PAI, with HN and LN variants. Works out of the box with the wrapper. Strengths: better at fast motion, better reference adherence, reduced color shifting. Weaknesses: still worse than 2.1 VACE for face consistency, multi-frame interpolation, wide shots.
-- **VACE 2.2 uses black background + white lines** for lineart/canny (inverted from 2.1's white bg + black lines).
+- **VACE 2.1 module on 2.2:** Community reports suggest VACE 2.1 works most reliably on the 2.2 low-noise stage; high-noise support is weaker and inconsistent, and may require special settings or workarounds (e.g., injecting reference video as latents and starting denoising at step 2) rather than working out of the box. This topic was unsettled through mid-2025, with contradictory user reports.
+- **Fun Control 2.2 and Fun Inpaint 2.2** were released August 8, 2025 by Alibaba PAI. Official native VACE 2.2 came later (users were using unofficial merges of Wan 2.1 VACE into Wan 2.2 through at least mid-August). Fun VACE 2.2 strengths: better at fast motion, better reference adherence, reduced color shifting. Weaknesses: many users found 2.1 VACE better for face consistency, multi-frame interpolation, wide shots.
 - **WanAnimate** despite the 2.2 branding is structurally Wan 2.1 I2V. LoRAs trained on 2.2 are **not** compatible with WanAnimate; use 2.1 or 2.2 LN LoRAs instead.
-- **Masks in 2.2 are inverted from VACE** in some workflows -- worth checking.
-- **Control signals (Uni3C, Fun Control)** need strength 3-5 on HN, 1.0 or off on LN.
+- **Mask behavior in Wan 2.2 workflows** can be confusing and may differ between WanVideo Encode, VACE, and wrapper/native workflows; users reported mask slots sometimes behaving more like control/attention guidance than strict inpainting masks.
+- **Control signals (Uni3C, Fun Control)** may need higher strength on HN than on LN; experiment to find working values for your workflow.
 
 ### Looping and frame count
 
@@ -375,7 +376,7 @@ This preserves native 2.2 motion and brightness while still benefiting from dist
 | 3090 | 2.2 VACE 720p | dual model with controlnet | 81 | -- | ~16 minutes |
 | Mac M4 128GB | 5B | -- | -- | -- | VAE OOMs on fp32 (5B VAE is 4x heavier than 2.1) |
 
-- **Linux uses ~4 GB less VRAM than Windows** with torch compile.
+- **Linux may use less VRAM than Windows** with torch compile (torch.compile on Windows was reported as inconsistent in some torch versions).
 - **5090** handles fp8 with no block swap.
 - "WAN 2.2 can generate 240 frames in 110 seconds" on top hardware with distill LoRAs.
 
@@ -416,8 +417,8 @@ Models that **do not** build on 2.2 despite common assumptions:
 |------|-------|
 | **Jun 2025** | Early-access users leak teaser specs (1280x720x30fps, still 16fps native) |
 | **Jul 2025** | Wan 2.2 released. Three variants: A14B T2V, A14B I2V, TI2V-5B. MoE boundary discovered at sigma 0.875/0.900. Kijai fp8/bf16 conversions; City96 GGUF. Immediate community consensus: HN is the "soul," LN is "2.1 finetune." VACE 2.1 confirmed working on 2.2 LN only |
-| **Aug 2025** | First Wan 2.2 Lightning LoRAs released and promptly criticized (style bias, bright-lighting bias, motion degradation). Fun VACE 2.2 released. fp8_fast confirmed usable with 2.2 (2.1 couldn't). Lightning 1.1 variants emerge |
-| **Sep 2025** | Fun VACE 2.2 modules (HN + LN) mature. WanAnimate released (actually 2.1). MAGREF ported. Boundary parameter confirmed at 0.900 for I2V. LightVAE tested and found inferior to 2.1 VAE |
+| **Aug 2025** | First Wan 2.2 Lightning LoRAs released and promptly criticized (style bias, bright-lighting bias, motion degradation). Fun Control 2.2 and Fun Inpaint 2.2 released by Alibaba PAI (Aug 8); users experiment with unofficial VACE 2.1-into-2.2 merges. fp8_fast confirmed usable with 2.2 (2.1 couldn't). Lightning 1.1 variants emerge |
+| **Sep 2025** | Fun VACE 2.2 workflows mature. WanAnimate released (actually 2.1). MAGREF ported. Boundary parameter confirmed at 0.900 for I2V. LightVAE tested and found inferior to 2.1 VAE |
 | **Oct 2025** | LightX2V 1022 and 1030 released; 1030 declared "very close to base motion quality." Dyno model. rCM I2V merged model. LongCat. 2.1 LightX2V on LN re-confirmed as best for lighting |
 | **Nov 2025** | 2.2 LightX2V v1030 dominates; FFGO; Krea Realtime 2.2 extraction. Kandinsky 5 2B enters as quality rival. SVI 2.0 Pro released for 2.2 |
 | **Dec 2025** | LightX2V 1217. New T2V distill LoRAs. rCM 6.0 merged for I2V. TurboWan 2.2 claims 100x speedup. Community consensus: Wan 2.2 may be the last open-source Wan |
@@ -428,8 +429,8 @@ Models that **do not** build on 2.2 despite common assumptions:
 
 ## See Also
 
-- [[wan-2.1]] -- Predecessor; LN is a finetune of 2.1; 2.1 still preferred for faces, VACE, long-form lip-sync
-- [[vace]] -- VACE 2.1 still wins for most inpainting; Fun VACE 2.2 for fast motion
+- [[wan-2.1]] -- Predecessor; LN is a finetune of 2.1; many users still preferred 2.1 for VACE control workflows and long-form lip-sync
+- [[vace]] -- Many users preferred VACE 2.1 for control-heavy inpainting; Fun VACE 2.2 for fast motion
 - [[wananimate]] -- Branded as 2.2 but structurally 2.1 I2V
 - [[humo]] -- 2.1-based; works as LN in 2.2 hybrid
 - [[phantom]] -- 2.1-based character consistency; can be LN refiner for 2.2

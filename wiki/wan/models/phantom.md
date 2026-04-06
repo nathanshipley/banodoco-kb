@@ -3,13 +3,14 @@ title: Phantom
 aliases: [phantom, wan-phantom, phantom-14b, phantom-1.3b]
 sources_ingested: 16
 last_updated: 2026-04-06
+verification: partial (GPT-5.4, checked against top 3 weeks of raw messages)
 ---
 
 # Phantom
 
 Phantom is a subject consistency / identity preservation model built on top of [[wan-2.1]]. It takes reference images and encodes them as latent frames appended to the generation's noise latent (in the temporal dimension), allowing it to preserve character likeness, clothing, and objects across video frames. Unlike standard I2V models that put image information in extra channels, Phantom keeps the T2V architecture intact, which means it remains compatible with [[vace|VACE]] and T2V-trained [[lora|LoRAs]].
 
-Phantom was developed by the Phantom-video team (possibly acquired by ByteDance based on developer GitHub profiles). The 1.3B model was released first, followed by the 14B model in May 2025. A "Phantom Pro" model trained on higher resolutions was announced but details remain limited. The team also released [[humo|HuMo]] (audio-driven character generation) and OmniInsert (subject insertion for videos).
+Phantom was developed by the Phantom-video team. The 1.3B model was released first, followed by the 14B model in May 2025. The same team is believed to have also released [[humo|HuMo]] (audio-driven character generation) and OmniInsert (subject insertion for videos), though this is not confirmed in Discord discussions. There was unverified community speculation (late 2025) that the team may have been acquired by ByteDance.
 
 > "Phantom references are on another level, true subject to video capability." -- Ablejones, Discord #wan_chatter, September 2025
 
@@ -18,11 +19,11 @@ Phantom was developed by the Phantom-video team (possibly acquired by ByteDance 
 ## What It's For
 
 - **Character consistency** -- Maintain a person's face, hair, clothing, and body across generated video
-- **Multi-subject scenes** -- Up to 4 reference images, each can be a different subject (person, object, background)
+- **Multi-subject scenes** -- Supports multiple reference images (users reported up to 4), which can cover different subjects (people, objects, scenes)
 - **Product replication** -- Excellent at accurately replicating products and objects from reference photos
 - **Style adherence** -- Good at style mixing and maintaining artistic styles from references
 - **Pseudo-I2V** -- Though technically T2V, produces some of the best I2V-like results by encoding reference latents
-- **3D character perspectives** -- Can generate full rotation/pan views of a character from a single image, useful for extracting training data
+- **Inferring unseen views** -- Some users reported Phantom can infer views not present in the reference (e.g., the rear of a car from a front-facing image) -- David Snow, Discord #wan_chatter
 
 ---
 
@@ -34,13 +35,12 @@ Phantom is a fine-tuned Wan T2V model (not a separate module like VACE). It repl
 
 | Model | Size | Notes |
 |-------|------|-------|
-| Phantom 1.3B | ~2.6 GB (fp16) | Simpler, works well with VACE at this scale |
+| Phantom 1.3B | -- | Tested with VACE at 1.3B scale (Kijai demo) |
 | Phantom 14B fp16 | ~30 GB | Best quality, too large for on-the-fly quantization on 12 GB cards |
 | Phantom 14B fp8_e4m3fn | ~15 GB | Good balance of quality and speed |
-| Phantom 14B fp8_e5m2 | ~15 GB | Better compatibility with older GPUs (e.g., RTX 3060) |
+| Phantom 14B fp8_e5m2 | ~15 GB | Reported to work on RTX 3060 where e4m3fn did not |
 | VACE+Phantom v2 merge (fp16) | ~30 GB | Piblarg's merged model combining both capabilities |
-| VACE+Phantom v2 GGUF Q8 | ~16 GB | orabazes conversion for low-VRAM setups |
-| VACE+Phantom v2 GGUF Q5_K_M | ~10 GB | Smallest merged option |
+| VACE+Phantom v2 GGUF | varies | orabazes conversion for low-VRAM setups |
 | FusionX Phantom merge | varies | Phantom merged with FusionX LoRAs, compatible with VACE |
 
 **Key repositories:**
@@ -60,7 +60,7 @@ Phantom is a fine-tuned Wan T2V model (not a separate module like VACE). It repl
 | VACE+Phantom merge | 832x480 | 81 | ~12 GB | FFLF workflow, 15 min on 3060 |
 | Phantom + VACE module | 720p | 81+ | ~24 GB+ | Resource intensive |
 
-**System RAM:** 32 GB minimum. 64 GB recommended. Windows users should increase paging file to 80-96 GB to avoid OOM crashes.
+**System RAM:** 32 GB minimum. 64 GB recommended. Windows users may need to increase their paging file size to avoid OOM crashes with complex Phantom+VACE workflows.
 
 ### ComfyUI Setup
 
@@ -72,7 +72,7 @@ Phantom works with both **Kijai WanVideoWrapper** and **native ComfyUI nodes**.
 - `WanVaceAdvanced` (drozbay/Ablejones) -- Advanced VACE nodes with Phantom embed handling
 - VACE+Phantom conditioning patcher (Ablejones) -- Properly injects phantom latents into VACE conditioning
 
-**Critical:** Phantom only works with T2V models. It is incompatible with I2V models, Uni3C (which requires I2V), and GGUF VACE modules (cannot plug non-GGUF VACE into Phantom GGUF). The VACE+Phantom merged model works with fp8 scaled I2V models but not with GGUF loaders.
+**Important:** Phantom is architecturally a T2V model, which causes incompatibilities with some I2V-specific tooling. Kijai confirmed Uni3C does not work with Phantom because "uni3c is only for I2V models and Phantom is technically T2V model." Users also reported that non-GGUF VACE modules cannot be plugged into Phantom GGUF models. Some users did attempt I2V-style workflows with Phantom, but compatibility varies by setup.
 
 ---
 
@@ -82,35 +82,27 @@ Phantom works with both **Kijai WanVideoWrapper** and **native ComfyUI nodes**.
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
-| **Frames** | **121** | Phantom trained on 121 frames. Consistency degrades at 81 or 49 frames (produces "midgets," wrong clothing). 97 frames is a viable middle ground for VACE merge |
-| **FPS** | **24** | Training framerate. VACE trained at 16fps with 81 frames |
-| **CFG** | **5** | Phantom needs CFG > 1. CFG 1.0 produces poor likeness and ignores references |
-| **Steps** | **20** | Minimum for quality. Full model was much better than distilled at fewer steps |
-| **Sampler** | **DPM++ SDE / UniPC** | DPM++ SDE Beta reportedly best. LCM generally does not work well |
-| **Shift** | **Low (2.2 or lower)** | Phantom prefers low shift values. Higher shift hurts likeness/consistency |
-| **Resolution** | **832x480** | Trained on 480p. Works well at higher resolutions despite not being trained on them |
-| **Reference images** | **1-4** | Up to 4 images. Can cover different angles of same subject or different subjects |
+| **Frames** | **121** | Phantom trained on 121 frames (confirmed by Ablejones). Some users reported degraded consistency at lower frame counts |
+| **FPS** | **24** | Training framerate (confirmed by Ablejones, JohnDopamine) |
+| **CFG** | **Varies** | CFG behavior is workflow- and LoRA-dependent. Some users reported good results at CFG 1 with CausVid setups; others preferred CFG 3-5 without speed LoRAs |
+| **Steps** | **8-20** | Many users reported workable results at 8-12 steps with CausVid. Without speed LoRAs, more steps may improve quality |
+| **Sampler** | **UniPC commonly used** | Scheduler choice significantly affects results. UniPC was frequently used successfully |
+| **Shift** | **Low values reported better** | Several users reported lower shift improved likeness, but not universally tested |
+| **Resolution** | **832x480** | Trained on 480p (confirmed by chrisd0073). Works at higher resolutions despite not being trained on them |
+| **Reference images** | **1-4** | Users reported up to 4 images. Can cover different angles of same subject or different subjects |
 
 ### With Speed LoRAs (CausVid/LightX2V)
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
-| **Steps** | **8-12** | 12 steps with CausVid produces decent results |
-| **CFG schedule** | **CFG 3 for first 3 steps, CFG 1.0 for remaining** | Phantom is very sensitive to CFG scheduling with distill LoRAs |
-| **CausVid strength** | **0.3-0.5** | Higher strengths cause flicker. Block 0 disabled is "the right way" |
-| **LightX2V strength** | **0.5 with CFG 2.0** | CFG 1.0 worsens Phantom resemblance |
-| **CausVid version** | **V2 preferred** | Can use full strength, less plasticy, has block 0 already removed |
+| **Steps** | **8-12** | Multiple users reported decent results at 8-12 steps with CausVid |
+| **CFG schedule** | **Varies** | Some users scheduled CFG higher for first steps then dropped to 1.0; others used CFG 1 throughout |
+| **CausVid strength** | **Varies widely** | Users reported different preferred strengths; some used 1.0, others lower. Higher strengths may cause flicker |
+| **CausVid version** | **Mixed preferences** | CausVid V2 was widely tested, but some users preferred V1.5 for Phantom specifically |
 
 ### Phantom CFG (Internal)
 
-The original Phantom model uses 3 CFG passes with its own internal formula:
-
-```
-noise_pred = noise_pred_uncond + phantom_cfg_scale * (noise_pred_phantom - noise_pred_uncond)
-           + cfg_scale * (noise_pred_cond - noise_pred_phantom)
-```
-
-This makes Phantom 14B approximately 3x slower than base Wan 14B due to the triple noise predictions. Setting main CFG to 1.0 disables phantom CFG and restores normal speed, but at the cost of reference adherence. Use a dual CFG guider for proper handling of Phantom's 2 negative embeds. -- Kijai, Discord #wan_chatter, July 2025
+Phantom has its own internal CFG mechanism that interacts with the main CFG setting. Users observed that Phantom CFG interactions were sometimes confusing -- some reported no noticeable changes between CFG values of 1, 5, and 9, while others found CFG affected likeness. The interaction between Phantom CFG and main CFG appears workflow-dependent and is not fully settled in community understanding.
 
 ### VACE+Phantom Merge Settings
 
@@ -127,9 +119,9 @@ This makes Phantom 14B approximately 3x slower than base Wan 14B due to the trip
 
 Phantom encodes reference images into latent frames that are appended to the generation's noise tensor in the **temporal dimension**. This is architecturally identical to how [[vace|VACE]] stores its references -- both live in temporal space, while I2V models put image information in extra input channels. Because Phantom never modifies the base T2V architecture's channel count, it remains a T2V model and can work alongside VACE.
 
-When you set 81 frames with Phantom, it actually samples more frames (e.g., 89) because the reference latents are included in the sampled tensor. The reference frames are trimmed at the **end** of sampling, not the beginning. -- Kijai, Discord #wan_chatter, July 2025
+Users observed that Phantom/VACE workflows may sample extra latent frames beyond what was requested. Kijai confirmed: "phantom reference adds a latent, so the frame count is not matching." This means control inputs may need padding to match. -- Kijai, Discord #wan_chatter
 
-Phantom uses prompts internally to determine which aspects of reference images to focus on. This is why detailed prompting about reference contents is critical -- it will ignore anything in the reference not explicitly mentioned in the prompt.
+Several users reported that prompting can strongly affect which reference attributes Phantom preserves. Some found that Phantom often ignores reference details not mentioned in the prompt, while others got good results with minimal prompting. The exact mechanism is not fully understood, and results appear inconsistent across setups.
 
 ---
 
@@ -142,21 +134,16 @@ Phantom uses prompts internally to determine which aspects of reference images t
 - **Real backgrounds also work** -- Phantom prefers simple but real backgrounds; VACE reference prefers white
 - **Cover multiple angles** -- Four images of the same subject (face, profile, back of jacket, etc.) provide strong consistency
 - **Collages for more subjects** -- Limited to 4 image slots, but each slot can be a collage of multiple characters
-- **Send as batch, not concatenated** -- Better results when feeding images separately rather than making one combined image
-- **Duplicate for emphasis** -- Sending the same image multiple times can improve resemblance
-- **Use real photos over AI images** -- Real face images produce much better results than AI-generated faces
-- **Match resolution** -- Don't crop reference images smaller than the output resolution. Mirror edges and blur if needed
+- **Multi-image handling varies by implementation** -- Wrapper and native node behavior may differ for batch inputs. Some users reported batch inputs only partially working (e.g., wrapper using only the first image). Test your specific setup
 
 ### Prompting for Phantom
 
-Phantom prompting is fundamentally different from standard T2V:
+Phantom prompting is different from standard T2V, though the community has not reached full consensus on best practices:
 
-- **Simple, minimal prompts work best** -- "A woman drinking coffee" works better than detailed paragraphs. Extensive descriptions take focus away from reference identity
-- **Mention what you want to keep** -- Phantom ignores reference elements not mentioned in the prompt. Add details about hair color, clothing, etc. that you want preserved
-- **Chinese prompts work better** -- Model was trained mostly with Chinese text, adheres better to Chinese prompts
+- **Simple vs. detailed prompts -- opinions vary** -- Many users prefer simpler prompts for better likeness ("A woman drinking coffee" rather than detailed paragraphs), finding that extensive descriptions take focus away from reference identity. However, some users reported success with more descriptive prompting that includes camera movements and scene details
+- **Mention what you want to keep** -- Several users found that prompting can help steer which reference attributes are emphasized, though results are inconsistent
 - **For multiple characters** -- Describe each person briefly ("man in black," "woman with red hair") to prevent Phantom from only rendering one
-- **Add actions to negative** -- "Talking" or "conversation" in negative prompt prevents unwanted mouth movement
-- **Use closed-mouth reference** -- If characters keep talking, use reference images with closed mouths
+- **Unwanted talking is a common issue** -- Many users reported characters talking/moving their mouths regardless of the prompt. No widely confirmed fix exists in the checked messages, though some users experimented with closed-mouth references and negative prompts
 
 ### Combining with VACE
 
@@ -175,14 +162,11 @@ The VACE+Phantom combination is the most popular advanced workflow:
 - **HuMo pipeline** -- Generate scene with VACE+Phantom for movement, then v2v pass with HuMo for lip sync
 - **MultiTalk** -- Phantom has more dynamic movement, MultiTalk has better lip sync. Cannot easily combine their embeds (both feed into same image_embeds input)
 - **Wan 2.2 hybrid** -- Use Wan 2.2 HN model for initial steps to get depth map, then use Phantom for LN sampling. Or use VACE 2.2 for high noise, switch to Phantom for final steps
-- **WanAnimate** -- Can use VACE+Phantom for multi-subject videos, then WanAnimate for motion refinement with cropped inpainting
-- **Face detailing** -- Standard FaceDetailer doesn't work with video. Use modified Impact Pack fork (Ablejones) that bypasses image batch warnings
+- **FantasyTalking incompatible** -- Kijai confirmed: "FantasyTalking = I2V, Phantom = T2V" -- they cannot be directly combined
 
 ### Video Extension
 
-- **81 frames per section with 9-frame overlap** -- Using WanPhantomSubjectToVideo node for steerable motion continuation
-- **FFLF (First-Frame-Last-Frame)** -- Morphing technique that avoids usual Phantom problems at less than 121 frames. Works better at 81 frames than standard Phantom at 81
-- **Context windows** -- Phantom with context windows produces confusing results; use with caution. Phantom+VACE merge fixed for context windows as of August 2025
+- **Context windows** -- Limited evidence on context window behavior with Phantom. One user (tttADs) reported using context windows successfully: "with Phantom, I use the context window. After refining, the seams mostly disappear." Results may vary
 
 ---
 
@@ -191,7 +175,7 @@ The VACE+Phantom combination is the most popular advanced workflow:
 | Feature | Phantom | [[magref|MAGREF]] | [[vace|VACE]] ref | [[wananimate|WanAnimate]] | Stand-In | IP-Adapter | LoRA |
 |---------|---------|--------|----------|-------------|----------|------------|------|
 | **Architecture** | T2V + ref latents | I2V model | T2V + VACE module | ControlNet-like | LoRA (~300 MB) | Adapter | Fine-tuned weights |
-| **Likeness** | ~80% (excellent) | ~95% (best) | ~60% | Good, not 1:1 | Decent | Moderate | Best (trained) |
+| **Likeness** | Very good | Excellent (per some users) | Moderate | Good, not 1:1 | Decent | Moderate | Best (trained) |
 | **Multi-ref** | Up to 4 images | Single image | Single image | Varies | Single | Single | N/A |
 | **Prompt following** | Moderate | Weaker | Strong | Good | Moderate | Moderate | Strong |
 | **Motion quality** | Good (24fps trained) | 15fps trained | Best | Good | Like base | Like base | Like base |
@@ -200,10 +184,9 @@ The VACE+Phantom combination is the most popular advanced workflow:
 | **Flexibility** | Good (outfit/hair changes) | Rigid (exact match) | Moderate | Moderate | Limited | Limited | Fixed |
 
 **Key comparisons:**
-- **MAGREF** gets higher accuracy (~95% vs ~80%) but is limited to single reference at full resolution and is an I2V model. Better for exact likeness, worse for creative flexibility. Works better for character swapping (5 people in video) than Phantom
+- **MAGREF** -- Some users (gokuvonlange) considered MAGREF better than Phantom for likeness; others (mdkb) found Phantom better in recent tests. MAGREF is an I2V model, which limits compatibility. Opinions varied by use case
 - **VACE reference** is weaker for likeness but more compatible with controls and prompting. VACE has better motion than Phantom
-- **WanAnimate** surpassed massive VACE+Phantom+PUSA workflows with far less tweaking (DawnII), though Phantom still edges it on pure likeness (Piblarg). Community split on which is better
-- **Stand-In** is similar to Phantom but just a 300 MB LoRA, making it more compatible with other workflows. Phantom is better overall for likeness
+- **Stand-In** is a LoRA-based approach, making it more compatible with other workflows. Not extensively compared in the checked messages
 - **LoRA training** will almost always beat image references for consistency, but requires training time and data
 
 ---
@@ -211,18 +194,17 @@ The VACE+Phantom combination is the most popular advanced workflow:
 ## Quirks & Gotchas
 
 - **Seed dependent** -- Some seeds work fantastically while others produce complete failures. Use live preview to detect failures after 5-10 steps and restart with new seed
-- **Frame count critical** -- Trained on 121 frames. At 49 frames produces "midgets," at 81 frames clothing/face degrades. Always try 121 first
+- **Frame count critical** -- Trained on 121 frames. Some users reported degraded consistency at lower frame counts. Try 121 first
 - **Fragile to additions** -- Adding anything (LoRAs, merges, other models) tends to make Phantom work worse. Use lower strengths when combining
-- **Style LoRAs destroy performance** -- Any style LoRA negatively impacts Phantom results. Character LoRAs trained on T2V only work ~30% with Phantom
-- **Struggles with animated/2D content** -- Does realism well, struggles with anime/cartoon styles. Likely trained only on realistic images
-- **First frames look bad** -- First few frames typically look poor, then quality clears up. This is normal behavior
-- **Characters constantly talking** -- Common issue. Use closed-mouth reference images and add "talking" to negative prompt
+- **LoRAs often reduce Phantom quality** -- Several users reported that many LoRAs work worse on pure Phantom than on base T2V, though some merged/FusionX workflows were reported to work well. Some stylized outputs (Simpsons, CGI-toon) were achieved successfully
+- **Mixed results with stylized content** -- Some users speculated Phantom may be biased toward realistic imagery, but others reported good anime-style and CGI-toon results
+- **Start-of-video glitches** -- Some users reported glitches or flashing at the beginning of generations, especially when combining VACE and Phantom
+- **Characters constantly talking** -- Common issue reported by many users. No widely confirmed fix; some experimented with closed-mouth references and negative prompts
 - **Multiple characters unreliable** -- Sometimes renders only one of two characters. More clearly describe both in the prompt
 - **Reference positioning matters** -- Characters perform better when positioned optimally in reference images. Phantom considers colors, backgrounds, positions, and scale
-- **WebP format issues** -- Convert WebP images to PNG/JPG for better results
-- **Moviigen LoRA causes issues** -- Even at 0.25 strength, not worth the weird motion artifacts or likeness loss
+- **Moviigen LoRA may cause issues** -- One user reported it was "a mistake in I2V Phantom" but this was an early, limited observation
 - **Phantom alone + VACE can conflict** -- Coupling with VACE sometimes causes character consistency to break and produces artifacts. The merged model handles this better than separate loading
-- **fp16 vs bf16 matters** -- fp16 quality improvement over bf16 is massive on Phantom specifically. -- Dream Making, Discord #wan_chatter, June 2025
+- **Precision format matters** -- Users reported that precision format choice (fp16, fp8, e4m3fn vs e5m2) significantly affects Phantom results and compatibility
 
 ---
 
@@ -230,23 +212,22 @@ The VACE+Phantom combination is the most popular advanced workflow:
 
 | Problem | Solution |
 |---------|----------|
-| CFG 1.0 produces poor likeness | Phantom needs CFG > 1. Use at least CFG 3-5, or schedule: CFG 3 for first steps, then drop to 1.0 |
+| CFG behavior inconsistent | CFG behavior is workflow-dependent. Some users reported good results at CFG 1 with CausVid; others preferred higher CFG without speed LoRAs. Experiment with your setup |
 | Flashing/noise at start of video | Lower VACE embed strength for video input. Or add LoRA block edit with block 0 off. Lower CausVid to 0.4 |
-| Tensor size mismatch with VACE | Use patcher node. Put Phantom images only in last node. Add 4 VACE images for every Phantom image to match sizes |
+| Tensor size mismatch with VACE | Phantom adds latent/frame-count complications. Use careful node ordering, put control frames through VACE and reference images through Phantom. May require patcher node |
 | Only one character renders | Describe both characters explicitly in prompt. Use 14B (handles 3+ subjects better than 1.3B) |
-| Mask showing as frame | Try empty or very short prompts. Long prompts can cause flash issues |
-| ComfyUI crashes (OOM) | Check RAM usage. Increase Windows paging file to 80-96 GB. Phantom + VACE is very resource intensive |
-| LCM scheduler poor results | Use UniPC or DPM++ SDE instead. LCM doesn't work well with Phantom |
-| CausVid causes noise/artifacts with GGUF | Use fp8 instead of GGUF Q8 for better CausVid compatibility |
-| Phantom ignoring references | Add specific details about reference contents to the prompt. Phantom only preserves what's mentioned |
-| 3x slower than expected | Phantom uses 3 CFG passes. Set main CFG to 1.0 to disable (at cost of quality), or accept the speed trade-off |
-| ControlNet tensor mismatch | Need to pad control frames since Phantom adds latent(s) to the temporal dimension |
-| bf16 VACE module issues | Don't mix bf16 VACE module with Phantom fp8_e5m2. Match precision between models |
+| Mask showing as frame | Some users saw inpainting masks appear in outputs when combining VACE/Phantom/CausVid. Cause and fix not confirmed |
+| ComfyUI crashes (OOM) | Check RAM usage. Consider increasing Windows paging file. Phantom + VACE workflows are very resource intensive |
+| Scheduler sensitivity | Scheduler choice significantly affects Phantom results. UniPC was commonly used successfully. Experiment with different schedulers |
+| CausVid artifacts | Some users reported noise/artifacts when combining CausVid with certain model formats. Experiment with different precision formats |
+| Phantom ignoring references | Prompting may help steer which reference attributes are emphasized, but results are inconsistent. Try mentioning key details in the prompt |
+| Slower than expected | Phantom's internal CFG mechanism may add overhead. Speed varies by workflow and settings |
+| ControlNet tensor mismatch | Phantom adds latent(s) that can cause size mismatches. Kijai noted control frames may need padding |
+| Precision format mismatch | Non-GGUF VACE modules cannot be used with Phantom GGUF models. Match precision formats between models |
 | Poor results with same first-frame and ref | Use different images. Diverse references always outperform duplicate ones |
-| Reference image flickering in wrapper | Latent isn't trimmed properly when combined with Phantom. Known wrapper issue |
-| Self-forcing breaks at 6 steps | Use 4-5 steps maximum with Phantom when using self-forcing |
-| Excessive mouth movement | Use reference with closed mouth. Add facial expression descriptions to prompt |
-| WanVacePhantomSimpleV2 error | Need images in phantom image input. VACE references can be empty. Don't plug videos into phantom input (causes OOM) |
+| Start-of-video flickering | Some users reported flicker at the beginning, especially when combining VACE and Phantom. Wrapper/native behavior may differ |
+| Excessive mouth movement | Common issue. Some users experimented with closed-mouth references and prompt adjustments, but no reliable fix confirmed |
+| VACE/Phantom input confusion | Phantom uses image refs; VACE can handle video/reference frames. Keep control frames in VACE and reference images in Phantom |
 | Hair/clothing changes between batches | Frame count sensitivity. Use 121 frames. Add more reference images covering different angles |
 
 ---
@@ -255,15 +236,11 @@ The VACE+Phantom combination is the most popular advanced workflow:
 
 Phantom has a complicated relationship with LoRAs:
 
-- **T2V LoRAs partially work** (~30% effectiveness). LoRAs need retraining with Phantom as base for best results
-- **CausVid V2** is the most-used speed LoRA. Use at 0.3-0.5 strength with block 0 disabled. V2 preferred over V1
-- **LightX2V** works at 0.5 strength with CFG 2.0. R16 version still better for VACE/Phantom at various strengths
-- **FusionX** -- Merging FusionX with Phantom produces stellar results. UniPC sampler works well with FusionX Phantom
-- **PUSA** -- Phantom FusionX + PUSA + LightX2V LoRA stack provides good I2V results
-- **Merging Phantom with T2V at 0.15-0.25 strength** dramatically improves LoRA compatibility. Pure Phantom often produces poor results ("monstrosity") with LoRAs
-- **Merging speed LoRAs into Phantom** (CausVid/AccVid baked in) works well for eliminating per-generation LoRA loading
-- **Wan 2.2 LN LoRA** can be extracted and applied to Phantom to get 2.2 improvements
-- **Disable TeaCache** when using Phantom + CausVid with 10 steps. Quality much better without
+- **LoRA compatibility is mixed** -- Some users reported normal T2V LoRAs working with Phantom, while many reported reduced likeness or instability. Piblarg noted "any major change to phantom affects character consistency." Thom293 reported "Loras seem to just be weaker with phantom in general"
+- **CausVid** is commonly used with Phantom at 8-12 steps. Strengths and version preferences varied substantially across users -- some preferred V2, while others found V1.5 worked better for Phantom specifically
+- **Merging Phantom with base T2V** -- Some users (notably trianglecircle) reported that merging Phantom with T2V improved LoRA compatibility, as pure Phantom produced poor results with many LoRAs
+- **Wan 2.2 LN LoRA extraction** was actively explored for Phantom (Ablejones), but Kijai reported not having luck applying it. Not confirmed to work
+- **Experimental community merges** -- Users experimented with baking speed LoRAs into Phantom and various merge combinations, but results were unpredictable
 
 ---
 
@@ -271,17 +248,10 @@ Phantom has a complicated relationship with LoRAs:
 
 | GPU | Capability | Notes |
 |-----|-----------|-------|
-| RTX 3060 (12 GB) | 832x480x121 with merge | 15-18 min with VACE+Phantom FFLF. Use e5m2 format (e4m3fn incompatible). VACE module on top is too heavy |
-| RTX 4090 (24 GB) | Full Phantom 14B fp8 | Comfortable. ~253 seconds for standard generation |
-| RTX 5090 (32 GB) | Full Phantom + VACE + LoRAs | Handles complex multi-model workflows |
-| RTX 6000 Pro (48 GB) | Everything | About 2x speed of 4090 |
-| L4 (cloud) | Full workflow | ~100s with LightX2V + 3 LoRAs |
+| RTX 3060 (12 GB) | 832x480 with merge | Use e5m2 format (e4m3fn reported incompatible on 3060). Full VACE+Phantom workflows are resource-intensive at this VRAM level |
+| RTX 4090 (24 GB) | Full Phantom 14B fp8 | One user initially got OOM on first attempt, succeeded on retry |
 
-**Speed comparisons:**
-- Phantom alone: 253 seconds vs VACE alone: 738 seconds (same generation) -- VRGameDevGirl84
-- Phantom + VACE: 261 seconds -- VRGameDevGirl84
-- FP8 Phantom: roughly half the generation time of FP16 with similar quality
-- SageAttention approximately doubles Phantom speed
+**Notes:** Phantom+VACE workflows are generally resource-intensive. Exact timings vary widely by workflow, resolution, frame count, and LoRA usage.
 
 ---
 
@@ -296,12 +266,9 @@ Phantom has a complicated relationship with LoRAs:
 | June 2025 | Community develops advanced combination nodes (WanVacePhantomSimpleV2, DualV2) |
 | June 2025 | VACE+Phantom v2 merge released (Piblarg fp16, orabazes GGUF) |
 | June 2025 | FusionX Phantom merged models appear |
-| July 2025 | Phantom+VACE workflows refined. PerpNegGuider testing. MAGREF comparisons begin |
-| August 2025 | Phantom + MultiTalk combination fixed for context windows |
-| September 2025 | HuMo released by Phantom team. WanAnimate comparisons. VACE 2.2 + Phantom hybrid workflows |
-| October 2025 | Phantom custom 14B model released by community (Thom293). Lynx released (ByteDance competitor) |
-| November 2025 | OmniInsert announced by Phantom team. Phantom Pro (higher res training) announced |
-| December 2025 | Community reports Phantom possibly acquired by ByteDance |
+| July 2025 | Phantom+VACE workflows refined. MAGREF comparisons begin |
+
+*Note: Later timeline entries (Aug-Dec 2025) were not verified against raw messages and have been removed pending verification.*
 
 ---
 
@@ -309,7 +276,7 @@ Phantom has a complicated relationship with LoRAs:
 
 - [[vace]] -- Control system that pairs with Phantom for the most popular advanced workflow
 - [[magref]] -- I2V alternative with higher accuracy but less flexibility
-- [[wananimate]] -- Newer alternative with simpler setup, debated vs Phantom for likeness
+- [[wananimate]] -- Alternative approach to motion/character control (not directly compared in verified messages)
 - [[humo]] -- Audio-driven model from same team, built on similar architecture
 - [[lora|LoRA Training]] -- Training custom LoRAs on Phantom base for best character consistency
 - [[wan-2.1]] -- Base model family Phantom is built on

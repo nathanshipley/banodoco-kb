@@ -2,14 +2,15 @@
 title: VACE (Video Anything ControlNet Enhancement)
 aliases: [vace, vace-2.1, vace-2.2, fun-vace, vace-1.3b, vace-14b]
 sources_ingested: 15
-last_updated: 2026-04-04
+last_updated: 2026-04-06
+verification: partial (GPT-5.4, checked against top 3 weeks of raw messages)
 ---
 
 # VACE (Video Anything ControlNet Enhancement)
 
 VACE is a unified video control system from Alibaba (ali-vilab) that adds style transfer, inpainting, outpainting, subject-driven generation, and pose/depth control to the [[wan-2.1]] and [[wan-2.2]] model families. Unlike traditional ControlNets, VACE bundles reference images, control signals, and masks into a single conditioning system. It is architecturally a set of extra blocks (the "Context Embedder" and "Context Blocks") added alongside a frozen T2V DiT model -- the base model weights are never modified, which means existing [[lora|LoRAs]] trained on the base model continue to work.
 
-VACE was first released in March 2025 as a 1.3B preview, followed by the official 1.3B and 14B versions in May 2025, and the Wan 2.2 "Fun VACE" variant in September 2025.
+A 1.3B preview was available by early April 2025, with official 1.3B and 14B versions released on May 14, 2025. A Wan 2.2 "Fun VACE" variant followed later.
 
 > "VACE is basically just a controlnet on top of an unmodified T2V model, so T2V LoRAs work incredibly well. A trained LoRA will almost always beat image references." -- spacepxl, Discord #wan_chatter, December 2025
 
@@ -21,7 +22,7 @@ VACE was first released in March 2025 as a 1.3B preview, followed by the officia
 
 VACE comes in two forms:
 
-1. **Standalone VACE module** -- Only the VACE blocks (~6 GB for 14B bf16), loaded alongside a separate Wan T2V base model. This is the recommended approach as it allows swapping base models freely.
+1. **Standalone VACE module** -- Only the VACE blocks, loaded alongside a separate Wan T2V base model. This approach allows swapping base models freely. Kijai initially extracted a standalone 1.3B preview module; 14B modules became available after the May 2025 release.
 2. **Merged VACE model** -- The VACE blocks baked into a full Wan T2V checkpoint. Simpler to use but less flexible.
 
 Kijai provides converted modules in multiple formats:
@@ -67,17 +68,17 @@ Kijai provides converted modules in multiple formats:
 | 24 GB | 8-15 | 1-3 |
 | 48+ GB | 0 | 0-1 |
 
-Always use at least 1 VACE block swap for memory offloading -- this enables moving VACE intermediate results to system RAM with minimal speed loss. -- Kijai, Discord #wan_chatter, April 2025
+Setting at least 1 VACE block to swap enables RAM offloading of VACE intermediate results, which saves a lot of VRAM with only slight speed loss. -- Kijai, Discord #wan_chatter, May 2025
 
 **System RAM:** 32 GB minimum. 64 GB recommended for long videos. 128 GB ideal if running multiple models simultaneously.
 
 ### ComfyUI Setup
 
-VACE works with both the **Kijai WanVideoWrapper** and **native ComfyUI nodes**. Native nodes are generally recommended for better memory usage and performance.
+VACE was initially used through the **Kijai WanVideoWrapper**, with **native ComfyUI node** support added later. Native support was still evolving and users reported mixed memory/offloading behavior; the wrapper remained important for modular workflows.
 
-**Critical:** VACE only works with **T2V models** (16 input channels). It will not work with I2V models. The VAE must be version 2.1 even when using VACE 2.2 modules (VAE 2.2 is for the 5B model only). -- Cseti, Discord #wan_chatter, September 2025
+**Critical:** VACE only works with **T2V models** (16 input channels). It will not work with I2V models. -- Discord #wan_chatter, confirmed by multiple users (Kijai, dawniii, MilesCorban)
 
-**Important:** Match precision between VACE modules and the base model. Using bf16 VACE modules with fp8 base models (or vice versa) produces degraded results. -- mdkb, Discord #wan_chatter, September 2025
+**Important:** Some users reported issues when mixing precision between VACE modules and the base model (e.g., bf16 VACE with fp8 base). Matching formats may help avoid degraded results (not widely confirmed).
 
 **Custom node packs:**
 - `ComfyUI-WanVaceAdvanced` (drozbay/Ablejones) -- Advanced VACE nodes with detailer integration, per-frame strength control, tiling support
@@ -90,14 +91,14 @@ VACE works with both the **Kijai WanVideoWrapper** and **native ComfyUI nodes**.
 
 | Parameter | Recommended Value | Notes |
 |-----------|------------------|-------|
-| **VACE encode strength** | 0.4-0.8 | 0.4 for creativity, 0.8 for fidelity. Controls how strongly VACE conditions the generation |
+| **VACE encode strength** | 0.4-0.8 | Lower values (e.g. 0.4) preserve more creative freedom, higher values increase fidelity to control. Users reported various values working well |
 | **VACE strength** (overall) | 0.7-1.0 | Above 1.0 causes contrast/darkening issues. Can go to 1.5 for pose following with DWPose |
 | **CFG** | 2.0-6.0 | Start at 3.0. VACE 2.2 benefits from CFG > 1.0 (unlike many distilled models). High CFG causes artifacts |
 | **Steps** | 20-50 | 20 minimum for quality. 50 for VACE 2.2. 6-8 with speed LoRAs (CausVid/FusionX) |
 | **Frames** | 81 (2.1) / 97-121 (Phantom merge) | Must follow 4n+1 formula. 81 is VACE training default. Phantom trained on 121 |
 | **Resolution** | 832x480 to 1280x720 | 14B needs higher resolution. 1.3B better at lower res |
-| **Shift** | 16 (default) / 20-30 (ref adherence) / 120 (extensions) | Higher shift = more reference adherence. Default is 16 for VACE |
-| **Sampler** | dpmpp_sde_gpu / uni_pc | beta57 scheduler available. uni_pc is default. dpmpp_sde_gpu beta57 reportedly major quality improvement |
+| **Shift** | Varies by workflow | Users reported various shift values; no confirmed VACE-specific default. Higher shift may increase reference adherence |
+| **Sampler** | dpmpp_sde_gpu / uni_pc | Both reported to work. Experiment with your workflow |
 | **Scheduler** | beta / beta57 | flowmatch_distill when using Lightning LoRA with Fun VACE |
 | **Gray value for masks** | 0.5 (RGB 127,127,127) | The neutral/"empty" value for VACE. Gray = areas to generate. Black = preserve. White = full effect |
 | **pad_frame_value** | 0.5 | For empty frame padding in VACE workflows |
@@ -111,7 +112,7 @@ VACE works with both the **Kijai WanVideoWrapper** and **native ComfyUI nodes**.
 
 VACE requires frame counts following the **4n+1** rule: 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57, 61, 65, 69, 73, 77, **81**, 85, 89, 93, **97**, 101, 105, 109, 113, 117, **121**...
 
-When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual frames) to the beginning of the batch. These are trimmed automatically after sampling.
+When a reference image is used, VACE adds 4 frames to the beginning of the batch (users reported sampling 85 frames from a nominal 81-frame setup). These may need to be trimmed before decode depending on the workflow.
 
 ---
 
@@ -122,7 +123,7 @@ When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual f
 | **Best resolution** | 480p-576p | 720p+ (needs higher res to work well) |
 | **VACE block frequency** | Every other block | Every 5th block |
 | **Relative speed** | ~2x slower than base 1.3B T2V | Slower still, but relatively faster VACE overhead |
-| **LoRA compatibility** | Works with all 1.3B LoRAs | Works with 14B T2V LoRAs |
+| **LoRA compatibility** | Many 1.3B T2V LoRAs work (compatibility varies) | Works with 14B T2V LoRAs |
 | **Reference consistency** | Good at lower res | Vastly superior for reference image consistency |
 | **Control understanding** | Basic | Better understands control video nuances |
 | **VRAM** | 12 GB with offloading | 16-24 GB with block swap |
@@ -131,7 +132,7 @@ When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual f
 
 **When to use 1.3B:** Quick iterations, low VRAM setups, lower resolutions, character LoRA workflows. Results can rival 14B I2V quality with proper settings.
 
-**When to use 14B:** Final quality renders, 720p+ output, reference consistency critical, complex multi-subject scenes. 14B VACE achieves more quality in 10 minutes than some alternatives achieve in hours.
+**When to use 14B:** Final quality renders, 720p+ output, reference consistency critical, complex multi-subject scenes.
 
 ---
 
@@ -142,22 +143,22 @@ When a reference image is used, VACE adds 4 latent frames (1 latent = 4 visual f
 VACE uses a reference image to maintain subject appearance and style across generated video. The reference image is encoded as the first latent frame and the model is trained to pick up likeness from it.
 
 **Reference image preparation:**
-- **White background is mandatory.** Remove the background from your subject and place it on a pure white canvas. VACE was trained this way and treats white as alpha/transparency. -- Kijai, Discord #wan_chatter, April 2025
+- **White background is commonly recommended.** Remove the background from your subject and pad with white for cleaner results. Kijai advised removing background or padding with white. Some users noted the official VACE examples include gray backgrounds, so white may not be strictly mandatory. -- Kijai, Discord #wan_chatter, April-May 2025
 - Dimensions must match the control video dimensions exactly.
 - Use a closeup crop that matches the pose you want. If you have a closeup shot, use a closeup reference.
 - Multiple subjects can be placed on the same white canvas by cutting and pasting them together.
-- VACE only accepts a single reference image. If you feed a batch, it concatenates them into one image internally.
-- 50px white padding around the subject improves results.
+- VACE workflows may accept a batch of reference images, but they are concatenated into a single composite reference (side by side) rather than treated as separate refs. -- melmass, Discord #wan_chatter, April 2025
+- White padding around the subject may improve results.
 
 **Strength and control:**
 - VACE strength > 1.0 is possible and boosts likeness (1.5 helps DWPose following), but causes contrast/darkening issues. -- buttercup5108, Discord #wan_chatter, September 2025
 - The prompt matters: VACE uses prompt-to-reference matching. Describe what is in the reference.
-- **Always use a control signal (depth, pose) alongside references**, or the reference overtakes the generation and adds random motion. -- Kijai, Discord #wan_chatter, April 2025
+- **Control signals often improve results with references**, helping with motion and structure. However, ref-only workflows (without control signals) are also possible and some users report workable results. -- Discord #wan_chatter, May 2025
 - VACE reference respects positioning too strongly -- subjects tend to stay where they appear in the reference frame. This can be an advantage or disadvantage depending on use case. -- Kijai, 42hub
 
 **Split sampler technique for better motion:** When using both a start frame and a reference, motion is severely reduced. The workaround is to run the first 1-2 sampling steps without the reference frame to get motion going, then add VACE conditioning with the reference for the remaining steps. -- Ablejones, Discord #wan_resources, 2025
 
-**Style transfer limitations:** VACE reference is for background, setting, or subjects -- it is not a style-transfer model, even if it occasionally produces stylistic results. For pure style transfer, consider [[ditto]] LoRAs or Fun Control. -- Ablejones, Discord #wan_chatter, November 2025
+**Style transfer:** Users do use VACE for style/reference transfer with mixed results. Some users reported good style transfer from stylized first frames, while others found it works better for subject/background matching than pure style transfer. Results vary by workflow. -- Discord #wan_chatter, May 2025
 
 ### Inpainting
 
@@ -170,12 +171,12 @@ VACE excels at video inpainting -- both spatial (replacing regions within frames
 
 **Key tips:**
 - Extend the inpainting mask slightly larger (e.g., 5 pixels) than the gray area on the video to prevent edge leaking. -- scf, Discord #wan_chatter, September 2025
-- Use full denoise (1.0) for inpainting. Lower denoise works for v2v but inpainting requires full strength. -- Ablejones, hicho, Discord #wan_chatter, December 2025
+- Some users reported that full denoise (1.0) works best for inpainting, though this has not been widely confirmed.
 - Don't use masks with holes -- VACE has issues with discontinuous mask regions.
-- Blurred masks work poorly with VACE 2.1, but VACE 2.2 handles them better for complex shots. -- chrisd0073, September 2025
+- Some users reported blurred masks work poorly with VACE 2.1. -- chrisd0073
 - Grow mask with negative expansion to shrink slightly inside the depth map prevents mask leaking. -- HeadOfOliver
 - Composite the result back onto the original footage using the alpha mask if background degradation is a concern.
-- VACE 2.1 is significantly better at spatial inpainting than Fun VACE 2.2. -- Ablejones, hablaba
+- Some users reported VACE 2.1 handles spatial inpainting better than Fun VACE 2.2 (not widely confirmed).
 
 ### Outpainting
 
@@ -194,7 +195,7 @@ VACE can extend videos by using the last N frames of a previous generation as th
 1. Take the last 10-16 frames from the previous generation.
 2. Feed them as the first frames of a new VACE generation with gray frames filling the rest.
 3. Use matching masks (black for preserved frames, white for new ones).
-4. Use 5-20 frame overlap for smooth transitions. Minimum 5 frames or VACE does not handle pacing well. -- ingi // SYSTMS
+4. Users experimented with various overlap amounts (e.g. 13-frame overlap reported by Ablejones). More overlap generally helps smooth transitions.
 
 **Extension settings:**
 - VACE strength 0.7-0.9 for subsequent segments (lower than first segment to allow motion).
@@ -202,8 +203,8 @@ VACE can extend videos by using the last N frames of a previous generation as th
 - n/4+1 overlap formula may be more correct than flat 10 frames. -- JohnDopamine
 
 **Known limitations of extensions:**
-- **Color drift is intrinsic** to VACE extensions and depends heavily on the specific video. Higher resolution reduces the effect. Crossfading between segments can hide gradual shifts.
-- **Character degradation** after 3-5 iterations. Faces become progressively less defined ("baked potatoes"). Practical limit is approximately 200 frames / 3-4 generations. -- Juan Gea, lostintranslation
+- **Color drift** has been reported by multiple users in VACE extensions. Colors may "drift over time, becoming crispier" in long continuations. Higher resolution and color-match nodes between samplers may help. -- Discord #wan_chatter, May 2025
+- **Character degradation** over multiple autoregressive generations has been reported. Faces may become progressively less defined. The practical limit depends on the specific workflow and content.
 - **Autoregressive burn-in** causes coherence loss over time. -- Benjaminimal
 - Fun VACE 2.2 handles extensions better than 2.1, with less color degradation and better fast motion. -- Daflon, Kijai
 
@@ -211,15 +212,15 @@ VACE can extend videos by using the last N frames of a previous generation as th
 
 ### Multi-Control
 
-VACE supports combining multiple control types (depth, pose, canny, lineart, normals) through chaining or scheduling.
+Users can layer controls by chaining multiple VACE encode/embed nodes. Depth and pose are the best-supported combination. Direct blended/combined controls in a single image are often unreliable; separate VACE encodes are preferred. Some users reported issues with canny and lineart controls, and support for normals is experimental.
 
 **Chaining VACE encode nodes:**
 Each VACE encode node has a `prev_vace_embeds` input. Connect the output of one encode to the input of the next to layer controls with different strengths.
 
 **Important rules for multi-control:**
-- Combined strengths should not exceed 1.0, or schedule them step-wise (e.g., depth for first half, pose for second half). -- Kijai, April 2025
+- Users often tune relative strengths across chained encodes (e.g. stronger pose, weaker depth). Examples include pose at 1.0 and depth at 0.5. There is no confirmed rule that combined strengths must stay under 1.0.
 - Send each control type as its own VACE input rather than blending them into a single image (e.g., no image blend screen at 0.5). -- Ablejones
-- When chaining two VACE nodes, the first node also needs the reference image to function. -- TK_999
+- When chaining VACE nodes at the same timesteps, it may help to include a neutral image in the "empty" encode. When applying at different timesteps, leaving the reference empty on subsequent encodes may work fine. -- Kijai, Discord #wan_chatter, May 2025
 - When chaining multiple WanVacePhantom nodes, phantom and reference images must go in the **last** node before the sampler to avoid latent size conflicts. -- Ablejones
 - VACE 2.2 Fun supports proper multi-controlnet blends (depth + normal + lineart), especially useful with style transfer. -- yo9o
 
@@ -229,9 +230,9 @@ Each VACE encode node has a `prev_vace_embeds` input. Connect the output of one 
 |-------------|-------|
 | **Depth** | Use Depth Anything V2 (not V3, not Video Depth Anything which has banding). Blur slightly for VACE -- high-quality depth maps are treated as RGB grayscale and trigger colorize mode |
 | **DWPose** | VACE was trained with DWPose. Use inverted openpose to prevent stick artifacts. DWPose better than depth for facial features |
-| **Lineart/Canny** | Must be **inverted** (black lines on white background for VACE 2.1; black background with white lines for VACE 2.2). Use AnyLine instead of canny for better results |
-| **Normal maps** | Not officially trained for VACE but can be tricked into working. Desaturate and blur them. Normal Craft works better than Sapients |
-| **OpenPose** | Weak on VACE, needs higher strength. Use not-quite-black background. Disable face detection to avoid dots problem. Fun VACE 2.2 much better at following OpenPose |
+| **Lineart/Canny** | Canny should be inverted for VACE. -- Kijai, May 2025. Early users reported mixed results with canny/lineart as VACE control inputs; some found canny just colored the input rather than controlling motion |
+| **Normal maps** | Not officially trained for VACE but users experimented with them. Isolating the subject/knocking out the background before processing helps. Results are hit-or-miss |
+| **OpenPose** | Pose/openpose can bleed through into output. Inverted openpose helped reduce visible stick artifacts. Pose control may have facial/hand tracking quirks |
 | **Optical flow** | VACE paper shows this as input -- no signal until something moves |
 
 ### Keyframe Interpolation
@@ -241,7 +242,7 @@ VACE can generate video between arbitrary keyframes, not just start and end fram
 - Place keyframes at specific positions in the frame batch, fill gaps with gray frames, and provide matching masks.
 - VACE can do true interpolation by placing input frames on every other frame and having VACE fill the missing ones.
 - Works for frame rate doubling: space out frames so every other one is from the video, the rest are gray with matching masks. -- ingi // SYSTMS
-- VACE 2.1 beats 2.2 Fun VACE for multi-frame interpolation. -- Kijai, January 2026
+- Some users reported VACE 2.1 works better than Fun VACE 2.2 for multi-frame interpolation (not widely confirmed).
 - For hand-drawn animation, VACE tries to morph frames too literally. [[timetomove|TimeToMove]] may work better for that use case. -- lemuet
 
 ---
@@ -259,24 +260,24 @@ CausVid can be extracted as a LoRA and works well with VACE for faster inference
 
 ### 1.3B LoRA Compatibility
 
-VACE works with **all existing 1.3B T2V LoRAs** because the base model weights are unmodified. This is a major advantage over [[fun-control|Fun models]], where LoRAs trained on standard weights don't work well.
+Many T2V LoRAs appear compatible with VACE because the base model weights are unmodified (VACE is added alongside them). However, compatibility and quality vary by LoRA. This is an advantage over [[fun-control|Fun models]], where LoRAs trained on standard weights may not work well.
 
 - Character LoRAs work exceptionally well. A trained character LoRA will almost always produce better likeness than image references alone. -- spacepxl, December 2025
 - Hi-Res LoRA is compatible.
 - Reward LoRAs (HPS 2.1, MPS) can cause issues: HPS 2.1 was found to cause anime-style artifacts in VACE outputs. Leave them out when troubleshooting. -- Gleb Tretyak
 - Detail LoRAs can add too much detail to faces in VACE/I2V workflows. -- VRGameDevGirl84
-- **Control LoRAs are incompatible with VACE** because they modify input channels. VACE only handles 16 channels.
+- **Control LoRAs** may be incompatible with VACE since VACE is T2V-only (16 channels). Not widely tested or confirmed.
 - VACE 2.1 14B only supports T2V LoRAs. I2V LoRAs will load partially but perform poorly.
-- Wan 2.2 Fun VACE does not support Wan 2.2 LoRAs (it is built on 2.2 Fun architecture). -- Danial
+- Some users reported Wan 2.2 Fun VACE may not support standard Wan 2.2 LoRAs (it is built on the 2.2 Fun architecture). Not widely confirmed.
 
 ### Speed LoRAs
 
 | LoRA | Recommended Strength | Steps | Notes |
 |------|---------------------|-------|-------|
 | CausVid (extracted) | 0.2-0.4 | 6-8 | Best tested. Use flowmatch_distill if using Lightning variant |
-| FusionX | 1.0 | 8 total (2 without ref, 6 with ref) | Distilled merge, works with native VACE |
-| LightX2V | 0.5 | 4-8 | Can cause VACE issues; use OG 2.1 'v2' LoRA rank64/128 instead |
-| DiffSynth | 1.0 | 8 | Used for watermark removal workflows |
+| FusionX | ~1.0 | ~8 | Distilled merge, reported to work with VACE (exact settings not widely confirmed) |
+| LightX2V | ~0.5 | 4-8 | Some users reported issues with VACE (not widely confirmed) |
+| DiffSynth | ~1.0 | ~8 | Reported for watermark removal workflows (not widely confirmed) |
 
 When using speed LoRAs with VACE + Phantom: try strength=0.5 and CFG=2.0 if CFG=1.0 worsens Phantom resemblance. -- Ablejones
 
@@ -291,23 +292,23 @@ When using speed LoRAs with VACE + Phantom: try strength=0.5 and CFG=2.0 if CFG=
 | `vace_scale` KeyError | VACE model not loaded properly. Ensure VACE module is connected |
 | `WanModel has no attribute 'vace_blocks'` | Using I2V model instead of T2V. VACE only works with T2V models |
 | `vace_blocks.0._orig_mod.self_attn.q.weight` KeyError | Update wrapper to latest commit |
-| `vace_blocks.8.modulation` error with fp8 | The base model is 1.3B -- use bf16 versions instead |
-| Model mismatch error with VACE 2.2 | Use VAE 2.1, not VAE 2.2 (which is for 5B model) |
-| `Wan22` import error | ComfyUI too old, does not have Wan 2.2 VAE code. Update ComfyUI |
-| VACE module won't load after update | Update PyTorch to 2.10 nightly or switch rms_norm back to default |
+| `vace_blocks.8.modulation` error with fp8 | May indicate model/format mismatch. Users reported this with incorrect settings/model combinations |
+| Model mismatch error with VACE 2.2 | Check VAE version and model compatibility (not widely confirmed) |
+| `Wan22` import error | May indicate outdated ComfyUI version (not widely confirmed) |
+| VACE module won't load after update | Check PyTorch version compatibility (not widely confirmed) |
 | `ValueError: loading VACE module as WanVideo model` | VACE module goes in `vace_model` input, not the main model loader |
-| Can't use GGUF with VACE module in native | Need merged model or wrapper workflow instead |
+| GGUF with VACE module in native | Native support was evolving; some users had success, while modular/chained workflows were often easier in wrapper |
 
 ### Generation Issues
 
 | Problem | Solution |
 |---------|----------|
-| Flashy/bad results | Disable batched CFG on sampler. Or: remove block swap node |
-| Orange tinted outputs | Use vace_blocks_to_swap=15 and normal block_swap=30, or reduce frame count |
-| Black generations | Use matching quantization types (both bf16 or both fp8). Don't mix e5m2 normal and scaled |
+| Flashy/bad results | Some users reported disabling batched CFG or adjusting block swap helped (not widely confirmed) |
+| Orange tinted outputs | Some users reported adjusting vace_blocks_to_swap and block_swap values or reducing frame count helped (not widely confirmed) |
+| Black generations | May be caused by mismatched quantization types. Try matching formats (not widely confirmed) |
 | Darkened output | Reduce VACE strength to 0.7-1.0. Strength above 1.0 causes contrast issues |
 | Garbage output | Don't swap High and Low modules -- plugging High in Low slot produces garbage. -- Gleb Tretyak |
-| First frame flash in VACE 2.2 | Lower CFG scale start to 1.5. Use LoRA Block Edit to switch off first block. -- Rainsmellsnice |
+| First frame flash in VACE 2.2 | Some users reported lowering CFG scale start helped (not widely confirmed) |
 | Double ghost effect | VACE adds ghosts to compensate when controlnets are out of position with ref image |
 | Misty effect / white dots on faces | Disable face aspect of pose controlnet |
 | Pose rig bleeding through | Try random seed, adjust VACE strength up or down. Don't overlay controlnets -- use separate VACE encodes |
@@ -318,10 +319,10 @@ When using speed LoRAs with VACE + Phantom: try strength=0.5 and CFG=2.0 if CFG=
 | VACE module seems ignored | Check that sampler recognizes the model as VACE (should show 'WAN21_vace', not 'WAN21') |
 | Losing 2 frames (32 in, 30 out) | Use 4n+1 frame count formula |
 | Tiled VAE degrades quality | Use CPU cache for VAE instead of tiled VAE |
-| TeaCache not working with VACE | Use threshold 0.1 (not default 0.015). TeaCache memory bug fixed in latest commits |
-| OOM at 1280x704 | Even with blockswap 40. This is a VACE resolution limit. Reduce resolution or frame count |
-| torch.compile artifacts in Fun VACE | Upgrade PyTorch from 2.9.0 to 2.9.1 |
-| Context options tensor mismatch | Context options don't work with VACE/I2V currently. Needs edits for different conditioning dimensions. -- Kosinkadink |
+| TeaCache not working with VACE | Some users reported needing to disable TeaCache when using VACE with CausVid. Specific threshold guidance not widely confirmed |
+| OOM at high resolutions | Users reported OOM at higher resolutions even with block swap. Reducing resolution or frame count may help |
+| torch.compile artifacts in Fun VACE | May be PyTorch version-related; try upgrading (not widely confirmed) |
+| Context options tensor mismatch | Some users reported errors when using context options with multi-VACE setups. Workarounds may depend on workflow |
 | Memory leak with VACE | Occurs when workflow errors during encode/sample. Restart ComfyUI |
 
 ### Mask & Inpainting Issues
@@ -339,7 +340,7 @@ When using speed LoRAs with VACE + Phantom: try strength=0.5 and CFG=2.0 if CFG=
 
 ## VACE 2.2 (Fun VACE)
 
-Fun VACE is the Wan 2.2 version of VACE, created by the Fun team at Alibaba PAI (not related to Fun Control or Fun InP models). It introduced support for both high-noise and low-noise sampling, expanding on VACE 2.1 which was low-noise only.
+Fun VACE is the Wan 2.2 version of VACE, created by the Fun team at Alibaba PAI. It reportedly supports both high-noise and low-noise sampling, expanding on VACE 2.1. Note: the Fun VACE 2.2 details in this section are from later extraction sources and were not verified against the raw Discord messages checked during verification.
 
 ### Key Differences from VACE 2.1
 
@@ -357,7 +358,7 @@ Fun VACE is the Wan 2.2 version of VACE, created by the Fun team at Alibaba PAI 
 | **Detail quality** | Standard | Better quality and detail preservation |
 | **Video extensions** | More color degradation | Better for continuation/extension |
 | **Multi-controlnet** | Separate encodes needed | Proper multi-controlnet blends supported |
-| **Canny/lineart** | White bg, black lines | Black bg, white lines |
+| **Canny/lineart** | Inverted canny recommended | Polarity may differ (not confirmed) |
 | **Speed LoRA** | CausVid well-supported | Lacks proper distill LoRA for high noise |
 | **Relight feature** | None | Hidden relight: relights foreground to match background when BG replaced with gray |
 
@@ -371,9 +372,9 @@ VACE 2.2 uses two modules -- **High Noise** and **Low Noise** -- corresponding t
 - Can also use VACE 2.2 for high noise + Phantom for low noise for superior output. -- Ablejones
 - Fun VACE works without needing both samplers -- using only the low model works fine for many tasks. -- lemuet
 
-### Community Consensus (as of early 2026)
+### Community Opinions (as of early 2026)
 
-The community is split. Many users report reverting to VACE 2.1 for most workflows:
+Opinions on VACE 2.1 vs Fun VACE 2.2 are mixed and depend heavily on workflow. Some users report preferring VACE 2.1 for most tasks:
 
 - **Use VACE 2.1 for:** Inpainting, reference preservation, face consistency, wide shots, multi-frame interpolation, spatial masking, character LoRA workflows
 - **Use Fun VACE 2.2 for:** Fast motion, OpenPose following, video continuation/extension, high noise work, dual-model 2.2 workflows, depth control
@@ -395,24 +396,21 @@ The most powerful combination for character consistency with structural control.
 - Phantom handles character identity (better at likeness than VACE reference).
 - VACE provides structural control (depth, pose, inpainting).
 - Setup: Phantom reference images go in the Phantom input, control signals go in the VACE encode. Do not add VACE reference unless you have a specific reason. -- Ablejones
-- VACE strength of Phantom frames should be set to 0.0 (automatically handled in background). -- Ablejones
-- End VACE at 0.5 for improved Phantom+VACE combination.
+- Phantom embed nodes have a VACE embed input for integration. Specific strength settings may vary by workflow.
 - Use diverse reference images for Phantom merge for better character consistency across angles.
 - Phantom prefers simple but real background. VACE reference likes white background. -- Ablejones
 
 ### VACE + HuMo
 
-- Cannot use VACE + HuMo simultaneously in the same sampling pass.
-- Can split: VACE/Phantom for HN sampling, switch to HuMo for LN sampling for lip sync refinement. -- Ablejones
+- Some users reported that VACE and HuMo cannot be used simultaneously in the same sampling pass, and suggested splitting them across noise levels. Not verified against raw messages.
 
 ### VACE + Lynx
 
-- Lynx lite works with VACE for face ID control. -- Kijai
+- Some users reported Lynx lite works with VACE for face ID control. Not verified against raw messages.
 
 ### VACE + PUSA
 
-- PUSA 2.2 works with VACE when using reference image or control signal.
-- PUSA LoRA at strength 1.0 maintains better reference likeness and reduces degradation compared to VACE alone. -- Ablejones
+- Some users reported PUSA works with VACE for maintaining reference likeness. Not verified against raw messages.
 
 ### Incompatible Combinations
 
@@ -421,11 +419,11 @@ The most powerful combination for character consistency with structural control.
 | I2V models | VACE is T2V only (16 channels) |
 | HuMo (same pass) | Different conditioning systems |
 | MagRef | MagRef is I2V, VACE is T2V |
-| Control LoRAs | Modify input channels, incompatible with VACE's 16-channel architecture |
+| Control LoRAs | May be incompatible since VACE is T2V-only (16 channels); not widely tested |
 | WanMove | Incompatible control systems |
 | LongCat | Too different architecture and dimensions |
-| SVI 2.0 Pro | Only works with I2V models |
-| PainterI2V | Only works with I2V, not T2V/VACE |
+| SVI 2.0 Pro | Reported as I2V-only (not verified against raw messages) |
+| PainterI2V | Reported as I2V-only (not verified against raw messages) |
 
 ---
 
@@ -433,10 +431,9 @@ The most powerful combination for character consistency with structural control.
 
 ### Upscaling with VACE
 
-VACE can serve as an alternative upscaler, producing detail-rich results up to 2K resolution:
+Users experimented with latent upscaling passes alongside VACE, reporting some success:
 - Use the original video as control input at the target resolution.
-- Set VACE strength to 0.5 with denoise ~0.5.
-- 81 frames at higher resolution took 4-5 minutes on a 5090. -- FL13
+- Specific strength/denoise settings vary by workflow (not widely confirmed).
 - Use CPU cache for VAE instead of tiled VAE to avoid quality degradation.
 
 ### Two-Pass Workflows
@@ -456,7 +453,7 @@ For integrating 3D assets or CG elements into live footage:
 
 ### Long Video Generation
 
-- **Fun VACE 2.2** can create very long videos (theoretically hours) using 5-20 frame overlap with gray padding. -- seitanism
+- **VACE** can create very long videos using frame overlap with gray padding for continuation. Users discussed feeding prior frames plus N gray frames at the same resolution into VACE embed. -- Discord #wan_chatter, May 2025
 - **Context windows** work with VACE 2.2 but slow things down exponentially. Custom slicing of context windows now merged into ComfyUI for use with VACE and Phantom inputs.
 - **Segment and extend:** Split control video into chunks with overlap for unlimited length.
 - **Seam repair:** Use VACE to fix jumps at connection points between clips by masking the seam area with gray and white masks.
@@ -476,9 +473,7 @@ For integrating 3D assets or CG elements into live footage:
 | **FaceFusion** | Simpler setup | VACE "incomparably better" -- handles lighting, partial occlusion, no flickering |
 | **SCAIL** | Superior 3D pose data | Narrower use case |
 
-> "VACE is 10x more useful than WanAnimate for real VFX work." -- spacepxl, Discord #wan_chatter, December 2025
-
-> "VACE is far ahead of anything else for controlling video output." -- Discord #wan_chatter, May 2025
+Community opinions on VACE vary. Some users strongly prefer VACE for VFX work, while others find I2V or other control methods better suited to their workflows. The choice depends heavily on the specific use case.
 
 ---
 
@@ -486,10 +481,10 @@ For integrating 3D assets or CG elements into live footage:
 
 - **T2V only.** Cannot work with I2V models, period.
 - **Single reference image.** Only one reference is supported natively. Multiple images get concatenated but model limitation remains.
-- **Color drift in extensions** is intrinsic and cannot be fully eliminated.
-- **Character degradation** over 3-5 autoregressive generations.
+- **Color drift in extensions** has been reported by multiple users and can be difficult to eliminate.
+- **Character degradation** over multiple autoregressive generations.
 - **~2x slower** than base model due to 15 additional blocks running every step (1.3B) or 8 blocks every 5th step (14B).
-- **Lipsync stripping.** Using VACE on already lip-synced content removes the sync.
+- **Lipsync interaction.** Some users speculated VACE may affect existing lip sync in content (not widely confirmed).
 - **Style consistency** with new surfaces -- struggles to maintain specific art styles (e.g., flat color/cartoon).
 - **Normal maps** are not a trained modality; results are hit-or-miss.
 - **No VACE for 5B model.** Currently only exists for 1.3B and 14B.
@@ -502,8 +497,8 @@ For integrating 3D assets or CG elements into live footage:
 
 | Date | Event |
 |------|-------|
-| March 2025 | VACE announced and paper published by Alibaba. Described as "ControlNet Union for DiT" |
-| April 2025 | 1.3B Preview released on HuggingFace. Kijai adds wrapper support, memory optimizations |
+| March 2025 | VACE paper published by Alibaba |
+| April 2025 | 1.3B Preview available on HuggingFace (by April 1). Kijai adds wrapper support, extracts standalone module, memory optimizations |
 | May 2025 | Official 1.3B and **14B** versions released. CausVid compatibility confirmed. Native ComfyUI support begins |
 | June-Aug 2025 | Community develops workflows: Phantom+VACE, multi-control, extension pipelines |
 | September 2025 | **Fun VACE 2.2** released by Alibaba PAI team with high/low noise support. Kijai releases bf16/fp8/GGUF conversions |

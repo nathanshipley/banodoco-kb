@@ -2,16 +2,17 @@
 title: Wan 2.1
 aliases: [wan-2.1, wan2.1, wan 2.1, wan2_1]
 sources_ingested: 17
-last_updated: 2026-04-05
+last_updated: 2026-04-06
+verification: partial (GPT-5.4, checked against top 3 weeks of raw messages)
 ---
 
 # Wan 2.1
 
-Wan 2.1 is Alibaba's open-source video diffusion model family, released on February 26, 2025. It was the release that fundamentally changed the open-source video generation landscape: the first open model to deliver quality competitive with closed-source commercial systems, released under permissive licensing, in sizes ranging from 1.3B (runnable on 8 GB consumer GPUs) to 14B (competitive with Kling and Sora). Wan 2.1 is the foundation on which virtually every open-source video workflow of 2025 was built -- including [[vace|VACE]], [[phantom|Phantom]], [[humo|HuMo]], [[wananimate|WanAnimate]], InfiniteTalk, MultiTalk, SkyReels V3, Krea Realtime, and dozens of other derivative models. Even the [[wan-2.2|Wan 2.2]] Low Noise expert is, in effect, a Wan 2.1 finetune.
+Wan 2.1 is Alibaba's open-source video diffusion model family, released on February 26, 2025. It was the release that fundamentally changed the open-source video generation landscape: the first open model to deliver quality competitive with closed-source commercial systems, released under permissive licensing, in sizes ranging from 1.3B (runnable on 8 GB consumer GPUs) to 14B (competitive with Kling and Sora). Wan 2.1 became the major base model and interoperability target for open-source video workflows in 2025, with many pipelines and derivatives built around it -- including [[vace|VACE]], [[phantom|Phantom]], [[humo|HuMo]], [[wananimate|WanAnimate]], InfiniteTalk, MultiTalk, SkyReels V3, Krea Realtime, and dozens of related systems. Even the [[wan-2.2|Wan 2.2]] Low Noise expert is, in effect, a Wan 2.1 finetune.
 
 > "Wan 2.1 is miles better than Hunyuan Video despite only 1B parameter difference. Massive quality differences between the models." -- Discord #wan_chatter, February 2025
 
-> "Old 2.1 LightX2V still undefeated as baseline." -- Discord #wan_chatter, October 2025
+> Wan 2.1 LightX2V remained commonly used in hybrid 2.2 workflows, especially on the low-noise stage. -- Discord #wan_chatter, October 2025
 
 > "2.2 LN Wan is just 2.1+++, so you can use 2.2 LN LoRAs pretty reliably in Wan 2.1 based models." -- Discord #wan_chatter, January 2026
 
@@ -30,7 +31,7 @@ Its position in the ecosystem:
 - **July 2025** -- Wan 2.2 released with dual high/low noise MoE architecture. The Low Noise expert is effectively a Wan 2.1 finetune, which is why 2.1 LoRAs and techniques continue to work on the 2.2 low stage.
 - **August 2025-present** -- Wan 2.1 remains the base of choice for many purpose-built derivatives (HuMo, WanAnimate, InfiniteTalk, Phantom, MAGREF, Bindweave, SteadyDancer, SCAIL, etc.) because its T2V and I2V structures are simpler, more stable, and train faster than 2.2's MoE split.
 
-The community consensus through early 2026 is that Wan 2.1 is not obsolete: for inpainting, face consistency, VACE work, reference adherence, and most distilled/speed workflows, 2.1 is still either competitive with or superior to 2.2.
+Many users continued to prefer Wan 2.1 for certain workflows -- particularly VACE-based control, some reference-heavy setups, and distilled/speed pipelines -- while others considered 2.2 clearly better for motion and prompt adherence. Opinions remained actively mixed through early 2026.
 
 ---
 
@@ -164,7 +165,7 @@ The official Wan 2.1 negative prompt is a long Chinese string starting with "色
 | **VRAM (fp16)** | ~8 GB | ~28 GB; fp8 ~16 GB; Q4 ~8 GB |
 | **Best resolution** | 480p, usable to 720p+ | 720p and 480p |
 | **Speed on 4090 (832x480x81, 20 steps)** | ~2 min | ~12 min with SageAttention |
-| **Quality at 720p** | "~10% of 14B" (community consensus) | Flagship |
+| **Quality at 720p** | Much weaker than 14B, though still usable for prototyping | Flagship |
 | **Quality at 480p** | Surprisingly close to 14B | Sharper but sometimes oversharpened |
 | **Stippling artifacts** | Yes, needs second-pass cleanup | No |
 | **Prompt adherence** | Good for its size | Excellent |
@@ -425,9 +426,9 @@ For truly long video (30s+), purpose-built systems based on Wan 2.1 are often be
 | 14B I2V | 14B T2V | Generally no |
 | 1.3B | 14B | Partial load, poor results |
 | 14B | 1.3B | Partial load, poor results |
-| Wan 2.1 T2V/I2V | Wan 2.2 Low Noise | **Yes, reliably** -- 2.2 LN is effectively a 2.1 finetune |
+| Wan 2.1 T2V/I2V | Wan 2.2 Low Noise | Often works (2.2 LN is effectively a 2.1 finetune), but reliability varies by LoRA; native 2.2 LoRAs usually perform better |
 | Wan 2.1 | Wan 2.2 High Noise | Mixed -- sometimes, often not |
-| Wan 2.1 I2V LightX2V | Wan 2.2 Low Noise | Yes, undefeated for low noise |
+| Wan 2.1 I2V LightX2V | Wan 2.2 Low Noise | Commonly used; some users preferred it over 2.2 Lightning for low noise |
 | rCM (Wan 2.1 trained) | Wan 2.2 | Does not work properly |
 | Character LoRAs (2.1) | Wan 2.2 | Works better when connected to low noise only |
 
@@ -452,23 +453,23 @@ Wan 2.2 launched in July 2025 with a dual high/low noise MoE architecture. Despi
 
 The 2.2 MoE splits at sigma ~0.875. The High Noise expert is a new model trained for motion, composition, and prompt following. The Low Noise expert is, functionally, a Wan 2.1 finetune that handles detail and resolution. This means:
 
-- Wan 2.1 LoRAs work on the 2.2 Low stage.
-- The 2.1 LightX2V LoRA is still the best low-noise speed LoRA even for 2.2 workflows.
+- Many Wan 2.1 LoRAs can be used on the 2.2 low-noise stage, often with higher strength, but results are mixed and native 2.2 training generally works better.
+- The 2.1 LightX2V LoRA remained commonly used on the low-noise stage of 2.2 workflows.
 - Character LoRAs from 2.1 work better when applied only to the low-noise stage of 2.2.
 
-### 2. LightX2V 2.1 LoRAs are still undefeated
+### 2. LightX2V 2.1 LoRAs remained popular
 
-The original Wan 2.1 LightX2V LoRA for I2V remains the best speed LoRA for low noise work as of early 2026. New 2.2 Lightning and Lightx2v variants have better prompt adherence in some cases but the 2.1 version still wins for lighting quality, motion coherence, and low-noise stability.
+The original Wan 2.1 LightX2V LoRA for I2V remained commonly used for low-noise speed workflows into 2026. Some users preferred it over newer 2.2 Lightning variants for lighting quality, though others argued that distill/speed LoRAs on 2.2 high-noise reduced what made 2.2 special. New 2.2 variants offered better prompt adherence in some cases.
 
 ### 3. FusionX
 
-FusionX is a distilled 14B T2V merge (CausVid + LightX2V + other accelerations baked in). As of late 2025, "FusionX quality is still unmatched for Wan 2.1 -- considered the perfect finale to Wan 2.1." FusionX on 2.1 produces better results than FusionX-equivalent stacks on 2.2.
+FusionX is a distilled 14B T2V merge (CausVid + LightX2V + other accelerations baked in). It was a popular Wan 2.1 variant known for speed/quality balance, though some users noted that distillation can "invent" details and trade off character/LoRA fidelity for speed. FusionX represented a mature, well-tested workflow for users who prioritized generation speed on Wan 2.1.
 
-### 4. Face consistency and inpainting
+### 4. VACE-based control workflows
 
-- VACE 2.1 beats Fun VACE 2.2 for inpainting, reference preservation, face consistency, and wide shots.
-- Character LoRA workflows are more stable on 2.1.
-- Multi-frame interpolation is better on VACE 2.1 than 2.2.
+- Users reported strong results from Wan 2.1 + VACE workflows, particularly for V2V/control; some continued to prefer 2.1-based control setups because 2.2 VACE workflows were experimental or less mature.
+- Character LoRA workflows were generally more stable on 2.1.
+- Direct comparative evidence across all categories (inpainting, face consistency, wide shots, multi-frame interpolation) was limited; the preference was strongest for V2V control specifically.
 
 ### 5. Long-form lip-sync / talking video
 
@@ -488,7 +489,7 @@ Every major derivative (Phantom, MAGREF, Bindweave, HuMo, WanAnimate, SteadyDanc
 
 > "Wan 2.1 vs 2.2 for low noise: 2.1 LightX2V LoRA works fine with 2.2 low noise, no need for new 2.2 low noise LoRA." -- Discord #wan_chatter, October 2025
 
-> "Lightning preferred for I2V generally, but 2.1 LightX2V still undefeated for low noise due to better lighting." -- Discord #wan_chatter, October 2025
+> Some users reported preferring 2.1 LightX2V over Lightning for low-noise work due to lighting quality, though this was not universally agreed. -- Discord #wan_chatter, October 2025
 
 ---
 
@@ -503,7 +504,7 @@ Wan 2.1 is the base of an enormous ecosystem. Models that are finetunes, derivat
 | **MAGREF** | Multi-reference character/object control | Wan 2.1 I2V |
 | **Bindweave** | Subject-consistent video | Wan 2.1 I2V 720p |
 | **[[humo|HuMo]]** | Audio-driven video, 17B = 14B + audio layers | Wan 2.1 14B |
-| **[[wananimate|WanAnimate]]** | Pose-driven character animation with controlnet | Wan 2.1 |
+| **[[wananimate|WanAnimate]]** | Pose-driven character animation derivative | Wan 2.1 |
 | **SteadyDancer-14B** | Dance/pose animation with facial expression | Wan 2.1 I2V + VideoLLaMA3-7B |
 | **SVI / SVI-Film** | Infinite video via special LoRAs | Wan 2.1 I2V 480p |
 | **InfiniteTalk** | Long-form talking head | Wan 2.1 |
@@ -576,10 +577,10 @@ Power consumption is lower than image generation: a 5080 uses ~200W for Wan vide
 | **Jul 2025** | **Wan 2.2 released** with dual MoE architecture. Low Noise model identified as 2.1 finetune |
 | **Aug 2025** | LightX2V becomes dominant speed LoRA. HuMo released (Wan 2.1 + audio layers). Krea Realtime distillation |
 | **Sep 2025** | WanAnimate released. Fun VACE 2.2. InfiniteTalk established as long-form king. SkyReels V3 |
-| **Oct 2025** | Bindweave, SteadyDancer, Rolling Forcing. LightX2V 1022 and 1030 versions. 2.1 LightX2V LoRA confirmed still best for low noise |
+| **Oct 2025** | Bindweave, SteadyDancer, Rolling Forcing. LightX2V 1022 and 1030 versions. 2.1 LightX2V LoRA remained popular for low-noise workflows |
 | **Nov 2025** | LongCat (uses 2.1 VAE). SCAIL, WanMove, ATI, SVI 2.0 released for both 2.1 and 2.2 |
-| **Dec 2025** | FusionX declared "unmatched for Wan 2.1, perfect finale." LightX2V 1217. rCM alternative distillation |
-| **Jan 2026** | Community consensus: 2.1 still preferred for inpainting, face consistency, VACE, speed LoRAs. 2.2 LN officially acknowledged as "2.1+++" |
+| **Dec 2025** | FusionX popular as mature distilled Wan 2.1 variant. LightX2V 1217. rCM alternative distillation |
+| **Jan 2026** | Many users still preferred 2.1 for VACE-based control and speed LoRA workflows; opinions mixed vs 2.2. 2.2 LN acknowledged as "2.1+++" |
 | **Feb 2026** | Wan 2.1 ecosystem still actively extended (FlashPortrait, OmniTransfer, PainterI2V, EgoX) |
 
 ---
@@ -587,7 +588,7 @@ Power consumption is lower than image generation: a 5080 uses ~200W for Wan vide
 ## See Also
 
 - [[wan-2.2]] -- Dual MoE successor; Low Noise expert is a 2.1 finetune
-- [[vace]] -- Unified control system, VACE 2.1 still preferred for most tasks
+- [[vace]] -- Unified control system, VACE 2.1 still preferred by many for V2V/control workflows
 - [[phantom]] -- Character consistency, built on Wan 2.1 T2V
 - [[humo]] -- Audio-driven video, Wan 2.1 14B + audio layers
 - [[wananimate]] -- Pose-driven character animation on Wan 2.1
