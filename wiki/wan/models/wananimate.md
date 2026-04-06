@@ -2,14 +2,15 @@
 title: WanAnimate
 aliases: [wan-animate, wananimate, wan animate, wan-2.2-animate, wan animate 2.2]
 sources_ingested: 6
-last_updated: 2026-04-05
+last_updated: 2026-04-06
+verification: partial (GPT-5.4, checked against W38/W39/W45 raw messages, 41 issues found and corrected)
 ---
 
 # WanAnimate
 
 WanAnimate is Alibaba's character animation / motion transfer model in the Wan family, released mid-September 2025. It takes a driving video (providing pose + facial performance) and a reference character image, and produces a video of the reference character performing the driving video's motion. It can also replace a character inside existing footage (character swap) when run with masks and background frames.
 
-Despite being branded "Wan 2.2 Animate," WanAnimate is architecturally closer to [[wan-2.1]] I2V: "Wan Animate is closer to 2.1 architecture. LoRA 2.2 are not compatible with wan animate." -- Kijai, Discord #wan_chatter, September 2025. In practice this means 2.1 LoRAs and 2.2 *low-noise* LoRAs both work; 2.2 MoE LoRAs do not.
+Despite being branded "Wan 2.2 Animate," WanAnimate appears architecturally closer to [[wan-2.1]] I2V — it uses a single model (no high/low noise split like 2.2 MoE), and the old 2.1 LightX2V LoRA works with it. Community consensus treats it as 2.1-based: "WanAnimate is called 2.2 but its just one model, no hi/low. It is suspected to be similar to wan 2.1." -- 42hub, Discord #wan_chatter, September 2025. 2.2 MoE LoRAs are not compatible.
 
 > "WanAnimate is clearly best for vid2vid." -- Kijai, Discord #wan_chatter, September 2025
 
@@ -27,9 +28,8 @@ WanAnimate operates in two main modes:
 It also supports:
 
 - **Face control** -- facial expression/performance is transferred via a face adapter, not just skeleton pose. It tracks lip sync and gaze direction, which is unusual for pose models.
-- **Animal poses** -- VitPose in the WanAnimatePreprocess nodes can detect animal skeletons, enabling quadruped animation. -- Nathan Shipley, Hashu
-- **Trajectory/ATI-style control** -- can follow point trajectories for object movement, not just dance poses. Accepts first-frame, last-frame, one ref slot, controlnet, and trajectories simultaneously. -- Gleb Tretyak, Discord #wan_chatter, November 2025
-- **RGB driving input** -- you can feed RGB video directly as control without a preprocessor; it will follow structure and motion, losing a bit of likeness but handling foreground-occluded scenes better than pose.
+- **Animal poses** -- VitPose in the WanAnimatePreprocess nodes can detect animal skeletons, enabling quadruped animation (reported by community members, not extensively verified).
+- **Trajectory/ATI-style control** -- community members experimented with ATI-like point/trajectory guidance in November 2025, but this is exploratory and not a confirmed production-ready feature.
 
 ---
 
@@ -44,7 +44,7 @@ It also supports:
 
 ### VAE & Base
 
-WanAnimate uses the **Wan 2.1 VAE** (it is based on the 2.1 I2V architecture, not 2.2). Wan 2.1 T2V will also load because base layers are the same. -- xiver2114
+WanAnimate uses the **Wan 2.1 VAE** (it is based on the 2.1 I2V architecture, not 2.2 MoE).
 
 ### ComfyUI Nodes
 
@@ -52,7 +52,7 @@ Two implementations exist and the wrapper is generally considered superior:
 
 | Implementation | Notes |
 |---|---|
-| **Kijai WanVideoWrapper** | "Animate quality in wrapper is 5x better than native" -- asd. Better prompt adherence, looping, handles empty face images automatically. |
+| **Kijai WanVideoWrapper** | Generally considered superior. Better prompt adherence, looping, handles empty face images automatically. |
 | **Native ComfyUI** | Better backplate cleanup in character replace; slightly better gaze control. Requires manually feeding black face images when not using face input. |
 
 The `ComfyUI-WanAnimatePreprocess` custom node package (Kijai) replaces manual pose/face detection with automatic VitPose-based detection, SAM2 masking from keypoints or bbox, and optional Flux Kontext reference retargeting. V2 of this workflow gives substantially cleaner face transfer and better eye quality than V1.
@@ -137,22 +137,21 @@ WanAnimate exposes block-range scheduling (wrapper-only) for fine-grained contro
 
 ## Inputs
 
-### Pose / Canny / Driving Video
+### Pose / Driving Video
 
 - Uses **VitPose-H** internally (not DWPose), with a hardcoded 256x192 input resolution.
 - VitPose can extract human joints from hand-drawn sketches and stick figures -- usable as driving source without real video. -- dj47
-- VitPose only handles **one person at a time**; use DWPose for multi-person scenes.
-- **Inverted canny required** -- unlike regular canny, WanAnimate expects white background with black edges. Using non-inverted canny causes static backgrounds and bad results. -- Ablejones
-- Pose input accepts **depth maps mixed in**, useful for backward-facing scenes where pose estimation fails. -- Clément
+- VitPose only handles **one person at a time**; multi-person scenes require separate passes per person.
 - Lines work better than dots for control inputs; solid shapes also work well. -- Mads Hagbarth Damsbo
-- You can feed raw RGB video as control without a preprocessor; it follows motion and structure at a small cost to likeness.
+
+> **Note:** WanAnimate does NOT accept canny or depth map inputs natively. Canny, depth, and structural control are [[vace]] / Fun Control features. If your pipeline uses canny with WanAnimate, that canny is being processed by VACE upstream, not by WanAnimate itself. Some users experimented with feeding depth maps but results were unreliable ("seems to do something... and also turns my resulting video green" -- citizenplain; "needs strict depth training to be reliable" -- dawniii).
 
 ### Reference Image
 
-- **Single reference only** -- multiple references cause extra arms / errors. -- Kijai
+- **Generally single reference** -- WanAnimate workflows typically use one reference image. Multi-reference support is available in other models ([[phantom]], [[vace]]) but not confirmed for WanAnimate.
 - **Closer framing helps likeness.** "You want to smell their digital breath." Crop tighter and prompt for the face being prominent.
 - **Back-shot references** help with character turn-arounds.
-- **T-pose characters work best** because Flux Kontext preprocessing is biased toward T-pose. -- Kijai
+- **Flux Kontext preprocessing** -- the codebase can preprocess the reference with Flux Kontext to repose it in pose-only mode. -- melmass
 - Higher-resolution reference = better face texture, since more pixels go to the face.
 - Reference image in the same pose/position as first frame of the guiding video gives much better consistency.
 - **Flux Kontext step** in the preprocessor aligns the reference with the first video frame automatically.
@@ -162,25 +161,24 @@ WanAnimate exposes block-range scheduling (wrapper-only) for fine-grained contro
 - If you use masking but no face images, masking breaks -- pass **empty (black) images for every frame** as a workaround. The wrapper handles this automatically; native requires manual input. -- Kijai
 - Face model input is hardcoded to 512x512, which can cause warped crops on extreme profiles.
 - Disconnect `face_images` if you don't want facial performance transferred -- works fine without the blocky black mask.
-- Disconnect `clip_vision` from the encode node for better likeness as the video progresses and after the first context window.
-- "With clip embeds: better identity but worse lighting. Without: better lighting but worse identity." -- Kijai
+- Disconnecting `clip_vision` from the encode node may affect the identity/lighting tradeoff, but specific effects are not well-established in community testing.
 
 ### Masking
 
-- The model is trained to handle **blocky masks only** -- also works with square masks but not smooth masks. A custom node converts normal masks into the blocky style. -- Kijai
-- Masking is **rigid** -- use grow/blur, or switch to VACE for precise masks.
+- **Blockier/larger masks give more freedom** -- the mask shape influences the character shape, and blocky masks appear to work better than precise smooth masks. -- community observation
+- **Masking can feel rigid** -- one user noted: "the one thing I will say is a strike against wan-animate is how rigid the masking is." Grow/blur can help. VACE allows more precise masks by comparison. -- dawniii
 - **Mask everything you want to replace** including hair, face, and body. The model prefers larger masks over too-small ones.
-- SAM 2.1 is better than earlier SAM versions for this task. SEC masking is solid and works better than SAM2 alone. Qwen2.5VL tagging outperforms Florence2 for mask generation (155 frames in 30s).
+- Community members have tested SeC-4B masking as an alternative to SAM2 for WanAnimate, with promising early results.
 - For chibi / non-standard body proportions, greatly expand the mask (200+ pixel expansion makes a massive difference). -- David Snow
 - **Disconnect bg_images and mask entirely** to run WanAnimate as a character animation model (reference provides background) instead of character replacement.
-- Removing bg_images and mask also turns WanAnimate into a "stronger VACE/Fun controlnet". -- slmonker
+- Running without masking can work well: "all of my wan animates are 0 masking what so ever" -- Fill
 
 ---
 
 ## Resolution & Dimensions
 
-- **All image inputs must be divisible by 16** for long videos. If dimensions aren't divisible by 16, you can only generate exactly 77 frames. -- BestWind
-- **Generate at 720p or higher** for better pose following and likeness; WanAnimate, like VACE and Phantom, benefits strongly from higher resolution.
+- **Dimensions divisible by 16** may be required for long videos — some users reported resolution-related errors when dimensions don't divide evenly.
+- **720p or higher** is commonly used; higher resolution generally helps pose following and likeness.
 - 832x480 works; 480x832 has issues in some segmentation workflows.
 - 1920x1080 produces excellent quality on 96 GB VRAM systems, no post-processing needed.
 - For vertical phone video, if mask nodes flip vertical -> horizontal, pre-rotate with `ffmpeg -vf "scale=1080:1920"`.
@@ -206,10 +204,8 @@ Two mechanisms are available (vs SCAIL's single mechanism):
 2. **Context windows** (`WanVideo Encode Latent Batch` with context options) -- works after bug fix in Oct 2025. Minimizes color drift but causes background morphing. Less "frying" than built-in windows.
 
 For maximum stability over long sequences:
-- Set blockswap to 40 for 389 frames at 720x1280 on 64 GB RAM. -- Kijai
 - Use `tiled_vae` option in WanVideo Animate Embeds for higher frame limits.
 - Set `num_frames == frame_window_size` when using context options (disables built-in looping).
-- Concat latent image trick reduces flash during long generations. -- Gleb Tretyak
 
 ### Speed (LightX2V & Lightning)
 
@@ -229,9 +225,7 @@ For maximum stability over long sequences:
 
 ### Multi-Model Pipelines
 
-- **WanAnimate + V2V InfiniteTalk at 50% denoise** is claimed as a current SOTA stack. -- ArtOfficial
-- **SCAIL -> WanAnimate** -- use SCAIL for pose retargeting to different body proportions, then WanAnimate for facial performance stability. -- Juan Gea
-- **Alternate single steps** between WanAnimate and SCAIL samplers for combined benefits. -- mallardgazellegoosewildcat2
+- **SCAIL -> WanAnimate** -- community workflow idea: use SCAIL for pose retargeting to different body proportions, then WanAnimate for facial performance stability.
 - **Flux Krea w/ PuLID -> Wan S2V -> Qwen 2509 -> WanAnimate 2.2** is a full production pipeline example. -- Zlikwid
 
 ---
@@ -250,8 +244,8 @@ For maximum stability over long sequences:
 - **The model is very sensitive to prompts** -- keep them simple.
 - **Relight LoRA causes identity drift** in some cases -- disable for 2D/anime characters.
 - **Bottom of objects go wonky** with the relight LoRA enabled.
-- **2.2 LoRAs (MoE) are NOT compatible**; only 2.1 LoRAs and 2.2 **low-noise** LoRAs work. Use the 2.2 Low Noise LoRA at weight 1.0 alone.
-- **LoKr format not supported** for WanAnimate LoRAs. -- boorayjenkins
+- **2.2 MoE LoRAs are NOT compatible** -- WanAnimate is 2.1-based, so 2.2 high-noise LoRAs don't work. 2.1 LoRAs and the old 2.1 LightX2V work fine. -- Kijai
+- **Cannot merge LoRAs with low-mem load** enabled for bf16 WanAnimate. -- community troubleshooting
 - **Animate "adds lips to every character"** regardless of reference image -- generate multiple seeds for close matches. -- Sal TK FX
 - **Anime characters have mouth-scale issues** -- the model forces human anatomy onto smaller anime mouths.
 
@@ -274,7 +268,7 @@ For maximum stability over long sequences:
 | Snow/dust artifacts | Add to negative prompt (requires NAG since CFG 1.0) |
 | Grid noise pattern | Use the v2 fp8_scaled model |
 | Black mask box around V2 output | Add black face images instead of disconnecting; ensure face strength ≥ 1.0 |
-| Flickering black blocks | Enable `fl2v` switch on the node for 2.2 models |
+| Flickering black blocks | Check face adapter inputs; ensure face images are connected or black images passed |
 | Face shaking / jitter | Use old preprocessor workflow, or disconnect face_images if not needed |
 | Losing face likeness without LightX | Reduce pose strength, increase face strength; or keep LightX LoRA for its face-preserving side effect |
 | Overexposure on long runs | Use LCM, fewer steps, weaker settings, or context windows instead of frame windowing |
@@ -286,7 +280,7 @@ For maximum stability over long sequences:
 | Poor LoRA results | Trigger word in captions, train on 720p images+videos, rank 32 instead of 64 |
 | Shift/transition visible in video | Tighter mask around subject, leave thin edge on top, 50% coverage on problematic areas |
 | Color drift between windows | Known issue; context windows vs built-in is a tradeoff |
-| Depth input turns green | Blend method similar to VACE needed; depth training isn't reliable |
+| Depth input turns green | Depth is not a native WanAnimate input — use [[vace]] for depth control instead |
 | Black screen with clip embeds + sageattn | Disconnect clip output, or use `PatchSageAttentionKJ` with `sageattn_qk_int8_pv_fp16_cuda` |
 | Black result when torch compiling | Related to SageAttention auto mode with clip vision |
 | Native black image while wrapper works | Check all settings match; wrapper handles empty face inputs, native doesn't |
@@ -299,7 +293,7 @@ For maximum stability over long sequences:
 | OOM with Uni3C + WanAnimate | Disconnect both bg_images and mask |
 | Output 2-3 frames short | Normal -- output must be divisible by 4 after first frame |
 | Hair cut off in reference | Change KJ workflow resize from "stretch" to another mode |
-| Flickering background in static scenes | Use inverted canny, prompt for motion |
+| Flickering background in static scenes | Prompt for motion in the scene; consider replacement mode with background frames |
 
 ---
 
@@ -309,13 +303,10 @@ For maximum stability over long sequences:
 |---|---|
 | Wan 2.1 T2V LoRAs | Yes (base layers are identical) |
 | Wan 2.1 I2V LoRAs | Yes (WanAnimate is 2.1 I2V architecture) |
-| Wan 2.2 Low-Noise LoRAs | Yes, at weight 1.0 alone |
-| Wan 2.2 High-Noise LoRAs | No |
-| Wan 2.2 MoE (dual) LoRAs | No -- use only the Low-Noise half |
+| Wan 2.2 MoE LoRAs | No -- WanAnimate is 2.1-based, not 2.2 MoE |
 | LightX2V 2.1 | Yes, strongly recommended |
 | LightX2V 2.2 | No |
-| Character LoRAs | Yes, often still needed for strong likeness -- "Wan Animate still needs character LoRA in testing" -- Dream Making |
-| LoKr format | No |
+| Character LoRAs | Users experimented with character LoRAs; effectiveness varies |
 | Relight LoRA (bundled) | Yes, 0-1 strength |
 
 For training custom WanAnimate character LoRAs: use trigger words in captions, train on 720p images with videos, rank 32 instead of 64, skip mentioning clothing if you want the training-data outfits to appear.
@@ -327,7 +318,7 @@ For training custom WanAnimate character LoRAs: use trigger words in captions, t
 | Model | vs WanAnimate |
 |---|---|
 | **[[vace]]** | VACE has stronger native control and is "10x more useful for real VFX work" (spacepxl). WanAnimate saves time by keeping everything in one model. VACE is far better at depth; WanAnimate doesn't understand depth at all. |
-| **[[phantom]]** | Phantom has better 1:1 likeness for fine details. Phantom+VACE combined is still considered best overall likeness. Disagreement: Quality_Control says WanAnimate is more accurate. |
+| **[[phantom]]** | Mixed opinions: some users say Phantom has better fine-detail likeness, others prefer WanAnimate. Phantom+VACE combined is a popular alternative. No consensus on which is better overall. |
 | **Fun VACE 2.2 + pose** | May outperform WanAnimate for some character animation cases. -- Guus |
 | **SCAIL** | Better for plain pose control, complex movements (spinning, multi-character), body retargeting to non-human proportions, and ID retention. WanAnimate better for facial performance / dialogue and long-gen stability. Use both in sequence: SCAIL -> WanAnimate. |
 | **OneToAll Animation** | Better at pose retargeting and reference keeping; better for long clips. WanAnimate still wins on init adherence and likeness. |
@@ -348,7 +339,7 @@ For training custom WanAnimate character LoRAs: use trigger words in captions, t
 
 - Character swap in existing footage where you have a clean reference
 - Motion transfer from a performance video to a new character
-- Dialogue / facial performance (best-in-class for face + lips + gaze)
+- Dialogue / facial performance (strong for face + lips + gaze)
 - Full-body dance and action with good pose fidelity
 - Animal / quadruped animation (VitPose supports animal skeletons)
 
@@ -373,7 +364,7 @@ For training custom WanAnimate character LoRAs: use trigger words in captions, t
 | Sep 2025 | Replicate API hosts WanAnimate at ~333 seconds for $1. |
 | Oct 2025 | Context windows work with WanAnimate after bug fix. Face adapter blocks moved into main blocks for block-swap VRAM reduction. V2 fp8_scaled released (fixes grid noise). |
 | Oct 2025 | Native torch RMSNorm support (9x faster RMSNorm) in ComfyUI nightly. Confirmed architecture is 2.1 I2V-based. |
-| Nov 2025 | ATI-style trajectory support confirmed, multiple simultaneous control inputs (first frame + last frame + ref + controlnet + trajectories). OneToAll Animation emerges as pose-retargeting competitor. |
+| Nov 2025 | Community experiments with ATI-style trajectory guidance for WanAnimate (exploratory, not confirmed as production feature). OneToAll Animation emerges as pose-retargeting competitor. |
 | Dec 2025 | SCAIL emerges as strong alternative; community settles on "SCAIL for body retargeting, WanAnimate for facial performance." FlashPortrait identified as same face encoder. |
 | Jan-Feb 2026 | David Snow's chibi workflow (200+ pixel mask expansion). HY-Motion 1.0 pairs well as driving video generator. |
 

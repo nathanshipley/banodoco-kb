@@ -95,3 +95,30 @@ Append-only record of what was processed and when.
 **Status of existing pages:** VACE, Wan 2.1, Wan 2.2, WanAnimate, and Phantom pages remain in the wiki but are flagged as UNVERIFIED. They were compiled from extraction summaries and may contain similar conflation errors. They will be re-verified (and corrected) once the new pipeline is operational.
 
 **Blocked on:** Updated Supabase API key (legacy keys disabled April 2) and OpenAI API key for GPT-5.2 verification.
+
+---
+
+## [2026-04-06] infrastructure | Raw message pull + GPT-5.4 verification pipeline built
+
+**Type:** Pipeline infrastructure
+
+**Raw messages pulled:** 286,616 messages across 5 Wan channels, stored as 246 weekly JSON files in `data/raw/`. Each message includes content, author name, reply reference (reference_id), emoji reactions with reactor names, edit history, attachments, pins, thread IDs. Deleted messages filtered out.
+
+| Channel | Messages | Weeks |
+|---------|----------|-------|
+| wan_chatter | 220,500 | 59 |
+| wan_gens | 23,476 | 58 |
+| wan_training | 21,358 | 56 |
+| wan_comfyui | 11,582 | 28 |
+| wan_resources | 9,700 | 45 |
+
+**Verification pipeline built:** `scripts/verify_wiki.py` — cross-checks wiki pages against raw Discord messages using GPT-5.4. Automatically finds the densest weeks for a topic, loads relevant messages + reply context, sends to GPT-5.4 with a structured prompt checking for 6 error types (capability conflation, model confusion, unsupported claims, misinterpretation, invented details, opinion as consensus). Outputs JSON report to `wiki/_meta/verification/`.
+
+**First verification test — WanAnimate page:**
+- Checked against top 3 weeks (W38, W39, W45 — 573 relevant messages)
+- Found 8 high-severity issues, 32 medium, 1 low
+- Confirmed the known canny/depth conflation error (flagged as capability_conflation in all 3 weeks)
+- Also caught: unsupported trajectory/ATI claims, invented attribution quotes, depth maps incorrectly attributed to WanAnimate
+- 46 claims verified OK (core architecture, 77-frame chunking, replacement mode, face tracking)
+- Cost: ~$0.28 for 3-week verification
+- GPT-5.4 selected over GPT-5.2 (latest model, marginal price increase, better reasoning)
