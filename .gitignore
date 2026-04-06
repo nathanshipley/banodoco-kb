@@ -10,6 +10,9 @@ __pycache__/
 .venv/
 venv/
 
+# Raw Discord messages (148MB+ JSON, pulled from Supabase on demand)
+data/raw/
+
 # OS files
 .DS_Store
 Thumbs.db
