@@ -41,7 +41,7 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 | Troubleshooting | 15+ common errors with solutions |
 
 ### Current Step
-**Incremental wiki compilation** - Adopting Karpathy's llm-wiki pattern. Building a markdown wiki layer (`wiki/wan/`) between raw extractions and HTML output. Processing extraction files one at a time, compiling knowledge into topic-specific wiki pages. See Wiki Operations section below.
+**Building verified weekly compilation pipeline.** Initial topic-focused compilation produced 5 wiki pages (VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom) but spot-checking revealed capability conflation errors introduced at the Sonnet extraction step. Pivoting to: (1) pull raw Discord messages from Supabase as ground truth, (2) process chronologically in weekly chunks, (3) verify each pass with GPT-5.2 high reasoning against raw messages (pom's brain-of-bndc pattern). Existing pages are unverified drafts. See Wiki Operations section below.
 
 ### VACE/WanAnimate Research (Feb 6, 2026)
 Searched extracted data, found rich content ready to add to KB:

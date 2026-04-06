@@ -310,16 +310,38 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Adopting incremental wiki compilation (Karpathy's llm-wiki pattern)</p>
+            <p><strong>Phase:</strong> Building verified weekly compilation pipeline</p>
             <p><strong>Knowledge Bases Live:</strong></p>
             <ul>
                 <li><a href="kb/ltx2/index.html">LTX Video 2</a> - Released Jan 5, 2026 ✅</li>
                 <li><a href="kb/wan/index.html">Wan Ecosystem</a> - Released Feb 22, 2025 ✅</li>
             </ul>
-            <p><strong>Next:</strong> Bootstrap markdown wiki structure, run VACE calibration test to validate approach.</p>
+            <p><strong>Wiki Pages (unverified drafts):</strong> VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom</p>
+            <p><strong>Next:</strong> Pull raw Discord messages from Supabase, build weekly compilation + GPT-5.2 verification pipeline, re-verify existing pages.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">April 6, 2026</div>
+                <h3>Fact-checking error caught; pivoting to verified weekly pipeline</h3>
+
+                <p>Compiled 5 wiki pages from extraction summaries (VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom &mdash; ~2,300 lines total). During spot-checking, Nathan found that the WanAnimate page incorrectly attributed canny/depth capabilities to WanAnimate &mdash; those are actually VACE features. NotebookLM confirmed: WanAnimate only accepts pose and face inputs.</p>
+
+                <p><strong>Root cause:</strong> The extraction summaries (Sonnet processing 400-msg chunks) are lossy. When Discord conversations discuss multi-model workflows like "I used VACE canny with WanAnimate," the extraction strips context about which model owns which capability, producing items like "WanAnimate: inverted canny required." The wiki compilation agents, working from these summaries, lack the domain knowledge to catch the conflation.</p>
+
+                <p><strong>New pipeline &mdash; verified weekly compilation:</strong></p>
+                <ul>
+                    <li><strong>Raw messages as source of truth:</strong> Pull from Supabase and store locally, not just Sonnet summaries</li>
+                    <li><strong>Weekly chunks:</strong> Process chronologically by week (not monthly), matching how knowledge actually accumulates in a community</li>
+                    <li><strong>Cross-model verification:</strong> After each weekly pass, GPT-5.2 (high reasoning) fact-checks every claim against the raw messages &mdash; inspired by <a href="https://github.com/banodoco/brain-of-bndc/blob/main/src/features/summarising/subfeatures/news_summary.py">pom's brain-of-bndc pattern</a> where Claude generates and GPT-5.2 verifies</li>
+                    <li><strong>Existing pages flagged as unverified drafts</strong> until re-checked against raw messages</li>
+                </ul>
+
+                <div class="insight">
+                    <strong>Lesson:</strong> Confident-sounding LLM output compiled from lossy summaries can contain subtle but significant errors. Cross-model verification against raw sources is essential &mdash; you can't verify summaries against summaries. The error was baked in at the extraction step, not the compilation step.
+                </div>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">April 4, 2026</div>
                 <h3>Adopting Karpathy's LLM-Wiki pattern for incremental compilation</h3>

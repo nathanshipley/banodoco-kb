@@ -66,3 +66,32 @@ Append-only record of what was processed and when.
 - `wiki/wan/models/phantom.md` (325 lines)
 
 **Method:** Extracted Phantom content across full timeline. Covers temporal latent encoding architecture, 1-4 reference images, key settings (CFG 5, 20 steps, 121 frames), VACE merge technique, comparison to MAGREF/WanAnimate/VACE ref/IP-Adapter/LoRA approaches, 15 quirks, 17 troubleshooting entries, LoRA compat (CausVid/LightX2V/FusionX), hardware benchmarks, timeline Apr-Dec 2025.
+
+---
+
+## [2026-04-06] PIVOT | Fact-checking error discovered, switching to verified weekly pipeline
+
+**Type:** Process change
+
+**What happened:** During spot-checking of the WanAnimate page, Nathan identified that the "Inputs" section incorrectly attributed canny and depth map capabilities to WanAnimate. These are actually VACE features. The extraction summaries had conflated the two because Discord conversations often discuss multi-model workflows (e.g., "I used VACE canny with my WanAnimate pipeline") and the Sonnet extraction step stripped that context, producing bullet points like "WanAnimate: inverted canny required" — which is wrong.
+
+**Verification with NotebookLM confirmed:** WanAnimate only accepts pose data (DWPose/OpenPose) and face control signals. Canny, depth, and line art are strictly VACE/Fun Control features.
+
+**Root cause:** The extraction files (data/wan_*_knowledge.md) are lossy Sonnet summaries of 400-message chunks. When conversations span multiple models, the extraction step can strip the context about which capability belongs to which model. The wiki compilation agents — working only from these summaries — lack the domain knowledge to catch the conflation. This isn't just a WanAnimate problem; the same error pattern could exist in any compiled page.
+
+**Decision: pivot to a verified, weekly, raw-message pipeline.** Inspired by pom's brain-of-bndc pattern (Claude generates, GPT-5.2 with high reasoning fact-checks against raw sources).
+
+**New pipeline:**
+1. Pull raw Discord messages from Supabase, store locally by channel/week
+2. Process chronologically in weekly chunks (not monthly, not topic-focused) — this matches Karpathy's "work it in stages" advice and how knowledge actually accumulates
+3. Each weekly pass updates relevant wiki pages
+4. GPT-5.2 verification pass checks every claim against the raw messages for that week
+5. Corrections applied before moving to next week
+
+**Why weekly:** Monthly is too coarse — model launch weeks can have 10x normal traffic and knowledge changes rapidly. Weekly matches how a real person would follow along.
+
+**Why raw messages:** The extraction summaries are where context gets lost. Verification against summaries won't catch errors introduced at the extraction step. Raw messages preserve the full conversation context needed to determine which model a capability belongs to.
+
+**Status of existing pages:** VACE, Wan 2.1, Wan 2.2, WanAnimate, and Phantom pages remain in the wiki but are flagged as UNVERIFIED. They were compiled from extraction summaries and may contain similar conflation errors. They will be re-verified (and corrected) once the new pipeline is operational.
+
+**Blocked on:** Updated Supabase API key (legacy keys disabled April 2) and OpenAI API key for GPT-5.2 verification.
