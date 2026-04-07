@@ -1,7 +1,7 @@
 ---
 title: Control LoRAs for Wan
 aliases: [control-lora, control-loras, tile-deblur, tile-control, depth-control]
-last_updated: 2025-03-19
+last_updated: 2025-03-27
 ---
 
 # Control LoRAs for Wan
@@ -496,18 +496,19 @@ comfy suggested an alternative approach:
 
 ## Comparison to Other Control Methods
 
-| Aspect | Control LoRA | ControlNet | VACE |
-|--------|-------------|------------|------|
-| **Architecture** | LoRA on base model | Separate control network | Module on base model |
-| **Training complexity** | Simple (standard LoRA) | Complex (dual networks) | Complex (module training) |
-| **Inference cost** | Low (just LoRA) | High (full control model) | Medium (module) |
-| **VRAM usage** | Minimal | Significant | Medium |
-| **Flexibility** | High (any control signal) | High (any control signal) | High (multiple controls) |
-| **Stacking** | Unknown | Well-established | Native multi-control |
-| **Quality** | Excellent (tile, depth WIP) | Proven | Excellent |
-| **Native support** | Yes (with reshape_weight) | Yes | Yes |
-| **Training time** | Fast | Slow | Slow |
-| **Model sizes** | 1.3B only (currently) | Various | 1.3B and 14B |
+| Aspect | Control LoRA | ControlNet | VACE | Wan Fun Control |
+|--------|-------------|------------|------|----------------|
+| **Architecture** | LoRA on base model | Separate control network | Module on base model | Built-in control |
+| **Training complexity** | Simple (standard LoRA) | Complex (dual networks) | Complex (module training) | N/A (pre-trained) |
+| **Inference cost** | Low (just LoRA) | High (full control model) | Medium (module) | Low (built-in) |
+| **VRAM usage** | Minimal | Significant | Medium | Minimal |
+| **Flexibility** | High (any control signal) | High (any control signal) | High (multiple controls) | High (generalized) |
+| **Stacking** | Unknown | Well-established | Native multi-control | Unknown |
+| **Quality** | Excellent (tile, depth WIP) | Proven | Excellent | Excellent |
+| **Native support** | Yes (with reshape_weight) | Yes | Yes | Yes |
+| **Training time** | Fast | Slow | Slow | N/A |
+| **Model sizes** | 1.3B only (currently) | Various | 1.3B and 14B | 1.3B and 14B |
+| **Control strength** | Very strong | Adjustable | Adjustable | Very strong |
 
 ---
 
@@ -611,7 +612,7 @@ comfy confirmed this is the plan for the comfy trainer project.
 
 ## Status and Availability
 
-**Current status (March 19, 2025):**
+**Current status (March 27, 2025):**
 
 **Available now:**
 - Tile control LoRA v0.1 and v0.2 (1.3B)
@@ -662,6 +663,7 @@ comfy confirmed this is the plan for the comfy trainer project.
 - [[vace]] — Alternative control method
 - [[wan-2.1]] — Base model for control LoRAs
 - [[comfyui]] — Platform for using control LoRAs
+- [[wan-fun]] — Built-in control alternative (Wan Fun Control models)
 
 ## External Resources
 

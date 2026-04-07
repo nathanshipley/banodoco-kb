@@ -1,7 +1,7 @@
 ---
 title: LoRA Training for Wan
 aliases: [lora-training, training, finetune]
-last_updated: 2025-03-21
+last_updated: 2025-03-30
 ---
 
 # LoRA Training for Wan
@@ -64,6 +64,7 @@ LoRA training for Wan video models is significantly more resource-intensive than
 - **[[squish-lora]]:** 20 videos, minimal training time, exceptional results
 - **[[cakify-lora]]:** 168x350 resolution, produces excellent results at standard resolutions
 - **Ryza character LoRA:** 4 HD images + 30 video clips, 35 minutes on 8x H100 — Kytra, March 21, 2025
+- **Toon style LoRA:** 50 images, 100 epochs (~1300 steps), excellent results — VRGameDevGirl84, March 30, 2025
 
 > "and he accidentally trained with only 2 videos! for 1 epoch" — Juampab12, March 10, 2025
 
@@ -175,6 +176,16 @@ Recommended by the community for distributed training:
 While diffusion-pipe does use diffusers, comfy noted that diffusers is "a real pile of trash" and is working on an alternative training framework:
 
 > "current libraries people use for training like diffusers for example is a real pile of trash and I think it's greatly limiting what can be done with training and I want to change that" — comfy, March 10, 2025
+
+**Dataset cropping issue (March 30, 2025):**
+
+TimHannan discovered that diffusion-pipe defaults to cropping datasets to square:
+
+> "so it looks like i guess the default diffusion pipe setting crop the dataset to square so anything not square doesnt look so great" — TimHannan, March 30, 2025
+
+> "the longer step overfitted versions kinda break through the square resolution issue but still seems off" — TimHannan, March 30, 2025
+
+**Workaround:** Adjust cropping settings or use square datasets.
 
 ### spacepxl's WanTraining
 
@@ -351,12 +362,13 @@ Amirsun(Papi) released a standalone GUI captioner:
 
 > "assuming I have 100s of videos of different characters doing x to use as samples" — aikitoria, March 9, 2025
 
-For motion/concept LoRAs, having diverse examples (100+ videos) is beneficial. However, recent breakthroughs show that as few as 2-20 high-quality videos can produce excellent results:
+For motion/concept LoRAs, having diverse examples (100+ videos) is beneficial. However, recent breakthroughs show that as few as 2-50 high-quality videos/images can produce excellent results:
 
 - **[[squish-lora]]:** 20 videos, exceptional generalization
 - **[[cakify-lora]]:** Unknown count, trained at 168x350, excellent results
 - **Hydraulic press LoRA:** 2 videos, 1 epoch, "crazy good" results
 - **Ryza character LoRA:** 4 HD images + 30 video clips, excellent results — Kytra, March 21, 2025
+- **Toon style LoRA:** 50 images, excellent results — VRGameDevGirl84, March 30, 2025
 
 > "only 20 clips in training data!" — Juampab12, March 10, 2025
 
@@ -377,6 +389,22 @@ For motion/concept LoRAs, having diverse examples (100+ videos) is beneficial. H
 ```
 kxsr, she is on a barrel in a town square, adjusting her boot. A building and a flag are in the background. A staff with a blue bulb shape leans against the barrel and the camera is steady.
 ```
+
+**VRGameDevGirl84's toon style LoRA (March 30, 2025):**
+- 50 images (not videos)
+- 100 epochs (~1300 steps)
+- Excellent results at 0.5-1.0 strength
+- Demonstrates that image-only training can work for style LoRAs
+
+> "got bored and decided to make a Toon style lora. Used about 50 images for this one." — VRGameDevGirl84, March 30, 2025
+
+> "for mine I Trained for 100 epochs, roughly 13 steps per epoch — so around 1300 total steps." — VRGameDevGirl84, March 30, 2025
+
+**Key insight:** Video training is not always necessary:
+
+> "awesome, so you dont really need video" — TimHannan, March 30, 2025
+
+For style LoRAs, image-only training can be sufficient and much faster.
 
 ### Frame 1 Considerations for I2V
 
@@ -421,6 +449,26 @@ mamad8 shared a tool for downloading YouTube videos:
 LarpsAI uses local LLMs to generate yt-dlp commands:
 > "whats great is u can plug the codebase for it into an LLM local and it will gen the cli commands for you if u give it the url" — LarpsAI, March 21, 2025
 
+**ffmpeg scripts (March 30, 2025):**
+
+Alisson Pereira shared scripts for video preprocessing:
+- Frame rate adjustment to 16 fps
+- Automatic downscaling (handled by diffusion-pipe)
+- https://github.com/alisson-anjos/useful-scripts/blob/main/adjust_to_24fps.py
+
+> "scripts that use ffmpeg" — Alisson Pereira, March 30, 2025
+
+> "Before I would rescale it, but there is no need if you use the diffusion pipe, because it already does the downscale." — Alisson Pereira, March 30, 2025
+
+> "frame rate i change to 16 fps." — Alisson Pereira, March 30, 2025
+
+**Scene detection:**
+
+For breaking long videos into scenes:
+- **PySceneDetect:** https://www.scenedetect.com/
+
+> "Now if you have very large videos and you want to break them into scenes you can use PySceneDetect." — Alisson Pereira, March 30, 2025
+
 ---
 
 ## Training Strategy
@@ -463,6 +511,14 @@ Video training is significantly slower than image training due to the temporal d
 **However:** spacepxl noted that training on 9 frames is not much slower than 1 frame:
 
 > "I trained on 9 frames mostly, it's not that much slower than 1 frame since there's some constant cost per step" — spacepxl, March 10, 2025
+
+**Image-only training for style (March 30, 2025):**
+
+VRGameDevGirl84 demonstrated that style LoRAs can be trained on images alone:
+
+> "awesome, so you dont really need video" — TimHannan, March 30, 2025
+
+For style transfer, image-only training is much faster and can produce excellent results.
 
 ### Regularization and Data Mixing
 
@@ -871,6 +927,19 @@ Tried training a LoRA to add a Super Mario Bros. score HUD overlay:
 
 Training tools may crop or pad videos, potentially removing the HUD area. Verify that the HUD is actually present in the processed training data.
 
+### Dataset Cropping Issues (March 30, 2025)
+
+**Problem:** diffusion-pipe defaults to cropping datasets to square, causing issues with non-square videos.
+
+**Symptoms:**
+- Non-square videos look distorted or "off"
+- Longer training (overfitting) partially breaks through the issue
+
+**Solution:**
+- Adjust cropping settings in diffusion-pipe
+- Use square datasets (crop manually before training)
+- Check processed training data to verify cropping behavior
+
 ---
 
 ## AI-Assisted Development
@@ -923,6 +992,52 @@ Using Blender to create consistent camera movement datasets:
 
 ---
 
+## From-Scratch Training (Experimental)
+
+**Kytra's 5B Wan experiment (March 30, 2025):**
+
+Kytra successfully trained a 5B parameter version of Wan by downscaling the 14B model:
+
+**Approach:**
+- Modified diffusion-pipe for full finetunes
+- Downscaled 14B to 5B by dropping blocks and reducing dimensions
+- 297 video dataset at 480p
+- Learning rate: 3e-5 (later adjusted based on loss plateau)
+- 8x H100 GPUs
+- Free compute
+
+**Progress:**
+- Epoch 3: Noise
+- Epoch 10: Slightly cleaner noise
+- Epoch 30: Slightly cleaner noise
+- Epoch 150: Pieces of a picture visible
+- Later epochs: Persistent objects moving through space
+
+> "I just woke up to test the 14B downscaled to 5B train I left going last night and epoch150 is actually giving me pieces of a picture and not just noise" — Kytra, March 30, 2025
+
+> "it's ugly, but it's working" — Kytra, March 30, 2025
+
+**Community insights (spacepxl):**
+
+> "loss is still looking pretty high so I'm guessing it just needs 10x or 100x longer to see any results" — spacepxl, March 30, 2025
+
+> "learning rate might be too high" — spacepxl, March 30, 2025
+
+> "when you're training from scratch if lr is too high it will plateau early" — spacepxl, March 30, 2025
+
+**Recommended approach:**
+- Plot loss with logarithmic x-axis for better trend visibility
+- Lower learning rate when loss plateaus (not raise it)
+- Expect 10-100x longer training than initial estimates
+- Small test datasets will overfit quickly rather than providing meaningful signal
+
+**Alternative approach suggested:**
+> "could also be interesting to go the other direction, prune the 14b model down" — spacepxl, March 30, 2025
+
+> "that might be easier, it worked well on flux" — spacepxl, March 30, 2025
+
+---
+
 ## See Also
 
 - [[wan-2.1]] — Base model for LoRA training
@@ -944,3 +1059,5 @@ Using Blender to create consistent camera movement datasets:
 - [Fal.ai Wan Training](https://fal.ai/) — Managed Wan LoRA training service
 - [Video Model Studio](https://github.com/jbilcke-hf/VideoModelStudio) — Open-source trainer with automated dataset creation
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) — YouTube video downloader for dataset creation
+- [Alisson's ffmpeg scripts](https://github.com/alisson-anjos/useful-scripts) — Video preprocessing scripts
+- [PySceneDetect](https://www.scenedetect.com/) — Scene detection for breaking long videos

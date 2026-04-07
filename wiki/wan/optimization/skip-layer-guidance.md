@@ -1,7 +1,7 @@
 ---
 title: Skip Layer Guidance (Uncond)
 aliases: [slg-uncond, uncond-skip, negative-skip, slg, skip-layer-guidance]
-last_updated: 2025-03-16
+last_updated: 2025-03-30
 ---
 
 # Skip Layer Guidance (Uncond)
