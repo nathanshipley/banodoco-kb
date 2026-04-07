@@ -1,7 +1,7 @@
 ---
 title: Control LoRAs for Wan
-aliases: [control-lora, control-loras, tile-deblur, tile-control]
-last_updated: 2025-03-10
+aliases: [control-lora, control-loras, tile-deblur, tile-control, depth-control]
+last_updated: 2025-03-19
 ---
 
 # Control LoRAs for Wan
@@ -62,6 +62,46 @@ Control LoRAs work by concatenating control signals (depth maps, pose skeletons,
 
 > "They're all upscale examples technically, the input is downscaled to 0.25x then upscaled back up (bilinear) and blurred, to ensure all high res details are destroyed." — spacepxl, March 10, 2025
 
+### Depth Control (WIP)
+
+**Released:** March 19, 2025 by spacepxl (WIP version)
+
+**Model:** Wan 2.1 T2V 1.3B
+
+**Purpose:** Depth-based structure and motion control
+
+**Download:** https://huggingface.co/spacepxl/Wan2.1-control-loras/tree/main/1.3b/depth
+
+**Status:** Work in progress — prompt following not always great, needs recaptioning with dense VLM captions
+
+**Training details:**
+- Uses Depth Anything V2 Small for depth generation
+- Purposely avoided consistent video depth models to learn to ignore flickering
+- Training resolutions: 624x624, 832x480 (portrait and landscape)
+- Rank: 128
+
+> "Just uploaded a WIP version of depth control lora for 1.3b (+workflow) https://huggingface.co/spacepxl/Wan2.1-control-loras/tree/main/1.3b/depth WIP because the prompt following is not always great. I need to recaption some data with dense VLM captions probably, and continue training. It controls structure and motion quite well though, and with an early step cutoff you can get creative results." — spacepxl, March 19, 2025 [🔥x32 🚀x5 😮x3 🤯 🩵x2]
+
+**Community reception:**
+> "bro you're fucking crushing it" — Faust-SiN, March 19, 2025
+
+> "Those examples look really nice!" — pom_x_moq#0, March 19, 2025
+
+> "awesome!" — Kijai, March 19, 2025
+
+**Known quirks:**
+- Doesn't like pure black in depth maps — use slightly lifted values
+- Works well on square images (624x624) and landscape (832x480)
+- Can be used with character LoRAs for combined control
+- Prompt following improves with proper captioning
+
+**Depth map preprocessing:**
+- Use Depth Anything V2 for generation
+- Avoid pure black values (lift to slightly higher values)
+- Solid colors can trip it up — use gradients for better results
+
+> "can you try lifting the black to a slightly higher value just to see what happens? I'm curious if it's ok with solid non-black there or if any solid color will trip it up" — spacepxl, March 19, 2025
+
 ---
 
 ## Implementation
@@ -107,6 +147,8 @@ https://github.com/huggingface/diffusers/tree/main/examples/flux-control
 
 > "except on the original ip2p model" — comfy, March 10, 2025
 
+**Native workflow:** Available at https://huggingface.co/spacepxl/Wan2.1-control-loras/blob/main/1.3b/depth/Wan2.1_1.3b_depth_control_lora.json
+
 ### Kijai Wrapper Support
 
 **Status:** Working with both v0.1 and v0.2
@@ -116,10 +158,15 @@ https://github.com/huggingface/diffusers/tree/main/examples/flux-control
 - Start/end percentage control for LoRA application
 - Compatible with other LoRAs (with caveats)
 - Example workflows provided
+- Block dropping support (added March 19, 2025)
 
 **Known limitation:** Cannot unload only the control LoRA when using end percentage with multiple LoRAs. The end percentage unloads all LoRAs currently.
 
 > "doesn't work with another lora currently as I don't know how to unload only one LoRA..." — Kijai, March 10, 2025
+
+**Update (March 19, 2025):** Kijai added the ability to drop blocks from control LoRAs, which may help with compatibility when stacking with other LoRAs.
+
+> "I updated the wrapper to allow dropping blocks from the control lora, that may help" — Kijai, March 19, 2025
 
 ---
 
@@ -145,6 +192,57 @@ https://github.com/huggingface/diffusers/tree/main/examples/flux-control
 - Start/end percentage: 0.0-0.1 for early application
 
 **Example workflow:** Provided by spacepxl (March 10, 2025)
+
+### Depth Control Workflow
+
+**Basic setup (Wrapper):**
+1. Load Wan 2.1 T2V 1.3B model
+2. Load depth control LoRA
+3. Generate depth maps using Depth Anything V2
+4. Use control LoRA loader node
+5. Set start/end percentages
+6. Connect to sampler
+
+**Recommended settings:**
+- **LoRA strength:** 1.0 (default)
+- **Start %:** 0.0 (apply from beginning)
+- **End %:** 0.1-0.3 (stop early for creative freedom)
+- **Steps:** 25-35 (split sigmas: 10 depth + 15-25 refinement)
+- **CFG:** 4.0 (first pass), 6.0 (second pass)
+- **Sampler:** UniPC recommended
+
+> "all my examples are ending it at 0.1" — Kijai, March 10, 2025
+
+> "still so strong at 0.1" — Kijai, March 10, 2025
+
+**Split sigma workflow:**
+- First sampler: Depth control LoRA + character LoRA (10 steps)
+- Second sampler: Character LoRA only (15-25 steps)
+- This allows structure from depth, then refinement for details
+
+> "depth + custom lora on early steps, then only custom lora on late steps, that's the way" — spacepxl, March 19, 2025
+
+**Combining with character LoRAs:**
+- Use depth control + character LoRA on first pass
+- Character LoRA only on second pass
+- Adjust steps to balance structure vs likeness
+- More steps on second pass = better character likeness
+
+> "you should probably use more steps" — melmass#0, March 19, 2025
+
+> "I would also use depth + your lora on the first pass and your lora only on the second" — melmass#0, March 19, 2025
+
+### Depth Control Workflow (Native)
+
+**Requirements:**
+- ComfyUI commit ca8efab or later
+- All nodes updated
+- Depth control LoRA v0.2
+
+**Common error if outdated:**
+> "Given groups=1, weight of size [1536, 32, 1, 2, 2], expected input[2, 16, 11, 78, 78] to have 32 channels, but got 16 channels instead"
+
+**Solution:** Update ComfyUI to latest commit (March 10, 2025 or later)
 
 ### Tile Control Workflow (Wrapper)
 
@@ -218,6 +316,13 @@ No confirmed results on stacking as of March 10, 2025.
 
 > "I trained on 9 frames mostly, it's not that much slower than 1 frame since there's some constant cost per step" — spacepxl, March 10, 2025
 
+**Training settings (depth model):**
+- Depth Anything V2 Small for depth generation
+- Generated during training (not pre-processed)
+- Purposely used flickering depth to teach robustness
+
+> "depth anything v2 small, I purposely avoided any of the more consistent video depth models so it would learn to ignore flickering" — spacepxl, March 19, 2025
+
 ### Tile Deblur Training Process
 
 **Why tile deblur first:**
@@ -240,7 +345,7 @@ No confirmed results on stacking as of March 10, 2025.
 ### Future Control Signals
 
 **Planned by spacepxl:**
-- Depth control ("probably next")
+- Depth control (released WIP March 19, 2025)
 - Pose control
 - Canny edges
 - Normal maps
@@ -251,6 +356,7 @@ No confirmed results on stacking as of March 10, 2025.
 - Depth maps
 - Style transfer
 - Multi-control combinations
+- Camera control for I2V
 
 ---
 
@@ -283,6 +389,11 @@ comfy suggested an alternative approach:
 - Works with torch.compile
 - Compatible with TeaCache and other optimizations
 
+**1.3B depth control:**
+- ~20 seconds for 81 frames at 832x480 with all optimizations (Kijai, March 19, 2025)
+- 30 steps: 29 seconds (Kijai, March 19, 2025)
+- Works with SageAttention, fp16_fast, TeaCache, torch.compile
+
 **Comparison to alternatives:**
 - Faster than full ControlNet
 - Similar speed to base model + LoRA
@@ -295,6 +406,16 @@ comfy suggested an alternative approach:
 - Maintains temporal consistency
 - Handles various input types
 - Creative vs faithful balance adjustable via denoise
+
+**Depth control results:**
+- Controls structure and motion quite well
+- Prompt following needs improvement (WIP)
+- Works well with early step cutoff for creative results
+- Scales up to 640p from training resolution
+
+> "pretty good, pretty good" — Kijai, March 19, 2025
+
+> "especially when these 1.3B gens take like 20 seconds 😄" — Kijai, March 19, 2025
 
 **Comparison to other upscaling methods:**
 - More creative than traditional upscalers
@@ -342,6 +463,35 @@ comfy suggested an alternative approach:
 
 **Status:** Known limitation in wrapper implementation
 
+**Workaround (March 19, 2025):** Use block dropping feature to reduce control LoRA influence while keeping it loaded
+
+### Depth Map Quirks
+
+**Pure black issue:**
+- Depth control doesn't like pure black in depth maps
+- Lift black values slightly (e.g., to 10-20 instead of 0)
+- Solid colors can trip it up — use gradients
+
+> "it doesn't seem to like pure black much" — Kijai, March 19, 2025
+
+> "yeah I noticed this too, maybe I should do some random clamping in the training since DAv2 will almost never return a solid black" — spacepxl, March 19, 2025
+
+**Inverted depth values:**
+- Some users reported needing to invert depth values (black front, white back)
+- Check your depth map polarity if results are unexpected
+
+### Character LoRA Compatibility
+
+**Issue:** Character LoRAs may not show through strongly when combined with depth control
+
+**Solutions:**
+- Use split sigma workflow (depth + character on first pass, character only on second)
+- Increase steps on second pass for better likeness
+- Adjust relative LoRA strengths
+- Use more steps overall (35+ recommended)
+
+> "I am finding that my lora's don't really shine in combination with depth lora. the clothing is kind of there, but not the face at all" — jasblack#0, March 19, 2025
+
 ---
 
 ## Comparison to Other Control Methods
@@ -354,9 +504,10 @@ comfy suggested an alternative approach:
 | **VRAM usage** | Minimal | Significant | Medium |
 | **Flexibility** | High (any control signal) | High (any control signal) | High (multiple controls) |
 | **Stacking** | Unknown | Well-established | Native multi-control |
-| **Quality** | Excellent (tile) | Proven | Excellent |
+| **Quality** | Excellent (tile, depth WIP) | Proven | Excellent |
 | **Native support** | Yes (with reshape_weight) | Yes | Yes |
 | **Training time** | Fast | Slow | Slow |
+| **Model sizes** | 1.3B only (currently) | Various | 1.3B and 14B |
 
 ---
 
@@ -376,11 +527,19 @@ comfy suggested an alternative approach:
 
 > "so you can use this to upscale like 360p to 720p by adding some blur?" — Juampab12, March 10, 2025
 
-### Depth Control (Planned)
+### Depth Control
 
 - Guide generation with depth maps
 - 3D-aware video generation
 - Scene structure control
+- Camera movement control
+- Character animation with depth
+
+**Workflow:**
+1. Generate or extract depth maps
+2. Use depth control LoRA for structure
+3. Combine with character LoRAs for identity
+4. Refine with second pass
 
 ### Pose Control (Planned)
 
@@ -393,6 +552,16 @@ comfy suggested an alternative approach:
 > "I think once we have a solid baseline of control models for video it will be easier to generate new paired data for creative training" — spacepxl, March 10, 2025
 
 > "like using depth control to make style transfer examples" — spacepxl, March 10, 2025
+
+### Camera Control for I2V
+
+**Community interest:**
+> "Well, you might want to think about controlling the camera in i2v..." — N0NSens, March 19, 2025
+
+**spacepxl's perspective:**
+> "fair, although conditioning on camera movement alone without scene structure is a tricky one" — spacepxl, March 19, 2025
+
+> "I think image + pose might be more useful to more people" — spacepxl, March 19, 2025
 
 ---
 
@@ -420,34 +589,70 @@ comfy confirmed this is the plan for the comfy trainer project.
 
 ### Planned Control Signals
 
-- Depth (next priority)
+- Depth (released WIP March 19, 2025)
 - Pose / OpenPose
 - Canny edges
 - Normal maps
 - Segmentation masks
 - Any visual signal representable as image/video
 
+### 14B Support
+
+**Community interest:**
+> "Are you thinking about training a 14b depth at all?" — Cubey, March 19, 2025
+
+**spacepxl's response:**
+> "t2v maybe, i2v would probably need different considerations because it already has the image and mask inputs" — spacepxl, March 19, 2025
+
+**Considerations for I2V:**
+> "tbh, I don't see depth control being that useful for i2v, since you would need a video source for the control, and in that case you can already get great results with flow edit. Maybe I'm wrong though" — spacepxl, March 19, 2025
+
 ---
 
 ## Status and Availability
 
-**Current status (March 10, 2025):**
-
-> "Not ready to share yet, those examples were just from an extremely unoptimized inference script in my training repo" — spacepxl, March 10, 2025
-
-> "I'll share it soon-ish, I want everyone to be able to train their own control models or finetune existing ones" — spacepxl, March 10, 2025
+**Current status (March 19, 2025):**
 
 **Available now:**
-- Tile control LoRA v0.1 and v0.2
+- Tile control LoRA v0.1 and v0.2 (1.3B)
+- Depth control LoRA WIP (1.3B)
 - Training code (WanTraining repository)
-- Example workflows
+- Example workflows (native and wrapper)
 
 **Planned:**
-- ComfyUI integration improvements
-- Easy training workflow
+- Improved depth control with better captioning
+- Pose control LoRA
+- Canny/lineart control
+- 14B versions (T2V)
+- ComfyUI training framework integration
 - Model-agnostic implementation
-- Support for various control signals
 - Documentation and tutorials
+
+---
+
+## Community Examples
+
+**Depth control examples (March 19, 2025):**
+
+**Kijai's tests:**
+- Flying fish with depth control
+- Pikachu with depth control (restless at CFG 3.0)
+- Color mask experiments (RGB colors as depth)
+- 640p upscaling from training resolution
+
+**melmass#0's tests:**
+- Bearded man crying and making grimaces
+- Two robots fighting with sparkles and fire
+- PlayStation one graphics style
+- Red flower growing
+- Camera rotating around subjects
+
+**Community feedback:**
+> "this is game changing" — Neex, March 19, 2025
+
+> "You think this(training control LoRAs) could also work on hyv" — happy.j, March 19, 2025
+
+> "yes, it could be done if someone wants to train it" — spacepxl, March 19, 2025
 
 ---
 

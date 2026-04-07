@@ -1,7 +1,7 @@
 ---
 title: LoRA Training for Wan
 aliases: [lora-training, training, finetune]
-last_updated: 2025-03-14
+last_updated: 2025-03-21
 ---
 
 # LoRA Training for Wan
@@ -49,8 +49,11 @@ LoRA training for Wan video models is significantly more resource-intensive than
 |-----------|--------|----------|------|------|
 | 168x350 | Variable | Short clips | 1 | Minutes to hours |
 | 244p | 60 | Short clips | 1 | Hours |
+| 416x240 | 81 | Standard | 1 | Hours |
 | 480p | 81 | Standard | 1 | Hours to 1 day |
 | 720p | 81 | Standard | 1-2 | 1-2 days |
+| 720x720 | 5 | Short clips | 1 (4090) | 35 minutes |
+| 1280x720 | Variable | Standard | 8x H100 | 35 minutes |
 
 > "1.3B hours not days" — Juampab12, March 9, 2025
 
@@ -60,6 +63,7 @@ LoRA training for Wan video models is significantly more resource-intensive than
 - **Hydraulic press LoRA:** 2 videos, 1 epoch, 15-20 minutes, already "crazy good" — Juampab12, March 10, 2025
 - **[[squish-lora]]:** 20 videos, minimal training time, exceptional results
 - **[[cakify-lora]]:** 168x350 resolution, produces excellent results at standard resolutions
+- **Ryza character LoRA:** 4 HD images + 30 video clips, 35 minutes on 8x H100 — Kytra, March 21, 2025
 
 > "and he accidentally trained with only 2 videos! for 1 epoch" — Juampab12, March 10, 2025
 
@@ -125,6 +129,10 @@ This demonstrates that full fine-tunes (not LoRAs) can take extremely long perio
 - May require pipeline parallelism configuration
 
 > "8 might Im not sure. This is from my tests and 2 48gb gpus could do full 720p so 8 4090s could maybe. probably for sure now because they just enabled block swapping if needed" — Benjimon, March 9, 2025
+
+**8x H100:**
+- 1280x720 character LoRA: 35 minutes (Kytra, March 21, 2025)
+- Allows rapid iteration and testing
 
 ### System RAM
 
@@ -200,6 +208,84 @@ Kohya merged a PR adding new features:
 
 > "btw for anyone using musubi Kohya (merged a PR) that added a new flag for fp8 optimization yesterday. Worth a look (update maybe). fp16 source files are also supported now: https://github.com/kohya-ss/musubi-tuner/pull/141" — JohnDopamine, March 13, 2025
 
+### Fal.ai Training Service
+
+**Released:** March 2025
+
+Fal.ai added Wan LoRA training to their platform:
+- Web-based interface
+- Automatic dataset processing
+- Video upload support (requires zipping)
+- Auto-captioning with Qwen2.5 7B (added March 21, 2025)
+- Trained on 8x H100 cluster
+- **Downloadable LoRAs** (confirmed March 21, 2025)
+
+**Pricing:**
+- Integrated into Fal's credit system
+- Training time: ~30 minutes minimum (dataset dependent)
+
+> "my trainer for fal passed functional review and is just getting a pass from the front-end team, it should be hopefully be out today. And yes of course you can download the LoRA." — Benjaminimal, March 21, 2025
+
+> "and it should get deployed on an 8xH100 as well." — Benjaminimal, March 21, 2025
+
+**Dataset preparation:**
+- Zip up videos
+- Include prompts in zipfile (or use auto-captioning)
+- Target: 81 frames at 16 fps (~5 seconds)
+- Recommended resolution: 416x240
+
+> "target should be 81 frames at 16 fps (a little over 5sec)" — Benjaminimal, March 21, 2025
+
+> "416x240" — Benjaminimal, March 21, 2025 (recommended resolution)
+
+> "i havent seen much gain in going higher tbh" — Benjaminimal, March 21, 2025
+
+**Training parameters:**
+- Steps: ~1k to ~2k total (125-250 on 8x GPU)
+- One step on 8 GPUs = 8 steps on 1 GPU
+
+> "depends on what you're running on - the way diff-pipe works is one step = one sample across all devices. so if you're running on 8 gpus, one step is the same as 8 steps on one gpu. with that being said, a total of ~1k to ~2k steps seems acceptable (so 125 to 250 steps on an 8x), depending on dataset size." — Benjaminimal, March 21, 2025
+
+**Evaluation runs:**
+
+Benjaminimal conducted 16 different training runs comparing LR and rank options, with evaluation results pending as of March 21, 2025.
+
+> "and while i've still got some firepower at my disposal, i ran 16 different training runs last night to compare lr and rank options - evaluation runs are generating, i'll share when it's ready" — Benjaminimal, March 21, 2025
+
+### Krea Training Service
+
+**Released:** March 2025
+
+Krea added Wan LoRA training:
+- Web-based interface
+- Drag-and-drop video upload
+- Auto-detects scene cuts
+- Fast training (minutes)
+- **No LoRA download** (Krea ecosystem only)
+
+> "the Krea Wan lora trainer def seems to be working! have a dataset of ~12 Wile E Coyote clips that I uploaded. it trained quite fast." — citizenplain#0, March 20, 2025
+
+> "downside seems to be that you can't DL the lora.." — citizenplain#0, March 20, 2025
+
+**Use case:**
+- Good for testing concepts quickly
+- Integrated with Krea's generation platform
+- Not suitable if you need local LoRA files
+
+### Video Model Studio (VMS)
+
+**Released:** March 21, 2025
+
+Open-source trainer by jbilcke-hf:
+- **Repository:** https://github.com/jbilcke-hf/VideoModelStudio
+- Supports Wan 2.1 1.3B
+- Automated dataset creation
+- Open-source alternative to commercial platforms
+
+> "<@109566238258126848>'s open source trainer (VMS) now does wan2.1" — LarpsAI, March 21, 2025
+
+> "it has automated dataset creation too.. nice!" — LarpsAI, March 21, 2025
+
 ### Gradio Training Interfaces
 
 **Community development (March 13-14, 2025):**
@@ -245,10 +331,21 @@ Captioning may be less critical for pure character identity LoRAs, but still rec
 - Florence2 for auto-captioning
 - ChatGPT for caption generation
 - Manual captioning for best quality
+- Qwen2.5 7B (integrated in Fal.ai as of March 21, 2025)
 
 > "I'm not sure how to go about captioning them or if that is even necessary" — aikitoria, March 9, 2025
 
 > "I've never made a lora before" — aikitoria, March 9, 2025
+
+**Qwen2.5-VL Captioner:**
+
+Amirsun(Papi) released a standalone GUI captioner:
+- Supports video and image batch captioning
+- Uses Qwen2.5-VL
+- Available for $5 CAD or free on request
+- https://civitai.com/articles/12823/streamline-your-lora-training-with-the-standalone-ai-captioner-gui
+
+> "Hey folks I created an all in one video and image batch captioner using Qwen2.5-VL with GUI." — Amirsun(Papi), March 21, 2025
 
 ### Dataset Size
 
@@ -259,12 +356,27 @@ For motion/concept LoRAs, having diverse examples (100+ videos) is beneficial. H
 - **[[squish-lora]]:** 20 videos, exceptional generalization
 - **[[cakify-lora]]:** Unknown count, trained at 168x350, excellent results
 - **Hydraulic press LoRA:** 2 videos, 1 epoch, "crazy good" results
+- **Ryza character LoRA:** 4 HD images + 30 video clips, excellent results — Kytra, March 21, 2025
 
 > "only 20 clips in training data!" — Juampab12, March 10, 2025
 
 > "that prove once again that we dont need so big dataset just good selection" — nebsh#0, March 10, 2025
 
 > "quality is all you need!" — Juampab12, March 10, 2025
+
+**Kytra's character LoRA dataset (March 21, 2025):**
+- 4 high-definition images of the character (varying sizes, resized to 1280x720)
+- 30+ hand-picked video clips (3-4 seconds each)
+- Recorded with OBS from gameplay
+- All videos resized to 1280x720
+- Training time: 35 minutes on 8x H100
+
+> "Trained on 4 high definition images of the character and just over 30 hand picked video clips that I snagged with OBS while playing the game yesterday. Each clip was 3 to 4 seconds long." — Kytra, March 21, 2025
+
+**Example caption:**
+```
+kxsr, she is on a barrel in a town square, adjusting her boot. A building and a flag are in the background. A staff with a blue bulb shape leans against the barrel and the camera is steady.
+```
 
 ### Frame 1 Considerations for I2V
 
@@ -293,6 +405,21 @@ For motion/concept LoRAs, having diverse examples (100+ videos) is beneficial. H
 
 **Note on manual cropping:**
 > "the reason I needed to do it manually was to make sure it cropped where I wanted, not just the center" — Juampab12, March 13, 2025
+
+**yt-dlp for YouTube downloads:**
+
+mamad8 shared a tool for downloading YouTube videos:
+- **Repository:** https://github.com/yt-dlp/yt-dlp
+- Example command: `yt-dlp -f "bestvideo[ext=mp4]" -a urls.txt`
+- Downloads best video quality without audio
+- Can process multiple URLs from a text file
+
+> "PS: if you need to download youtube videos, this tool is absolutely perfect: https://github.com/yt-dlp/yt-dlp" — mamad8, March 21, 2025
+
+**LLM-assisted downloads:**
+
+LarpsAI uses local LLMs to generate yt-dlp commands:
+> "whats great is u can plug the codebase for it into an LLM local and it will gen the cli commands for you if u give it the url" — LarpsAI, March 21, 2025
 
 ---
 
@@ -603,12 +730,18 @@ This provides 4x more training data from the same source video while avoiding VA
 
 **Considerations:**
 - **Local:** Free after hardware investment, but blocks your system
-- **Cloud (Vast.ai, etc.):** Pay per hour, but doesn't block local resources
+- **Cloud (Vast.ai, RunPod, GCP, etc.):** Pay per hour, but doesn't block local resources
 - **Hybrid:** Prototype locally, scale to cloud for final training
 
 > "sometimes local sometime on vast" — Benjimon, March 9, 2025
 
 > "vast is annoying asf tho" — Benjimon, March 9, 2025
+
+**Cloud platforms used by community:**
+- Vast.ai
+- RunPod
+- GCP (Google Cloud Platform) — used by Kytra for 8x H100 access
+- Fal.ai (managed service)
 
 ### Patience Requirements
 
@@ -763,6 +896,33 @@ Most developers in the community use AI assistance for coding:
 
 ---
 
+## Camera Movement Training
+
+**ArtOfficial's approach (March 21, 2025):**
+
+Using Blender to create consistent camera movement datasets:
+- Create 3D scenes with HDRI backgrounds
+- Animate camera movements (dolly, pan, orbit, etc.)
+- Render consistent motion sequences
+- Train LoRAs on the rendered videos
+
+> "great idea with using blender to create consistent camera movement. Ended up using an HDRI and it really simplified it. Hopefully if this works, I can create a bunch of different camera movement loras!" — ArtOfficial, March 21, 2025
+
+**Advantages:**
+- Perfect consistency across dataset
+- No people or objects needed (pure camera motion)
+- Can generate diverse scenery easily
+- Full control over camera parameters
+
+> "I'm hoping 22 diverse scenery videos is enough. There's no people in it or anything, so I'm curious if I'll need to add some walking characters into the dataset or if it will be able to abstract that" — ArtOfficial, March 21, 2025
+
+**Kytra's assessment:**
+> "I 100% see this working" — Kytra, March 21, 2025
+
+> "it's all so consistent from a data perspective" — Kytra, March 21, 2025
+
+---
+
 ## See Also
 
 - [[wan-2.1]] — Base model for LoRA training
@@ -781,3 +941,6 @@ Most developers in the community use AI assistance for coding:
 - [spacepxl Demystifying SD Finetuning](https://github.com/spacepxl/demystifying-sd-finetuning/) — Dense but informative reference on alpha/LR relationships
 - [Musubi Tuner](https://github.com/kohya-ss/musubi-tuner) — Kohya's training framework with recent fp8 optimizations
 - [Vast.ai](https://vast.ai/) — GPU rental for cloud training
+- [Fal.ai Wan Training](https://fal.ai/) — Managed Wan LoRA training service
+- [Video Model Studio](https://github.com/jbilcke-hf/VideoModelStudio) — Open-source trainer with automated dataset creation
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) — YouTube video downloader for dataset creation

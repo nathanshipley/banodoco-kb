@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting Wan Video Generation
 aliases: [troubleshooting, wan-troubleshooting, errors]
-last_updated: 2025-03-02
+last_updated: 2025-03-23
 ---
 
 # Troubleshooting Wan Video Generation
@@ -104,6 +104,33 @@ unable to mmap 32789894024 bytes from file: Cannot allocate memory (12)
 > "32 is really low, could you increase your swap file if on linux?" — Benjimon, March 2, 2025
 
 > "64gb kits are relatively inexpensive now especially if you are running ddr4. That being said I would go with 96 if you can manager it. Comfy can get really ram hungry." — cyncratic#0, March 2, 2025
+
+### Windows Virtual Memory Issues (March 23, 2025)
+
+**Symptoms:**
+- OOM errors on model loading despite sufficient physical RAM
+- `RuntimeError: CUDA error: out of memory` (which actually means RAM, not VRAM)
+- System freezes or crashes
+
+**Cause:** Windows virtual memory (page file) disabled or misconfigured
+
+**Solution:**
+1. Press Win + R, type `sysdm.cpl`, press Enter
+2. Navigate to Advanced tab → Settings under Performance
+3. Go to Advanced tab → Change under Virtual memory
+4. Enable "Automatically manage paging file size for all drives"
+5. Restart system
+
+> "I put Assigned by the system in all drives" — Juampab12, March 23, 2025
+
+> "omg it works now" — Juampab12, March 23, 2025
+
+**Important:** Having 0 virtual memory will cause OOM errors even with 64GB physical RAM. Windows needs virtual memory for proper operation.
+
+**Recommended settings:**
+- Let Windows manage page file size automatically
+- If setting manually, use 1.5x-2x your physical RAM
+- Place page file on fastest drive (NVMe SSD preferred)
 
 ## PyTorch Hash Mismatch
 
@@ -212,6 +239,48 @@ See [[hardware]] for VRAM requirements.
 
 See [[wan-2.1#vae-compatibility]] for details.
 
+## CUDA Issues (March 23, 2025)
+
+### Multiple CUDA versions installed
+
+**Symptoms:**
+- SageAttention errors
+- Path conflicts
+- Inconsistent behavior
+
+**Diagnosis:**
+- Check installed CUDA versions in Control Panel
+- Run `nvcc --version` in PowerShell to see active version
+- Note: `nvidia-smi` shows driver version, not CUDA toolkit version
+
+**Solution:**
+1. Uninstall all CUDA toolkits
+2. Install single version (12.4, 12.5, or 12.8 recommended)
+3. Verify installation: `nvcc --version`
+4. Reinstall PyTorch matching CUDA version
+
+**CUDA version recommendations:**
+- **12.4** — Stable, widely compatible (Benjimon's preference)
+- **12.5** — Good balance
+- **12.8** — Latest, required for 5000-series GPUs
+
+> "I like cuda 12.4" — Benjimon, March 23, 2025
+
+> "Theoretically 12.8 would work with everything" — Benjimon, March 23, 2025
+
+**Visual Studio Integration:**
+- May be needed for compiler support
+- Not always required for inference
+- If needed, install matching version for your CUDA toolkit
+
+### SageAttention not working after CUDA changes
+
+**Solution:**
+- Reinstall SageAttention after CUDA/PyTorch changes
+- Reinstall Triton if using Windows
+- Clear pip cache: `pip cache purge`
+- Verify PyTorch CUDA version matches installed CUDA toolkit
+
 ## Getting Help
 
 **Before asking for help:**
@@ -225,6 +294,7 @@ See [[wan-2.1#vae-compatibility]] for details.
 - System RAM
 - Operating system
 - PyTorch version (`pip list | grep torch`)
+- CUDA version (`nvcc --version`)
 - ComfyUI version
 - Exact error message (full traceback)
 - Workflow file (if possible)

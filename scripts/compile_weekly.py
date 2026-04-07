@@ -370,21 +370,21 @@ Read through these conversations and update the wiki. Return your changes as JSO
     approx_tokens = len(user_content) // 4
     print(f"  Approximate input: ~{approx_tokens:,} tokens ({len(relevant_pages)}/{len(current_wiki)} pages sent)")
 
-    response = client.messages.create(
+    # Use streaming to avoid timeout for large requests
+    text = ""
+    usage = None
+    with client.messages.stream(
         model=COMPILE_MODEL,
         max_tokens=MAX_OUTPUT_TOKENS,
         system=COMPILATION_SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_content}],
         temperature=0.2,
-    )
+    ) as stream:
+        for event_text in stream.text_stream:
+            text += event_text
+        response = stream.get_final_message()
+        usage = response.usage
 
-    # Extract text content
-    text = ""
-    for block in response.content:
-        if block.type == "text":
-            text += block.text
-
-    usage = response.usage
     print(f"  Tokens — input: {usage.input_tokens:,}, output: {usage.output_tokens:,}")
 
     # Calculate cost (Sonnet pricing: $3/M input, $15/M output)

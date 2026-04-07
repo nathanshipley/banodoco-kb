@@ -1,7 +1,7 @@
 ---
 title: Context Windows for Long Video
 aliases: [context-windows, context-window, long-video]
-last_updated: 2025-03-02
+last_updated: 2025-03-18
 ---
 
 # Context Windows for Long Video
@@ -30,49 +30,31 @@ Memory stays bounded because only one window is processed at a time. The overlap
 | **Prompts** | Separate with `|` | One prompt per window; keep very similar |
 | **Stride** | ≤10 (for HN), 4-8 (general) | Stride >10 crashes high noise context windows. Stride 8 can go "crazy" |
 
-## Multi-Prompt Support
+### Context Stride
 
-Context windows support multiple prompts separated by `|` pipes, with one prompt applied per window:
+**Controls how many frames to advance for each window.**
 
-```
-old man is laughing|old man is crying
-```
+Rule of thumb: Smaller values create more windows with greater overlap but may be more redundant.
 
-**Important notes:**
-- Each prompt is applied to one context window (20 latents = 80 frames)
-- Prompts should be mostly the same with small variations
-- The full prompt is used for each window, not just the changed portion
-- The console log shows which prompt is used for which window via "Prompt index"
-- Prompts that are too different will cause visible scene changes between windows
+Typical settings:
+- **4-8:** More windows, smoother potential results, slower generation
+- **16-24:** Fewer windows, potentially faster generation
+- **Match with your frame rate:** Setting to your natural frame rate (e.g., 8 for 24fps) can be intuitive
 
-**Example workflow:**
-- 6 context windows = 6 prompts possible
-- Each window processes ~80 frames (20 latents × 4 frames per latent)
-- Prompts should maintain consistency while varying specific details
+> "Context Stride (default: 4)" — fredbliss, March 17, 2025
 
-> "you'd use mostly same prompt and change some bit of it" — Kijai, March 3, 2025
+### Context Overlap
 
-> "like here it was 'man walks to the ocean|a shark attacks the man' and it did keep the man but everything else changed" — Kijai, March 3, 2025
+**Controls how many frames at window edges are blended.**
 
-### Prompt Index Behavior
+Rule of thumb: More overlap means smoother transitions between windows but higher computation cost.
 
-The console output shows which prompt is being applied to which frames:
+Typical settings:
+- **8-12:** Minimal but functional blending
+- **16-24:** Standard blending for good transitions
+- **32-48:** Extra-smooth blending for videos with complex motion
 
-```
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-Prompt index: 0
-[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-Prompt index: 1
-```
-
-This indicates frames 0-10 use prompt 0, frames 3-13 use prompt 1, etc. The overlap means some frames see blended prompts.
-
-**Common issues:**
-- Prompt index 0 is sometimes skipped entirely
-- Uneven distribution of prompt indices across windows
-- Difficulty achieving even splits with certain frame counts and overlap settings
-
-> "i can't seem to get an even number of stride/overlaps here, so there's never an even split of prompt indices" — TK_999, March 4, 2025
+> "Context Overlap (default: 16)" — fredbliss, March 17, 2025
 
 ## Compatibility
 
@@ -86,28 +68,77 @@ This indicates frames 0-10 use prompt 0, frames 3-13 use prompt 1, etc. The over
 - TeaCache (produces noise artifacts) — confirmed incompatible by Kijai, March 2, 2025
 - Stock VACE 2.1 (until custom slicing merged)
 
-## I2V with Context Windows
+## Prompting for Context Windows
 
-Context windows work with I2V by reusing the same conditioning image across all windows. Kijai posted a workflow for this on March 2, 2025.
+### Scene Transitions
 
-**Current limitations:**
-- Cannot grab the last frame of each context window as new conditioning
-- Cannot inject a new start frame for each window
-- The model won't work with unfinished images
-- Each window can have its own image (not yet implemented as of March 3, 2025)
+Kijai demonstrated effective scene transition syntax on March 2, 2025:
 
-> "giving each window it's own image should work though" — Kijai, March 3, 2025
+```
+an old man gets up and walks away into the sea -> a shark attacks the old man -> huge explosion
+```
 
-> "Long Context with image to vid..." — Flipping Sigmas, March 3, 2025
+```
+red panda eats an ice cream -> red panda walks away
+```
 
-Note that long I2V generations with context windows will take several hours.
+The `->` separator works well for indicating scene transitions. The model understands this syntax and creates smooth transitions between scenes.
 
-**I2V-specific issues:**
-- First window (frames 1-81) may feel like it has to "reset" after initial generation
-- Subsequent windows (2→3, 3→4) blend more smoothly
-- The image has to "reset" after the first window before other windows get along
+**March 17, 2025 update:** Pipe separator `|` is the standard syntax for multi-prompt context windows:
 
-> "with i2v, it feels like the image has to 'reset' after the first window [1-81]... maybe its my limited test and needs more, but it felt like after that one time, the other windows get along" — Cubey, March 4, 2025
+```
+Aerial view of a coastal village on a sunny day with calm sea and clear blue sky |
+Clouds gradually forming and darkening, wind picking up as waves grow higher |
+Heavy storm with rain pouring down, lightning in distance, dramatic seas |
+Storm clearing gradually, rainbow appearing as sunlight breaks through clouds
+```
+
+> "Aerial view of a coastal village on a sunny day with calm sea and clear blue sky | Clouds gradually forming and darkening, wind picking up as waves grow higher | Heavy storm with rain pouring down, lightning in distance, dramatic seas | Storm clearing gradually, rainbow appearing as sunlight breaks through clouds" — fredbliss, March 17, 2025
+
+### Multi-Window Prompts
+
+For longer videos, separate prompts with `|` pipes:
+```
+scene 1 description | scene 2 description | scene 3 description
+```
+
+Keep prompts very similar between windows to avoid jarring transitions.
+
+**Prompt blending experiments (March 17-18, 2025):**
+
+fredbliss has been working on advanced prompt blending techniques for context windows:
+
+> "A red sheep jumps over a fence at dusk | A red sheep jumps over a fence at night | A red sheep jumps over a fence at night, stars in sky | A red sheep jumps over a fence at dawn, sun rising" — fredbliss, March 17, 2025
+
+However, combining loop and blend techniques proved challenging:
+
+> "loop and blend dont seem to play well together" — fredbliss, March 17, 2025
+
+> "or im doing something very wrong" — fredbliss, March 17, 2025
+
+## Looping with Context Windows
+
+**Kijai's recommendation (March 18, 2025):**
+
+For looping videos, use the `uniform_looped` context schedule instead of the Mobius looping technique:
+
+> "I don't feel like it's any good, somewhat works with 1.3B model but not the others.. I prefer using the context options for looping" — Kijai, March 18, 2025
+
+**Setup for looping:**
+- Use `uniform_looped` context schedule
+- Minimum 169 frames (2 windows) for proper looping
+- 81 frame context window size
+- 16 frame overlap recommended
+
+> "it's not good at that little frames, you want to use 81 as the context window size and do something like 169 frames" — Kijai, March 18, 2025
+
+**I2V looping:**
+
+Kijai had limited success with I2V looping using context windows:
+
+> "yea, but i never had much luck with I2V" — Kijai, March 18, 2025
+
+For I2V, use `uniform_looped` context schedule for best results.
 
 ## Known Issues
 
@@ -129,6 +160,7 @@ Note that long I2V generations with context windows will take several hours.
 - **325 frames** at 81 context, ~1600 seconds on 4090 (ajo6268, March 3, 2025)
 - **513 frames** at 832x480 in 50 minutes on 5090 (Kijai, March 3, 2025)
 - **1025+ frames** possible on modest VRAM with proper settings
+- **1353 frames** at 832x480 with 30 steps in 25 minutes 37 seconds on unspecified hardware (Kijai, March 18, 2025)
 - Context windows outperform RifleX for temporal consistency (tested at 161 frames)
 
 ### Notable Generations
@@ -143,6 +175,15 @@ Note that long I2V generations with context windows will take several hours.
 - Result: Smooth transitions with minimal visible context shifts
 
 > "I think this might be a record for the longest single oss video gen in one go." — orabazes, March 3, 2025
+
+**1353-frame generation (Kijai, March 18, 2025):**
+- Resolution: 832x480
+- Frames: 1353
+- Steps: 30
+- Time: 25 minutes 37 seconds (51.25s/it)
+- Result: "weird goat hybrids"
+
+> "Sampling 1353 frames at 832x480 with 30 steps 100%|██████████████████████████████████████████████████████████████████████████████████| 30/30 [25:37<00:00, 51.25s/it]" — Kijai, March 18, 2025 [👀x2 🔥]
 
 ## Window Blending
 
@@ -163,6 +204,7 @@ Kijai's implementation uses window blending code from Kosinkadink (AnimateDiff) 
 | **RifleX** | ~161 frames | Inferior to context windows | Fast | High (VRAM constrained) |
 | **Frame Extension** | Unlimited | Degrades after 3-5 iterations | Medium | Low |
 | **SVI** | Unlimited | Best for pure continuation | Medium | Medium |
+| **Mobius Looping** | 81-161 frames | Good (1.3B), Fair (14B) | Fast | Low |
 
 **Context Windows vs RifleX:**
 
@@ -174,6 +216,14 @@ In direct comparison at 161 frames:
 
 > "Context windows and TeaCache don't work together and leads to noise" — Kijai, March 3, 2025
 
+**Context Windows vs Mobius Looping:**
+
+Kijai's assessment (March 18, 2025):
+- Mobius: Works somewhat with 1.3B, not reliable for 14B or I2V
+- Context windows: Preferred for production looping, more reliable
+
+> "I don't feel like it's any good, somewhat works with 1.3B model but not the others.. I prefer using the context options for looping" — Kijai, March 18, 2025
+
 ## Workflow Examples
 
 Kijai posted example workflows in the repository. Key workflow from March 3, 2025 demonstrates:
@@ -181,14 +231,44 @@ Kijai posted example workflows in the repository. Key workflow from March 3, 202
 - Proper overlap and stride settings
 - Integration with I2V
 
+## Advanced: Prompt Blending Research
+
+**fredbliss's WanSAE project (March 18, 2025):**
+
+fredbliss is developing an embedding transition autoencoder to improve context window transitions:
+
+**Core problem:** Semantic transition understanding in video generation
+
+**Key questions:**
+1. How do semantic concepts transform between prompts?
+2. Can we mathematically model the "distance" between conceptual spaces?
+3. How can we create more intelligent bridges between disparate visual ideas?
+
+**Proposed solution:**
+- Learn latent representation of prompt transitions
+- Develop metrics for transition "difficulty"
+- Create predictive model for generating bridge prompts
+- Enable more sophisticated context windowing
+
+**Technical approach:**
+- Focus on T5 embeddings (no CLIP dependency)
+- Train on curated transition pairs
+- Build analysis tools to quantify semantic shifts
+- Develop recommendations for smooth blending
+
+> "by modeling the mathematical relationship between prompt embeddings, we can: predict transition quality, recommend intelligent blending strategies, potentially extend video generation beyond current 81-frame limit" — fredbliss (via Claude summary), March 18, 2025
+
+**Current status:** Early research phase, combining ideas from ColPali for multi-vector embeddings.
+
 ## See Also
 
-- [[wan-2.1]] -- Base model that uses context windows
-- [[vace]] -- VACE compatibility with context windows
-- [[svi]] -- Alternative for very long video
-- [[teacache]] -- Incompatible with context windows
-- [[samplers]] -- Sampler choices for context window workflows
-- [[riflex]] -- Alternative long-video technique (inferior to context windows)
+- [[wan-2.1]] — Base model that uses context windows
+- [[vace]] — VACE compatibility with context windows
+- [[svi]] — Alternative for very long video
+- [[teacache]] — Incompatible with context windows
+- [[samplers]] — Sampler choices for context window workflows
+- [[riflex]] — Alternative long-video technique (inferior to context windows)
+- [[mobius-looping]] — Alternative looping technique (context windows preferred)
 
 ## External Resources
 
