@@ -1,12 +1,12 @@
 ---
 title: Enhance-a-Video
-aliases: [enhance-a-video, enhance, wan-enhance]
-last_updated: 2025-03-09
+aliases: [enhance-a-video, enhance, wan-enhance, feta]
+last_updated: 2025-03-13
 ---
 
 # Enhance-a-Video
 
-Enhance-a-Video is an optimization technique for Wan video generation that provides speed improvements with minimal quality impact. It was implemented by Kijai for native ComfyUI on March 9, 2025.
+Enhance-a-Video (also called "Feta" in the community) is an optimization technique for Wan video generation that provides speed improvements with minimal quality impact. It was implemented by Kijai for native ComfyUI on March 9, 2025.
 
 > "made a proper WanVideo Enhance-a-video node for native" — Kijai, March 9, 2025
 
@@ -21,6 +21,7 @@ Enhance-a-Video is based on research from NUS-HPC-AI-Lab that optimizes video ge
 - Compatible with TeaCache and torch.compile
 - Minimal quality impact
 - Works with both T2V and I2V models
+- **Excellent detail preservation** — particularly noted for background details
 
 ---
 
@@ -45,6 +46,26 @@ JmySff tested with I2V 480p, 960x544, 25 steps, native ComfyUI:
 JmySff reported combining TeaCache with the new Enhance-a-Video node:
 - **324 frames, 960x544, I2V 480p, 25 steps:** 24 minutes 12 seconds
 - Additional 1 minute speedup from Enhance-a-Video on top of TeaCache benefits
+
+> "I don't really understand why i just gain 1 minute with Enhance a video but... i'm just happy" — JmySff, March 9, 2025
+
+**Community reception (March 10, 2025):**
+
+Mixed results reported:
+- Some users found it "hit or miss" with Hunyuan Video
+- "some prompts were better off one way or the other" — TK_999
+- Not universally convinced it's always better
+- "more knobs is usually more fun" — TK_999
+
+**Quality benefits (March 13, 2025):**
+
+Multiple users reported Feta (Enhance-a-Video) provides excellent detail preservation:
+
+> "feta is pretty nice for T2V imo" — Kijai, March 13, 2025
+
+> "Slg 9 30% with feta put some nice details in the background" — IllumiReptilien, March 13, 2025
+
+> "the one with feta seems to have best hands?" — Kijai, March 13, 2025
 
 ---
 
@@ -85,6 +106,16 @@ When using multiple patches, order matters:
 | **Strength** | 0.32 | JmySff's tested value; adjust based on workflow |
 | **Placement** | After rope, before output layer | Handled automatically by node |
 
+**Community-tested settings (March 13, 2025):**
+
+IllumiReptilien reported using Feta with:
+- SLG block 10
+- 30% end percent
+- TeaCache enabled
+- Flow shift 3
+
+This combination was reported to produce excellent results with good detail preservation.
+
 ---
 
 ## Compatibility
@@ -95,6 +126,7 @@ When using multiple patches, order matters:
 - Native ComfyUI
 - TeaCache (confirmed compatible)
 - Torch.compile (confirmed compatible)
+- **SLG (Skip Layer Guidance)** — confirmed compatible March 13, 2025
 
 **May not work with:**
 - I2V models (Kijai noted uncertainty about usefulness for I2V)
@@ -139,6 +171,33 @@ Kijai expressed uncertainty about whether Enhance-a-Video is useful for I2V mode
 
 ---
 
+## Combining with SLG (March 13, 2025)
+
+**Major discovery:** Enhance-a-Video (Feta) combines exceptionally well with Skip Layer Guidance (uncond skip).
+
+Multiple users reported excellent results:
+
+> "SLG 10 30% feta teacache" — IllumiReptilien, March 13, 2025
+
+> "the one with feta seems to have best hands?" — Kijai, March 13, 2025
+
+> "Slg 9 30% with feta put some nice details in the background" — IllumiReptilien, March 13, 2025
+
+**Recommended combination:**
+- SLG block 10 (or 9)
+- End percent 0.3 (30%)
+- Feta (Enhance-a-Video) enabled
+- TeaCache optional for additional speedup
+- Flow shift 3
+
+**Benefits:**
+- Better hand generation
+- Improved background details
+- Better overall quality
+- No additional speed penalty from SLG
+
+---
+
 ## Comparison to Other Optimizations
 
 | Optimization | Speedup | Quality Impact | Compatibility |
@@ -172,6 +231,7 @@ For maximum performance, combine Enhance-a-Video with:
 - [[sageattention]] — ~25% speedup, stacks well
 - [[torch-compile]] — ~30% speedup, place last in patch order
 - [[fp16-accumulate]] — ~20-30% speedup, stacks well
+- [[slg-uncond]] — Quality improvement, no speed penalty, excellent combination
 
 **Example combined performance (JmySff, March 9, 2025):**
 - I2V 480p, 960x544, 324 frames, 25 steps
@@ -179,6 +239,13 @@ For maximum performance, combine Enhance-a-Video with:
 - **Total time:** 24 minutes 12 seconds
 - **Estimated baseline:** ~45-60 minutes without optimizations
 - **Speedup:** ~2-2.5x faster
+
+**Example with SLG (March 13, 2025):**
+- SLG block 10, 30% end percent
+- Feta (Enhance-a-Video)
+- TeaCache
+- Flow shift 3
+- **Result:** Excellent quality with good detail preservation and improved hands
 
 ---
 
@@ -188,6 +255,7 @@ For maximum performance, combine Enhance-a-Video with:
 - [[teacache]] — Compatible optimization
 - [[torch-compile]] — Compatible optimization
 - [[sageattention]] — Compatible optimization
+- [[slg-uncond]] — Excellent combination for quality improvement
 - [[speed]] — Overview of all speed optimizations
 
 ## External Resources

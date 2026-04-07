@@ -14,7 +14,7 @@ Usage:
     python compile_weekly.py --next 3                   # Process next 3 unprocessed weeks
     python compile_weekly.py --status                   # Show progress
 
-Cost: ~$0.10-0.50 per week depending on message volume (Sonnet pricing).
+Cost: ~$0.10-3.00 per week depending on message volume (Sonnet pricing).
 """
 
 import requests
@@ -48,7 +48,125 @@ ALL_CHANNELS = ["wan_chatter", "wan_comfyui", "wan_training", "wan_gens", "wan_r
 
 # Use Sonnet for compilation (good quality, 10x cheaper than Opus)
 COMPILE_MODEL = "claude-sonnet-4-5-20250929"
-MAX_MESSAGES_PER_CHUNK = 500  # Split large weeks into chunks
+MAX_MESSAGES_PER_CHUNK = 1000  # Split large weeks into chunks
+MAX_OUTPUT_TOKENS = 32000  # Avoid truncation on large page updates
+
+# Low-signal message patterns to filter before compilation
+LOW_SIGNAL_EXACT = {
+    "lol", "lmao", "lmfao", "rofl", "haha", "hahaha", "hahahaha", "ha",
+    "nice", "noice", "yeah", "yep", "yup", "nope", "nah", "ok", "okay",
+    "thanks", "thx", "ty", "np", "yw", "true", "same", "rip", "gg", "f",
+    "wow", "whoa", "damn", "dang", "bruh", "bro", "oof", "hmm", "hmmm",
+    "oh", "ohh", "ohhh", "ah", "ahh", "eh", "meh", "idk", "ikr", "tbh",
+    "fr", "frfr", "sus", "bet", "cap", "w", "l", "based", "this",
+    "^", "^^", "^^^", "+1", "...", "..", ".", "?", "??", "???", "!",
+    "!!!", "xd", "xdd", "kek", "kekw", "omg", "smh", "ngl", "imo",
+    "interesting", "indeed", "exactly", "absolutely", "definitely",
+    "makes sense", "for real", "that's wild", "i see",
+}
+
+
+def is_low_signal(msg):
+    """Check if a message is low-signal noise (greetings, reactions, etc.)."""
+    content = msg.get("content", "").strip().lower()
+    if not content:
+        return True  # empty messages
+    # Keep messages with reactions (community validated them)
+    if msg.get("reactions"):
+        return False
+    # Keep pinned messages
+    if msg.get("is_pinned"):
+        return False
+    # Keep replies (they provide context in threads)
+    if msg.get("reference_id"):
+        return False
+    # Keep messages with attachments (images, files)
+    if msg.get("attachments"):
+        return False
+    # Check exact matches
+    if content in LOW_SIGNAL_EXACT:
+        return True
+    # Pure emoji messages (unicode emoji or Discord custom :emoji:)
+    import unicodedata
+    stripped = content.replace(" ", "")
+    if all(unicodedata.category(c).startswith(("So", "Sk", "Cn")) or c in "️⃣" for c in stripped):
+        return True
+    # Very short + no technical terms (under 15 chars)
+    if len(content) < 15:
+        tech_terms = {"gpu", "vram", "lora", "wan", "vace", "cfg", "fp8", "fp16", "bf16",
+                      "gguf", "comfy", "node", "step", "frame", "model", "train", "sage",
+                      "tea", "block", "res", "720", "480", "1080", "4090", "3090", "5090",
+                      "cuda", "torch", "oom", "ram", "gen", "vid", "img", "i2v", "t2v",
+                      "14b", "1.3b", "5b", "dit", "vae", "clip", "umt5", "sampler",
+                      "kijai", "comfyui", "diffusion", "denoise", "latent"}
+        if not any(t in content for t in tech_terms):
+            return True
+    return False
+
+
+def filter_messages(messages):
+    """Remove low-signal messages, return filtered list + count removed."""
+    filtered = [m for m in messages if not is_low_signal(m)]
+    return filtered, len(messages) - len(filtered)
+
+
+def find_relevant_pages(messages, wiki_pages):
+    """Given a chunk of messages, find which wiki pages are relevant.
+
+    Returns dict of relevant pages (path → content) + a brief index of all other pages.
+    This avoids sending the entire wiki state with every chunk.
+    """
+    # Build a searchable text from the messages
+    msg_text = " ".join(m.get("content", "").lower() for m in messages)
+
+    # Score each page by how relevant it is to this chunk's messages
+    page_scores = {}
+    for path, content in wiki_pages.items():
+        # Extract page title and aliases from frontmatter
+        score = 0
+        lines = content.split("\n")
+        title = ""
+        aliases = []
+        for line in lines[:10]:
+            if line.startswith("title:"):
+                title = line.split(":", 1)[1].strip().lower()
+            if line.startswith("aliases:"):
+                alias_str = line.split(":", 1)[1].strip()
+                try:
+                    aliases = json.loads(alias_str)
+                except:
+                    aliases = [a.strip() for a in alias_str.strip("[]").split(",")]
+
+        # Score based on title/alias matches in messages
+        search_terms = [title] + [a.lower() for a in aliases]
+        # Also use the path stem
+        stem = Path(path).stem.replace("-", " ").replace("_", " ")
+        search_terms.append(stem)
+
+        for term in search_terms:
+            if term and len(term) > 2:
+                count = msg_text.count(term.lower())
+                score += count
+
+        page_scores[path] = score
+
+    # Include pages with score > 0 (mentioned in messages), plus always include overview
+    relevant = {}
+    index_lines = []
+    for path in sorted(wiki_pages.keys()):
+        score = page_scores.get(path, 0)
+        if score > 0 or "overview" in path:
+            relevant[path] = wiki_pages[path]
+        else:
+            # Brief one-liner for the index
+            title = Path(path).stem.replace("-", " ").title()
+            for line in wiki_pages[path].split("\n")[:10]:
+                if line.startswith("title:"):
+                    title = line.split(":", 1)[1].strip()
+                    break
+            index_lines.append(f"- {path}: {title}")
+
+    return relevant, index_lines
 
 
 def load_state():
@@ -222,12 +340,19 @@ def compile_week(week_label, messages, current_wiki, client):
 
     formatted = format_messages_for_compilation(messages)
 
-    # Build wiki state summary
+    # Find relevant wiki pages for this chunk (instead of sending everything)
+    relevant_pages, other_pages_index = find_relevant_pages(messages, current_wiki)
+
+    # Build wiki state with only relevant pages + brief index of others
     wiki_state = ""
     if current_wiki:
-        wiki_state = "## Current Wiki Pages\n\n"
-        for path, content in sorted(current_wiki.items()):
-            wiki_state += f"### {path}\n```markdown\n{content}\n```\n\n"
+        if relevant_pages:
+            wiki_state = f"## Relevant Wiki Pages ({len(relevant_pages)} of {len(current_wiki)} total)\n\n"
+            for path, content in sorted(relevant_pages.items()):
+                wiki_state += f"### {path}\n```markdown\n{content}\n```\n\n"
+        if other_pages_index:
+            wiki_state += f"## Other Existing Pages (not shown — create or update these by path if needed)\n\n"
+            wiki_state += "\n".join(other_pages_index) + "\n\n"
     else:
         wiki_state = "## Current Wiki Pages\n\n(No pages exist yet — this is the first week.)\n\n"
 
@@ -243,11 +368,11 @@ Read through these conversations and update the wiki. Return your changes as JSO
 
     # Check approximate token count (rough: 1 token ≈ 4 chars)
     approx_tokens = len(user_content) // 4
-    print(f"  Approximate input: ~{approx_tokens:,} tokens")
+    print(f"  Approximate input: ~{approx_tokens:,} tokens ({len(relevant_pages)}/{len(current_wiki)} pages sent)")
 
     response = client.messages.create(
         model=COMPILE_MODEL,
-        max_tokens=16000,
+        max_tokens=MAX_OUTPUT_TOKENS,
         system=COMPILATION_SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_content}],
         temperature=0.2,
@@ -291,7 +416,9 @@ def process_week(week_label, client, dry_run=False):
         print(f"  No messages found, skipping")
         return 0
 
-    print(f"  Messages: {len(messages)}")
+    # Filter low-signal messages
+    messages, removed = filter_messages(messages)
+    print(f"  Messages: {len(messages)} (filtered {removed} low-signal)")
 
     current_wiki = load_current_wiki()
     print(f"  Current wiki pages: {len(current_wiki)}")
@@ -376,6 +503,29 @@ def show_status():
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--status":
         show_status()
+        return
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--cost":
+        """Estimate cost for remaining weeks without running."""
+        state = load_state()
+        processed = set(state.get("weeks_processed", []))
+        all_weeks = get_all_weeks()
+        remaining = [w for w in all_weeks if w not in processed]
+        total_msgs = 0
+        print(f"{'Week':<12} {'Raw':>6} {'Filtered':>8} {'Chunks':>6} {'Est Cost':>10}")
+        print("-" * 50)
+        for w in remaining:
+            msgs = load_week_messages(w)
+            filtered, removed = filter_messages(msgs)
+            n_chunks = max(1, (len(filtered) + MAX_MESSAGES_PER_CHUNK - 1) // MAX_MESSAGES_PER_CHUNK)
+            # Rough estimate: ~$0.25/chunk with optimized relevant-pages
+            est_cost = n_chunks * 0.25
+            total_msgs += len(filtered)
+            print(f"{w:<12} {len(msgs):>6} {len(filtered):>8} {n_chunks:>6} ${est_cost:>8.2f}")
+        total_chunks = max(1, (total_msgs + MAX_MESSAGES_PER_CHUNK - 1) // MAX_MESSAGES_PER_CHUNK)
+        print("-" * 50)
+        print(f"{'TOTAL':<12} {'':>6} {total_msgs:>8} {total_chunks:>6} ${total_chunks * 0.25:>8.2f}")
+        print(f"\nNote: $0.25/chunk is a rough estimate. Actual cost depends on wiki page sizes sent.")
         return
 
     client = anthropic.Anthropic()

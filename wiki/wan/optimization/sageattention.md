@@ -1,7 +1,7 @@
 ---
 title: SageAttention
 aliases: [sageattention, sage-attention, sage]
-last_updated: 2025-03-06
+last_updated: 2025-03-10
 ---
 
 # SageAttention
@@ -39,6 +39,15 @@ pip install -e . --no-build-isolation
 
 Prebuilt Windows wheels available at: https://github.com/woct0rdho/SageAttention/releases
 
+**Latest version (March 2025):** SageAttention 2.1.1
+
+**Installation from wheel:**
+```bash
+python -m pip install sageattention-2.1.1-cp312-cp312-win_amd64.whl
+```
+
+> "i downloaded the file kijai shared and did this: python.exe -m pip install sageattention-2.0.0-cp312-cp312-win_amd64.whl" — BestWind, March 10, 2025
+
 ## Usage
 
 ### Native ComfyUI
@@ -63,6 +72,44 @@ Use the **PatchSageAttention** node rather than the CLI flag. The node form is m
 - `sage_attn_fp16` — FP16 mode for multi-GPU setups
 
 **Recommendation:** Select a specific mode instead of `auto` if you encounter issues.
+
+## Kernel Selection by GPU Architecture
+
+SageAttention auto-selects kernels based on hardware:
+
+| GPU Architecture | Auto-Selected Kernel | Notes |
+|-----------------|---------------------|-------|
+| **A100** | `sageattn_qk_int8_pv_fp16_cuda` | Ampere flagship |
+| **Other Ampere (3090, etc.)** | `sageattn_qk_int8_pv_fp16_triton` | 3090, 3090 Ti, A6000 |
+| **Ada (4090, 5090, L40)** | `sageattn_qk_int8_pv_fp8_cuda` | Fastest on Ada+ |
+| **Hopper (H100)** | `sageattn_qk_int8_pv_fp8_cuda_sm90` | Hopper-specific |
+| **Blackwell (B100)** | `sageattn_qk_int8_pv_fp8_cuda` | Latest architecture |
+
+> "A100 = `sageattn_qk_int8_pv_fp16_cuda`" — Doctor Shotgun, March 10, 2025
+
+> "other Ampere = `sageattn_qk_int8_pv_fp16_triton`" — Doctor Shotgun, March 10, 2025
+
+> "Ada = `sageattn_qk_int8_pv_fp8_cuda`" — Doctor Shotgun, March 10, 2025
+
+> "Hopper = `sageattn_qk_int8_pv_fp8_cuda_sm90`" — Doctor Shotgun, March 10, 2025
+
+> "Blackwell = `sageattn_qk_int8_pv_fp8_cuda`" — Doctor Shotgun, March 10, 2025
+
+## Performance Benchmarks
+
+**4090 with fp8 weights + torch.compile + SageAttention:**
+- **int8+fp8 kernel:** 38 s/it
+- **int8+fp16 kernel:** 47 s/it
+- **xformers (baseline):** ~75 s/it
+
+> "i get 38 s/it with int8fp8 and 47 s/it with int8fp16" — Doctor Shotgun, March 10, 2025
+
+> "xformers like 75 s/it or sth lmao" — Doctor Shotgun, March 10, 2025
+
+**Speedup analysis:**
+- fp8 kernel is ~25% faster than fp16 kernel
+- fp8 kernel is ~2x faster than xformers baseline
+- fp16 kernel is ~1.6x faster than xformers baseline
 
 ## Multi-GPU Usage
 
@@ -98,6 +145,10 @@ Some users experience issues with fp8 SageAttention on I2V in multi-GPU setups. 
 **Problem:** I2V generations produce completely black output when using certain SageAttention modes.
 
 **Cause:** The `fp8_cuda` kernel (specifically `sageattn_qk_int8_pv_fp8_cuda`) causes precision overflow on I2V models.
+
+> "i2v doesnt work for me with fp8 sage" — Doctor Shotgun, March 10, 2025
+
+> "something overflows to NaN and you get a black image" — Doctor Shotgun, March 10, 2025
 
 **Solution:** Use the FP16 kernel instead:
 - In wrapper: Select `sageattn_qk_int8_pv_fp16_triton` or `sageattn_qk_int8_pv_fp16_cuda`
@@ -170,6 +221,81 @@ Some users encounter Triton-related errors when running with SageAttention:
 
 > "Some behaviour can change depending on how much free VRAM you have at the time, so possibly once you'd run it you had a bit less (due to caching) and that triggered a different thing to happen (requiring Triton)" — Screeb, Discord #wan_chatter, March 4, 2025
 
+### PyTorch Nightly Compatibility
+
+**Issue:** After upgrading to PyTorch nightly (2.7.0+), SageAttention may need to be reinstalled.
+
+**Error message:**
+```
+ValueError: Can't import SageAttention: DLL load failed while importing _qattn: The specified procedure could not be found.
+```
+
+**Solution:** Reinstall SageAttention after PyTorch upgrade:
+```bash
+pip install sageattention-2.1.1-cp312-cp312-win_amd64.whl
+```
+
+> "sageattention need to be reinstalled to match the new latest torch or something like that?" — BestWind, March 10, 2025
+
+> "possibly" — Kijai, March 10, 2025
+
+**Note:** Some users report SageAttention 1.0.6 continuing to work with PyTorch 2.7.0 without reinstallation, but upgrading to SageAttention 2.1+ is recommended.
+
+### Triton Version Requirements
+
+**Windows users:** Triton 3.0+ is required for SageAttention 2.0+.
+
+**Installation:**
+```bash
+pip install triton-windows
+```
+
+> "windows triton should be in pypi now" — Kijai, March 10, 2025
+
+> "pip install triton-windows" — Kijai, March 10, 2025
+
+**Reported working configurations:**
+- SageAttention 1.0.6 + Triton 3.2.0 + PyTorch 2.7.0
+- SageAttention 2.0.0 + Triton 3.0.0 + PyTorch 2.7.0
+- SageAttention 2.1.1 + Triton 3.0.0 + PyTorch 2.7.0
+
+### First-Time Compilation
+
+**Issue:** First time running SageAttention shows compilation logs (ptxas).
+
+**Behavior:**
+- Compilation logs only appear on first run
+- Subsequent runs use cached compiled kernels
+- Logs may reappear if cache is cleared or settings change
+
+> "ptxas only shows up in the console first time it does something, then it's cached" — Kijai, March 10, 2025
+
+> "it won't show when it uses the cached" — Kijai, March 10, 2025
+
+## Quality Impact
+
+### Quantization Concerns
+
+**Community perspective on 8-bit attention:**
+
+> "taking the precision hit to 8bit to me sounds like meh when im used to ppl around me trying to run LLMs in friggin 2.5bit weight quantization" — Doctor Shotgun, March 10, 2025
+
+SageAttention uses 8-bit quantization for attention calculations, which is inherently lossy. However:
+- The quality loss is minimal in practice
+- Much less aggressive than extreme LLM quantization (2.5-bit)
+- According to SageAttention's paper, quality impact is negligible
+
+**fp8 vs fp16 quality:**
+
+Community reports suggest minimal quality difference:
+- fp8 kernel is faster but theoretically lower quality
+- In practice, differences are hard to detect
+- Speed gain (25%) often worth the minimal quality tradeoff
+
+> "according to sageattention's paper claims, it doesnt [degrade quality]" — Doctor Shotgun, March 10, 2025
+
+> "but it is quantized attention" — Doctor Shotgun, March 10, 2025
+
 ## Performance Comparison
 
 | Mode | Speed | Quality | GPU Support |
@@ -195,6 +321,8 @@ Some users encounter Triton-related errors when running with SageAttention:
 | Slower than SDPA | Check for VRAM pressure causing offloading; increase block swap |
 | Installation fails | Use `--no-build-isolation` flag; ensure torch and ninja are installed first |
 | Compilation fails | Install ninja in ComfyUI venv: `pip install ninja` |
+| DLL load failed after PyTorch upgrade | Reinstall SageAttention to match new PyTorch version |
+| ptxas logs appearing | Normal on first run; subsequent runs use cached kernels |
 
 ## Performance Stack
 
@@ -204,7 +332,7 @@ For maximum performance, combine SageAttention with:
 - [[torch-compile]] — ~30% speedup, stacks with SageAttention
 - [[teacache]] — ~2x speedup, stacks with SageAttention
 
- Achievable combined speedup: **~3-4x faster** than baseline with all optimizations
+Achievable combined speedup: **~3-4x faster** than baseline with all optimizations
 
 ## See Also
 
@@ -220,3 +348,4 @@ For maximum performance, combine SageAttention with:
 - [SageAttention GitHub](https://github.com/thu-ml/SageAttention)
 - [SageAttention Windows Builds](https://github.com/woct0rdho/SageAttention/releases)
 - [SageAttention Paper](https://arxiv.org/abs/2410.02367)
+- [Triton Windows PyPI](https://pypi.org/project/triton-windows/)

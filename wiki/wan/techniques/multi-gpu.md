@@ -1,7 +1,7 @@
 ---
 title: Multi-GPU Generation
 aliases: [multi-gpu, multigpu, distributed]
-last_updated: 2025-03-06
+last_updated: 2025-03-11
 ---
 
 # Multi-GPU Generation
@@ -15,6 +15,8 @@ Multi-GPU support for Wan uses FSDP (Fully Sharded Data Parallel) to shard and o
 - Running full-quality models on multiple consumer GPUs
 - Faster generation through parallel processing
 - Handling models that exceed single-GPU VRAM
+- **TeaCache support** for additional speedup (confirmed March 11, 2025)
+- **Torch.compile support** for further optimization (in development March 11, 2025)
 
 ## Implementation
 
@@ -31,6 +33,8 @@ Multi-GPU support for Wan uses FSDP (Fully Sharded Data Parallel) to shard and o
 - Weight offloading for VRAM management
 - Ring attention for sequence parallelism
 - Ulysses attention for additional parallelism
+- **TeaCache support** (March 11, 2025)
+- **Torch.compile support** (in development March 11, 2025)
 
 ### Hardware Requirements
 
@@ -156,6 +160,7 @@ torchrun --nproc_per_node=4 generate.py \
 | `--attn_impl` | Attention implementation | `sage_attn_fp16` for I2V |
 | `--base_seed` | Random seed | Set for reproducibility |
 | `--master_port` | Port for distributed training | Change if running multiple instances |
+| `--tc_thresh` | TeaCache threshold | 0.18-0.3 for speedup (March 11, 2025) |
 
 ### Environment Variables
 
@@ -180,6 +185,12 @@ torchrun --nproc_per_node=4 generate.py \
 - Frames: 81
 - Time: ~3 minutes total (estimated)
 - Quality: Full quality
+
+**4x 4090 with TeaCache (March 11, 2025):**
+- **Without TeaCache:** 15 minutes
+- **With TeaCache (threshold 0.18):** 10 minutes (near-identical quality)
+- **With TeaCache (threshold 0.3):** 7.5 minutes (some artifacts, useful for prompt finding)
+- **Speedup:** 33-50% faster with TeaCache
 
 **8x 4090:**
 - Tested but requires optimization
@@ -212,6 +223,76 @@ torchrun --nproc_per_node=4 generate.py \
 - Insufficient CPU cores for T5 (increase `OMP_NUM_THREADS`)
 - Slow interconnect between GPUs (NVLink recommended)
 - VRAM pressure causing excessive offloading
+
+## TeaCache Integration (March 11, 2025)
+
+intervitens successfully integrated TeaCache with the multi-GPU script:
+
+> "btw I think I got teacache working with the multigpu script" — intervitens, March 11, 2025
+
+### TeaCache Performance
+
+**Threshold 0.18:**
+- Time: 15 minutes → 10 minutes
+- Quality: "videos look near identical to me" — intervitens
+- **Recommended for production use**
+
+**Threshold 0.3:**
+- Time: 15 minutes → 7.5 minutes
+- Quality: "some noticeable artifacts" but "movement and overall composition are almost the same"
+- **Useful for prompt/seed finding**
+
+### Visual Comparison
+
+intervitens shared side-by-side comparisons:
+- Left: No TeaCache
+- Right: TeaCache with 0.18 threshold
+- Result: Near-identical quality with 33% speedup
+
+### Use Cases
+
+**Production rendering:**
+- Use threshold 0.18 for near-identical quality
+- 33% speedup with minimal quality loss
+- Suitable for final outputs
+
+**Rapid iteration:**
+- Use threshold 0.3 for 50% speedup
+- Some artifacts but composition/motion preserved
+- Excellent for finding good prompts/seeds
+- Re-render finals at lower threshold
+
+### Activation
+
+Set `--tc_thresh 0.22` (or other value) to activate TeaCache:
+
+```bash
+torchrun --nproc_per_node=4 generate.py \
+  --task i2v-14B \
+  --tc_thresh 0.18 \
+  # ... other parameters
+```
+
+## Torch.compile Integration (March 11, 2025)
+
+aikitoria is actively working on torch.compile integration for the multi-GPU script:
+
+> "I'm still trying to get the compile to do anything" — aikitoria, March 11, 2025
+
+**Current status:**
+- Compiling individual blocks doesn't provide speedup
+- Compiling entire model is slow and may not be beneficial
+- torch_tensorrt attempted but has compatibility issues (f64 types, missing trtllm)
+- Work in progress
+
+**Implementation note:**
+
+For torch.compile to work with FSDP, add `use_orig_params=True` to the FSDP function call in `wan/distributed/fsdp.py`:
+
+```python
+# In wan/distributed/fsdp.py
+FSDP(..., use_orig_params=True)
+```
 
 ## Precision and Quality
 
@@ -307,6 +388,7 @@ Community testing shows minimal quality difference between fp16 and fp8 on multi
 |--------|------------|----------------|
 | **VRAM per GPU** | 24+ GB required | 12+ GB sufficient |
 | **Speed (720p I2V)** | ~15 min (3090) | ~3 min (4x 3090 Ti) |
+| **Speed with TeaCache** | ~10 min (estimated) | ~10 min (threshold 0.18), ~7.5 min (threshold 0.3) |
 | **Setup complexity** | Simple | Moderate |
 | **Cost** | 1 high-end GPU | 4 mid-range GPUs |
 | **Flexibility** | Limited by single GPU | Can scale to larger models |
@@ -323,6 +405,8 @@ Community testing shows minimal quality difference between fp16 and fp8 on multi
 - Tiled VAE for higher resolutions
 - Sliding window for video extension
 - Optimized ring_size and ulysses_size configurations
+- **TeaCache integration** (COMPLETED March 11, 2025)
+- **Torch.compile integration** (IN PROGRESS March 11, 2025)
 
 ## Troubleshooting
 
@@ -338,12 +422,17 @@ Community testing shows minimal quality difference between fp16 and fp8 on multi
 | Port conflict | Use `--master_port` to specify different port |
 | 8 GPU setup slow | Experiment with `--ring_size` and `--ulysses_size` values |
 | Higher resolution OOM | Wait for tiled VAE implementation |
+| TeaCache not working | Ensure latest version of multi-GPU script; use threshold 0.18-0.3 |
+| TeaCache artifacts | Lower threshold to 0.18 for better quality |
+| Torch.compile not working | Work in progress; add `use_orig_params=True` to FSDP call |
 
 ## See Also
 
 - [[wan-2.1]] — Base model for multi-GPU generation
 - [[sageattention]] — Attention optimization used in multi-GPU
 - [[fp16-accumulate]] — Required optimization for multi-GPU
+- [[teacache]] — Speed optimization now compatible with multi-GPU
+- [[torch-compile]] — Speed optimization being integrated with multi-GPU
 - [[hardware]] — Hardware requirements and recommendations
 
 ## External Resources

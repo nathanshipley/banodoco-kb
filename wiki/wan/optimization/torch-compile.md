@@ -1,7 +1,7 @@
 ---
 title: Torch Compile
 aliases: [torch-compile, torch.compile, compile]
-last_updated: 2025-03-04
+last_updated: 2025-03-16
 ---
 
 # Torch Compile
@@ -18,6 +18,8 @@ Torch compile is a PyTorch optimization that compiles the model's computation gr
 
 > "normally it's about 10% to 30% speed up, even 2%, so not always super useful" — for1096, March 4, 2025
 
+---
+
 ## Compatibility
 
 **Works with:**
@@ -28,10 +30,14 @@ Torch compile is a PyTorch optimization that compiles the model's computation gr
 - TeaCache (stacks for additional speedup)
 - fp16 accumulation (stacks for additional speedup)
 - SageAttention (stacks for additional speedup)
+- Skip Layer Guidance (must be applied LAST)
+- Enhance-a-Video (must be applied LAST)
 
 **May not work with:**
 - Some models (compatibility varies)
 - Certain PyTorch versions (requires updating)
+
+---
 
 ## Implementation
 
@@ -43,6 +49,10 @@ Kijai provides a custom compile node that compiles only the transformer blocks r
 - All transformer blocks are identical, so compilation is more efficient
 - Use the `PatchModelAddDownscale (Kohya Deep Shrink)` or similar compile nodes from Kijai
 
+**Options:**
+- **Transformer blocks only:** Recommended for most cases
+- **Full model:** May not provide additional speedup
+
 ### Native ComfyUI
 
 Use the standard torch compile node in native workflows.
@@ -51,6 +61,29 @@ Use the standard torch compile node in native workflows.
 - When using TeaCache with torch.compile in native, use **Kijai's compile node** instead of the standard one
 - The standard compile node wraps the whole model, which can cause errors with TeaCache
 - Kijai's node only compiles transformer blocks, avoiding the `'OptimizedModule' object has no attribute 'forward_orig'` error
+
+---
+
+## Patch Order (Critical)
+
+**Major update (March 16, 2025):** Torch.compile must be applied LAST in the patch chain.
+
+**Correct order:**
+1. Skip Layer Guidance (if using)
+2. Enhance-a-Video (if using)
+3. TeaCache (if using)
+4. **Torch.compile (LAST)**
+
+> "you want compile to apply last after all that" — Kijai, March 16, 2025
+
+**Why this matters:**
+- Patches applied after compile break compilation
+- Model must be reloaded to fix broken compilation
+- Compile obfuscates error messages from other patches
+
+> "introducing enhance (and probably other patches) after you have ran it once with compile does break compile until you reload the model" — Kijai, March 16, 2025
+
+---
 
 ## Compile Modes
 
@@ -66,7 +99,42 @@ Use the standard torch compile node in native workflows.
 
 > "typically we use the inductor mode, i think many have issues with cuagraphs node. It could be that pytorch needs updating" — TK_999, March 4, 2025
 
+---
+
 ## Known Issues
+
+### Flaky Behavior
+
+**Issue:** Compile can break when changing settings or adding nodes
+
+> "Compile is flaky the way it's done, often when changing settings or adding nodes to the model chain it can break, and then reloading the model from start can fix it" — Kijai, March 16, 2025
+
+**Symptoms:**
+- Errors after workflow changes
+- Inconsistent behavior
+- Cryptic error messages
+
+**Solutions:**
+- Reload model from scratch
+- Restart ComfyUI
+- Ensure patches are in correct order
+
+### Patch Order Errors
+
+**Issue:** Applying patches in wrong order causes errors
+
+**Example error:**
+```
+RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
+```
+
+**Solution:** Move torch.compile to end of patch chain
+
+**Reported case (March 16, 2025):**
+- User (CJ) experienced persistent errors with split sigmas + TeaCache + torch.compile
+- Error disappeared after moving compile to end and setting to transformer blocks only
+- Issue persisted across ComfyUI restarts and PC reboots
+- Running without TeaCache but with compile fixed it
 
 ### TeaCache Compatibility Error
 
@@ -115,6 +183,24 @@ KSampler
 
 > "fp8_e4m3fn compilation in general doesn't work on 3090, fp8_e5m2 does" — Kijai, March 4, 2025
 
+### Variable Performance
+
+**Reported issue (March 16, 2025):**
+
+User (CJ) reported dramatic performance degradation after torch.compile issues:
+- Before: 15 sec/it
+- After error and disabling compile: 100+ sec/it
+- Performance did not recover immediately
+
+**Possible causes:**
+- Broken compilation state
+- Model not properly reloaded
+- Cached compilation artifacts
+
+**Solution:** Full ComfyUI restart and model reload
+
+---
+
 ## Troubleshooting
 
 | Problem | Solution |
@@ -126,6 +212,12 @@ KSampler
 | Inductor not working | Update PyTorch; some models may not be compatible |
 | 3090 compilation fails | Use fp8_e5m2 instead of fp8_e4m3fn; use fp16_fast instead of fp8_fast |
 | "file already exists" error | Windows cache file bug; update to PyTorch 2.6.0+ |
+| Errors after adding patches | Move compile to END of patch chain; reload model |
+| Cryptic errors | Compile obfuscates error messages; disable compile to see real error |
+| Performance degradation | Reload model; restart ComfyUI; check patch order |
+| Flaky behavior | Reload model from scratch; ensure patches in correct order |
+
+---
 
 ## Performance Stack
 
@@ -134,8 +226,14 @@ For maximum performance, combine torch.compile with:
 - [[fp16-accumulate]] — ~20-30% speedup, stacks with compile
 - [[sageattention]] — ~25% speedup alone, nearly 2x with fp16 accumulate and compile
 - [[teacache]] — ~2x speedup, stacks with compile (use Kijai's compile node)
+- [[skip-layer-guidance]] — Slight speedup + quality improvement, apply BEFORE compile
+- [[enhance-a-video]] — Slight speedup, apply BEFORE compile
 
 Achievable combined speedup: **~2-3x faster** than baseline with all optimizations
+
+**Critical:** Always apply torch.compile LAST in the optimization chain
+
+---
 
 ## See Also
 
@@ -143,4 +241,6 @@ Achievable combined speedup: **~2-3x faster** than baseline with all optimizatio
 - [[fp16-accumulate]] — Stackable optimization
 - [[sageattention]] — Stackable optimization
 - [[teacache]] — Stackable optimization (requires Kijai's compile node)
+- [[skip-layer-guidance]] — Apply before compile
+- [[enhance-a-video]] — Apply before compile
 - [[speed]] — Other speed optimization techniques
