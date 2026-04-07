@@ -103,12 +103,26 @@ https://github.com/fblissjr/ComfyUI-WanVideoWrapper-fps-interpolation
 2. Use LTX keyframe interpolation to fill in frames to 24 FPS
 3. LTX provides semantic understanding for better interpolation quality
 
+**Key advantages:**
+- **10x faster generation** — LTX generates much faster than Wan
+- **Semantic interpolation** — LTX understands scene content, not just pixel motion
+- **Better quality** — Superior to RIFE or other pixel-based interpolators at low framerates
+- **Flexible keyframe placement** — Can accept any frame as a keyframe
+
+**Community consensus (March 5, 2025):**
+> "basically, LTX can generate videos 10x faster than Wan, and can now accept every single frame as keyframes, meaning you can just interpolate videos with it. this is a much better solution than something like Rife which doesnt have the intelligence to work correctly at low framerates. So if you were able to generate a full Hunyuan or Wan video at like 6 fps instead of 16/24, it would be 3.5-4x faster to generate, and then you could go interpolate using LTX for the full 16/24fps video" — Juampab12, March 5, 2025
+
 **Limitations:**
 - Still need a way to generate Wan at 4 FPS in the first place
 - "we still cant generate 4fps video though" — Juampab12, March 5, 2025
 - "that's the part I most wanted remember?" — Juampab12, March 5, 2025
 
 This makes the FPS generation problem (not just interpolation) still relevant for the community.
+
+**Implementation status (March 5, 2025):**
+- Juampab12 working on custom node for LTX interpolation
+- Manual setup requires 18 frames connected by hand
+- Custom node will automate the process: "input a video, it calculates everything in the back end to allow for interpolation, and boom"
 
 ## Known Issues
 

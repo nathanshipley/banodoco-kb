@@ -1,7 +1,7 @@
 ---
 title: TeaCache
 aliases: [teacache, tea-cache, naive-teacache]
-last_updated: 2025-03-05
+last_updated: 2025-03-09
 ---
 
 # TeaCache
@@ -11,6 +11,8 @@ TeaCache is a latent-caching optimization that skips redundant diffusion steps b
 Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, achieving nearly 2x speedup without the full polynomial fitting approach used in the original paper. A native ComfyUI implementation was also released on March 2, 2025.
 
 **Major Update (March 5, 2025):** Kijai integrated the official coefficient calculations from the TeaCache team, making the implementation more accurate and allowing for higher threshold values with better quality preservation.
+
+**Major Update (March 8, 2025):** Kijai updated the TeaCache node documentation to reflect significantly different optimal values for 1.3B vs 14B models when using coefficients.
 
 > "3 mins 32 secs vs 1min 49 secs" — Kijai demonstrating TeaCache speedup, Discord #wan_chatter, March 1, 2025
 
@@ -32,6 +34,8 @@ Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, ac
 - **Can start from step 0** — no longer requires skipping early steps
 - **More precise skipping** — skips the "right" steps in a smarter manner
 - **28 minutes for 312 frames** at 960x544, 30 steps, GGUF Q8 on RTX 4090 (JmySff)
+- **169 frames in 2 minutes** with context windows, 4.281 GB VRAM used (Kijai, March 5, 2025)
+- **24 minutes for 324 frames** at 960x544 I2V 480p (JmySff, March 9, 2025)
 
 **Native implementation:**
 - Initial testing shows promise but requires proper threshold tuning
@@ -49,6 +53,8 @@ Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, ac
 - 20 samples: 240s → 167s with TeaCache (David Snow, March 2, 2025)
 - 60 samples: 660s → 227s with TeaCache (David Snow, March 2, 2025)
 - 312 frames, 960x544, 30 steps: 28 minutes (JmySff, March 5, 2025)
+- 169 frames with context windows: 2 minutes, 4.281 GB VRAM (Kijai, March 5, 2025)
+- 324 frames, 960x544, I2V 480p, 25 steps: 24 minutes 12 seconds (JmySff, March 9, 2025)
 
 > "more steps u run, more benefit u get" — slmonker, March 2, 2025
 
@@ -86,6 +92,16 @@ The coefficients make TeaCache:
 - **Better quality** — "the quality is brilliant with the coefficients" (DevouredBeef)
 - **Safer at step 0** — can potentially start from step 0 without artifacts
 
+### Model-Specific Values (March 8, 2025)
+
+Kijai updated the TeaCache node documentation to reflect that **1.3B and 14B models require very different threshold values** when using coefficients:
+
+> "I did not actually realise the TeaCache values for 1.3B are so different with coefficients... updated my node to have better docs to reflect all that" — Kijai, March 8, 2025
+
+**Reported working values:**
+- **1.3B with coefficients:** threshold 0.250, start_step 1, end_step -1 (Organoids, March 8, 2025)
+- **14B with coefficients:** threshold 0.25-0.35 (community consensus, March 5, 2025)
+
 ### Conditional vs Unconditional
 
 The implementation caches conditional and unconditional passes separately. Kijai noted they seem to trigger at the same steps, so batching them might not have been necessary, but separate caching was chosen to avoid higher memory usage.
@@ -100,7 +116,7 @@ The implementation caches conditional and unconditional passes separately. Kijai
 
 | Parameter | Recommended Value | Notes |
 |-----------|------------------|-------|
-| **threshold** | **0.04** (without coefficients), **0.25-0.35** (with coefficients) | Lower = more aggressive caching, higher speedup, more quality loss. With coefficients, much higher values are safe |
+| **threshold** | **0.04** (without coefficients), **0.25-0.35** (with coefficients, 14B), **0.250** (with coefficients, 1.3B) | Lower = more aggressive caching, higher speedup, more quality loss. With coefficients, much higher values are safe. **Model-specific values critical.** |
 | **start_step** | **8** (without coefficients), **0-2** (with coefficients) | Skip early noisy steps. With coefficients, may not be needed at all |
 | **use_coefficients** | **true** | Enable official coefficient calculations (recommended as of March 5, 2025) |
 | **Steps (total)** | 20-50 | TeaCache works across all step counts; more steps = more benefit |
@@ -113,8 +129,9 @@ The implementation caches conditional and unconditional passes separately. Kijai
 
 **Threshold guidance (with coefficients enabled):**
 - **0.2** — Starting point for testing
-- **0.25-0.35** — Recommended range for matching previous speeds (DevouredBeef, March 5, 2025)
-- **0.3** — Good balance of speed and quality at 50 steps
+- **0.25-0.35** — Recommended range for 14B models (DevouredBeef, March 5, 2025)
+- **0.250** — Reported working well for 1.3B (Organoids, March 8, 2025)
+- **0.3** — Good balance of speed and quality at 50 steps for 14B (community consensus, March 5, 2025)
 - **Higher values possible** — Coefficients allow much higher thresholds while maintaining quality
 
 **Start step guidance (without coefficients):**
@@ -126,6 +143,7 @@ The implementation caches conditional and unconditional passes separately. Kijai
 
 **Start step guidance (with coefficients enabled):**
 - **0** — May work without artifacts now (Kijai noted it "seems to never activate at start like it shouldn't")
+- **1** — Reported working well for 1.3B (Organoids, March 8, 2025)
 - **2** — Conservative choice for testing (DevouredBeef used this)
 - **Higher values** — Potentially unnecessary with coefficients
 
@@ -137,6 +155,10 @@ TeaCache skipped 15 cond steps, 15 uncond steps
 **Note:** For 50-step workflows, starting later (step 10-12) may be necessary to avoid artifacts. The optimal start_step value scales with total step count.
 
 **Step count dependency:** The default settings (start_step 8, threshold 0.04) are optimized for 30 steps. For 20-step workflows, you may need to adjust start_step lower (e.g., 5-6). For 50-step workflows, you may need to increase start_step (e.g., 10-12).
+
+**Important update (March 5, 2025):** After the coefficient update, the default threshold in example workflows was changed from 0.04 to 0.03, but this may be a decimal error. With coefficients enabled, the recommended threshold is **0.3** (not 0.03). Users reported TeaCache not triggering with 0.03 threshold after the update.
+
+**Critical: Model-specific values (March 8, 2025):** The 1.3B and 14B models require **significantly different threshold values** when using coefficients. Using 14B values on 1.3B (or vice versa) will result in poor performance.
 
 ### Native ComfyUI
 
@@ -193,6 +215,26 @@ Kijai released an initial native TeaCache implementation on March 2, 2025:
 
 > "just too many steps skipped so the noise isn't removed fully" — Kijai, March 2, 2025
 
+**Quality vs Speed Trade-offs (March 9, 2025):**
+
+Community member spacepxl noted that TeaCache and other optimizations can significantly hurt quality:
+
+> "teacache in particular is really bad for quality, sage attn is probably ok" — spacepxl, March 9, 2025
+
+> "but high shift and low steps are deadly for quality" — spacepxl, March 9, 2025
+
+> "eh, 1.3b at 50 steps easily beats the quality of most people's 'efficient' 14b workflows" — spacepxl, March 9, 2025
+
+> "most of the optimizations people use hurt quality a lot" — spacepxl, March 9, 2025
+
+spacepxl advocates for prioritizing quality over speed:
+
+> "I would much rather wait twice as long for better quality" — spacepxl, March 9, 2025
+
+> "these video generation times are not bad at all compared to cg rendering" — spacepxl, March 9, 2025
+
+This represents a minority view in the community, as most users actively seek speed optimizations, but it's worth noting for quality-critical work.
+
 ---
 
 ## Compatibility
@@ -205,13 +247,16 @@ Kijai released an initial native TeaCache implementation on March 2, 2025:
 - Stacks with [[fp16-accumulate]] and [[sageattention]]
 - Stacks with [[torch-compile]]
 - Works with CFG splitting (seitanism#0 confirmed, March 2, 2025)
-- **FlowEdit** — Kijai confirmed TeaCache works with FlowEdit (March 5, 2025)
+- **FlowEdit** — Kijai confirmed TeaCache works with FlowEdit (March 5, 2025), though lower threshold values may be needed
+- **Context windows** — Kijai implemented TeaCache support for context windows on March 5, 2025. Uses a complex caching system that caches every unique window (20+ caches). Requires lower threshold values than standard workflows.
+- **Enhance-a-Video** — Compatible as of March 9, 2025. JmySff reported using TeaCache + Enhance-a-Video together successfully.
 
 **Does NOT work with:**
-- Context windowing (produces noise artifacts — do not combine)
-- VACE workflows (not tested; likely incompatible with context windows)
+- **Wan Feta Enhance** — JmySff reported no difference with/without when TeaCache is enabled (March 5, 2025). Kijai confirmed it needs to be a proper patch to work together.
 - GGUF models (as of March 2, 2025)
-- **Wan Feta Enhance** — JmySff reported no difference with/without when TeaCache is enabled (March 5, 2025)
+
+**Previously incompatible but now working:**
+- **Context windowing** — Was incompatible (produced noise artifacts) until March 5, 2025. Kijai implemented a solution that caches each unique context window separately. Requires lower threshold values.
 
 **Unclear/untested:**
 - LoRA workflows
@@ -222,13 +267,43 @@ Kijai released an initial native TeaCache implementation on March 2, 2025:
 
 ## Known Issues
 
-### Context Window Incompatibility
+### Context Window Compatibility (RESOLVED March 5, 2025)
 
-**Critical:** TeaCache is **incompatible with context windowing** and produces noise artifacts when combined. Do not use TeaCache for long video generation that relies on context windows.
+**Previous status:** TeaCache was **incompatible with context windowing** and produced noise artifacts when combined.
 
 Kijai noted on March 2, 2025: "can't figure out teacache for context windows though, maybe not even possible..."
 
-Kijai confirmed on March 5, 2025: "I did lots of weird things trying to get it to work with context windows, doesn't seem possible"
+**Update (March 5, 2025):** Kijai successfully implemented TeaCache support for context windows. The implementation caches every unique window separately (20+ caches in some cases). Example output:
+
+```
+TeaCache skipped: 0 conditional steps
+TeaCache skipped: 0 unconditional steps
+TeaCache skipped: 11 prediction_2 steps
+TeaCache skipped: 11 prediction_3 steps
+[...continues for 40+ prediction windows...]
+```
+
+**Important notes for context window usage:**
+- Requires **much lower threshold values** than standard workflows
+- Each context window is cached separately to avoid mixing them up
+- Successfully tested: 169 frames in 2 minutes with 4.281 GB VRAM
+- Kijai confirmed: "it does work" and "main thing is to not mix them up like it was doing, leading to only noise"
+
+### Threshold Changes After Update (March 5, 2025)
+
+**Critical issue:** After the March 5, 2025 update that added coefficient support, many users reported TeaCache no longer triggering with previous settings.
+
+**Cause:** The default threshold in example workflows was changed to 0.03, but with coefficients enabled, this value is too low. The recommended threshold with coefficients is **0.3** (10x higher).
+
+**Solution:** Update threshold to 0.25-0.35 when using coefficients. The example workflow may have a decimal error (0.03 instead of 0.3).
+
+> "It got changed with the update, when using the coefficients the value should be about 10x from when not using them" — Kijai, March 5, 2025
+
+### Model-Specific Values (March 8, 2025)
+
+**Critical:** The 1.3B and 14B models require **very different threshold values** when using coefficients. Using 14B values on 1.3B (or vice versa) will result in poor performance.
+
+**Solution:** Always check the TeaCache node documentation for your specific model size. Kijai updated the node to include model-specific guidance.
 
 ### Early Step Noise
 
@@ -286,7 +361,15 @@ With coefficients enabled, the skip count reporting may be inaccurate:
 
 ### Wan Feta Enhance Incompatibility
 
-JmySff reported on March 5, 2025 that Wan Feta Enhance shows no difference when TeaCache is enabled, suggesting they may be incompatible.
+JmySff reported on March 5, 2025 that Wan Feta Enhance shows no difference when TeaCache is enabled, suggesting they may be incompatible. Kijai confirmed that "the enhance a video needs to be a proper patch to work together with it."
+
+### FlowEdit Lower Threshold Requirement
+
+Kijai noted on March 5, 2025 that "for FlowEdit I had to use lower values to not break it." When using TeaCache with FlowEdit, you may need to reduce the threshold below standard recommendations.
+
+### Set/Get Node Incompatibility
+
+User burgstall reported on March 6, 2025 that TeaCache arguments cannot be passed through "setnode/getnode" nodes. This appears to be a workflow limitation rather than a TeaCache bug.
 
 ---
 
@@ -296,10 +379,13 @@ JmySff reported on March 5, 2025 that Wan Feta Enhance shows no difference when 
 |---------|----------|
 | No speedup | TeaCache didn't trigger; try lower threshold or lower start_step |
 | "0 steps skipped" in log | TeaCache didn't trigger; try lower threshold or lower start_step |
+| TeaCache not triggering after March 5 update | Increase threshold to 0.25-0.35 if using coefficients (default may be 0.03 instead of 0.3) |
+| TeaCache not working on 1.3B after March 8 | Check model-specific threshold values; 1.3B requires different values than 14B |
 | Noise artifacts / flickering circles | Increase start_step to 8 or higher; avoid threshold 0.0; may need start_step 10-12 for 50-step workflows |
 | Quality degradation | Increase threshold (try 0.06-0.08); increase start_step |
 | VRAM spikes between samplers | Turn off TeaCache between stages or add VRAM clear node |
-| Artifacts with context windows | Do not use TeaCache with context windows — they are incompatible |
+| Artifacts with context windows (pre-March 5) | Context windows were incompatible until March 5, 2025 |
+| Context windows producing noise (post-March 5) | Use much lower threshold values than standard workflows |
 | Slower than expected | Check that node reports skipped steps; ensure PyTorch 2.7+ for fp16 accumulate |
 | OOM after enabling TeaCache | Increase block swap by 5-10 blocks to compensate for 12-13% VRAM overhead |
 | Too many steps skipped, noise remains | Increase threshold or start_step; threshold too aggressive for step count |
@@ -308,6 +394,8 @@ JmySff reported on March 5, 2025 that Wan Feta Enhance shows no difference when 
 | Much slower with coefficients | Increase threshold to 0.25-0.35 to match previous skip rates |
 | Skip count seems wrong | With coefficients, reporting may be inaccurate; use generation time instead |
 | Feta Enhance not working | May be incompatible with TeaCache; disable one or the other |
+| FlowEdit breaking with TeaCache | Use lower threshold values than standard workflows |
+| Set/Get nodes not working | Cannot pass TeaCache args through set/get nodes; connect directly |
 
 ---
 
@@ -319,6 +407,7 @@ For maximum performance, combine TeaCache with:
 - [[sageattention]] — ~25% speedup alone, stacks with TeaCache
 - [[torch-compile]] — ~30% speedup, stacks with TeaCache
 - **CFG splitting** — Works with TeaCache (seitanism#0 confirmed)
+- **Enhance-a-Video** — Compatible with TeaCache (JmySff confirmed March 9, 2025)
 
 **Achievable combined speedup:** ~3-4x faster than baseline in some cases
 
@@ -328,6 +417,15 @@ For maximum performance, combine TeaCache with:
 - **3.3x speedup**
 
 > "wrapper with fp8, fp16 accumulate, cfg splitting, teacache, sage, torchcompile...its ridiculous fast" — seitanism#0, March 2, 2025
+
+**Example with Enhance-a-Video (March 9, 2025):**
+
+JmySff reported combining TeaCache with the new Enhance-a-Video node:
+- **Without Enhance-a-Video:** 6 minutes 35 seconds (25 steps, native, TeaCache)
+- **With Enhance-a-Video:** 5 minutes 36 seconds (25 steps, native, TeaCache)
+- Additional 1 minute speedup from Enhance-a-Video on top of TeaCache benefits
+
+> "I don't really understand why i just gain 1 minute with Enhance a video but... i'm just happy" — JmySff, March 9, 2025
 
 ---
 
@@ -357,6 +455,7 @@ The official TeaCache team released coefficient calculations that make the dista
 - **Step reporting** — logs "TeaCache skipped X cond steps, Y uncond steps" at completion
 - **Unequal skipping:** Conditional and unconditional passes may skip different numbers of steps (e.g., 16 cond, 29 uncond reported by seitanism#0)
 - **With coefficients:** May skip cond/uncond independently, making reported counts less reliable
+- **Context window caching (March 5, 2025):** Each unique context window is cached separately to avoid mixing, resulting in 20+ separate caches
 
 ### Why Wan 2.1 Works Well
 
@@ -404,9 +503,16 @@ TeaCache is particularly useful for previewing:
 | **March 5, 2025** | **TeaCache team releases official coefficient calculations** |
 | **March 5, 2025** | Kijai integrates coefficients into wrapper; makes them optional for testing |
 | **March 5, 2025** | Community testing shows coefficients allow higher thresholds (0.25-0.35) with better quality |
-| **March 5, 2025** | FlowEdit compatibility confirmed |
+| **March 5, 2025** | FlowEdit compatibility confirmed (requires lower threshold values) |
 | **March 5, 2025** | Wan Feta Enhance incompatibility discovered |
 | **March 5, 2025** | Skip count reporting issues identified with coefficients enabled |
+| **March 5, 2025** | **Context window support implemented** — caches each unique window separately |
+| **March 5, 2025** | 169 frames in 2 minutes with context windows + TeaCache demonstrated |
+| **March 6, 2025** | Set/Get node incompatibility reported |
+| **March 8, 2025** | Kijai updates node documentation to reflect model-specific threshold values (1.3B vs 14B) |
+| **March 9, 2025** | Enhance-a-Video compatibility confirmed; JmySff reports successful combination with TeaCache |
+| **March 9, 2025** | 324 frames in 24 minutes with TeaCache + Enhance-a-Video (JmySff) |
+| **March 9, 2025** | spacepxl advocates for quality-first approach, noting TeaCache "really bad for quality" |
 
 ---
 
@@ -416,10 +522,11 @@ TeaCache is particularly useful for previewing:
 - [[fp16-accumulate]] — Stackable optimization
 - [[sageattention]] — Stackable optimization
 - [[torch-compile]] — Stackable optimization
-- [[context-windows]] — Incompatible with TeaCache
+- [[context-windows]] — Now compatible with TeaCache (as of March 5, 2025)
 - [[speed]] — Overview of all speed optimizations
 - [[adaptive-guidance]] — Alternative optimization (native only)
-- [[flowedit]] — Compatible with TeaCache
+- [[flowedit]] — Compatible with TeaCache (requires lower threshold)
+- [[enhance-a-video]] — Compatible with TeaCache (confirmed March 9, 2025)
 
 ## External Resources
 
