@@ -310,17 +310,64 @@
 
         <section class="status-summary">
             <h2>Current Status</h2>
-            <p><strong>Phase:</strong> Building verified weekly compilation pipeline</p>
+            <p><strong>Phase:</strong> Weekly compilation from raw Discord messages (7/59 weeks done)</p>
             <p><strong>Knowledge Bases Live:</strong></p>
             <ul>
                 <li><a href="kb/ltx2/index.html">LTX Video 2</a> - Released Jan 5, 2026 ✅</li>
                 <li><a href="kb/wan/index.html">Wan Ecosystem</a> - Released Feb 22, 2025 ✅</li>
             </ul>
-            <p><strong>Wiki Pages (unverified drafts):</strong> VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom</p>
-            <p><strong>Next:</strong> Pull raw Discord messages from Supabase, build weekly compilation + GPT-5.2 verification pipeline, re-verify existing pages.</p>
+            <p><strong>Wiki (from raw messages):</strong> 51+ pages, ~15K lines &mdash; Wan 2.1, VACE, Wan Fun, SageAttention, TeaCache, LoRA Training, Control LoRAs, and 40+ more</p>
+            <p><strong>Next:</strong> Top up Anthropic API credits, continue weekly compilation (W15+), run GPT-5.4 verification, build wiki&rarr;HTML rendering.</p>
         </section>
 
         <div class="timeline">
+            <article class="timeline-entry">
+                <div class="timestamp">April 6, 2026 - Evening</div>
+                <h3>Weekly compilation running: 7 weeks done, 51+ wiki pages from raw messages</h3>
+
+                <p>The verified weekly pipeline is operational and producing high-quality results. Compiled weeks W08&ndash;W14 (Feb 24 &ndash; Apr 6, 2025) from raw Discord messages, generating 51+ wiki pages with ~15,000 lines of attributed, sourced content.</p>
+
+                <p><strong>Infrastructure built:</strong></p>
+                <ul>
+                    <li><code>scripts/pull_raw_messages.py</code> &mdash; 286,616 messages pulled from Supabase, stored as 246 weekly JSON files across 5 channels</li>
+                    <li><code>scripts/compile_weekly.py</code> &mdash; Claude Sonnet processes raw messages week-by-week, updating wiki pages incrementally</li>
+                    <li><code>scripts/verify_wiki.py</code> &mdash; GPT-5.4 cross-checks wiki claims against raw messages (different model family prevents rubber-stamping)</li>
+                </ul>
+
+                <p><strong>Key pages built so far:</strong></p>
+                <ul>
+                    <li><strong>Models:</strong> Wan 2.1 (670 lines), VACE (752 lines), Wan Fun (900+ lines), SkyReels A2, Squish/Cakify LoRAs</li>
+                    <li><strong>Optimization (16 pages):</strong> SageAttention, TeaCache, torch.compile, fp16 accumulate, SVDQuant, context windows, SLG, CFG Zero Star, Mobius looping, and more</li>
+                    <li><strong>Techniques (14 pages):</strong> Control LoRAs, start/end frame, prompt travel, differential diffusion, regional conditioning, multi-GPU, Sapiens preprocessors</li>
+                    <li><strong>Training:</strong> LoRA training (946 lines), VAE finetuning</li>
+                </ul>
+
+                <p><strong>Cost optimization:</strong> Initial pipeline cost ~$1.32/1K messages. After optimizing (relevant pages only per chunk, larger chunks, low-signal filtering), reduced to ~$0.72/1K messages &mdash; a 45% reduction. Estimated ~$60 remaining for all 52 unprocessed weeks.</p>
+
+                <table style="width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem;">
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <th style="text-align:left; padding:0.4rem;">Week</th>
+                        <th style="text-align:right; padding:0.4rem;">Messages</th>
+                        <th style="text-align:right; padding:0.4rem;">Cost</th>
+                        <th style="text-align:left; padding:0.4rem;">Highlights</th>
+                    </tr>
+                    <tr><td style="padding:0.3rem;">W08</td><td style="text-align:right;">96</td><td style="text-align:right;">$0.23</td><td>Pre-release buzz</td></tr>
+                    <tr><td style="padding:0.3rem;">W09</td><td style="text-align:right;">4,232</td><td style="text-align:right;">$3.55</td><td>Wan 2.1 launch week</td></tr>
+                    <tr><td style="padding:0.3rem;">W10</td><td style="text-align:right;">8,644</td><td style="text-align:right;">~$3.50</td><td>Optimization frenzy (SageAttention, SVDQuant)</td></tr>
+                    <tr><td style="padding:0.3rem;">W11</td><td style="text-align:right;">8,813</td><td style="text-align:right;">$11.67</td><td>SLG, motion LoRAs (before optimization)</td></tr>
+                    <tr><td style="padding:0.3rem;">W12</td><td style="text-align:right;">5,567</td><td style="text-align:right;">$4.03</td><td>Mobius looping, Wan 2.1 paper</td></tr>
+                    <tr><td style="padding:0.3rem;">W13</td><td style="text-align:right;">5,209</td><td style="text-align:right;">$3.93</td><td>Wan Fun models released</td></tr>
+                    <tr><td style="padding:0.3rem;">W14</td><td style="text-align:right;">5,278</td><td style="text-align:right;">~$3.00</td><td>VACE 1.3B launch (partial)</td></tr>
+                    <tr style="border-top:1px solid var(--border); font-weight:600;">
+                        <td style="padding:0.3rem;">Total</td><td style="text-align:right;">37,839</td><td style="text-align:right;">~$30</td><td></td>
+                    </tr>
+                </table>
+
+                <div class="insight">
+                    <strong>Quality check:</strong> Pages built from raw messages are significantly richer than the earlier topic-focused pages built from lossy Sonnet summaries. Proper attribution (author, channel, date), specific numbers preserved, and no capability conflation errors detected. The weekly chronological approach means knowledge builds naturally &mdash; early weeks cover setup/optimization, later weeks add models and techniques as they're released.
+                </div>
+            </article>
+
             <article class="timeline-entry">
                 <div class="timestamp">April 6, 2026</div>
                 <h3>Fact-checking error caught; pivoting to verified weekly pipeline</h3>
