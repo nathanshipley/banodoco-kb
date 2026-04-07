@@ -1,7 +1,7 @@
 ---
 title: TeaCache
 aliases: [teacache, tea-cache, naive-teacache]
-last_updated: 2025-03-12
+last_updated: 2025-04-05
 ---
 
 # TeaCache
@@ -12,11 +12,7 @@ Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, ac
 
 **Major Update (March 5, 2025):** Kijai integrated the official coefficient calculations from the TeaCache team, making the implementation more accurate and allowing for higher threshold values with better quality preservation.
 
-**Major Update (March 8, 2025):** Kijai updated the TeaCache node documentation to reflect significantly different optimal values for 1.3B vs 14B models when using coefficients.
-
-**Major Update (March 11, 2025):** TeaCache confirmed working with multi-GPU setups, achieving 15 minutes → 10 minutes speedup on 4x GPU configuration.
-
-**Major Update (March 12, 2025):** Community reports increasing concerns about quality degradation, particularly with motion-heavy content. TeaCache effectiveness is highly seed-dependent and content-dependent.
+**Major Update (April 5, 2025):** Community guidance on optimal settings for low-step workflows and sampler compatibility.
 
 > "3 mins 32 secs vs 1min 49 secs" — Kijai demonstrating TeaCache speedup, Discord #wan_chatter, March 1, 2025
 
@@ -53,6 +49,11 @@ Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, ac
 - **Effectiveness varies significantly by content** — low-motion scenes show better results
 - **TeaCache may not trigger** at very low thresholds (0.035 reported as ineffective)
 
+**Low-step workflows (April 5, 2025):**
+- **10 steps with TeaCache:** 10 seconds faster than 8 steps without TeaCache (ajo6268)
+- **Requires proper sampler:** Euler/Normal works; ancestral/SDE samplers do not
+- **Threshold tuning critical:** At low step counts, threshold must be carefully adjusted
+
 **Native implementation:**
 - Initial testing shows promise but requires proper threshold tuning
 - Default threshold (0.15) is too high; 0.05 or lower recommended
@@ -74,62 +75,11 @@ Kijai implemented a "naive" version of TeaCache for Wan 2.1 on March 1, 2025, ac
 - 101 frames, 960x544, 30 steps: 11 minutes (JmySff, March 11, 2025)
 - **Multi-GPU 4x setup:** 15 minutes → 10 minutes (threshold 0.18), 15 minutes → 7.5 minutes (threshold 0.3)
 - **With fast movement:** 3:33 with TeaCache vs 5:35 without (N0NSens, March 12, 2025)
+- **10 steps GGUF8:** 10 seconds faster than 8 steps without TeaCache (ajo6268, April 5, 2025)
 
 > "more steps u run, more benefit u get" — slmonker, March 2, 2025
 
 > "Basically, you can generate a video with 60 samples (using teacache defaults) faster than you can generate one with 20 samples without teacache." — David Snow, March 2, 2025
-
----
-
-## Quality Impact vs Speed Trade-offs
-
-**Community perspectives on TeaCache quality:**
-
-TeaCache has become a subject of debate in the community regarding quality vs speed trade-offs:
-
-> "teacache in particular is really bad for quality, sage attn is probably ok" — spacepxl, March 9, 2025
-
-> "I'm not convinced by this tea cache business. it seems very hit or miss. on some seeds it looks practically identical. on others there is significant degradation with more warping of the background etc" — aikitoria, March 12, 2025
-
-> "the more movement the more degradation i think" — Juampab12, March 12, 2025
-
-> "I kinda gave up on tea cache. The speed up didn't seem worth it because of increase fail rate" — Organoids, March 12, 2025
-
-**Updated community feedback (March 12, 2025):**
-
-> "I havent found a way to use teacache with big motion, it always breaks it and looks awful so i personally dont use it anymore unless i want a quick check for a lora or something. Yeah its faster with teacache but if you have to end up doing multiple generations it may end up wasting more time than it actually saves" — Payuyi, March 12, 2025
-
-**Key observations:**
-- **Seed-dependent quality:** Some seeds produce nearly identical results, others show significant degradation
-- **Motion sensitivity:** More movement in the scene tends to cause more quality loss
-- **Background warping:** One of the most common artifacts reported
-- **Hit or miss nature:** Results can be unpredictable, requiring testing per generation
-- **Big motion incompatibility:** Fast-moving scenes consistently show degradation
-- **Increased fail rate:** May require multiple generations to get acceptable results
-
-**When TeaCache works well:**
-- Static or slow-moving scenes
-- Close-ups where differences are less visible
-- Preview/iteration workflows where speed matters more than final quality
-- Seeds that happen to work well with caching
-- Low-motion content
-
-**When TeaCache struggles:**
-- Fast motion or dynamic camera movement
-- Complex scene changes
-- Certain seeds that are sensitive to step skipping
-- Quality-critical final renders
-- "Big motion" scenes (consistently problematic)
-
-**Alternative perspective:**
-
-Despite quality concerns, many users find TeaCache valuable:
-
-> "i just play with both, sometimes more teacache is better, sometimes more / less threshold from adaptive works better, it is nice to have options and mix them" — Miku, March 11, 2025
-
-> "yeah seems there is no free lunch here" — aikitoria, March 12, 2025
-
-See [[quality-vs-speed]] for comprehensive discussion of optimization trade-offs.
 
 ---
 
@@ -215,9 +165,9 @@ The implementation caches conditional and unconditional passes separately. Kijai
 | Parameter | Recommended Value | Notes |
 |-----------|------------------|-------|
 | **threshold** | **0.04** (without coefficients), **0.25-0.35** (with coefficients, 14B), **0.250** (with coefficients, 1.3B), **0.18-0.3** (multi-GPU), **0.2** (updated recommendation March 12) | Lower = more aggressive caching, higher speedup, more quality loss. With coefficients, much higher values are safe. **Model-specific values critical.** Multi-GPU can use 0.18 for quality or 0.3 for speed. |
-| **start_step** | **8** (without coefficients), **0-2** (with coefficients), **10** (multi-GPU default March 12) | Skip early noisy steps. With coefficients, may not be needed at all. Multi-GPU updated to start at step 10 by default for better quality. |
+| **start_step** | **8** (without coefficients), **0-2** (with coefficients), **10** (multi-GPU default March 12), **0** (low-step workflows April 5) | Skip early noisy steps. With coefficients, may not be needed at all. Multi-GPU updated to start at step 10 by default for better quality. Low-step workflows can start at 0. |
 | **use_coefficients** | **true** | Enable official coefficient calculations (recommended as of March 5, 2025) |
-| **Steps (total)** | 20-50 | TeaCache works across all step counts; more steps = more benefit |
+| **Steps (total)** | 20-50 | TeaCache works across all step counts; more steps = more benefit. 10 steps minimum for low-step workflows. |
 
 **Threshold guidance (without coefficients):**
 - **0.04** — Balanced default (Kijai's recommendation)
@@ -248,7 +198,7 @@ The implementation caches conditional and unconditional passes separately. Kijai
 - **Higher values** — More conservative, slower but stabler
 
 **Start step guidance (with coefficients enabled):**
-- **0** — May work without artifacts now (Kijai noted it "seems to never activate at start like it shouldn't")
+- **0** — May work without artifacts now (Kijai noted it "seems to never activate at start like it shouldn't"). Works for low-step workflows (April 5, 2025)
 - **1** — Reported working well for 1.3B (Organoids, March 8, 2025)
 - **2** — Conservative choice for testing (DevouredBeef used this)
 - **10** — Updated multi-GPU default for better quality (intervitens, March 12, 2025)
@@ -287,6 +237,27 @@ Kijai released an initial native TeaCache implementation on March 2, 2025:
 
 ---
 
+## Low-Step Workflows (April 5, 2025)
+
+**Critical insight:** TeaCache is designed for normal step counts (20-50), not low-step distilled workflows.
+
+> "the idea with TeaCache is to set normal amount of steps and then adjust how many steps actually are done with the threshold value" — Kijai, April 5, 2025
+
+> "you can see from the report after how many that is, something like 30% skipped generally is decent quality, more than 50% usually ends up bad" — Kijai, April 5, 2025
+
+**However:** Some users found success with low-step workflows:
+
+> "in the end - the speed up benefit - is really not enough to give a significant gain when full GGUF 8 at 8 steps is so good" — ajo6268, April 5, 2025
+
+**Recommendations for low-step workflows:**
+- Use 10+ steps minimum
+- Avoid ancestral/SDE samplers (use Euler, uni_pc)
+- Start TeaCache at step 0 (with coefficients)
+- Threshold tuning is critical -- too low and TeaCache won't trigger
+- The speedup may not be worth the complexity for 8-step workflows
+
+---
+
 ## Compatibility
 
 **Works with:**
@@ -302,19 +273,42 @@ Kijai released an initial native TeaCache implementation on March 2, 2025:
 - **Enhance-a-Video** — Compatible as of March 9, 2025. JmySff reported using TeaCache + Enhance-a-Video together successfully.
 - **Multi-GPU** — Confirmed working with multi-GPU setups (March 11, 2025)
 - **Adaptive Guidance** — Can be combined but may have compatibility issues (Miku reports mixing both works, March 11, 2025)
+- **GGUF models** — Compatible (April 5, 2025)
 
 **Does NOT work with:**
 - **Wan Feta Enhance** — JmySff reported no difference with/without when TeaCache is enabled (March 5, 2025). Kijai confirmed it needs to be a proper patch to work together.
-- GGUF models (as of March 2, 2025)
+- **Ancestral/SDE samplers** — dpmpp_sde, dpmpp_2m_sde cause errors (April 5, 2025)
 - **Big motion scenes** — Consistently breaks quality (Payuyi, March 12, 2025)
 
 **Previously incompatible but now working:**
 - **Context windowing** — Was incompatible (produced noise artifacts) until March 5, 2025. Kijai implemented a solution that caches each unique context window separately. Requires lower threshold values.
 
-**Unclear/untested:**
-- LoRA workflows
-- Long video generation without context windows
-- Interaction with different samplers
+---
+
+## Sampler Compatibility (April 5, 2025)
+
+**Critical:** TeaCache does NOT work with ancestral/SDE samplers.
+
+> "stuff that does substeps and adds noise, like ancestral/SDE samplers don't generally work with TeaCache" — Kijai, April 5, 2025
+
+**Compatible samplers:**
+- uni_pc
+- euler
+- dpmpp_2m
+- deis
+
+**Incompatible samplers:**
+- dpmpp_sde
+- dpmpp_2m_sde
+- Any ancestral variant
+
+**Error with SDE:** `RuntimeError: Boolean value of Tensor with more than one value is ambiguous`
+
+**Recommended sampler/scheduler for TeaCache:**
+- **Sampler:** Euler or uni_pc
+- **Scheduler:** Normal or Simple
+
+See [[samplers]] for more details.
 
 ---
 
@@ -447,6 +441,20 @@ Multiple users report that TeaCache increases the rate of failed/unusable genera
 
 **Recommendation:** Consider TeaCache primarily for preview/iteration rather than final renders, especially for motion-heavy content.
 
+### Excessive Step Skipping (April 5, 2025)
+
+Some users reported TeaCache skipping more steps than requested:
+
+> "TeaCache skipped: 33 cond steps, 33 uncond step, out of 20 steps" — ajo6268, April 5, 2025
+
+**Possible causes:**
+- Threshold too low
+- Sampler incompatibility (ancestral/SDE)
+- CFG set to 1.0
+- Model/format mismatch
+
+**Solution:** Use compatible samplers (Euler, uni_pc), increase threshold, ensure CFG > 1.0.
+
 ---
 
 ## Troubleshooting
@@ -479,6 +487,9 @@ Multiple users report that TeaCache increases the rate of failed/unusable genera
 | **Big motion breaking quality** | **Disable TeaCache for fast-moving content; consistently problematic** |
 | **Quality degradation with movement** | **More movement = more degradation; consider disabling for dynamic scenes** |
 | **Threshold 0.035 not working** | **Too low; increase to at least 0.2 with coefficients** |
+| **Excessive step skipping** | **Use compatible sampler (Euler, uni_pc); avoid ancestral/SDE** |
+| **Black output with TeaCache** | **Check sampler compatibility; ensure CFG > 1.0** |
+| **TeaCache pointless at low steps** | **Use 10+ steps minimum; TeaCache designed for 20-50 step workflows** |
 
 ---
 
@@ -533,123 +544,6 @@ intervitens provided additional optimization guidance:
 
 ---
 
-## Technical Details
-
-### Relative L1 Distance Calculation
-
-TeaCache calculates:
-```
-relative_distance = L1(time_embed, model_output) / norm_factor
-```
-
-When `relative_distance < threshold`, the step is skipped.
-
-### Coefficient Calculations (March 5, 2025)
-
-The official TeaCache team released coefficient calculations that make the distance comparison more accurate. These coefficients:
-- Scale the time embed and model output curves to align them better
-- Allow for higher threshold values while maintaining quality
-- Make skipping more precise and intelligent
-- Can be toggled on/off in the wrapper for comparison
-
-### Caching Strategy
-
-- **Separate cond/uncond caching** — avoids batching to save memory
-- **Mid-sampling trigger** — typically activates in the middle of sampling, not at the start
-- **Step reporting** — logs "TeaCache skipped X cond steps, Y uncond steps" at completion
-- **Unequal skipping:** Conditional and unconditional passes may skip different numbers of steps (e.g., 16 cond, 29 uncond reported by seitanism#0)
-- **With coefficients:** May skip cond/uncond independently, making reported counts less reliable
-- **Context window caching (March 5, 2025):** Each unique context window is cached separately to avoid mixing, resulting in 20+ separate caches
-- **Multi-GPU caching (March 11, 2025):** Works across multiple GPUs with proper threshold tuning
-
-### Why Wan 2.1 Works Well
-
-The time embed and model output curves are naturally very close for Wan 2.1, unlike other models. This means the "naive" approach (no polynomial fitting) works surprisingly well.
-
-### Polynomial Fitting (Future Improvement)
-
-The original TeaCache paper uses polynomial fitting to calculate scaling coefficients. Community member Screeb suggested:
-
-> "you just need to use `coefficients = np.polyfit(x, y, 4)` (or a higher order than 4 if that helps), where x and y are the raw input difference and output difference" — Screeb, March 2, 2025
-
-Kijai attempted this but encountered SVD errors. This remains a potential future optimization for even better efficiency.
-
-**Update (March 5, 2025):** The TeaCache team provided official coefficient calculations, which Kijai has now integrated.
-
----
-
-## Preview Workflow
-
-TeaCache is particularly useful for previewing:
-
-> "another thing I like is that it doesn't generally change the motion and composition, so you can sort of preview. And just disable it and run again for high quality version" — Kijai, March 2, 2025
-
-**Workflow:**
-1. Enable TeaCache with aggressive settings (threshold 0.03-0.04 without coefficients, or 0.25-0.35 with coefficients, start_step 5-8)
-2. Generate preview quickly to check composition and motion
-3. Disable TeaCache and regenerate with same seed for final quality
-
-**Multi-GPU workflow (March 11, 2025):**
-1. Use threshold 0.3 for rapid prompt/seed finding
-2. Once satisfied, re-render at threshold 0.18 for near-identical quality to no TeaCache
-
-**Quality-conscious workflow:**
-
-For users concerned about quality degradation:
-1. Test multiple seeds with TeaCache enabled
-2. Identify seeds that work well with caching
-3. Use those seeds for final renders, or disable TeaCache for critical work
-4. Consider TeaCache primarily for iteration/preview rather than final output
-
-**Updated recommendations (March 12, 2025):**
-
-Given the increased awareness of quality issues:
-1. **Avoid TeaCache for big motion** — consistently breaks quality
-2. **Test with low-motion content first** — verify TeaCache works for your use case
-3. **Be prepared for increased fail rate** — may need multiple generations
-4. **Use for iteration only** — disable for final renders if quality is critical
-5. **Monitor for background warping** — common artifact that may be unacceptable
-
----
-
-## Timeline
-
-| Date | Event |
-|------|-------|
-| **March 1, 2025** | Kijai implements "naive TeaCache" for Wan 2.1 wrapper |
-| **March 1, 2025** | Initial benchmarks: 212s → 109s, 53s → 28s |
-| **March 1, 2025** | Community testing begins; threshold 0.04 emerges as default |
-| **March 2, 2025** | User reports 1 hour → 18 minutes speedup at 720p/50 steps |
-| **March 2, 2025** | 12-13% VRAM overhead confirmed; block swap adjustment needed |
-| **March 2, 2025** | CFG splitting confirmed compatible with TeaCache |
-| **March 2, 2025** | Kijai releases initial native TeaCache implementation (missing start_step) |
-| **March 2, 2025** | I2V compatibility confirmed; works well with proper settings |
-| **March 2, 2025** | Context window incompatibility confirmed; Kijai notes it may not be possible to combine |
-| **March 2, 2025** | Native implementation testing shows promise but requires threshold tuning |
-| **March 5, 2025** | **TeaCache team releases official coefficient calculations** |
-| **March 5, 2025** | Kijai integrates coefficients into wrapper; makes them optional for testing |
-| **March 5, 2025** | Community testing shows coefficients allow higher thresholds (0.25-0.35) with better quality |
-| **March 5, 2025** | FlowEdit compatibility confirmed (requires lower threshold values) |
-| **March 5, 2025** | Wan Feta Enhance incompatibility discovered |
-| **March 5, 2025** | Skip count reporting issues identified with coefficients enabled |
-| **March 5, 2025** | **Context window support implemented** — caches each unique window separately |
-| **March 5, 2025** | 169 frames in 2 minutes with context windows + TeaCache demonstrated |
-| **March 6, 2025** | Set/Get node incompatibility reported |
-| **March 8, 2025** | Kijai updates node documentation to reflect model-specific threshold values (1.3B vs 14B) |
-| **March 9, 2025** | Enhance-a-Video compatibility confirmed; JmySff reports successful combination with TeaCache |
-| **March 9, 2025** | 324 frames in 24 minutes with TeaCache + Enhance-a-Video (JmySff) |
-| **March 9, 2025** | spacepxl advocates for quality-first approach, noting TeaCache "really bad for quality" |
-| **March 11, 2025** | **Multi-GPU support confirmed** — intervitens achieves 15min → 10min with threshold 0.18 |
-| **March 11, 2025** | Multi-GPU threshold 0.3 tested: 15min → 7.5min with artifacts, useful for prompt finding |
-| **March 11, 2025** | Adaptive Guidance + TeaCache combination reported working (Miku) |
-| **March 12, 2025** | Community debate on quality vs speed intensifies; mixed opinions on TeaCache value |
-| **March 12, 2025** | **Big motion incompatibility confirmed** — Payuyi reports consistent quality breaks |
-| **March 12, 2025** | **Increased fail rate concerns** — Organoids reports giving up on TeaCache |
-| **March 12, 2025** | **Multi-GPU optimizations** — intervitens updates default start_step to 10, adds CFG scheduling |
-| **March 12, 2025** | Threshold 0.035 confirmed too low; 0.2 recommended as new baseline with coefficients |
-
----
-
 ## See Also
 
 - [[wan-2.1]] — Base model that benefits from TeaCache
@@ -663,6 +557,7 @@ Given the increased awareness of quality issues:
 - [[enhance-a-video]] — Compatible with TeaCache (confirmed March 9, 2025)
 - [[multi-gpu]] — Multi-GPU generation with TeaCache support (confirmed March 11, 2025)
 - [[quality-vs-speed]] — Comprehensive discussion of optimization trade-offs
+- [[samplers]] — Sampler compatibility with TeaCache
 
 ## External Resources
 
