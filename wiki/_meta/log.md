@@ -122,3 +122,42 @@ Append-only record of what was processed and when.
 - 46 claims verified OK (core architecture, 77-frame chunking, replacement mode, face tracking)
 - Cost: ~$0.28 for 3-week verification
 - GPT-5.4 selected over GPT-5.2 (latest model, marginal price increase, better reasoning)
+
+---
+
+## [2026-04-06 to 2026-04-07] compilation | Weekly compilation W08-W14 from raw messages
+
+**Type:** Weekly compilation (fresh start from raw messages)
+
+**Previous unverified pages archived:** Moved VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom pages to `wiki/_archive/` — compiled from lossy Sonnet summaries, known conflation errors.
+
+**Weeks compiled:**
+
+| Week | Period | Messages | Cost | Key content |
+|------|--------|----------|------|-------------|
+| W08 | Feb 17-23, 2025 | 96 | $0.23 | Pre-release buzz |
+| W09 | Feb 24 - Mar 2 | 4,232 | $3.55 | Wan 2.1 launch, initial setup |
+| W10 | Mar 3-9 | 8,644 | ~$3.50 | SageAttention, SVDQuant, LoRA training |
+| W11 | Mar 10-16 | 8,813 | $11.67 | SLG, Squish/Cakify LoRAs, control LoRAs |
+| W12 | Mar 17-23 | 5,567 | $4.03 | Mobius looping, start/end frame, Wan 2.1 paper |
+| W13 | Mar 24-30 | 5,209 | $3.93 | Wan Fun models, CFG Zero Star, prompt travel |
+| W14 | Mar 31 - Apr 6 | 5,278 | ~$3.00 | VACE 1.3B launch (partial: 4/6 chunks) |
+| **Total** | | **37,839** | **~$30** | |
+
+**Pages created:** 51+ wiki pages across models/ (5), optimization/ (16), techniques/ (14), training/ (2), top-level (2).
+
+**Pipeline optimizations applied after W11 (saved ~2x cost):**
+- Relevant wiki pages only per chunk (not entire wiki state) — biggest savings
+- Chunk size 500 → 1000 messages (halves API overhead)
+- Pre-filter low-signal messages (~10% noise reduction)
+- Streaming mode (avoid SDK timeout errors on large requests)
+- max_tokens 16K → 32K (fix JSON truncation failures)
+- Added `--cost` flag for upfront cost estimation
+
+**Cost per 1K messages:** $1.32 before optimization → $0.72 after.
+
+**Blocked:** Anthropic API credits depleted during W14 chunk 5/6. W14 not marked complete in state file — will re-process from scratch when credits topped up.
+
+**Remaining:** ~52 weeks, ~238K messages, estimated ~$60 with optimized pipeline.
+
+**To resume:** `python scripts/compile_weekly.py --next N` picks up from W14.

@@ -41,7 +41,7 @@ Transform the Banodoco Discord database into a useful web-based knowledge base a
 | Troubleshooting | 15+ common errors with solutions |
 
 ### Current Step
-**Building verified weekly compilation pipeline.** Initial topic-focused compilation produced 5 wiki pages (VACE, Wan 2.1, Wan 2.2, WanAnimate, Phantom) but spot-checking revealed capability conflation errors introduced at the Sonnet extraction step. Pivoting to: (1) pull raw Discord messages from Supabase as ground truth, (2) process chronologically in weekly chunks, (3) verify each pass with GPT-5.2 high reasoning against raw messages (pom's brain-of-bndc pattern). Existing pages are unverified drafts. See Wiki Operations section below.
+**Weekly compilation in progress — 7/59 weeks done, blocked on API credits.** Compiled W08-W14 (Feb 24 - Apr 6, 2025) from raw Discord messages into 51+ wiki pages (~15K lines). Previous topic-focused pages (from lossy Sonnet summaries) archived to `wiki/_archive/`. Pipeline optimized to ~$0.72/1K messages (down from $1.32). ~$30 spent so far, ~$60 remaining for all 52 unprocessed weeks. **To resume:** top up Anthropic API credits, then `python scripts/compile_weekly.py --next N`. GPT-5.4 verification pipeline built but not yet run on fresh pages. Wiki→HTML rendering pipeline not yet built (Phase 5).
 
 ### VACE/WanAnimate Research (Feb 6, 2026)
 Searched extracted data, found rich content ready to add to KB:
